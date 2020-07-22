@@ -1,0 +1,9 @@
+Devisea, a tower defense game about mining resources, building bases, and exploring
+
+As you play, you devise new systems to effectivley collect and utilize resources.
+
+When you spawn into a world, you have just yourself and a couple trees to cut down and scrap to collect. As you dig into the ground, you set up drills (wood and scrap, simplest version) and connect pipes (wood, simplest) to them to pump resources to something.
+
+You could pipe resources into a Simple Assembler (4 copper, 2 tin) to make other objects (with the correct recipe), or you could pipe resources into your
+Master 
+
