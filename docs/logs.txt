@@ -1,0 +1,33 @@
+This document logs additions / patch notes to the Designa video game.
+
+It is formatted: 
+Date || Build || 
+	- Notes
+
+7/21/2020 || pa_1.0.0 || 
+	- Boilerplate engine design
+	- Game loop 
+	- Asset / primitive text (no numbers or other special characters) / gfx rendering 
+	- Input 
+	- Basic entity management system
+	- Tile system
+	- Added three tiles: Air tile ID 0, Grass tile ID 1, and Dirt tile ID 2
+	- State system
+	- World loader
+
+7/22/2020 || pa_1.0.1 ||  
+	- Basic creature physics
+	- World editing (place and delete dirt tiles)
+	- Basic HUD system rendering player health
+	- Time-based fall damage
+	- Camera, with smooth follow
+	- Creature hurt flashing
+	- Made the Air tile transparent, so ready to render the layer system that needs to be tweaked
+	
+7/23/2020 || pa_1.0.2 ||  
+	- Made render layers abstract
+	- SkyLayer will be the default first rendered layer. It renders a fillRect of color col across the entire map
+	- SkyLayer now can render the sky at any color according to var (night and day)
+	- Made a custom cursor
+	- Made Item class
+	- Added "Dirt" item ID 0
