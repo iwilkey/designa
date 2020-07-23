@@ -38,13 +38,13 @@ public abstract class Entity {
 	}
 	
 	public Rectangle getCollisionBounds(float xOffset, float yOffset) {
-		return new Rectangle((int) (x + collider.x + xOffset), 
-				(int) (y + collider.y + yOffset), collider.width, collider.height);
+		return new Rectangle((int) (x + collider.x - ab.getCamera().getxOffset() + xOffset), 
+				(int) (y + collider.y - ab.getCamera().getyOffset() + yOffset), collider.width, collider.height);
 	}
 	
 	protected void drawCollider(Graphics g) {
 		g.setColor(Color.red);
-		g.drawRect((int)x + collider.x, (int)y + collider.y, collider.width, collider.height);
+		g.drawRect((int) (x + collider.x - ab.getCamera().getxOffset()), (int) (y + collider.y - ab.getCamera().getyOffset()), collider.width, collider.height);
 	}
 
 	public float getX() {

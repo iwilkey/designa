@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 import dev.iwilkey.designa.AppBuffer;
 import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.building.BuildingHandler;
 import dev.iwilkey.designa.gfx.Animation;
-import dev.iwilkey.designa.tiles.Tile;
 import dev.iwilkey.designa.ui.HUD;
 
 public class Player extends Creature {
@@ -17,6 +17,9 @@ public class Player extends Creature {
 	
 	// HUD
 	private HUD hud;
+	
+	// Building manager
+	private BuildingHandler buildingHandler;
 	
 	public Player(AppBuffer ap, float x, float y) {
 		super(ap, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -37,6 +40,9 @@ public class Player extends Creature {
 		
 		// HUD
 		hud = new HUD(this);
+		
+		// Building Handler
+		buildingHandler = new BuildingHandler(this, ab);
 	}
 	
 	private void getInput()
@@ -48,6 +54,7 @@ public class Player extends Creature {
 	}
 	@Override
 	public void tick() {
+	
 		// Animations here
 		for (Animation anim : animations) {
 			anim.tick();
@@ -63,6 +70,9 @@ public class Player extends Creature {
 		// HUD
 		hud.tick();
 		
+		// Building handler
+		buildingHandler.tick();
+		
 	}
 
 	@Override
@@ -76,6 +86,7 @@ public class Player extends Creature {
 		}
 		//drawCollider(g);
 		hud.render(g);
+		buildingHandler.render(g);
 	}
 
 	@Override

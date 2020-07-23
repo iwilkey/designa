@@ -1,10 +1,18 @@
 
-These things don't need to be done in order. They are written as they pop into mind.
-------------------------------------------------------------------------------------
+These things need to be done, but don't need to be done in order (unless marked important)
+-----------------------------------------------------------------------------------------
 
-- Create a simple HUD / Inventory System for the player
+Important now
+-------------
+
+- Create a Inventory System for the player
 	- Four inventory slots
 		- This will need an Inventory class.
+		
+- Tiles need to drop resources when broken!
+		
+- Create a simple placement system
+	- If the item exists in the inventory of the Player, it can be placed.
 	
 - Keep working on the layer system. 
 	- Class is done, now it just needs to be rendered correctly
@@ -15,21 +23,21 @@ These things don't need to be done in order. They are written as they pop into m
 
 - See what can be done about that white line (Rendering issue, I'm guessing has to do with float to int casting somewhere)
 
-- Create a click-based block destroying system.
-	- Every tile needs health now, but there aren't a list of instances, instead, there must be a level.getData(x, y) about a tile.
-	- This will have the health of the specific tile in it.
-	- Every tile will now need a distinctive image for the level of broken they are
-	- Tiles don't heal over time
-	
-- Create Item class.
-	- Tiles will drop themselves as a resource now, able to be collected
+- Make primitive lighting system!
+	- Resource: https://gamedev.stackexchange.com/questions/126466/java-2d-lighting
+	- Figure out how to render things darker or lighter. All it takes. Easier said than done.
 
-- Create a simple placement system
-	- If the item exists in the inventory of the Player, it can be placed.
+- Create Day and Night cycle.
+	- This is a simple timer that effects lighting.
+	- Make a sun and moon graphic and move them across the top of the screen to indicate what time it is.
 	
 - Create more tiles! (See Tiles list in docs)
 
 - Create more items! (See Items list in docs)
+
+
+For later on
+------------
 
 - Create the Crate item.
 	- Another inventory with many slots (depending on level) For now, 25 should be fine.
@@ -59,15 +67,9 @@ These things don't need to be done in order. They are written as they pop into m
 - Create ground and air enemies
 	- These are Creatures in the Entity package.
 	- Simple AI must be created.
-
-- Make primitive lighting system!
-	- Resource: https://gamedev.stackexchange.com/questions/126466/java-2d-lighting
-	- Figure out how to render things darker or lighter. All it takes. Easier said than done.
-
-- Create Day and Night cycle.
-	- This is a simple timer that effects lighting.
-	- Make a sun and moon graphic and move them across the top of the screen to indicate what time it is.
 	
+- Create worlds for players to try and beat
+
 - Make more pleasing backgrounds, and try and use the layer system to parallax them when moving
 
 - Check out how this can become an iOS / Android app

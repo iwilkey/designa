@@ -30,4 +30,11 @@ Date || Build ||
 	- SkyLayer now can render the sky at any color according to var (night and day)
 	- Made a custom cursor
 	- Made Item class
+	- Made ItemHandler class, to make it easy to manage in the World
 	- Added "Dirt" item ID 0
+	- Made block selector graphic
+	- Implemented break and place range
+	- Made it impossible to place tiles on top of player
+	- Implemented tileBreakLevel for all tiles
+	- Made breaking tiles require the tile breakLevel to be zero
+	- Made the Input class understand justClicked, meaning actions that only should happen once when clicked are now possible

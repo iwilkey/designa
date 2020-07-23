@@ -16,14 +16,20 @@ public class Tile {
 	public static Tile grassTile = new GrassTile(1);
 	public static Tile dirtTile = new DirtTile(2);
 	
+	public static int getStrength(int id) {
+		return tiles[id].getStrength();
+	}
+	
 	// Class (The constructor, the texture of the tile, and the id)
 	
 	protected BufferedImage texture;
 	protected final int ID;
+	protected int strength;
 	
-	public Tile(BufferedImage tex, int id) {
+	public Tile(BufferedImage tex, int id, int strength) {
 		this.texture = tex;
 		this.ID = id;
+		this.strength = strength;
 		
 		tiles[id] = this; // Update the tiles array at the ID with the instance of this tile.
 	}
@@ -46,6 +52,10 @@ public class Tile {
 	
 	public int getID() {
 		return ID;
+	}
+	
+	public int getStrength() {
+		return strength;
 	}
 	
 }

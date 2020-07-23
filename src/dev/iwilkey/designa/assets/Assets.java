@@ -25,6 +25,7 @@ public class Assets {
 	
 	// GUI
 	public static BufferedImage[] heart;
+	public static BufferedImage selector, errorSelector, transSelector;
 	
 	// Animations
 	public static BufferedImage[] walk_right, walk_left;
@@ -75,6 +76,9 @@ public class Assets {
 		heart = new BufferedImage[2];
 		heart[0] = ss.crop(0, 3, ss.SLOT_SIZE, ss.SLOT_SIZE); // Full heart
 		heart[1] = ss.crop(0, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Empty heart
+		selector = ss.crop(0, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+		errorSelector = ss.crop(1, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+		transSelector = ss.crop(2, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		
 		// Init items
 		itemDirt = ss.crop(0, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);

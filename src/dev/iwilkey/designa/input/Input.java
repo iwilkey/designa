@@ -9,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 public class Input implements KeyListener, MouseListener, MouseMotionListener {
 
 	private boolean[] keys, justPressed, cantPress;
-	private boolean leftMouseButtonDown, rightMouseButtonDown;
+	private boolean leftMouseButtonDown, rightMouseButtonDown, justClickedLeft, cantClickLeft, justClickedRight, cantClickRight;
 	private int mouseX, mouseY;
 	
 	// CONTROLS
@@ -61,6 +61,20 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
 			leftMouseButtonDown = false;
 		} else if (m.getButton() == MouseEvent.BUTTON3) {
 			rightMouseButtonDown = false;
+		}
+	}
+	
+	public boolean justClicked(int button) {
+		switch(button) {
+			case 1:
+				return justClickedLeft;
+			
+			case 3:
+				return justClickedRight;
+			
+			default:
+				return false;
+
 		}
 	}
 	
@@ -117,6 +131,32 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener {
 			if(!cantPress[i] && keys[i]) {
 				justPressed[i] = true;
 			}
+		}
+		
+		// just clicked mouse left
+		
+		if(cantClickLeft && !leftMouseButtonDown) {
+			cantClickLeft = false;
+		} else if (justClickedLeft) {
+			cantClickLeft = true;
+			justClickedLeft = false;
+		}
+		
+		if(!cantClickLeft && leftMouseButtonDown) {
+			justClickedLeft = true;
+		}
+		
+		// just clicked mouse right
+		
+		if(cantClickRight && !rightMouseButtonDown) {
+			cantClickRight = false;
+		} else if (justClickedRight) {
+			cantClickRight = true;
+			justClickedRight = false;
+		}
+		
+		if(!cantClickRight && rightMouseButtonDown) {
+			justClickedRight = true;
 		}
 		
 		left = keys[KeyEvent.VK_A];

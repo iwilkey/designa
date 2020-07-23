@@ -12,7 +12,6 @@ import dev.iwilkey.designa.items.Item;
 import dev.iwilkey.designa.items.ItemHandler;
 import dev.iwilkey.designa.layer.Layer;
 import dev.iwilkey.designa.layer.SkyLayer;
-import dev.iwilkey.designa.tiles.AirTile;
 import dev.iwilkey.designa.tiles.Tile;
 import dev.iwilkey.designa.utils.Utils;
 
@@ -20,7 +19,8 @@ public class World {
 	
 	private AppBuffer ab;
 	private int width, height;
-	private int[][] tiles;
+	public int[][] tiles;
+	public int[][] tileBreakLevel;
 	
 	// Layers
 	private List<Layer> layers = new ArrayList<Layer>();
@@ -50,31 +50,6 @@ public class World {
 		for(Layer l : layers) {
 			l.tick();
 		}
-		
-		// TODO: Make a building manager class that does this
-		
-		//Building
-		if(ab.getInput().isRightMouseButtonDown()) {
-			int x = (int) (ab.getInput().getMouseX() + ab.getCamera().getxOffset()) / Tile.TILE_SIZE;
-			int y = (int) (ab.getInput().getMouseY() + ab.getCamera().getyOffset()) / Tile.TILE_SIZE;
-			if(getTile(x, y) instanceof AirTile) {
-				tiles[x][y] = 2;
-			} else {
-				return;
-			}
-		}
-		
-		// Destroying
-		if(ab.getInput().isLeftMouseButtonDown()) {
-			int x = (int) (ab.getInput().getMouseX() + ab.getCamera().getxOffset()) / Tile.TILE_SIZE;
-			int y = (int) (ab.getInput().getMouseY() + ab.getCamera().getyOffset()) / Tile.TILE_SIZE;
-			if(!(getTile(x, y) instanceof AirTile)) {
-				tiles[x][y] = 0;
-			} else {
-				return;
-			}
-		}
-		
 	}
 	
 	public void render(Graphics g) {
@@ -124,10 +99,13 @@ public class World {
 		height = Utils.parseInt(tokens[1]);
 		
 		tiles = new int[width][height];
+		tileBreakLevel = new int[width][height];
 		
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
-				tiles[x][y] = Utils.parseInt(tokens[x + y * width + 2]);
+				int id = Utils.parseInt(tokens[x + y * width + 2]);
+				tiles[x][y] = id;
+				tileBreakLevel[x][y] = Tile.getStrength(id);
 			}
 		}
 		
