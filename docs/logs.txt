@@ -38,3 +38,9 @@ Date || Build ||
 	- Implemented tileBreakLevel for all tiles
 	- Made breaking tiles require the tile breakLevel to be zero
 	- Made the Input class understand justClicked, meaning actions that only should happen once when clicked are now possible
+	- Started on trying to render a gfx representation of damage to a tile
+	
+7/24/2020 || pa_1.0.3 ||
+	- Began constructing a primitive lighting system.
+	- Worked on the light blending algorithm. Looks nice, but still needs some tweaking.
+	- Created a Vector2 class to help with lighting calculations

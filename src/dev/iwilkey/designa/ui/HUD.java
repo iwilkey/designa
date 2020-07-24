@@ -1,6 +1,7 @@
 package dev.iwilkey.designa.ui;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.entities.creature.Player;
@@ -10,12 +11,26 @@ public class HUD {
 	
 	private Player player;
 	
-	private int healthX = 600 - (10 * 20);
-	private int healthY = 10;
+	private int screenW, screenH;
+	
+	private int healthX;
+	private int healthY;
 	private int heartSpacing = 18;
+	
+	private Rectangle HUDBar;
 	
 	public HUD(Player player) {
 		this.player = player;
+		screenW = this.player.getAppBuffer().getGame().getWidth();
+		screenH = this.player.getAppBuffer().getGame().getHeight();
+		healthX = (screenW / 2) - ((10 * 18) / 2);
+		healthY = (screenH - 80);
+		
+		HUDBar = new Rectangle(0,0,0,0);
+		HUDBar.x = (screenW / 2) - ((10 * 24) / 2) - 2;
+		HUDBar.y = (screenH - 90);
+		HUDBar.width = (10 * 24);
+		HUDBar.height = 40;
 	}
 	
 	public void tick() {

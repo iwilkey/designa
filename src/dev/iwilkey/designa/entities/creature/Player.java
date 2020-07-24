@@ -120,4 +120,8 @@ public class Player extends Creature {
 		return null;
 	}
 	
+	public AppBuffer getAppBuffer() {
+		return ab;
+	}
+	
 }
