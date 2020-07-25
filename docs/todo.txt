@@ -21,11 +21,7 @@ Important now
 	- Graphics2D.scale() works! It just fucks up the building and destoying system coords, so they need to be multiplied by scale
 	- It also fucks up the centering of the camera, so something needs to be multiplied by scale
 
-- See what can be done about that white line (Rendering issue, I'm guessing has to do with float to int casting somewhere)
-
-- Make primitive lighting system!
-	- Resource: https://gamedev.stackexchange.com/questions/126466/java-2d-lighting
-	- Figure out how to render things darker or lighter. All it takes. Easier said than done.
+- See what can be done about that weird line (Rendering issue, I'm guessing has to do with float to int casting somewhere)
 
 - Create Day and Night cycle.
 	- This is a simple timer that effects lighting.

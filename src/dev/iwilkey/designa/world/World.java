@@ -1,6 +1,5 @@
 package dev.iwilkey.designa.world;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,7 @@ import dev.iwilkey.designa.AppBuffer;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.entities.EntityHandler;
 import dev.iwilkey.designa.entities.creature.Player;
-import dev.iwilkey.designa.gfx.Light;
+import dev.iwilkey.designa.gfx.LightManager;
 import dev.iwilkey.designa.items.ItemHandler;
 import dev.iwilkey.designa.layer.Layer;
 import dev.iwilkey.designa.layer.SkyLayer;
@@ -25,6 +24,7 @@ public class World {
 	public int[][] tiles;
 	public int[][] tileBreakLevel;
 	public int[][] lightMap;
+	private int[][] origLightMap;
 	
 	// Layers
 	private List<Layer> layers = new ArrayList<Layer>();
@@ -36,17 +36,19 @@ public class World {
 	private ItemHandler itemHandler;
 	
 	// Light
-	//private ArrayList<Light> lights = new ArrayList<Light>();
+	private LightManager lightManager;
 	
 	public World(AppBuffer ab, String path) {
 		this.ab = ab;
 		entityHandler = new EntityHandler(ab, new Player(ab, 100, 200));
 		itemHandler = new ItemHandler(ab);
+		lightManager = new LightManager(ab, this);
 		layers.add(new SkyLayer(ab, Assets.air));
 		
 		//itemHandler.addItem(Item.dirtItem.createNew(50, 50));
 		
 		loadWorld(path);
+
 	}
 	
 	public void tick() {
@@ -82,59 +84,24 @@ public class World {
 				int index = Math.round((float)tileBreakLevel[x][y] / 5);
 				g.drawImage(Assets.breakLevel[index], xx, yy, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
 				
-				renderLight(g, x, y);
+				lightManager.renderLight(g, x, y);
 			}
 		}
-		
-		
 		
 		itemHandler.render(g);
 		
 		entityHandler.render(g);
 	}
 	
-	private void renderLight(Graphics g, int x, int y) {
-		int xx = (int) (x * Tile.TILE_SIZE - ab.getCamera().getxOffset());
-		int yy = (int) (y * Tile.TILE_SIZE - ab.getCamera().getyOffset());
-		Color dark = new Color(0,0,0,0);
-		switch(lightMap[x][y]) {
-			case 6:
-				dark = new Color(0,0,0, 0);
-				break;
-			case 5:
-				dark = new Color(0,0,0, Math.round(255 / 4));
-				break;
-			case 4:
-				dark = new Color(0,0,0, Math.round(255 / 2.5f));
-				break;
-			case 3:
-				dark = new Color(0,0,0, Math.round(255 / 1.75f));
-				break;
-			case 2:
-				dark = new Color(0,0,0, Math.round(255 / 1.40f));
-				break;
-			case 1:
-				dark = new Color(0,0,0, Math.round(255 / 1.10f));
-				break;
-			
-			default:
-				dark = new Color(0,0,0, 255);
-
-		}
-		
-		g.setColor(dark);
-		g.fillRect(xx, yy, Tile.TILE_SIZE, Tile.TILE_SIZE);
-	}
-	
 	public Tile getTile(int x, int y) {
 		if(x < 0 || y < 0 || x >= width || y >= height) {
-			return Tile.dirtTile;
+			return Tile.airTile;
 		}
 		
 		Tile t = Tile.tiles[tiles[x][y]];
 		
 		if(t == null) {
-			return Tile.dirtTile;
+			return Tile.airTile;
 		}
 		
 		return t;
@@ -150,6 +117,7 @@ public class World {
 		tiles = new int[width][height];
 		tileBreakLevel = new int[width][height];
 		lightMap = new int[width][height];
+		origLightMap = new int[width][height];
 		
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
@@ -161,16 +129,13 @@ public class World {
 				// ambient light to work properly.
 				if(y > 15 && tiles[x][y] != 0) {
 					lightMap[x][y] = 6 - (Math.abs(y - 16));
+					origLightMap[x][y] = 6 - (Math.abs(y - 16));
 				} else if (tiles[x][y] == 0) {
 					lightMap[x][y] = 6;
+					origLightMap[x][y] = 6;
 				}
 			}
 		}
-		
-		new Light(this,16, 19, 6);
-		new Light(this,16, 23, 6);
-		new Light(this,16, 28, 6);
-		
 	}
 
 	public AppBuffer getAppBuffer() {
@@ -189,6 +154,16 @@ public class World {
 		return entityHandler;
 	}
 	
+	public LightManager getLightManager() {
+		return lightManager;
+	}
 	
+	public void setLightMap(int[][] lm) {
+		this.lightMap = lm;
+	}
 	
+	public int[][] getLightMap() {
+		return this.origLightMap;
+	}
+
 }

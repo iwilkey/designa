@@ -41,6 +41,11 @@ Date || Build ||
 	- Started on trying to render a gfx representation of damage to a tile
 	
 7/24/2020 || pa_1.0.3 ||
-	- Began constructing a primitive lighting system.
+	- Began constructing a primitive lighting system based off the idea of a 6-shade light map.
 	- Worked on the light blending algorithm. Looks nice, but still needs some tweaking.
 	- Created a Vector2 class to help with lighting calculations
+	
+7/25/2020 || pa.1.0.4 ||
+	- Advanced the lighting system by creating the LightManager class
+	- Created a efficient light baking algorithm based on where lights are placed
+	- Now player is able to add lights to or remove lights from the world

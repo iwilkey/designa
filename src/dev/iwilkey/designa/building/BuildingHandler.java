@@ -2,6 +2,7 @@ package dev.iwilkey.designa.building;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
 
 import dev.iwilkey.designa.AppBuffer;
 import dev.iwilkey.designa.assets.Assets;
@@ -37,6 +38,12 @@ public class BuildingHandler {
 			
 			// Damaging
 			if(ab.getInput().justClicked(1)) damageTile(pointerOnTileX(), pointerOnTileY());
+			
+			// If 'L' is pressed, a light will be placed on that tile.
+			if(ab.getInput().keyJustPressed(KeyEvent.VK_L)) ab.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
+			
+			// If 'X' is pressed, a light will be removed on that tile if it exists
+			if(ab.getInput().keyJustPressed(KeyEvent.VK_X)) ab.getWorld().getLightManager().removeLight(pointerOnTileX(), pointerOnTileY());
 					
 		}
 		
