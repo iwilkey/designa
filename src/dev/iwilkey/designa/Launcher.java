@@ -2,7 +2,7 @@ package dev.iwilkey.designa;
 
 public class Launcher {
 	
-	public static final String NAME = "Designa";
+	public static final String NAME = "Designa 1.0.5";
 	public static final int HEIGHT = 600;
 	public static final int WIDTH = 600;
 	

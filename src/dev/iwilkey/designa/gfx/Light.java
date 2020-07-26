@@ -23,7 +23,7 @@ public class Light {
 					Vector2 vec = new Vector2((x - xl), (y - yl));
 					float mag = Vector2.magnitude(vec);
 					int orig = oldLm[xl][yl];
-					if(!(6 - (int)Math.round(mag) < orig))
+					if(!(6 - (mag) < orig))
 						newLm[xl][yl] = 6 - (int)Math.round(mag);
 					
 					if(yl == y + strength && xl == x + strength)

@@ -4,6 +4,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import dev.iwilkey.designa.assets.Assets;
+
 public class Tile {
 	
 	// Statics (The global tile array, the global size of each tile, a global instance of each tile)
@@ -38,12 +40,27 @@ public class Tile {
 		
 	}
 	
-	public void render(Graphics g, int x, int y) { // How do we render a tile? At the x, y set by the world or level.
+	public void render(Graphics g, int x, int y, int bl, int id) { // How do we render a tile? At the x, y set by the world or level.
 		g.drawImage(texture, x, y, TILE_SIZE, TILE_SIZE, null);
+		renderBreakLevel(g, x, y, bl, id);
 	}
 	
-	public void render(Graphics g, float x, float y, float scale) { // How do we render a tile? At the x, y set by the world or level.
-		g.drawImage(texture, (int)(x * scale), (int) (y * scale), (int)(TILE_SIZE * scale), (int) (TILE_SIZE * scale), null);
+	private void renderBreakLevel(Graphics g, int x, int y, int bl, int id) {
+		float pd;
+		if(getStrength(id) > 0) pd = Math.abs((float)(getStrength(id) - bl) / bl) * 100;
+		else pd = 0;
+		
+		if(pd >= 0 && pd <= 20) {
+			g.drawImage(Assets.breakLevel[0], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+		} else if (pd > 20 && pd <= 40) {
+			g.drawImage(Assets.breakLevel[1], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+		} else if (pd > 40 && pd <= 60) {
+			g.drawImage(Assets.breakLevel[2], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+		} else if (pd > 60 && pd <= 80) {
+			g.drawImage(Assets.breakLevel[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+		} else {
+			g.drawImage(Assets.breakLevel[4], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+		}
 	}
 	
 	public boolean isSolid() { // Can you walk through the tile?

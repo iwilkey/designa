@@ -14,14 +14,11 @@ Important now
 - Create a simple placement system
 	- If the item exists in the inventory of the Player, it can be placed.
 	
-- Keep working on the layer system. 
-	- Class is done, now it just needs to be rendered correctly
+- Keep working on the layer system.
 	
 - Make camera zoom? (Scale)
 	- Graphics2D.scale() works! It just fucks up the building and destoying system coords, so they need to be multiplied by scale
 	- It also fucks up the centering of the camera, so something needs to be multiplied by scale
-
-- See what can be done about that weird line (Rendering issue, I'm guessing has to do with float to int casting somewhere)
 
 - Create Day and Night cycle.
 	- This is a simple timer that effects lighting.

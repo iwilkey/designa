@@ -50,9 +50,8 @@ public class Assets {
 		grass = ss.crop(0, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		
 		dirt = new BufferedImage[3];
-		dirt[0] = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
-		dirt[1] = ss.crop(1, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
-		dirt[2] = ss.crop(2, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+		dirt[0] = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE); // Reg tex
+		dirt[1] = ss.crop(1, 3, ss.SLOT_SIZE, ss.SLOT_SIZE); // UndergroundLayer
 		
 		// Init player
 		player = new BufferedImage[2];
@@ -81,11 +80,11 @@ public class Assets {
 		errorSelector = ss.crop(1, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		transSelector = ss.crop(2, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		breakLevel = new BufferedImage[5];
-		breakLevel[0] = ss.crop(5, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+		breakLevel[0] = ss.crop(5, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Clean block
 		breakLevel[1] = ss.crop(1, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		breakLevel[2] = ss.crop(2, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		breakLevel[3] = ss.crop(3, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-		breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+		breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
 		
 		// Init items
 		itemDirt = ss.crop(0, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);

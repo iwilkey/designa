@@ -45,7 +45,12 @@ Date || Build ||
 	- Worked on the light blending algorithm. Looks nice, but still needs some tweaking.
 	- Created a Vector2 class to help with lighting calculations
 	
-7/25/2020 || pa.1.0.4 ||
+7/25/2020 || pa_1.0.4 ||
 	- Advanced the lighting system by creating the LightManager class
 	- Created a efficient light baking algorithm based on where lights are placed
 	- Now player is able to add lights to or remove lights from the world
+	- The tiles now correctly render their break level
+
+7/26/2020 || pa_1.0.5 ||
+	- Added the UndergroundLayer to render the dirt in the background when under ground level
+	- Fixed the white line rendering issue

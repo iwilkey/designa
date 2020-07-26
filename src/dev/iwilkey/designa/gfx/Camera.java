@@ -33,8 +33,8 @@ public class Camera {
 		float targxOffset = e.getX() - (ab.getGame().getWidth() / 2) + e.getWidth() / 2;
 		float targyOffset = e.getY()- (ab.getGame().getHeight() / 2) + e.getHeight() / 2;
 		
-		xOffset += ((targxOffset - xOffset) * camSpeed * 0.01f);
-		yOffset += ((targyOffset - yOffset) * camSpeed * 0.01f);
+		xOffset += (((int)targxOffset - xOffset) * camSpeed * 0.01f);
+		yOffset += (((int)targyOffset - yOffset) * camSpeed * 0.01f);
 
 		checkWhiteSpace();
 	}

@@ -12,6 +12,7 @@ import dev.iwilkey.designa.gfx.LightManager;
 import dev.iwilkey.designa.items.ItemHandler;
 import dev.iwilkey.designa.layer.Layer;
 import dev.iwilkey.designa.layer.SkyLayer;
+import dev.iwilkey.designa.layer.UndergroundLayer;
 import dev.iwilkey.designa.tiles.Tile;
 import dev.iwilkey.designa.utils.Utils;
 
@@ -44,6 +45,7 @@ public class World {
 		itemHandler = new ItemHandler(ab);
 		lightManager = new LightManager(ab, this);
 		layers.add(new SkyLayer(ab, Assets.air));
+		layers.add(new UndergroundLayer(ab, Assets.dirt[1]));
 		
 		//itemHandler.addItem(Item.dirtItem.createNew(50, 50));
 		
@@ -76,13 +78,7 @@ public class World {
 				int xx = (int) (x * Tile.TILE_SIZE - ab.getCamera().getxOffset());
 				int yy = (int) (y * Tile.TILE_SIZE - ab.getCamera().getyOffset());
 				
-				getTile(x, y).render(g, xx, yy); // Render tile
-				
-				// Render the block broken level.
-				// 5 images in the array, 0th element being no damage
-				// Need to find a mathematical model for index to render the correct pattern based the tileBreakLevel.
-				int index = Math.round((float)tileBreakLevel[x][y] / 5);
-				g.drawImage(Assets.breakLevel[index], xx, yy, Tile.TILE_SIZE, Tile.TILE_SIZE, null);
+				getTile(x, y).render(g, xx, yy, tileBreakLevel[x][y], getTile(x, y).getID()); // Render tile
 				
 				lightManager.renderLight(g, x, y);
 			}
