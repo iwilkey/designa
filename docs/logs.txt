@@ -54,3 +54,9 @@ Date || Build ||
 7/26/2020 || pa_1.0.5 ||
 	- Added the UndergroundLayer to render the dirt in the background when under ground level
 	- Fixed the white line rendering issue
+	
+7/27/2020 || pa_1.0.6 ||
+	- Made the player face the direction they are breaking or building blocks in
+	- Began designing an inventory system.
+	- Made the Inventory base class abstract because this game with have two different inventories, one on the player and one as the crate.
+	- Made the PlayerInventory class to render the four slots and items within them.

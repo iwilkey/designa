@@ -8,6 +8,7 @@ import dev.iwilkey.designa.AppBuffer;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.building.BuildingHandler;
 import dev.iwilkey.designa.gfx.Animation;
+import dev.iwilkey.designa.inventory.PlayerInventory;
 import dev.iwilkey.designa.ui.HUD;
 
 public class Player extends Creature {
@@ -21,20 +22,20 @@ public class Player extends Creature {
 	// Building manager
 	private BuildingHandler buildingHandler;
 	
+	// Inventory
+	private PlayerInventory inventory;
+	
 	public Player(AppBuffer ap, float x, float y) {
 		super(ap, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 		
-		// Setting the collider 
-		
+		// Setting the collider
 		collider.width = width - 14;
 		collider.height = height;
 		collider.x = (width / 2) - (collider.width / 2);
 		collider.y = (height / 2) - (collider.height / 2) - 1;
 		
 		// Animations
-		
 		animations = new Animation[2];
-		
 		animations[0] = new Animation(100, Assets.walk_right);
 		animations[1] = new Animation(100, Assets.walk_left);
 		
@@ -43,6 +44,9 @@ public class Player extends Creature {
 		
 		// Building Handler
 		buildingHandler = new BuildingHandler(this, ab);
+		
+		// Init inventory
+		inventory = new PlayerInventory(ab, (ab.getGame().getWidth() / 2) - 100, ab.getGame().getHeight() - 65);
 	}
 	
 	private void getInput()
@@ -73,6 +77,8 @@ public class Player extends Creature {
 		// Building handler
 		buildingHandler.tick();
 		
+		// Inventory
+		inventory.tick();
 	}
 
 	@Override
@@ -87,6 +93,7 @@ public class Player extends Creature {
 		//drawCollider(g);
 		hud.render(g);
 		buildingHandler.render(g);
+		inventory.render(g);
 	}
 
 	@Override
@@ -103,7 +110,6 @@ public class Player extends Creature {
 				return animations[0].getCurrentFrame();
 			}
 		} else if (isMoving && !isGrounded) {
-			// Jump animation here!
 			if(facingLeft) {
 				return Assets.player_jump[0];
 			} else {
@@ -118,6 +124,18 @@ public class Player extends Creature {
 		}
 		
 		return null;
+	}
+	
+	public void changeFacingDirection(int num) {
+		switch(num) {
+			case 0:
+				facingRight = true;
+				facingLeft = false;
+				break;
+			default:
+				facingRight = false;
+				facingLeft = true;
+		}
 	}
 	
 	public AppBuffer getAppBuffer() {

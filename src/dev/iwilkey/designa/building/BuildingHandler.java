@@ -32,7 +32,6 @@ public class BuildingHandler {
 		selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
 		
 		if(inBreakRange) {
-			
 			//Building, TODO: Make sure that "2" is changed to whatever block is selected in the inventory (if applicable)
 			if(ab.getInput().justClicked(3)) placeTile(2, pointerOnTileX(), pointerOnTileY());
 			
@@ -44,7 +43,16 @@ public class BuildingHandler {
 			
 			// If 'X' is pressed, a light will be removed on that tile if it exists
 			if(ab.getInput().keyJustPressed(KeyEvent.VK_X)) ab.getWorld().getLightManager().removeLight(pointerOnTileX(), pointerOnTileY());
-					
+			
+			// Change face direction of player based on where the mouse was clicked
+			if(ab.getInput().justClicked(3) || ab.getInput().justClicked(1)) {
+				int px = (int) (ab.getWorld().getEntityHandler().getPlayer().getX() + ab.getCamera().getxOffset()) / Tile.TILE_SIZE;
+				if((pointerOnTileX() - px) > 0) {
+					ab.getWorld().getEntityHandler().getPlayer().changeFacingDirection(0);
+				} else {
+					ab.getWorld().getEntityHandler().getPlayer().changeFacingDirection(1);
+				}
+			}
 		}
 		
 		collider.x = (int) (selectorX - ab.getCamera().getxOffset());

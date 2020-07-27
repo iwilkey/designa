@@ -26,14 +26,10 @@ public class Light {
 					if(!(6 - (mag) < orig))
 						newLm[xl][yl] = 6 - (int)Math.round(mag);
 					
-					if(yl == y + strength && xl == x + strength)
-						newLm[xl][yl] = orig;
-					if(yl == y - strength && xl == x + strength)
-						newLm[xl][yl] = orig;
-					if(yl == y + strength && xl == x - strength)
-						newLm[xl][yl] = orig;
-					if(yl == y - strength && xl == x - strength)
-						newLm[xl][yl] = orig;
+					if(yl == y + strength && xl == x - strength) newLm[xl][yl] = orig;
+					if(yl == y - strength && xl == x + strength) newLm[xl][yl] = orig;
+					if(yl == y + strength && xl == x - strength) newLm[xl][yl] = orig;
+					if(yl == y - strength && xl == x + strength) newLm[xl][yl] = orig;
 				
 				} catch (ArrayIndexOutOfBoundsException e) {
 					continue;

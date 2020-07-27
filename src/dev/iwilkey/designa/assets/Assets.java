@@ -25,7 +25,7 @@ public class Assets {
 	
 	// GUI
 	public static BufferedImage[] heart, breakLevel;
-	public static BufferedImage selector, errorSelector, transSelector, HUDBar;
+	public static BufferedImage selector, errorSelector, transSelector, HUDBar, invSlot;
 	
 	// Animations
 	public static BufferedImage[] walk_right, walk_left;
@@ -85,6 +85,7 @@ public class Assets {
 		breakLevel[2] = ss.crop(2, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		breakLevel[3] = ss.crop(3, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
+		invSlot = ss.crop(3, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
 		
 		// Init items
 		itemDirt = ss.crop(0, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);

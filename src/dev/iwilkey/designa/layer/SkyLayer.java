@@ -18,8 +18,14 @@ public class SkyLayer extends Layer {
 	}
 	
 	public void render(Graphics g) {
-		for(int x = 0; x < ab.getWorld().getWorldWidth() * Tile.TILE_SIZE; x++) {
-			for(int y = 0; y < ab.getWorld().getWorldHeight() * Tile.TILE_SIZE; y++) {
+		
+		int xStart = (int) Math.max(0, ab.getGame().getCamera().getxOffset() / Tile.TILE_SIZE);
+		int xEnd = (int) Math.min(ab.getGame().getWidth(), ((ab.getGame().getCamera().getxOffset() + ab.getGame().getWidth()) / Tile.TILE_SIZE) + 1);
+		int yStart = (int) Math.max(0, ab.getGame().getCamera().getyOffset() / Tile.TILE_SIZE);
+		int yEnd = (int) Math.min(ab.getGame().getHeight(), ((ab.getGame().getCamera().getyOffset() + ab.getGame().getHeight()) / Tile.TILE_SIZE) + 1);
+		
+		for(int x = xStart * Tile.TILE_SIZE; x < xEnd * Tile.TILE_SIZE; x++) {
+			for(int y = yStart * Tile.TILE_SIZE; y < yEnd * Tile.TILE_SIZE; y++) {
 				if(x % image.getWidth() == 0 && y % image.getHeight() == 0) {
 					
 					int rr = 135 - (y / 3);

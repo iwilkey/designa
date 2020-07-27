@@ -45,7 +45,6 @@ public class LightManager {
 			
 			default:
 				dark = new Color(0,0,0, 255);
-
 		}
 		
 		g.setColor(dark);
