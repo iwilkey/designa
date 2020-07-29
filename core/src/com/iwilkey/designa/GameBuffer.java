@@ -1,5 +1,6 @@
 package com.iwilkey.designa;
 
+import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.world.World;
 
 public class GameBuffer {
@@ -19,9 +20,9 @@ public class GameBuffer {
     public Game getGame() {
         return game;
     }
-
     public World getWorld() {
         return world;
     }
+    public Camera getCamera() { return game.getCamera(); }
 
 }

@@ -2,7 +2,6 @@ package com.iwilkey.designa.world;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
@@ -46,7 +45,7 @@ public class World {
     }
 
     public Tile getTile(int x, int y) {
-        if(x < 0 || y < 0 || x > w || y > h) return Tile.airTile;
+        if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
 
         Tile t = Tile.tiles[tiles[x][Math.abs(h - y) - 1]];
 

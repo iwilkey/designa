@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
 
@@ -25,6 +26,9 @@ public class Game extends ApplicationAdapter {
 
 	// States
 	private State gameState;
+
+	// Camera
+	private Camera camera;
 
 	public Game() {
 
@@ -51,6 +55,9 @@ public class Game extends ApplicationAdapter {
 		// Init dimensions
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
+
+		// Init camera
+		camera = new Camera(gb, 0, 0);
 	}
 
 	private void tick() {
@@ -80,12 +87,7 @@ public class Game extends ApplicationAdapter {
 		batch.begin();
 
 		// Set camera matrix
-		/*
-		Vector3 position = new Vector3(100,0,0);
-		Matrix4 mat = new Matrix4();
-		mat.translate(position);
-		batch.setTransformMatrix(mat);
-		*/
+		batch.setTransformMatrix(Camera.mat);
 
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().render(batch);
@@ -109,4 +111,6 @@ public class Game extends ApplicationAdapter {
 			State.getCurrentState().dispose();
 		}
 	}
+
+	public Camera getCamera() { return camera; }
 }

@@ -86,7 +86,7 @@ public abstract class Creature extends Entity {
     }
 
     private void moveY() {
-        int ty = (int) (y - gravity - collider.y - collider.height) / Tile.TILE_SIZE;
+        int ty = (int) (y - gravity - collider.y - collider.height + 24) / Tile.TILE_SIZE;
         if(!collisionWithTile((int) (x + collider.x) / Tile.TILE_SIZE, ty) &&
                 !collisionWithTile((int) (x + collider.x + collider.width) / Tile.TILE_SIZE, ty)){
             isGrounded = false;
@@ -99,7 +99,7 @@ public abstract class Creature extends Entity {
             }
 
             timeInAir = 0;
-            y = ty * Tile.TILE_SIZE - collider.y - collider.height - 1;
+            y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
 
     }

@@ -25,6 +25,7 @@ public class GameState extends State {
 
     @Override
     public void tick() {
+        gb.getCamera().tick();
         world.tick();
     }
 

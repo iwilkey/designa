@@ -2,6 +2,7 @@ package com.iwilkey.designa.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.gfx.Geometry;
 
@@ -15,7 +16,7 @@ public abstract class Entity {
     protected float x, y;
     protected int width, height;
     protected int health;
-    protected boolean active = true;
+    protected boolean active;
     protected Rectangle collider;
 
     public Entity(GameBuffer gb, float x, float y, int w, int h) {

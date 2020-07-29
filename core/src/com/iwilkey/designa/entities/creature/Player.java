@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 
@@ -14,10 +13,10 @@ public class Player extends Creature {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 
         // Setting the collider
-        collider.width = width - 14;
+        collider.width = width - 9;
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
-        collider.y = (height / 2) - (collider.height / 2) - 1;
+        collider.y = (height / 2) - (collider.height / 2) + 1;
 
     }
 
@@ -32,8 +31,14 @@ public class Player extends Creature {
 
     @Override
     public void tick() {
+
+        // Move
         control();
         move();
+
+        // Center camera
+        gb.getCamera().centerOnEntity(this);
+
     }
 
     @Override
