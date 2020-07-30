@@ -26,6 +26,13 @@ public abstract class Creature extends Entity {
     protected float jumpTime = 1.0f;
     protected boolean isJumping = false;
 
+    // Rendering (Flashing)
+    protected boolean isFlashing = false;
+    protected float flashTime = 1.0f;
+    protected float flashDurationTimer = 0;
+    protected float flashIntervalTime = 0.08f;
+    protected float flashInterval = 0;
+
     public Creature(GameBuffer gb, float x, float y, int w, int h) {
         super(gb, x, y, w, h);
 
@@ -51,7 +58,7 @@ public abstract class Creature extends Entity {
             timeInAir += 0.1;
         }
 
-        //if(isFlashing) checkFlash();
+        if(isFlashing) checkFlash();
     }
 
     private void moveX() {
@@ -95,13 +102,34 @@ public abstract class Creature extends Entity {
             isGrounded = true;
 
             if(timeInAir > 2.1f) {
-                //fallDamage();
+                fallDamage();
             }
 
             timeInAir = 0;
             y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
 
+    }
+
+    public void checkFlash() {
+        flashDurationTimer += 0.01f;
+        flashInterval += 0.01f;
+
+        if(flashDurationTimer >= flashTime) {
+            isFlashing = false;
+        }
+        if(flashInterval >= flashIntervalTime * 2) {
+            flashInterval = 0;
+        }
+    }
+
+    private void fallDamage() {
+        hurt((int)(Math.floor(timeInAir) / 1.4f)); // Fall damage
+
+        // Init some flashing
+        flashDurationTimer = 0;
+        flashInterval = 0;
+        isFlashing = true;
     }
 
     protected void jump() {

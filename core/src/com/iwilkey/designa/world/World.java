@@ -3,6 +3,7 @@ package com.iwilkey.designa.world;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.tiles.Tile;
@@ -21,13 +22,18 @@ public class World {
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
+
+        // Entity
         entityHandler = new EntityHandler(gb, new Player(gb, 100, 500));
 
         loadWorld(path);
     }
 
+    float time = 0;
     public void tick() {
+        time += 0.01f;
         entityHandler.tick();
+
     }
 
     public void render(Batch b) {
@@ -36,11 +42,15 @@ public class World {
             for(int x = 0; x < w; x++) {
                 int xx = x * Tile.TILE_SIZE;
                 int yy = y * Tile.TILE_SIZE;
+
+                // Layers need to be rendered here because the Layer class was too performance intensive
+                b.draw(Assets.sky_colors[(int)time % 10], xx, yy + 100, 16, 16); // Back
+                if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy);
             }
         }
 
-        entityHandler.render(b);
+        entityHandler.render(b); // Front
 
     }
 
@@ -76,5 +86,7 @@ public class World {
     public GameBuffer getGameBuffer() {
         return gb;
     }
+
+    public EntityHandler getEntityHandler() { return entityHandler; }
 
 }

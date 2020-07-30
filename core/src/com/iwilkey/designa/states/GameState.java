@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.world.World;
 
 public class GameState extends State {
@@ -20,7 +21,7 @@ public class GameState extends State {
 
     @Override
     public void start() {
-
+        InputHandler.initGameStateInput();
     }
 
     @Override
@@ -32,7 +33,11 @@ public class GameState extends State {
     @Override
     public void render(Batch b) {
         world.render(b);
-        Text.draw(b, "Designa demo", 14, Game.h - 14 - 8);
+    }
+
+    @Override
+    public void onGUI(Batch b) {
+        gb.getWorld().getEntityHandler().getPlayer().getHUD().render(b);
     }
 
     @Override

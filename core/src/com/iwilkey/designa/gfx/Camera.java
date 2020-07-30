@@ -12,7 +12,7 @@ public class Camera {
     private GameBuffer gb;
 
     private Vector3 position;
-    private Vector3 offset;
+    public Vector3 offset;
 
     public static Matrix4 mat = new Matrix4();
 

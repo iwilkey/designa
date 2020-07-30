@@ -17,6 +17,7 @@ public abstract class State {
     public abstract void start();
     public abstract void tick();
     public abstract void render(Batch b);
+    public abstract void onGUI(Batch b);
     public abstract void dispose();
 
 }

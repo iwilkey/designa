@@ -1,13 +1,21 @@
 package com.iwilkey.designa.entities.creature;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.gui.HUD;
+import com.iwilkey.designa.input.InputHandler;
 
 public class Player extends Creature {
+
+    // Animations
+    private Animation[] animations;
+
+    // HUD
+    private HUD hud;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -18,19 +26,36 @@ public class Player extends Creature {
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
+        // Init Animations
+        animations = new Animation[2];
+        animations[0] = new Animation(100, Assets.walk_right);
+        animations[1] = new Animation(100, Assets.walk_left);
+
+        // HUD
+        hud = new HUD(this);
+
     }
 
     private void control() {
         xMove = 0;
 
-        // Desktop
-        if(Gdx.input.isKeyPressed(Input.Keys.D)) xMove += speed;
-        if(Gdx.input.isKeyPressed(Input.Keys.A)) xMove -= speed;
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !isJumping && isGrounded) jump();
+        if(InputHandler.moveRight) xMove += speed;
+        if(InputHandler.moveLeft) xMove -= speed;
+        if(InputHandler.jumpRequest && !isJumping && isGrounded) jump();
+        InputHandler.jumpRequest = false;
+
     }
 
     @Override
     public void tick() {
+
+        // Tick animations
+        for(Animation anim : animations) {
+            anim.tick();
+        }
+
+        // Tick HUD
+        hud.tick();
 
         // Move
         control();
@@ -43,7 +68,11 @@ public class Player extends Creature {
 
     @Override
     public void render(Batch b) {
-        b.draw(Assets.player, x, y, width, height);
+        if(isFlashing && flashInterval >= flashIntervalTime) {
+            b.draw(currentSprite(), x, y, width, height);
+        } else if (!isFlashing) {
+            b.draw(currentSprite(), x, y, width, height);
+        }
     }
 
     @Override
@@ -51,6 +80,31 @@ public class Player extends Creature {
 
     }
 
+    private TextureRegion currentSprite() {
+        if(isMoving && isGrounded) {
+            if(facingLeft) {
+                return animations[1].getCurrentFrame();
+            } else if (facingRight){
+                return animations[0].getCurrentFrame();
+            }
+        } else if (isMoving) {
+            if(facingLeft) {
+                return Assets.player_jump[0];
+            } else {
+                return Assets.player_jump[1];
+            }
+        } else {
+            if(facingLeft) {
+                return Assets.player[0];
+            } else {
+                return Assets.player[1];
+            }
+        }
+
+        return null;
+    }
+
     public GameBuffer getGameBuffer() { return gb; }
+    public HUD getHUD() { return hud; }
 
 }

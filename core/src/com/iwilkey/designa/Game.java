@@ -5,8 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.states.GameState;
@@ -22,7 +20,8 @@ public class Game extends ApplicationAdapter {
 	private GameBuffer gb;
 
 	// Graphics
-	SpriteBatch batch;
+	SpriteBatch gameBatch;
+	SpriteBatch guiBatch;
 
 	// States
 	private State gameState;
@@ -30,14 +29,11 @@ public class Game extends ApplicationAdapter {
 	// Camera
 	private Camera camera;
 
-	public Game() {
-
-	}
-	
 	@Override
 	public void create () {
 		// Init graphics batch
-		batch = new SpriteBatch();
+		gameBatch = new SpriteBatch();
+		guiBatch = new SpriteBatch();
 
 		// Init assets
 		Assets.init();
@@ -84,16 +80,20 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		batch.begin();
-
-		// Set camera matrix
-		batch.setTransformMatrix(Camera.mat);
-
+		// Render game
+		gameBatch.begin();
+		gameBatch.setTransformMatrix(Camera.mat);
 		if(State.getCurrentState() != null) {
-			State.getCurrentState().render(batch);
+			State.getCurrentState().render(gameBatch);
 		}
+		gameBatch.end();
 
-		batch.end();
+		// Render GUI
+		guiBatch.begin();
+		if(State.getCurrentState() != null) {
+			State.getCurrentState().onGUI(guiBatch);
+		}
+		guiBatch.end();
 
 		if(timer > 1000000000) {
 			System.out.println("tps: " + ticks);
@@ -105,7 +105,8 @@ public class Game extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
+		gameBatch.dispose();
+		guiBatch.dispose();
 
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().dispose();
