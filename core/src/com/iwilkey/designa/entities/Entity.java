@@ -1,10 +1,8 @@
 package com.iwilkey.designa.entities;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
-import com.iwilkey.designa.gfx.Geometry;
 
 import java.awt.Rectangle;
 
@@ -43,10 +41,6 @@ public abstract class Entity {
     public Rectangle getCollisionBounds(float xOff, float yOff) {
         return new Rectangle((int) (x + collider.x + xOff),
                 (int) (y + collider.y + yOff), collider.width, collider.height);
-    }
-
-    protected void drawCollider() {
-        Geometry.rect(x + collider.x, y + collider.y, collider.width, collider.height, Color.RED, Geometry.ShapeType.LINE);
     }
 
     public float getX() { return x; }
