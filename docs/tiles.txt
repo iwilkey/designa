@@ -1,0 +1,6 @@
+This is a list of tiles and what they do in Devisea.
+It is formatted: ID || Name || Solid? || Description
+
+0 || Air || Not Solid || This tile is the basic air tile. It is colored blue as the sky would be. May change color based on time of day?
+1 || Grass || Solid || This is the basic grass tile.
+2 || Dirt || Solid || This is the basic dirt tile.

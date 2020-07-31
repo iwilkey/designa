@@ -15,6 +15,7 @@ public class Assets {
 
     // GUI
     public static TextureRegion[] heart;
+    public static TextureRegion selector, errorSelector, transSelector;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt;
@@ -44,6 +45,9 @@ public class Assets {
         heart = new TextureRegion[2];
         heart[0] = ss.crop(0, 3, ss.SLOT_SIZE, ss.SLOT_SIZE); // Full heart
         heart[1] = ss.crop(0, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Empty heart
+        selector = ss.crop(0, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        errorSelector = ss.crop(1, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        transSelector = ss.crop(2, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

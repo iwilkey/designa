@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gui.HUD;
 import com.iwilkey.designa.input.InputHandler;
@@ -16,6 +17,9 @@ public class Player extends Creature {
 
     // HUD
     private HUD hud;
+
+    // Building
+    private BuildingHandler buildingHandler;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -33,6 +37,9 @@ public class Player extends Creature {
 
         // HUD
         hud = new HUD(this);
+
+        // Building
+        buildingHandler = new BuildingHandler(gb, this);
 
     }
 
@@ -63,6 +70,9 @@ public class Player extends Creature {
 
         // Center camera
         gb.getCamera().centerOnEntity(this);
+
+        // Building
+        buildingHandler.tick();
 
     }
 
@@ -106,5 +116,6 @@ public class Player extends Creature {
 
     public GameBuffer getGameBuffer() { return gb; }
     public HUD getHUD() { return hud; }
+    public BuildingHandler getBuildingHandler() { return buildingHandler; }
 
 }

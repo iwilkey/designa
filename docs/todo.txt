@@ -1,0 +1,68 @@
+These things need to be done, but don't need to be done in order (unless marked important)
+-----------------------------------------------------------------------------------------
+
+Important now
+-------------
+
+- REBUILD APP UP TO THIS POINT USING LIBGDX!
+
+- Tiles need to drop resources when broken!
+		
+- Create a simple placement system
+	- If the item exists in the inventory of the Player, it can be placed.
+	
+- Keep working on the layer system.
+	
+- Make camera zoom? (Scale)
+	- Graphics2D.scale() works! It just fucks up the building and destoying system coords, so they need to be multiplied by scale
+	- It also fucks up the centering of the camera, so something needs to be multiplied by scale
+
+- Create Day and Night cycle.
+	- This is a simple timer that effects lighting.
+	- Make a sun and moon graphic and move them across the top of the screen to indicate what time it is.
+
+For later on
+------------
+
+- Consider changing the inventory graphic?
+
+- Create more tiles! (See Tiles list in docs)
+
+- Create more items! (See Items list in docs)
+
+- Create the Crate item.
+	- Another inventory with many slots (depending on level) For now, 25 should be fine.
+
+- Create resources such as Trees and Scrap (Most general)
+	- Either make a sprite for them or...
+	- Make them as an array of tiles?
+	
+- Make workbench (Standing near it gives a GUI to make items)
+	- The item workbench
+
+- Make workbench GUI
+	- When player is near workbench and press 'E' a GUI will be brought up of all items they can craft with things
+	in their crate and inventory
+
+- Create minerals such as Copper and Tin
+	- These can not be mined by hand, but a Drill can be placed on them to mine them.
+
+- Create the drill and pipe system. lamo I'm thinking Mindustry
+	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
+	- Just start with one.
+	- This will need it's own package most likely. Very complex. Look at Mindustry's code for inspiration?
+	
+- Create simple Turrets and / or weapons
+	- Simple AI will need to be created.
+
+- Create ground and air enemies
+	- These are Creatures in the Entity package.
+	- Simple AI must be created.
+	
+- Create worlds for players to try and beat
+
+- Make more pleasing backgrounds, and try and use the layer system to parallax them when moving
+
+- Check out how this can become an iOS / Android app
+
+- Add more to this list.

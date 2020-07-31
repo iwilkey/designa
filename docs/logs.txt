@@ -1,0 +1,79 @@
+This document logs additions / patch notes to the Designa video game.
+
+It is formatted: 
+Date || Build || 
+	- Notes
+
+7/21/2020 || pa_1.0.0 || 
+	- Boilerplate engine design
+	- Game loop 
+	- Asset / primitive text (no numbers or other special characters) / gfx rendering 
+	- Input 
+	- Basic entity management system
+	- Tile system
+	- Added three tiles: Air tile ID 0, Grass tile ID 1, and Dirt tile ID 2
+	- State system
+	- World loader
+
+7/22/2020 || pa_1.0.1 ||  
+	- Basic creature physics
+	- World editing (place and delete dirt tiles)
+	- Basic HUD system rendering player health
+	- Time-based fall damage
+	- Camera, with smooth follow
+	- Creature hurt flashing
+	- Made the Air tile transparent, so ready to render the layer system that needs to be tweaked
+	
+7/23/2020 || pa_1.0.2 ||  
+	- Made render layers abstract
+	- SkyLayer will be the default first rendered layer. It renders a fillRect of color col across the entire map
+	- SkyLayer now can render the sky at any color according to var (night and day)
+	- Made a custom cursor
+	- Made Item class
+	- Made ItemHandler class, to make it easy to manage in the World
+	- Added "Dirt" item ID 0
+	- Made block selector graphic
+	- Implemented break and place range
+	- Made it impossible to place tiles on top of player
+	- Implemented tileBreakLevel for all tiles
+	- Made breaking tiles require the tile breakLevel to be zero
+	- Made the Input class understand justClicked, meaning actions that only should happen once when clicked are now
+	    possible
+	- Started on trying to render a gfx representation of damage to a tile
+	
+7/24/2020 || pa_1.0.3 ||
+	- Began constructing a primitive lighting system based off the idea of a 6-shade light map.
+	- Worked on the light blending algorithm. Looks nice, but still needs some tweaking.
+	- Created a Vector2 class to help with lighting calculations
+	
+7/25/2020 || pa_1.0.4 ||
+	- Advanced the lighting system by creating the LightManager class
+	- Created a efficient light baking algorithm based on where lights are placed
+	- Now player is able to add lights to or remove lights from the world
+	- The tiles now correctly render their break level
+
+7/26/2020 || pa_1.0.5 ||
+	- Added the UndergroundLayer to render the dirt in the background when under ground level
+	- Fixed the white line rendering issue
+	
+7/27/2020 || pa_1.0.6 ||
+	- Made the player face the direction they are breaking or building blocks in
+	- Began designing an inventory system.
+	- Made the Inventory base class abstract because this game with have two different inventories, one on the
+	    player and one as the crate.
+	- Made the PlayerInventory class to render the four slots and items within them.
+
+7/29/ 2020 || pa_1.0.7 ||
+    - Began the process of migrating entire project to implement libgdx so I can take advantage of Gradle.
+
+7/30/2020 || pa_1.0.8 ||
+    - Built an efficient input handler system so as to be general for core code but be written differently for
+        each platform.
+    - Continued to set up the project, changing a few minor things.
+    - Created a new camera zoom system.
+    - Rebuilt up to the point where world and entities are rendered correctly and user can control player.
+
+7/31/2020 || pa_1.0.9 ||
+    - Changed camera zoom controls
+    - Cleaned up various code
+    - Rebuilt up to the point where the building system is active (except for properly destroying blocks)

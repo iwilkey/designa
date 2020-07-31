@@ -52,6 +52,8 @@ public class World {
 
         entityHandler.render(b); // Front
 
+        entityHandler.getPlayer().getBuildingHandler().render(b);
+
     }
 
     public Tile getTile(int x, int y) {

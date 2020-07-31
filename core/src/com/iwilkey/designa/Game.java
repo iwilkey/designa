@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
 
@@ -29,6 +30,9 @@ public class Game extends ApplicationAdapter {
 	// Camera
 	private Camera camera;
 
+	// Input
+	private InputHandler input;
+
 	@Override
 	public void create () {
 		// Init graphics batch
@@ -40,6 +44,9 @@ public class Game extends ApplicationAdapter {
 
 		// Game Buffer
 		gb = new GameBuffer(this);
+
+		// Input
+		input = new InputHandler();
 
 		// Init states
 		gameState = new GameState(gb);
@@ -57,6 +64,7 @@ public class Game extends ApplicationAdapter {
 	}
 
 	private void tick() {
+		input.tick();
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().tick();
 		}
