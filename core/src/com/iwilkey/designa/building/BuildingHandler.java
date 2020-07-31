@@ -39,12 +39,19 @@ public class BuildingHandler {
             // Controlling the building will be different depending on the platform...
             switch(Gdx.app.getType()) {
                 case Desktop:
-                    // TODO: Replace '2' with ID of block selected in inventory.
-                    if (InputHandler.rightMouseButtonDown) placeTile(2, pointerOnTileX(), pointerOnTileY());
+                    // TODO: Replace @peram ID '2' with ID of block selected in inventory.
+                    if (InputHandler.rightMouseButtonDown) {
+                        if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
+                        else player.setFace(0);
+                        placeTile(2, pointerOnTileX(), pointerOnTileY());
+                    }
 
                     // If right mouse button was just clicked...
-                    if (InputHandler.leftMouseButtonDown) gb.getWorld().tiles[pointerOnTileX()]
-                            [(gb.getWorld().h - pointerOnTileY()) - 1] = 0;
+                    if (InputHandler.leftMouseButtonDown) {
+                        if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
+                        else player.setFace(0);
+                        damageTile(pointerOnTileX(), pointerOnTileY());
+                    }
 
                     break;
 
@@ -65,27 +72,25 @@ public class BuildingHandler {
     private void placeTile(int id, int x, int y) {
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
             gb.getWorld().tiles[x][(gb.getWorld().h - y) - 1] = id;
-            // gb.getWorld().tileBreakLevel[x][y] = Tile.getStrength(id);
+            gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] = Tile.getStrength(id);
         } else {
             return;
         }
     }
 
-    /*
     private void damageTile(int x, int y) {
         if(!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
-            gb.getWorld().tileBreakLevel[x][y]--;
+            gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1]--;
 
-            if(gb.getWorld().tileBreakLevel[x][y] <= 0) {
-                gb.getWorld().tiles[x][y] = 0;
-                gb.getWorld().tileBreakLevel[x][y] = Tile.getStrength(0);
+            if(gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] <= 0) {
+                gb.getWorld().tiles[x][(gb.getWorld().h - y) - 1] = 0;
+                gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] = Tile.getStrength(0);
             }
 
         } else {
             return;
         }
     }
-     */
 
     private int pointerOnTileX() {
         return (int) ((((InputHandler.cursorX) - Camera.position.x) /
@@ -100,7 +105,7 @@ public class BuildingHandler {
     public void render(Batch b) {
 
         if(Math.abs(selectorX - player.getX()) < 1.5 * Tile.TILE_SIZE &&
-            Math.abs(selectorY - player.getY()) < 2 * Tile.TILE_SIZE) {
+                Math.abs(selectorY - (player.getY() + 8)) < 2 * Tile.TILE_SIZE) {
             inRange = true;
 
             if(!(gb.getWorld().getEntityHandler().getPlayer().getCollisionBounds(0f,0f).intersects(selectorCollider))) {

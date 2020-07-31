@@ -3,8 +3,9 @@ package com.iwilkey.designa.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Cursor;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.iwilkey.designa.Game;
-import com.iwilkey.designa.gfx.Camera;
 
 public class InputHandler {
 
@@ -24,6 +25,15 @@ public class InputHandler {
         keys = new boolean[256];
         jp = new boolean[256];
         cp = new boolean[256];
+
+        setCursorAs("textures/cursor.png");
+    }
+
+    public static void setCursorAs(String path) {
+        Pixmap pix = new Pixmap(Gdx.files.internal(path));
+        Cursor cursor = Gdx.graphics.newCursor(pix, 4, 4);
+        Gdx.graphics.setCursor(cursor);
+        pix.dispose();
     }
 
     public static void initGameStateInput() {

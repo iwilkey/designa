@@ -76,4 +76,5 @@ Date || Build ||
 7/31/2020 || pa_1.0.9 ||
     - Changed camera zoom controls
     - Cleaned up various code
-    - Rebuilt up to the point where the building system is active (except for properly destroying blocks)
+    - Rebuilt up to the point where the building system is active and player looks at whatever side is being
+        edited. Also, tile strengths are rendered.

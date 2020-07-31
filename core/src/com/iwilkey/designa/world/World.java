@@ -16,16 +16,14 @@ public class World {
 
     // Rendering
     public int[][] tiles;
+    public int[][] tileBreakLevel;
 
     // Entities
     private EntityHandler entityHandler;
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
-
-        // Entity
         entityHandler = new EntityHandler(gb, new Player(gb, 100, 500));
-
         loadWorld(path);
     }
 
@@ -46,7 +44,7 @@ public class World {
                 // Layers need to be rendered here because the Layer class was too performance intensive
                 b.draw(Assets.sky_colors[(int)time % 10], xx, yy + 100, 16, 16); // Back
                 if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
-                getTile(x, y).render(b, xx, yy);
+                getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
             }
         }
 
@@ -58,13 +56,8 @@ public class World {
 
     public Tile getTile(int x, int y) {
         if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
-
         Tile t = Tile.tiles[tiles[x][Math.abs(h - y) - 1]];
-
-        if(t == null) {
-            return Tile.airTile;
-        }
-
+        if(t == null) return Tile.airTile;
         return t;
     }
 
@@ -76,11 +69,13 @@ public class World {
         h = Utils.parseInt(tokens[1]);
 
         tiles = new int[w][h];
+        tileBreakLevel = new int[w][h];
 
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
                 int id = Utils.parseInt(tokens[x + y * w + 2]);
                 tiles[x][y] = id;
+                tileBreakLevel[x][y] = Tile.getStrength(id);
             }
         }
     }

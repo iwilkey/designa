@@ -7,6 +7,9 @@ import com.iwilkey.designa.gfx.SpriteSheet;
 
 public class Assets {
 
+    // Cursor TODO: Check if this causes problems on a smartphone...
+    public static TextureRegion cursor;
+
     // Font
     public static TextureRegion[] font;
 
@@ -14,7 +17,7 @@ public class Assets {
     public static TextureRegion[] sky_colors;
 
     // GUI
-    public static TextureRegion[] heart;
+    public static TextureRegion[] heart, breakLevel;
     public static TextureRegion selector, errorSelector, transSelector;
 
     // Tiles
@@ -28,6 +31,9 @@ public class Assets {
     public static void init() {
 
         SpriteSheet ss = new SpriteSheet(new Texture("textures/spritesheet.png"));
+
+        // Cursor
+        cursor = ss.crop(0, 5, ss.SLOT_SIZE * 4, ss.SLOT_SIZE * 4);
 
         // Init font
         font = new TextureRegion[27];
@@ -48,6 +54,12 @@ public class Assets {
         selector = ss.crop(0, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         errorSelector = ss.crop(1, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         transSelector = ss.crop(2, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        breakLevel = new TextureRegion[5];
+        breakLevel[0] = ss.crop(5, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Clean block
+        breakLevel[1] = ss.crop(1, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        breakLevel[2] = ss.crop(2, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        breakLevel[3] = ss.crop(3, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

@@ -114,6 +114,16 @@ public class Player extends Creature {
         return null;
     }
 
+    public void setFace(int face) {
+        if(face == 0) {
+            facingLeft = true;
+            facingRight = false;
+        } else {
+            facingLeft = false;
+            facingRight = true;
+        }
+    }
+
     public GameBuffer getGameBuffer() { return gb; }
     public HUD getHUD() { return hud; }
     public BuildingHandler getBuildingHandler() { return buildingHandler; }

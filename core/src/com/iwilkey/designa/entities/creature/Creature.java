@@ -126,7 +126,6 @@ public abstract class Creature extends Entity {
     private void fallDamage() {
         hurt((int)(Math.floor(timeInAir) / 1.4f)); // Fall damage
 
-        // Init some flashing
         flashDurationTimer = 0;
         flashInterval = 0;
         isFlashing = true;
@@ -136,7 +135,7 @@ public abstract class Creature extends Entity {
         isJumping = true;
         jumpTimer += 0.1;
 
-        int ty = (int) (y + yMove + collider.y) / Tile.TILE_SIZE;
+        int ty = (int) (y + yMove + collider.y + collider.height) / Tile.TILE_SIZE;
         if(!collisionWithTile((int) (x + collider.x) / Tile.TILE_SIZE, ty) &&
                 !collisionWithTile((int) (x + collider.x + collider.width) / Tile.TILE_SIZE, ty)) {
             isGrounded = false;
