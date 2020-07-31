@@ -1,6 +1,7 @@
 package com.iwilkey.designa.building;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
@@ -39,18 +40,16 @@ public class BuildingHandler {
             // Controlling the building will be different depending on the platform...
             switch(Gdx.app.getType()) {
                 case Desktop:
-                    // TODO: Replace @peram ID '2' with ID of block selected in inventory.
+                    // TODO: Replace @param ID '2' with ID of block selected in inventory.
                     if (InputHandler.rightMouseButtonDown) {
-                        if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
-                        else player.setFace(0);
+                        checkFace();
                         placeTile(2, pointerOnTileX(), pointerOnTileY());
                     }
 
-                    // If right mouse button was just clicked...
                     if (InputHandler.leftMouseButtonDown) {
-                        if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
-                        else player.setFace(0);
+                        checkFace();
                         damageTile(pointerOnTileX(), pointerOnTileY());
+                        gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     break;
@@ -67,6 +66,11 @@ public class BuildingHandler {
 
         selectorCollider.x = (int) selectorX;
         selectorCollider.y = (int) selectorY;
+    }
+
+    private void checkFace() {
+        if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
+        else player.setFace(0);
     }
 
     private void placeTile(int id, int x, int y) {

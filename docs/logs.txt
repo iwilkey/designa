@@ -78,3 +78,5 @@ Date || Build ||
     - Cleaned up various code
     - Rebuilt up to the point where the building system is active and player looks at whatever side is being
         edited. Also, tile strengths are rendered.
+    - Rebuilding lighting system. Inital lights look fine, huge problems when go to placing lights. Some math
+        needs to be done to correct the OpenGL inverted y cord system.

@@ -14,7 +14,7 @@ public class Assets {
     public static TextureRegion[] font;
 
     // Colors
-    public static TextureRegion[] sky_colors;
+    public static TextureRegion[] sky_colors, light_colors;
 
     // GUI
     public static TextureRegion[] heart, breakLevel;
@@ -45,6 +45,10 @@ public class Assets {
         sky_colors = new TextureRegion[10];
         for(int i = 0; i < 10; i++) {
             sky_colors[i] = ss.crop(i, 11, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        }
+        light_colors = new TextureRegion[7];
+        for(int i = 0; i < 7; i++) {
+            light_colors[i] = ss.crop(i, 12, ss.SLOT_SIZE, ss.SLOT_SIZE);
         }
 
         // Init GUI

@@ -19,6 +19,7 @@ public class InputHandler {
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
     public static boolean leftMouseButton, rightMouseButton;
+    public static boolean placeLight, deleteLight;
 
 
     public InputHandler() {
