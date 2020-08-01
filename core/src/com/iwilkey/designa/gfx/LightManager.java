@@ -27,7 +27,7 @@ public class LightManager {
 
         TextureRegion shade;
 
-        switch (world.getLightMap()[x][(gb.getWorld().h - y) - 1]) {
+        switch (world.lightMap[x][y]) {
             case 6:
                 shade = Assets.light_colors[6];
                 break;
@@ -55,6 +55,7 @@ public class LightManager {
     }
 
     public void addLight(int x, int y, int strength) {
+
         for(int i = 0; i < lights.size(); i++) {
             if(lights.get(i).x == x && lights.get(i).y == y) return;
         }
@@ -63,10 +64,10 @@ public class LightManager {
 
         bakeLighting();
 
-        System.out.println("Light added at " + x + " " + y);
     }
 
     public void removeLight(int x, int y) {
+
         boolean found = false;
         for(int i = 0; i < lights.size(); i++) {
             if(lights.get(i).x == x && lights.get(i).y == y) {
@@ -79,17 +80,18 @@ public class LightManager {
             if(lights.size() >= 1) bakeLighting();
             else world.setLightMap(world.getLightMap());
         }
+
     }
 
     public void bakeLighting() {
+
         int ww = world.w;
         int hh = world.h;
 
         int oldLm[][] = new int[ww][hh];
         for(int y = 0; y < hh; y++) {
             for(int x = 0; x < ww; x++) {
-                // TODO: This also could be the source of light rendering trouble.
-                oldLm[x][(hh - y) - 1] = world.getLightMap()[x][(hh - y) - 1];
+                oldLm[x][y] = world.getLightMap()[x][y];
             }
         }
 
@@ -99,9 +101,8 @@ public class LightManager {
             else newLm = lights.get(i).buildLightMap(oldLm, ww, hh);
 
         }
-        world.setLightMap(newLm);
 
-        System.out.println("Light has been baked!");
+        world.setLightMap(newLm);
     }
 
 }

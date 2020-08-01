@@ -1,7 +1,6 @@
 package com.iwilkey.designa.building;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
@@ -38,6 +37,7 @@ public class BuildingHandler {
         if(inRange) {
 
             // Controlling the building will be different depending on the platform...
+            // TODO: Implement these controls within the input manager and check if @bool isBuilding is on or something.
             switch(Gdx.app.getType()) {
                 case Desktop:
                     // TODO: Replace @param ID '2' with ID of block selected in inventory.
@@ -49,7 +49,6 @@ public class BuildingHandler {
                     if (InputHandler.leftMouseButtonDown) {
                         checkFace();
                         damageTile(pointerOnTileX(), pointerOnTileY());
-                        gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     break;

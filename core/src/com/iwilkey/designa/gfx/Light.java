@@ -12,7 +12,6 @@ public class Light {
         this.strength = strength;
     }
 
-    // TODO: I suspect this is the place that gives the light system trouble. (world.h - y) needs to be applied in the right places.
     public int[][] buildLightMap(int[][] oldLm, int w, int h) {
         int[][] newLm = oldLm;
 
@@ -21,20 +20,20 @@ public class Light {
 
                 try {
 
-                    Vector2 vec = new Vector2((x - xl), ((h - y) - (h - yl)));
+                    Vector2 vec = new Vector2((x - xl), (y - yl));
                     float mag = Vector2.magnitude(vec);
-                    int orig = oldLm[xl][(h - yl) - 1];
+                    int orig = oldLm[xl][yl];
                     if(!(6 - (mag) < orig))
-                        newLm[xl][(h - yl) - 1] = 6 - Math.round(mag);
+                        newLm[xl][yl] = 6 - Math.round(mag);
 
-                    if(h - yl == y + strength && xl == x + strength)
-                        newLm[xl][(h - yl) - 1] = orig;
-                    if(h - yl == y - strength && xl == x + strength)
-                        newLm[xl][(h - yl) - 1] = orig;
-                    if(h - yl == y + strength && xl == x - strength)
-                        newLm[xl][(h - yl) - 1] = orig;
-                    if(h - yl == y - strength && xl == x - strength)
-                        newLm[xl][(h - yl) - 1] = orig;
+                    if(yl == y + strength && xl == x + strength)
+                        newLm[xl][yl] = orig;
+                    if(yl == y - strength && xl == x + strength)
+                        newLm[xl][yl] = orig;
+                    if(yl == y + strength && xl == x - strength)
+                        newLm[xl][yl] = orig;
+                    if(yl == y - strength && xl == x - strength)
+                        newLm[xl][yl] = orig;
 
                 } catch (ArrayIndexOutOfBoundsException e) {
                     continue;

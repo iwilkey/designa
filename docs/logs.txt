@@ -80,3 +80,7 @@ Date || Build ||
         edited. Also, tile strengths are rendered.
     - Rebuilding lighting system. Inital lights look fine, huge problems when go to placing lights. Some math
         needs to be done to correct the OpenGL inverted y cord system.
+
+8/1/2020 || pa_1.0.10 ||
+    - Fixed light rendering.
+    - Began creating a day and night cycle

@@ -1,5 +1,6 @@
 package com.iwilkey.designa.gfx;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
@@ -60,8 +61,8 @@ public class Camera {
             targetZoom -= amount;
         }
 
-        scale.x += (((targetZoom - scale.x) * camSpeed * 4 * 0.01f));
-        scale.y += (((targetZoom - scale.y) * camSpeed * 4 * 0.01f));
+        scale.x += (((targetZoom - scale.x) * camSpeed * 4 * Gdx.graphics.getDeltaTime()));
+        scale.y += (((targetZoom - scale.y) * camSpeed * 4 * Gdx.graphics.getDeltaTime()));
 
         InputHandler.zoomRequest = 0;
 
@@ -72,8 +73,8 @@ public class Camera {
         float targxOffset = e.getX() * scale.x - (gb.getGame().w / 2) + e.getWidth() / 2;
         float targyOffset = e.getY() * scale.y - (gb.getGame().h / 2) + e.getHeight() / 2;
 
-        offset.x += (((int)targxOffset - offset.x) * camSpeed * 0.01f);
-        offset.y += (((int)targyOffset - offset.y) * camSpeed * 0.01f);
+        offset.x += (((int)targxOffset - offset.x) * camSpeed * Gdx.graphics.getDeltaTime());
+        offset.y += (((int)targyOffset - offset.y) * camSpeed * Gdx.graphics.getDeltaTime());
 
         zoom(InputHandler.zoomRequest);
     }

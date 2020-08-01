@@ -27,11 +27,15 @@ public class World {
     // Light
     private LightManager lightManager;
 
+    // Environment
+    private AmbientCycle ambientCycle;
+
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
         entityHandler = new EntityHandler(gb, new Player(gb, 100, 500));
         lightManager = new LightManager(gb, this);
+        ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
     }
 
@@ -39,7 +43,7 @@ public class World {
     public void tick() {
         time += 0.01f;
         entityHandler.tick();
-
+        ambientCycle.tick();
     }
 
     public void render(Batch b) {
@@ -50,7 +54,7 @@ public class World {
                 int yy = y * Tile.TILE_SIZE;
 
                 // Layers need to be rendered here because the Layer class was too performance intensive
-                b.draw(Assets.sky_colors[(int)time % 10], xx, yy + 100, 16, 16); // Back
+                ambientCycle.render(b, xx, yy);
                 if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
 
@@ -92,11 +96,11 @@ public class World {
                 // TODO: Whenever 16, or (16 - 1) is used, that has to do with the world ground level! That should be defined in all worlds for
                 // ambient light to work properly.
                 if(y > 15 && tiles[x][y] != 0) {
-                    lightMap[x][y] = 6 - (Math.abs(y - 16));
-                    origLightMap[x][y] = 6 - (Math.abs(y - 16));
+                    lightMap[x][h - y - 1] = 6 - (Math.abs(y - 16));
+                    origLightMap[x][h - y - 1] = 6 - (Math.abs(y - 16));
                 } else if (tiles[x][y] == 0) {
-                    lightMap[x][y] = 6;
-                    origLightMap[x][y] = 6;
+                    lightMap[x][h - y - 1] = 6;
+                    origLightMap[x][h - y - 1] = 6;
                 }
 
             }
@@ -107,8 +111,9 @@ public class World {
         return gb;
     }
     public EntityHandler getEntityHandler() { return entityHandler; }
-    public int[][] getLightMap() { return origLightMap; }
+    public int[][] getLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }
-    public void setLightMap(int[][] nlm) { lightMap = nlm; }
+    public AmbientCycle getAmbientCycle() { return ambientCycle; }
+    public void setLightMap(int[][] nlm) { this.lightMap = nlm; }
 
 }
