@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.tiles.Tile;
-import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.util.ArrayList;
@@ -16,8 +15,6 @@ public class LightManager {
     private GameBuffer gb;
     private World world;
     private ArrayList<Light> lights = new ArrayList<Light>();
-
-    private int ambientLightSourceBlockLimit = 10;
 
     public LightManager(GameBuffer gb, World world) {
         this.gb = gb;
@@ -81,7 +78,7 @@ public class LightManager {
 
         if(found) {
             if(lights.size() >= 1) bakeLighting();
-            else world.setLightMap(world.getOrigLightMap());
+            else World.lightMap = world.getOrigLightMap();
         }
 
     }
@@ -90,6 +87,7 @@ public class LightManager {
         int[][] newLm = darkLm;
 
         int hh = World.h;
+
         for(int y = 0; y < hh; y++) {
             for (int x = 0; x < World.w; x++) {
                 if(world.tiles[x][y] == 0) newLm[x][hh - y - 1] = 6;
@@ -97,10 +95,9 @@ public class LightManager {
         }
 
         float percentOfDay = world.getAmbientCycle().getPercentOfDay();
-        int intensityLevel = (int) (percentOfDay / (100.0f / 6));
+        int intensityLevel = (int) (percentOfDay / (100.0f / 6)), topNum = 0, lvl = 0,
+                ambientLightSourceBlockLimit = 10;
 
-
-        // TODO: Average out the heights of the tallest block and increasingly lower intensity the farther you go down?
         for(int y = 0; y < hh; y++) {
             for(int x = 0; x < World.w; x++) {
                 if(world.tiles[x][y] != 0) {
@@ -112,9 +109,22 @@ public class LightManager {
                     }
 
                     if(c == ambientLightSourceBlockLimit) {
+                        topNum++; lvl += hh - y;
                         for (int yy = y; yy < hh; yy++) {
                             newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
                         }
+                    }
+                }
+            }
+        }
+
+        float avgTop = (float) lvl / topNum;
+
+        for(int y = 0; y < hh; y++) {
+            for(int x = 0; x < World.w; x++) {
+                if(world.tiles[x][y] != 0) {
+                    if(hh - y < avgTop - 6) {
+                        newLm[x][hh - y - 1] -= Math.abs(y - (avgTop - 3));
                     }
                 }
             }

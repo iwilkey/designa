@@ -12,7 +12,7 @@ import com.iwilkey.designa.utils.Utils;
 
 public class World {
 
-    private GameBuffer gb;
+    private final GameBuffer gb;
     public static int w, h;
 
     // Rendering
@@ -22,14 +22,13 @@ public class World {
     public int[][] origLightMap;
 
     // Entities
-    private EntityHandler entityHandler;
+    private final EntityHandler entityHandler;
 
     // Light
-    private LightManager lightManager;
+    private final LightManager lightManager;
 
     // Environment
-    private AmbientCycle ambientCycle;
-
+    private final AmbientCycle ambientCycle;
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
@@ -39,11 +38,9 @@ public class World {
         loadWorld(path);
     }
 
-    float time = 0;
     public void tick() {
-        time += 0.01f;
-        entityHandler.tick();
         ambientCycle.tick();
+        entityHandler.tick();
     }
 
     public void render(Batch b) {
@@ -57,13 +54,11 @@ public class World {
                 ambientCycle.render(b, xx, yy);
                 if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
-
-                lightManager.renderLight(b, x, y); // Render light
+                lightManager.renderLight(b, x, y);
             }
         }
 
         entityHandler.render(b); // Front
-
         entityHandler.getPlayer().getBuildingHandler().render(b);
 
     }
@@ -101,12 +96,10 @@ public class World {
     }
 
     public static void bake(int[][] lm) { lightMap = lm; }
-
     public GameBuffer getGameBuffer() { return gb; }
     public EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }
     public AmbientCycle getAmbientCycle() { return ambientCycle; }
-    public void setLightMap(int[][] nlm) { this.lightMap = nlm; }
 
 }

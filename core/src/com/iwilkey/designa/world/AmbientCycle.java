@@ -46,7 +46,6 @@ public class AmbientCycle {
             0%: Night
          */
 
-
         TextureRegion shadeOfSky;
 
         if(percentOfDay <= 100 && percentOfDay >= 90) { shadeOfSky = Assets.sky_colors[0]; }
@@ -60,7 +59,7 @@ public class AmbientCycle {
         else if (percentOfDay < 20 && percentOfDay >= 10) { shadeOfSky = Assets.sky_colors[8]; }
         else { shadeOfSky = Assets.sky_colors[9]; }
 
-        b.draw(shadeOfSky, xx, yy + 100, 16, 16); // Back
+        b.draw(shadeOfSky, xx, yy + 100, 16, 16);
         if(shadeOfSky != lastSky) gb.getWorld().getLightManager().bakeLighting();
         lastSky = shadeOfSky;
 

@@ -51,7 +51,7 @@ public class BuildingHandler {
                         checkFace();
                         damageTile(pointerOnTileX(), pointerOnTileY());
                         gb.getWorld().getLightManager().bakeLighting();
-                        gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
+                        // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     break;

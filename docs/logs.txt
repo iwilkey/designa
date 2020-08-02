@@ -88,3 +88,6 @@ Date || Build ||
         TODO marked in LightManager function buildAmbientLight because it still needs some work when you go farther into the
         ground
     - Light now bakes at appropriate times
+
+8/2/2020 || pa_1.0.11 ||
+    - Light intensity now reduces based on the average height of the top tile.
