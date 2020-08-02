@@ -12,7 +12,7 @@ public class AmbientCycle {
     private GameBuffer gb;
 
     private int time = 1, secondsPerDay = 10;
-    private float maxTickTime = secondsToTicks(secondsPerDay), percentOfDay;
+    private float maxTickTime = secondsToTicks(secondsPerDay), percentOfDay = 100;
     private boolean posTime = true;
 
     public AmbientCycle(World world, GameBuffer gb) {
@@ -35,6 +35,8 @@ public class AmbientCycle {
                 ticksToSeconds(time)) / (float)secondsPerDay) * 100;
     }
 
+    private TextureRegion lastSky;
+
     public void render(Batch b, int xx, int yy) {
 
         /*
@@ -43,6 +45,7 @@ public class AmbientCycle {
             50%: Evening / Morning <--- Depends on how time is moving (+ or -)
             0%: Night
          */
+
 
         TextureRegion shadeOfSky;
 
@@ -58,6 +61,8 @@ public class AmbientCycle {
         else { shadeOfSky = Assets.sky_colors[9]; }
 
         b.draw(shadeOfSky, xx, yy + 100, 16, 16); // Back
+        if(shadeOfSky != lastSky) gb.getWorld().getLightManager().bakeLighting();
+        lastSky = shadeOfSky;
 
     }
 
@@ -76,5 +81,7 @@ public class AmbientCycle {
     public void setTime(int ticks) {
         time = (ticks % (int)maxTickTime);
     }
+
+    public float getPercentOfDay() { return percentOfDay; }
 
 }

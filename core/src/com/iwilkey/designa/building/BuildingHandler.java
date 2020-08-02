@@ -44,11 +44,14 @@ public class BuildingHandler {
                     if (InputHandler.rightMouseButtonDown) {
                         checkFace();
                         placeTile(2, pointerOnTileX(), pointerOnTileY());
+                        gb.getWorld().getLightManager().bakeLighting();
                     }
 
                     if (InputHandler.leftMouseButtonDown) {
                         checkFace();
                         damageTile(pointerOnTileX(), pointerOnTileY());
+                        gb.getWorld().getLightManager().bakeLighting();
+                        gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     break;

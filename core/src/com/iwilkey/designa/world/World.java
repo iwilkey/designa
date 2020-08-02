@@ -18,7 +18,7 @@ public class World {
     // Rendering
     public int[][] tiles;
     public int[][] tileBreakLevel;
-    public int[][] lightMap;
+    public static int[][] lightMap;
     public int[][] origLightMap;
 
     // Entities
@@ -92,26 +92,19 @@ public class World {
                 int id = Utils.parseInt(tokens[x + y * w + 2]);
                 tiles[x][y] = id;
                 tileBreakLevel[x][y] = Tile.getStrength(id);
-
-                // TODO: Whenever 16, or (16 - 1) is used, that has to do with the world ground level! That should be defined in all worlds for
-                // ambient light to work properly.
-                if(y > 15 && tiles[x][y] != 0) {
-                    lightMap[x][h - y - 1] = 6 - (Math.abs(y - 16));
-                    origLightMap[x][h - y - 1] = 6 - (Math.abs(y - 16));
-                } else if (tiles[x][y] == 0) {
-                    lightMap[x][h - y - 1] = 6;
-                    origLightMap[x][h - y - 1] = 6;
-                }
-
+                lightMap[x][h - y - 1] = 0;
+                origLightMap[x][h - y - 1] = 0;
             }
         }
+
+        lightMap = lightManager.buildAmbientLight(lightMap);
     }
 
-    public GameBuffer getGameBuffer() {
-        return gb;
-    }
+    public static void bake(int[][] lm) { lightMap = lm; }
+
+    public GameBuffer getGameBuffer() { return gb; }
     public EntityHandler getEntityHandler() { return entityHandler; }
-    public int[][] getLightMap() { return this.origLightMap; }
+    public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }
     public AmbientCycle getAmbientCycle() { return ambientCycle; }
     public void setLightMap(int[][] nlm) { this.lightMap = nlm; }

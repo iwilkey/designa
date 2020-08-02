@@ -13,6 +13,7 @@ public class Light {
     }
 
     public int[][] buildLightMap(int[][] oldLm, int w, int h) {
+
         int[][] newLm = oldLm;
 
         for(int yl = y - strength; yl < y + strength + 1; yl++) {
@@ -35,9 +36,7 @@ public class Light {
                     if(yl == y - strength && xl == x - strength)
                         newLm[xl][yl] = orig;
 
-                } catch (ArrayIndexOutOfBoundsException e) {
-                    continue;
-                }
+                } catch (ArrayIndexOutOfBoundsException ignored) {}
             }
         }
 

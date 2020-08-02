@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class LightManager {
     private GameBuffer gb;
     private World world;
     private ArrayList<Light> lights = new ArrayList<Light>();
+
+    private int ambientLightSourceBlockLimit = 10;
 
     public LightManager(GameBuffer gb, World world) {
         this.gb = gb;
@@ -27,7 +30,7 @@ public class LightManager {
 
         TextureRegion shade;
 
-        switch (world.lightMap[x][y]) {
+        switch (World.lightMap[x][y]) {
             case 6:
                 shade = Assets.light_colors[6];
                 break;
@@ -56,8 +59,8 @@ public class LightManager {
 
     public void addLight(int x, int y, int strength) {
 
-        for(int i = 0; i < lights.size(); i++) {
-            if(lights.get(i).x == x && lights.get(i).y == y) return;
+        for(Light l : lights) {
+            if(l.x == x && l.y == y) return;
         }
 
         lights.add(new Light(x, y, strength));
@@ -78,31 +81,69 @@ public class LightManager {
 
         if(found) {
             if(lights.size() >= 1) bakeLighting();
-            else world.setLightMap(world.getLightMap());
+            else world.setLightMap(world.getOrigLightMap());
         }
 
     }
 
-    public void bakeLighting() {
+    public int[][] buildAmbientLight(int[][] darkLm) {
+        int[][] newLm = darkLm;
 
-        int ww = world.w;
-        int hh = world.h;
-
-        int oldLm[][] = new int[ww][hh];
+        int hh = World.h;
         for(int y = 0; y < hh; y++) {
-            for(int x = 0; x < ww; x++) {
-                oldLm[x][y] = world.getLightMap()[x][y];
+            for (int x = 0; x < World.w; x++) {
+                if(world.tiles[x][y] == 0) newLm[x][hh - y - 1] = 6;
             }
         }
 
-        int[][] newLm = new int[ww][hh];
-        for (int i = 0; i < lights.size(); i++) {
-            if(i > 0) newLm = lights.get(i).buildLightMap(newLm, ww, hh);
-            else newLm = lights.get(i).buildLightMap(oldLm, ww, hh);
+        float percentOfDay = world.getAmbientCycle().getPercentOfDay();
+        int intensityLevel = (int) (percentOfDay / (100.0f / 6));
 
+
+        // TODO: Average out the heights of the tallest block and increasingly lower intensity the farther you go down?
+        for(int y = 0; y < hh; y++) {
+            for(int x = 0; x < World.w; x++) {
+                if(world.tiles[x][y] != 0) {
+                    int c = 0;
+                    for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
+                        try {
+                            if (world.tiles[x][y - i - 1] == 0) c++;
+                        } catch (IndexOutOfBoundsException ignored) {}
+                    }
+
+                    if(c == ambientLightSourceBlockLimit) {
+                        for (int yy = y; yy < hh; yy++) {
+                            newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
+                        }
+                    }
+                }
+            }
         }
 
-        world.setLightMap(newLm);
+        return newLm;
+    }
+
+    public void bakeLighting() {
+
+        int ww = World.w;
+        int hh = World.h;
+
+        int[][] oldLm = world.origLightMap;
+        oldLm = buildAmbientLight(oldLm);
+
+        int[][] newLm = new int[ww][hh];
+
+        if(lights.size() != 0) {
+            for (int i = 0; i < lights.size(); i++) {
+                if (i > 0) newLm = lights.get(i).buildLightMap(newLm, ww, hh);
+                else newLm = lights.get(i).buildLightMap(oldLm, ww, hh);
+
+            }
+        } else {
+           newLm = oldLm;
+        }
+
+        World.bake(newLm);
     }
 
 }

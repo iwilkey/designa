@@ -83,4 +83,8 @@ Date || Build ||
 
 8/1/2020 || pa_1.0.10 ||
     - Fixed light rendering.
-    - Began creating a day and night cycle
+    - Began creating a day and night cycle with the AmbientCycle class.
+    - Made a primitive ambient light system to change the light exposure to the top most tile in a formation.
+        TODO marked in LightManager function buildAmbientLight because it still needs some work when you go farther into the
+        ground
+    - Light now bakes at appropriate times
