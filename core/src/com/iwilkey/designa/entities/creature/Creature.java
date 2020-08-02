@@ -7,7 +7,7 @@ import com.iwilkey.designa.tiles.Tile;
 
 public abstract class Creature extends Entity {
 
-    public static final float DEFAULT_SPEED = 1.05f;
+    public static final float DEFAULT_SPEED = 1.05f; // 1.05f orig
     public static final int DEFAULT_CREATURE_WIDTH = 22,
         DEFAULT_CREATURE_HEIGHT = 30;
 
@@ -62,6 +62,7 @@ public abstract class Creature extends Entity {
     }
 
     private void moveX() {
+
         if (xMove > 0) { // Moving right
 
             int tx = (int) (x + xMove + collider.x + collider.width) / Tile.TILE_SIZE;
@@ -90,9 +91,11 @@ public abstract class Creature extends Entity {
         } else {
             isMoving = false;
         }
+
     }
 
     private void moveY() {
+
         int ty = (int) (y - gravity - collider.y - collider.height + 24) / Tile.TILE_SIZE;
         if(!collisionWithTile((int) (x + collider.x) / Tile.TILE_SIZE, ty) &&
                 !collisionWithTile((int) (x + collider.x + collider.width) / Tile.TILE_SIZE, ty)){

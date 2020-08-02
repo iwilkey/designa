@@ -2,11 +2,11 @@ package com.iwilkey.designa.states;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.Game;
+import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
-import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.world.World;
+import com.iwilkey.designa.world.WorldGeneration;
 
 public class GameState extends State {
 
@@ -15,7 +15,7 @@ public class GameState extends State {
 
     public GameState(GameBuffer gb) {
         this.gb = gb;
-        world = new World(gb, "worlds/testworld.txt");
+        world = new World(gb, WorldGeneration.GenerateWorld("World" + MathUtils.random(10, 100000), 256, 60));
         gb.setWorld(world);
     }
 

@@ -90,4 +90,7 @@ Date || Build ||
     - Light now bakes at appropriate times
 
 8/2/2020 || pa_1.0.11 ||
-    - Light intensity now reduces based on the average height of the top tile.
+    - Light intensity now reduces based on the average height of the top tile. <--- UPDATE: That was my first approach and
+        it doesn't really work like I want it to so I will be changing that later on.
+    - Worlds can now procedurally generate using fine-tuned Perlin noise with whatever sample size is passed in.
+    - The world generator will create a randomly generated world and save it as a tilemap file to be opened or observed later.

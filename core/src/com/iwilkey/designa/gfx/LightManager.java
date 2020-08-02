@@ -120,6 +120,9 @@ public class LightManager {
 
         float avgTop = (float) lvl / topNum;
 
+        // TODO: Figure out a better way to decrease intensity as you go further underground. I am thinking
+        // TODO: that it should only have to do with the tallest block at that specific y.
+        /*
         for(int y = 0; y < hh; y++) {
             for(int x = 0; x < World.w; x++) {
                 if(world.tiles[x][y] != 0) {
@@ -129,6 +132,8 @@ public class LightManager {
                 }
             }
         }
+
+         */
 
         return newLm;
     }
@@ -147,7 +152,6 @@ public class LightManager {
             for (int i = 0; i < lights.size(); i++) {
                 if (i > 0) newLm = lights.get(i).buildLightMap(newLm, ww, hh);
                 else newLm = lights.get(i).buildLightMap(oldLm, ww, hh);
-
             }
         } else {
            newLm = oldLm;

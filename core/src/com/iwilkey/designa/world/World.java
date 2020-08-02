@@ -32,7 +32,7 @@ public class World {
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
-        entityHandler = new EntityHandler(gb, new Player(gb, 100, 500));
+        entityHandler = new EntityHandler(gb, new Player(gb, 100, 700));
         lightManager = new LightManager(gb, this);
         ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
@@ -51,10 +51,10 @@ public class World {
                 int yy = y * Tile.TILE_SIZE;
 
                 // Layers need to be rendered here because the Layer class was too performance intensive
-                ambientCycle.render(b, xx, yy);
-                if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                // if(yy < (h - 16) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
                 lightManager.renderLight(b, x, y);
+                ambientCycle.render(b, xx, yy);
             }
         }
 

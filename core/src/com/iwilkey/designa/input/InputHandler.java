@@ -21,6 +21,8 @@ public class InputHandler {
     public static boolean leftMouseButton, rightMouseButton;
     public static boolean placeLight, deleteLight;
 
+    public static boolean moveUp, moveDown;
+
 
     public InputHandler() {
         keys = new boolean[256];
@@ -51,6 +53,10 @@ public class InputHandler {
 
                         if(key == Input.Keys.D) moveRight = true;
                         if(key == Input.Keys.A) moveLeft = true;
+
+                        if(key == Input.Keys.W) moveUp = true;
+                        if(key == Input.Keys.S) moveDown = true;
+
                         if(key == Input.Keys.SPACE) jumpRequest = true;
 
 
@@ -62,6 +68,10 @@ public class InputHandler {
 
                         if(key == Input.Keys.D) moveRight = false;
                         if(key == Input.Keys.A) moveLeft = false;
+
+                        if(key == Input.Keys.W) moveUp = false;
+                        if(key == Input.Keys.S) moveDown = false;
+
                         if(key == Input.Keys.SPACE) jumpRequest = false;
 
                         return true;

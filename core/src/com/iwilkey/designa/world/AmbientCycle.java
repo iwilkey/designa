@@ -11,7 +11,7 @@ public class AmbientCycle {
     private World world;
     private GameBuffer gb;
 
-    private int time = 1, secondsPerDay = 10;
+    private int time = 1, secondsPerDay = 100;
     private float maxTickTime = secondsToTicks(secondsPerDay), percentOfDay = 100;
     private boolean posTime = true;
 

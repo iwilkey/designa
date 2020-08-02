@@ -10,6 +10,7 @@ import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
+import com.iwilkey.designa.world.WorldGeneration;
 
 public class Game extends ApplicationAdapter {
 
