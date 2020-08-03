@@ -4,21 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.World;
 
 public class Camera {
 
     public static Matrix4 mat = new Matrix4();
 
-    private GameBuffer gb;
+    private final GameBuffer gb;
     public static Vector3 position;
     public static Vector3 scale = new Vector3(1,1,1);
     public static Vector3 offset;
 
-    private static float camSpeed = 4.0f;
+    private final static float camSpeed = 4.0f;
     private static float targetZoom = 1;
 
     public Camera(GameBuffer gb, int x, int y) {
@@ -28,8 +30,8 @@ public class Camera {
     }
 
     private void translate() {
-        int hx = (int) (gb.getWorld().w * scale.x * Tile.TILE_SIZE - gb.getGame().w);
-        int hy = (int) (gb.getWorld().h * scale.y * Tile.TILE_SIZE + 100);
+        int hx = (int) (World.w * scale.x * Tile.TILE_SIZE - World.w);
+        int hy = (int) (World.h * scale.y * Tile.TILE_SIZE + 100);
         checkBounds(0, 0, hx, hy);
     }
 
@@ -51,7 +53,7 @@ public class Camera {
         }
     }
 
-    public static void zoom(float amount) {
+    public static void zoom(float amount, Entity e) {
 
         if(targetZoom - amount > 3) {
             targetZoom = 3;
@@ -61,8 +63,11 @@ public class Camera {
             targetZoom -= amount;
         }
 
-        scale.x += (((targetZoom - scale.x) * camSpeed * 4 * Gdx.graphics.getDeltaTime()));
-        scale.y += (((targetZoom - scale.y) * camSpeed * 4 * Gdx.graphics.getDeltaTime()));
+        scale.x = targetZoom;
+        scale.y = targetZoom;
+
+        offset.x = e.getX() * scale.x - (Game.w / 2f) + e.getWidth() / 2f;
+        offset.y = e.getY() * scale.y - (Game.h / 2f) + e.getHeight() / 2f;
 
         InputHandler.zoomRequest = 0;
 
@@ -70,13 +75,13 @@ public class Camera {
 
     public void centerOnEntity(Entity e) {
 
-        float targxOffset = e.getX() * scale.x - (gb.getGame().w / 2) + e.getWidth() / 2;
-        float targyOffset = e.getY() * scale.y - (gb.getGame().h / 2) + e.getHeight() / 2;
+        float targxOffset = e.getX() * scale.x - (Game.w / 2f) + e.getWidth() / 2f;
+        float targyOffset = e.getY() * scale.y - (Game.h / 2f) + e.getHeight() / 2f;
 
         offset.x += (((int)targxOffset - offset.x) * camSpeed * Gdx.graphics.getDeltaTime());
         offset.y += (((int)targyOffset - offset.y) * camSpeed * Gdx.graphics.getDeltaTime());
 
-        zoom(InputHandler.zoomRequest);
+        if(InputHandler.zoomRequest < 0 || InputHandler.zoomRequest > 0) zoom(InputHandler.zoomRequest, e);
     }
 
     public void tick() {

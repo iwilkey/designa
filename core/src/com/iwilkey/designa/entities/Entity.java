@@ -52,8 +52,5 @@ public abstract class Entity {
 
     public void setX(float x) { this.x = x; }
     public void setY(float y) { this.y = y; }
-    public void setHealth(int h) { this.health = h; }
-    public void setActive(boolean a) { this.active = a; }
-
 
 }

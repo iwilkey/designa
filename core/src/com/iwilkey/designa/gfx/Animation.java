@@ -6,7 +6,7 @@ public class Animation {
 
     private int speed, index;
     private long lt, timer;
-    private TextureRegion[] frames;
+    private final TextureRegion[] frames;
 
     public Animation(int speed, TextureRegion[] frames) {
         this.speed = speed;

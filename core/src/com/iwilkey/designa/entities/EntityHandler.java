@@ -1,7 +1,6 @@
 package com.iwilkey.designa.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.entities.creature.Player;
 
 import java.util.ArrayList;
@@ -9,14 +8,11 @@ import java.util.Iterator;
 
 public class EntityHandler {
 
-    private GameBuffer gb;
-    private Player player;
-    private ArrayList<Entity> entities;
+    private final Player player;
+    private final ArrayList<Entity> entities;
 
-    public EntityHandler(GameBuffer gb, Player player) {
-        this.gb = gb;
+    public EntityHandler(Player player) {
         this.player = player;
-
         entities = new ArrayList<Entity>();
         entities.add(player);
     }
@@ -40,7 +36,6 @@ public class EntityHandler {
     public void addEntity(Entity e) {
         entities.add(e);
     }
-
     public Player getPlayer() { return player; }
     public ArrayList<Entity> getEntities() { return entities; }
 

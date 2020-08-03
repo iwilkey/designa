@@ -1,7 +1,5 @@
 package com.iwilkey.designa.utils;
 
-import com.badlogic.gdx.math.MathUtils;
-
 public class PerlinNoise {
 
     long seed;

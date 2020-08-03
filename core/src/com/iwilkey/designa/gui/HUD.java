@@ -9,9 +9,10 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.tiles.Tile;
 
 public class HUD {
-    private Player player;
+    private final Player player;
 
-    private int healthX, healthY, heartSpacing = 16;
+    private int healthX, healthY;
+    private final int heartSpacing = 16;
 
     public HUD(Player player) {
         this.player = player;

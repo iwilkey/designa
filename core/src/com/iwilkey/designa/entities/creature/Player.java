@@ -13,13 +13,13 @@ import com.iwilkey.designa.input.InputHandler;
 public class Player extends Creature {
 
     // Animations
-    private Animation[] animations;
+    private final Animation[] animations;
 
     // HUD
-    private HUD hud;
+    private final HUD hud;
 
     // Building
-    private BuildingHandler buildingHandler;
+    private final BuildingHandler buildingHandler;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);

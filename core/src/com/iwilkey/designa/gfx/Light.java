@@ -4,7 +4,7 @@ import com.iwilkey.designa.physics.Vector2;
 
 public class Light {
 
-    private int strength;
+    private final int strength;
     public int x, y;
 
     public Light(int x, int y, int strength) {

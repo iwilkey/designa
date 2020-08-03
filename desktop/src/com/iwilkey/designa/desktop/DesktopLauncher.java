@@ -10,8 +10,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.title = "Desgina pa1.0.11";
-		config.width = 600;
-		config.height = 600;
+		config.width = 1280;
+		config.height = 720;
 		config.resizable = false;
 
 		new LwjglApplication(new Game(), config);

@@ -8,8 +8,8 @@ import com.iwilkey.designa.assets.Assets;
 
 public class AmbientCycle {
 
-    private World world;
-    private GameBuffer gb;
+    private final World world;
+    private final GameBuffer gb;
 
     private int time = 1, secondsPerDay = 100;
     private float maxTickTime = secondsToTicks(secondsPerDay), percentOfDay = 100;

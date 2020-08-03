@@ -10,16 +10,17 @@ import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.tiles.tiletypes.AirTile;
+import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
 
 public class BuildingHandler {
 
-    private GameBuffer gb;
-    private Player player;
+    private final GameBuffer gb;
+    private final Player player;
     private float selectorX = 0, selectorY = 0;
     private boolean inRange = false;
-    private Rectangle selectorCollider;
+    private final Rectangle selectorCollider;
 
     public BuildingHandler(GameBuffer gb, Player p) {
         this.gb = gb;
@@ -77,24 +78,20 @@ public class BuildingHandler {
 
     private void placeTile(int id, int x, int y) {
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
-            gb.getWorld().tiles[x][(gb.getWorld().h - y) - 1] = id;
-            gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] = Tile.getStrength(id);
-        } else {
-            return;
+            World.tiles[x][(World.h - y) - 1] = id;
+            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
         }
     }
 
     private void damageTile(int x, int y) {
         if(!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
-            gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1]--;
+            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
 
-            if(gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] <= 0) {
-                gb.getWorld().tiles[x][(gb.getWorld().h - y) - 1] = 0;
-                gb.getWorld().tileBreakLevel[x][(gb.getWorld().h - y) - 1] = Tile.getStrength(0);
+            if(gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+                World.tiles[x][(World.h - y) - 1] = 0;
+                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
             }
 
-        } else {
-            return;
         }
     }
 

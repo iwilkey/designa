@@ -12,8 +12,8 @@ import java.util.List;
 
 public class Text {
 
-    private static String sym = "abcdefghijklmnopqrstuvwxyz ";
-    private static char[] chars = sym.toCharArray();
+    private final static String sym = "abcdefghijklmnopqrstuvwxyz ";
+    private final static char[] chars = sym.toCharArray();
 
     public static List<String> runtimeMessages = new ArrayList<String>();
     public static List<TextureRegion[]> allProcessedMessages = new ArrayList<TextureRegion[]>();

@@ -5,7 +5,7 @@ import com.iwilkey.designa.world.World;
 
 public class GameBuffer {
 
-    private Game game;
+    private final Game game;
     private World world;
 
     public GameBuffer(Game game) {

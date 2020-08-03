@@ -19,9 +19,6 @@ public class InputHandler {
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
     public static boolean leftMouseButton, rightMouseButton;
-    public static boolean placeLight, deleteLight;
-
-    public static boolean moveUp, moveDown;
 
 
     public InputHandler() {
@@ -54,9 +51,6 @@ public class InputHandler {
                         if(key == Input.Keys.D) moveRight = true;
                         if(key == Input.Keys.A) moveLeft = true;
 
-                        if(key == Input.Keys.W) moveUp = true;
-                        if(key == Input.Keys.S) moveDown = true;
-
                         if(key == Input.Keys.SPACE) jumpRequest = true;
 
 
@@ -68,9 +62,6 @@ public class InputHandler {
 
                         if(key == Input.Keys.D) moveRight = false;
                         if(key == Input.Keys.A) moveLeft = false;
-
-                        if(key == Input.Keys.W) moveUp = false;
-                        if(key == Input.Keys.S) moveDown = false;
 
                         if(key == Input.Keys.SPACE) jumpRequest = false;
 
@@ -111,8 +102,8 @@ public class InputHandler {
                     // 'Just' methods
                     public boolean keyJustPressed(int KeyCode) {
                         if(KeyCode < 0 || KeyCode >= keys.length) return false;
-                        if(KeyCode == Input.Keys.E && !jp[KeyCode]) zoomRequest -= 0.1f;
-                        if(KeyCode == Input.Keys.Q && !jp[KeyCode]) zoomRequest += 0.1f;
+                        if(KeyCode == Input.Keys.E && !jp[KeyCode]) zoomRequest -= 1f;
+                        if(KeyCode == Input.Keys.Q && !jp[KeyCode]) zoomRequest += 1f;
                         return true;
                     }
 

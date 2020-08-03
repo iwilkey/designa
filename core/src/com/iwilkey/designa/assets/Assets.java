@@ -69,7 +69,7 @@ public class Assets {
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         grass = ss.crop(0, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         dirt = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        backDirt = ss.crop(1, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];

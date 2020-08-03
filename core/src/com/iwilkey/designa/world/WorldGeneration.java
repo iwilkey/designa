@@ -28,7 +28,7 @@ public class WorldGeneration {
             for(int x = 0; x < width; x++) {
                 int columnHeight = perlinNoise.getNoise(x, height, sampleDistance);
                 for(int y = 0; y < columnHeight; y++) {
-                    int id = (y == 0 + columnHeight - 1) ? 1 : 2;
+                    int id = (y == columnHeight - 1) ? 1 : 2;
                     tiles[x][y] = id;
                 }
             }

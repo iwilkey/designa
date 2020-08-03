@@ -12,9 +12,12 @@ import java.util.ArrayList;
 
 public class LightManager {
 
-    private GameBuffer gb;
-    private World world;
-    private ArrayList<Light> lights = new ArrayList<Light>();
+    private final GameBuffer gb;
+    private final World world;
+    private final ArrayList<Light> lights = new ArrayList<Light>();
+
+    public static int[] highestTile; // Highest tile (at that x value)
+    private static final int ambientLightSourceBlockLimit = 10;
 
     public LightManager(GameBuffer gb, World world) {
         this.gb = gb;
@@ -83,6 +86,26 @@ public class LightManager {
 
     }
 
+    public static void findHighestTiles() {
+        highestTile = new int[World.w];
+        for(int x = 0; x < World.w; x++) {
+            for(int y = 0; y < World.h; y++) {
+                if(World.tiles[x][y] != 0) {
+                    int c = 0;
+                    for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
+                        try {
+                            if (World.tiles[x][y - i - 1] == 0) c++;
+                        } catch (IndexOutOfBoundsException ignored) {}
+                    }
+
+                    if(c == ambientLightSourceBlockLimit) {
+                        highestTile[x] = y;
+                    }
+                }
+            }
+        }
+    }
+
     public int[][] buildAmbientLight(int[][] darkLm) {
         int[][] newLm = darkLm;
 
@@ -90,26 +113,24 @@ public class LightManager {
 
         for(int y = 0; y < hh; y++) {
             for (int x = 0; x < World.w; x++) {
-                if(world.tiles[x][y] == 0) newLm[x][hh - y - 1] = 6;
+                if(World.tiles[x][y] == 0) newLm[x][hh - y - 1] = 6;
             }
         }
 
         float percentOfDay = world.getAmbientCycle().getPercentOfDay();
-        int intensityLevel = (int) (percentOfDay / (100.0f / 6)), topNum = 0, lvl = 0,
-                ambientLightSourceBlockLimit = 10;
+        int intensityLevel = (int) (percentOfDay / (100.0f / 6));
 
-        for(int y = 0; y < hh; y++) {
-            for(int x = 0; x < World.w; x++) {
-                if(world.tiles[x][y] != 0) {
+        for(int x = 0; x < World.w; x++) {
+            for(int y = 0; y < hh; y++) {
+                if(World.tiles[x][y] != 0) {
                     int c = 0;
                     for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
                         try {
-                            if (world.tiles[x][y - i - 1] == 0) c++;
+                            if (World.tiles[x][y - i - 1] == 0) c++;
                         } catch (IndexOutOfBoundsException ignored) {}
                     }
 
                     if(c == ambientLightSourceBlockLimit) {
-                        topNum++; lvl += hh - y;
                         for (int yy = y; yy < hh; yy++) {
                             newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
                         }
@@ -118,22 +139,15 @@ public class LightManager {
             }
         }
 
-        float avgTop = (float) lvl / topNum;
-
-        // TODO: Figure out a better way to decrease intensity as you go further underground. I am thinking
-        // TODO: that it should only have to do with the tallest block at that specific y.
-        /*
-        for(int y = 0; y < hh; y++) {
-            for(int x = 0; x < World.w; x++) {
-                if(world.tiles[x][y] != 0) {
-                    if(hh - y < avgTop - 6) {
-                        newLm[x][hh - y - 1] -= Math.abs(y - (avgTop - 3));
+        for(int x = 0; x < World.w; x++) {
+            for(int y = 0; y < hh; y++) {
+                if(World.tiles[x][y] != 0) {
+                    if(hh - y < hh - highestTile[x] - 6) {
+                        newLm[x][hh - y - 1] -= Math.abs(hh - y - (hh - highestTile[x] - 3));
                     }
                 }
             }
         }
-
-         */
 
         return newLm;
     }

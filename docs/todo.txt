@@ -24,6 +24,8 @@ Important now
 For later on
 ------------
 
+- Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
+
 - Consider changing the inventory graphic?
 
 - Create more tiles! (See Tiles list in docs)

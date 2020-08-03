@@ -94,3 +94,7 @@ Date || Build ||
         it doesn't really work like I want it to so I will be changing that later on.
     - Worlds can now procedurally generate using fine-tuned Perlin noise with whatever sample size is passed in.
     - The world generator will create a randomly generated world and save it as a tilemap file to be opened or observed later.
+    - Fixed average highest tile method replaced with the highest tile for each x.
+    - Fixed the zoom to now zoom in and out instantly.
+    - Background dirt now renders underneath all terrain blocks broken.
+    - Cleaned up some code.

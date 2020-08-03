@@ -10,8 +10,8 @@ import com.iwilkey.designa.world.WorldGeneration;
 
 public class GameState extends State {
 
-    private GameBuffer gb;
-    private World world;
+    private final GameBuffer gb;
+    private final World world;
 
     public GameState(GameBuffer gb) {
         this.gb = gb;
