@@ -134,7 +134,7 @@ public abstract class Creature extends Entity {
         isFlashing = true;
     }
 
-    protected void jump() {
+    public void jump() {
         isJumping = true;
         jumpTimer += 0.1;
 

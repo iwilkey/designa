@@ -132,7 +132,8 @@ public class LightManager {
 
                     if(c == ambientLightSourceBlockLimit) {
                         for (int yy = y; yy < hh; yy++) {
-                            newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
+                            if(hh - yy <= hh - highestTile[x])
+                                newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
                         }
                     }
                 }

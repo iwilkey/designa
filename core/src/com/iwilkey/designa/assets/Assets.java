@@ -18,7 +18,7 @@ public class Assets {
 
     // GUI
     public static TextureRegion[] heart, breakLevel;
-    public static TextureRegion selector, errorSelector, transSelector;
+    public static TextureRegion selector, errorSelector, transSelector, jumpSelector;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt;
@@ -36,9 +36,16 @@ public class Assets {
         cursor = ss.crop(0, 5, ss.SLOT_SIZE * 4, ss.SLOT_SIZE * 4);
 
         // Init font
-        font = new TextureRegion[27];
+        // Numbers and symbols start on x = 11 and y = 1
+        font = new TextureRegion[27 + 16];
+        // Init letters (26 plus space)
         for (int i = 0; i < 27; i++) {
             font[i] = ss.crop(i, 0, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        }
+
+        // Init numbers and symbols (13)
+        for(int i = 0; i < 16; i++) {
+            font[i + 27] = ss.crop(i + 11, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         }
 
         // Init colors
@@ -58,6 +65,7 @@ public class Assets {
         selector = ss.crop(0, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         errorSelector = ss.crop(1, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         transSelector = ss.crop(2, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        jumpSelector = ss.crop(1, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
         breakLevel = new TextureRegion[5];
         breakLevel[0] = ss.crop(5, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Clean block
         breakLevel[1] = ss.crop(1, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);

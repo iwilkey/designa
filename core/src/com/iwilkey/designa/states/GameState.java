@@ -15,7 +15,7 @@ public class GameState extends State {
 
     public GameState(GameBuffer gb) {
         this.gb = gb;
-        world = new World(gb, WorldGeneration.GenerateWorld("World" + MathUtils.random(10, 100000), 256, 60));
+        world = new World(gb, WorldGeneration.GenerateWorld("World" + MathUtils.random(10, 100000), 20000, 100));
         gb.setWorld(world);
     }
 

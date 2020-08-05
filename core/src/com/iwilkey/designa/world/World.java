@@ -2,10 +2,12 @@ package com.iwilkey.designa.world;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
@@ -32,10 +34,11 @@ public class World {
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
-        entityHandler = new EntityHandler(new Player(gb, 100, 700));
         lightManager = new LightManager(gb, this);
         ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
+        entityHandler = new EntityHandler(new Player(gb, w / 2f,
+                (LightManager.highestTile[w / 2] * Tile.TILE_SIZE)));
     }
 
     public void tick() {
@@ -45,16 +48,20 @@ public class World {
 
     public void render(Batch b) {
 
-        for(int y = 0; y < h; y++) {
-            for(int x = 0; x < w; x++) {
+        int xStart = (int) Math.max(0, ((-Camera.position.x / Camera.scale.x) / Tile.TILE_SIZE) - 1);
+        int xEnd = (int) Math.min(w, ((((-Camera.position.x + Game.w) / Camera.scale.x) / Tile.TILE_SIZE) + 4));
+        int yStart = (int) Math.max(0, ((-Camera.position.y / Camera.scale.y) / Tile.TILE_SIZE) - 1);
+        int yEnd = (int) Math.min(h, ((((-Camera.position.y + Game.h) / Camera.scale.y) / Tile.TILE_SIZE) + 4));
+
+        for(int y = yStart; y < yEnd; y++) {
+            for(int x = xStart; x < xEnd; x++) {
                 int xx = x * Tile.TILE_SIZE;
                 int yy = y * Tile.TILE_SIZE;
 
-                // Layers need to be rendered here because the Layer class was too performance intensive
-                if(yy < (h - lightManager.highestTile[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                ambientCycle.render(b, xx, yy);
+                if(yy < (h - LightManager.highestTile[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
                 lightManager.renderLight(b, x, y);
-                ambientCycle.render(b, xx, yy);
             }
         }
 
@@ -92,7 +99,7 @@ public class World {
             }
         }
 
-        lightManager.findHighestTiles();
+        LightManager.findHighestTiles();
         lightMap = lightManager.buildAmbientLight(lightMap);
     }
 

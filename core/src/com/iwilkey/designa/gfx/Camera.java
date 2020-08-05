@@ -30,27 +30,21 @@ public class Camera {
     }
 
     private void translate() {
-        int hx = (int) (World.w * scale.x * Tile.TILE_SIZE - World.w);
-        int hy = (int) (World.h * scale.y * Tile.TILE_SIZE + 100);
-        checkBounds(0, 0, hx, hy);
+        int hx = (int) ((World.w * scale.x * Tile.TILE_SIZE) - (Game.w));
+        int hy = (int) (World.h * scale.y * Tile.TILE_SIZE) - (Game.h);
+        checkBounds(0, 8, hx, hy);
     }
 
     private void checkBounds(int lx, int ly, int hx, int hy) {
-        if(offset.x < lx && offset.y < ly) {
-            mat.setToTranslationAndScaling(new Vector3(lx, ly, 0), scale);
-        } else if (offset.x < lx) {
-            mat.setToTranslationAndScaling(new Vector3(lx, -offset.y, 0), scale);
-        } else if (offset.y < ly) {
-            mat.setToTranslationAndScaling(new Vector3(-offset.x, ly, 0), scale);
-        } else if (offset.x > hx && offset.y > hy) {
-            mat.setToTranslationAndScaling(new Vector3(-hx, -hy, 0), scale);
-        } else if (offset.x > hx) {
-            mat.setToTranslationAndScaling(new Vector3(-hx, -offset.y, 0), scale);
-        } else if (offset.y > hy) {
-            mat.setToTranslationAndScaling(new Vector3(-offset.x, -hy, 0), scale);
-        } else {
-            mat.setToTranslationAndScaling(new Vector3(-(offset.x), -(offset.y), 0), scale);
-        }
+
+        if(offset.x < lx && offset.y > hy) mat.setToTranslationAndScaling(new Vector3(lx, -hy, 0), scale);
+        else if(offset.x < lx) mat.setToTranslationAndScaling(new Vector3(lx, -offset.y, 0), scale);
+        else if(offset.y > hy) mat.setToTranslationAndScaling(new Vector3(-offset.x, -hy, 0), scale);
+        else if(offset.x > hx && offset.y < ly) mat.setToTranslationAndScaling(new Vector3(-hx, ly, 0), scale);
+        else if(offset.x > hx) mat.setToTranslationAndScaling(new Vector3(-hx, -offset.y, 0), scale);
+        else if(offset.y < ly) mat.setToTranslationAndScaling(new Vector3(-offset.x, ly, 0), scale);
+        else mat.setToTranslationAndScaling(new Vector3(-(offset.x), -(offset.y), 0), scale);
+
     }
 
     public static void zoom(float amount, Entity e) {

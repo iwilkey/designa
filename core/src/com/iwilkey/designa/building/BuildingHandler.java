@@ -19,7 +19,7 @@ public class BuildingHandler {
     private final GameBuffer gb;
     private final Player player;
     private float selectorX = 0, selectorY = 0;
-    private boolean inRange = false;
+    private boolean inRange = false, onTop = false;
     private final Rectangle selectorCollider;
 
     public BuildingHandler(GameBuffer gb, Player p) {
@@ -35,7 +35,7 @@ public class BuildingHandler {
         selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
 
         // Building and Destroying
-        if(inRange) {
+        if(inRange && !onTop) {
 
             // Controlling the building will be different depending on the platform...
             // TODO: Implement these controls within the input manager and check if @bool isBuilding is on or something.
@@ -46,6 +46,7 @@ public class BuildingHandler {
                         checkFace();
                         placeTile(2, pointerOnTileX(), pointerOnTileY());
                         gb.getWorld().getLightManager().bakeLighting();
+                        // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     if (InputHandler.leftMouseButtonDown) {
@@ -64,7 +65,14 @@ public class BuildingHandler {
                     break;
             }
 
-
+        } else if (onTop) {
+            if (InputHandler.rightMouseButtonDown) {
+                checkFace();
+                gb.getWorld().getEntityHandler().getPlayer().jump();
+                placeTile(2, pointerOnTileX(), pointerOnTileY());
+                gb.getWorld().getLightManager().bakeLighting();
+                // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
+            }
         }
 
         selectorCollider.x = (int) selectorX;
@@ -110,17 +118,25 @@ public class BuildingHandler {
         if(Math.abs(selectorX - player.getX()) < 1.5 * Tile.TILE_SIZE &&
                 Math.abs(selectorY - (player.getY() + 8)) < 2 * Tile.TILE_SIZE) {
             inRange = true;
+            onTop = false;
 
             if(!(gb.getWorld().getEntityHandler().getPlayer().getCollisionBounds(0f,0f).intersects(selectorCollider))) {
                 b.draw(Assets.selector, (int)(selectorX), (int)(selectorY),
                         Tile.TILE_SIZE, Tile.TILE_SIZE);
             } else {
                 inRange = false;
-                b.draw(Assets.errorSelector, (int)(selectorX), (int)(selectorY),
+                onTop = (selectorX - player.getX() < Tile.TILE_SIZE &&
+                        selectorY - player.getY() < Tile.TILE_SIZE);
+                if(onTop)
+                    b.draw(Assets.jumpSelector, (int)(selectorX), (int)(selectorY),
+                            Tile.TILE_SIZE, Tile.TILE_SIZE);
+                else
+                    b.draw(Assets.errorSelector, (int)(selectorX), (int)(selectorY),
                         Tile.TILE_SIZE, Tile.TILE_SIZE);
             }
         } else {
             inRange = false;
+            onTop = false;
             b.draw(Assets.transSelector, (int)(selectorX), (int)(selectorY),
                     Tile.TILE_SIZE, Tile.TILE_SIZE);
         }

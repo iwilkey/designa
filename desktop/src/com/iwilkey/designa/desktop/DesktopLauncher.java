@@ -9,7 +9,7 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
-		config.title = "Desgina pa1.0.11";
+		config.title = "Desgina pa1.0.12";
 		config.width = 1280;
 		config.height = 720;
 		config.resizable = false;

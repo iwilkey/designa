@@ -78,7 +78,7 @@ Date || Build ||
     - Cleaned up various code
     - Rebuilt up to the point where the building system is active and player looks at whatever side is being
         edited. Also, tile strengths are rendered.
-    - Rebuilding lighting system. Inital lights look fine, huge problems when go to placing lights. Some math
+    - Rebuilding lighting system. Initial lights look fine, huge problems when go to placing lights. Some math
         needs to be done to correct the OpenGL inverted y cord system.
 
 8/1/2020 || pa_1.0.10 ||
@@ -98,3 +98,13 @@ Date || Build ||
     - Fixed the zoom to now zoom in and out instantly.
     - Background dirt now renders underneath all terrain blocks broken.
     - Cleaned up some code.
+
+8/5/2020 || pa_1.0.12 ||
+    - Added numbers and symbols to text rendering.
+    - Fixed camera bounds calculations
+    - Made rendering very efficient. 60 TPS even with huge maps.
+        NOTE: Dimensions of 10000 x 100 are 1.90mb files. Not too big.
+        World files seem to progress in size linearly. 10000 x 100 is 1.90mb while 20000 x 100 is 3.80mb and so on...
+        The one caveat of a large map is obviously loading time. I need to consider making a loading screen.
+    - Fixed weird light blocking when building over the ground. TODO: This might need to be changed later on...
+    - Player now spawns in the center of the map. Still trying to make it the right y.

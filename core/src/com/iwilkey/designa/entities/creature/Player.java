@@ -49,10 +49,6 @@ public class Player extends Creature {
 
         if(InputHandler.moveRight) xMove += speed;
         if(InputHandler.moveLeft) xMove -= speed;
-
-        // if(InputHandler.moveUp) yMove += speed;
-        // if(InputHandler.moveDown) yMove -= speed;
-
         if(InputHandler.jumpRequest && !isJumping && isGrounded) jump();
         InputHandler.jumpRequest = false;
 
