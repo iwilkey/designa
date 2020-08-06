@@ -17,7 +17,7 @@ public class LightManager {
     private final ArrayList<Light> lights = new ArrayList<Light>();
 
     public static int[] highestTile; // Highest tile (at that x value)
-    private static final int ambientLightSourceBlockLimit = 10;
+    private static final int ambientLightSourceBlockLimit = 25;
 
     public LightManager(GameBuffer gb, World world) {
         this.gb = gb;
@@ -92,6 +92,8 @@ public class LightManager {
             for(int y = 0; y < World.h; y++) {
                 if(World.tiles[x][y] != 0) {
                     int c = 0;
+
+                    // TODO: Find a more steadfast algorithm for this.
                     for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
                         try {
                             if (World.tiles[x][y - i - 1] == 0) c++;
@@ -132,7 +134,7 @@ public class LightManager {
 
                     if(c == ambientLightSourceBlockLimit) {
                         for (int yy = y; yy < hh; yy++) {
-                            if(hh - yy <= hh - highestTile[x])
+                            if((World.tiles[x][y] == 2 || World.tiles[x][y] == 1))
                                 newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
                         }
                     }

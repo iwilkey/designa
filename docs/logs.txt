@@ -107,4 +107,8 @@ Date || Build ||
         World files seem to progress in size linearly. 10000 x 100 is 1.90mb while 20000 x 100 is 3.80mb and so on...
         The one caveat of a large map is obviously loading time. I need to consider making a loading screen.
     - Fixed weird light blocking when building over the ground. TODO: This might need to be changed later on...
-    - Player now spawns in the center of the map. Still trying to make it the right y.
+    - Player now spawns in the center of the map. Still trying to make it the right y. TODO: Make the map files have a spawn second line.
+    - Added StaticEntity class which is abstract for any static entity. I'm thinking they will be "models" that are two
+        dimensional arrays of certain tiles that, together, make up an entire static entity that can give you resources
+        on it's death. This makes it mesh better with the aesthetic of the game.
+    - Fixed some more lighting bugs, increased high air tile threshold to 25. TODO: My method may need to be changed...

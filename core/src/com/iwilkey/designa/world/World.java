@@ -37,8 +37,9 @@ public class World {
         lightManager = new LightManager(gb, this);
         ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
-        entityHandler = new EntityHandler(new Player(gb, w / 2f,
-                (LightManager.highestTile[w / 2] * Tile.TILE_SIZE)));
+        entityHandler = new EntityHandler(new Player(gb, 50,
+                h * Tile.TILE_SIZE));
+        // entityHandler.addEntity(new OakTree(gb, w / 2, h*Tile.TILE_SIZE - (lightManager.highestTile[(w / 2)] * Tile.TILE_SIZE)));
     }
 
     public void tick() {
