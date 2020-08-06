@@ -21,7 +21,8 @@ public class Assets {
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector;
 
     // Tiles
-    public static TextureRegion air, grass, dirt, backDirt;
+    public static TextureRegion air, grass, dirt, backDirt,
+        oakWood, leaf;
 
     // Player
     public static TextureRegion[] player, player_jump;
@@ -78,6 +79,8 @@ public class Assets {
         grass = ss.crop(0, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         dirt = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        oakWood = ss.crop(11, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        leaf = ss.crop(12, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];

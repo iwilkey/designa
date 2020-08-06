@@ -2,10 +2,9 @@ package com.iwilkey.designa.tiles;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.iwilkey.designa.assets.Assets;
-import com.iwilkey.designa.tiles.tiletypes.AirTile;
-import com.iwilkey.designa.tiles.tiletypes.DirtTile;
-import com.iwilkey.designa.tiles.tiletypes.GrassTile;
+import com.iwilkey.designa.tiles.tiletypes.*;
 
 public class Tile {
 
@@ -13,9 +12,11 @@ public class Tile {
     public static Tile[] tiles = new Tile[256];
     public static final int TILE_SIZE = 16;
 
-    public static Tile airTile = new AirTile(0);
-    public static Tile grassTile = new GrassTile(1);
-    public static Tile dirtTile = new DirtTile(2);
+    public static Tile airTile = new AirTile(0, 0);
+    public static Tile grassTile = new GrassTile(1, 4);
+    public static Tile dirtTile = new DirtTile(2, 3);
+    public static Tile oakWoodTile = new OakWoodTile(3, 8);
+    public static Tile leafTile = new LeafTile(4, 2);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();

@@ -9,6 +9,8 @@ import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
@@ -22,9 +24,13 @@ public class World {
     public int[][] tileBreakLevel;
     public static int[][] lightMap;
     public int[][] origLightMap;
+    public static int[] origHighTiles;
 
     // Entities
     private final EntityHandler entityHandler;
+
+    // Items
+    private final ItemHandler itemHandler;
 
     // Light
     private final LightManager lightManager;
@@ -36,14 +42,18 @@ public class World {
         this.gb = gb;
         lightManager = new LightManager(gb, this);
         ambientCycle = new AmbientCycle(this, gb);
+        entityHandler = new EntityHandler(new Player(gb, 0,
+                0));
+        itemHandler = new ItemHandler(gb);
+
         loadWorld(path);
-        entityHandler = new EntityHandler(new Player(gb, 50,
-                h * Tile.TILE_SIZE));
-        // entityHandler.addEntity(new OakTree(gb, w / 2, h*Tile.TILE_SIZE - (lightManager.highestTile[(w / 2)] * Tile.TILE_SIZE)));
+
+        itemHandler.addItem(Item.dirtItem.createNew(500, 500));
     }
 
     public void tick() {
         ambientCycle.tick();
+        itemHandler.tick();
         entityHandler.tick();
     }
 
@@ -60,13 +70,14 @@ public class World {
                 int yy = y * Tile.TILE_SIZE;
 
                 ambientCycle.render(b, xx, yy);
-                if(yy < (h - LightManager.highestTile[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
                 lightManager.renderLight(b, x, y);
             }
         }
 
-        entityHandler.render(b); // Front
+        itemHandler.render(b);
+        entityHandler.render(b);
         entityHandler.getPlayer().getBuildingHandler().render(b);
 
     }
@@ -89,6 +100,7 @@ public class World {
         tileBreakLevel = new int[w][h];
         lightMap = new int[w][h];
         origLightMap = new int[w][h];
+        origHighTiles = new int[w];
 
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
@@ -100,12 +112,17 @@ public class World {
             }
         }
 
-        LightManager.findHighestTiles();
+        origHighTiles = LightManager.findHighestTiles();
+        // WorldGeneration.GenerateEnvironment(gb, entityHandler, LightManager.highestTile, w, h);
         lightMap = lightManager.buildAmbientLight(lightMap);
+
+        entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
+        entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
     }
 
     public static void bake(int[][] lm) { lightMap = lm; }
     public GameBuffer getGameBuffer() { return gb; }
+    public ItemHandler getItemHandler() { return itemHandler; }
     public EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }

@@ -86,26 +86,22 @@ public class LightManager {
 
     }
 
-    public static void findHighestTiles() {
+    public static int[] findHighestTiles() {
+        int[] oht = new int[World.w];
         highestTile = new int[World.w];
         for(int x = 0; x < World.w; x++) {
             for(int y = 0; y < World.h; y++) {
-                if(World.tiles[x][y] != 0) {
-                    int c = 0;
-
-                    // TODO: Find a more steadfast algorithm for this.
-                    for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
-                        try {
-                            if (World.tiles[x][y - i - 1] == 0) c++;
-                        } catch (IndexOutOfBoundsException ignored) {}
-                    }
-
-                    if(c == ambientLightSourceBlockLimit) {
-                        highestTile[x] = y;
+                for(int yy = World.h - 1; yy > 0; yy--) {
+                    if(World.tiles[x][World.h - yy] != 0) {
+                        highestTile[x] = yy;
+                        oht[x] = yy;
+                        break;
                     }
                 }
             }
         }
+
+        return oht;
     }
 
     public int[][] buildAmbientLight(int[][] darkLm) {
@@ -124,29 +120,26 @@ public class LightManager {
 
         for(int x = 0; x < World.w; x++) {
             for(int y = 0; y < hh; y++) {
-                if(World.tiles[x][y] != 0) {
-                    int c = 0;
-                    for (int i = 0; i < ambientLightSourceBlockLimit; i++) {
-                        try {
-                            if (World.tiles[x][y - i - 1] == 0) c++;
-                        } catch (IndexOutOfBoundsException ignored) {}
-                    }
 
-                    if(c == ambientLightSourceBlockLimit) {
-                        for (int yy = y; yy < hh; yy++) {
-                            if((World.tiles[x][y] == 2 || World.tiles[x][y] == 1))
-                                newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
+                for(int yy = hh - 1; yy > 0; yy--) {
+                    if(World.tiles[x][hh - yy] != 0) {
+                        if(highestTile[x] < yy) highestTile[x] = yy;
+                        else if(highestTile[x] >= yy) {
+                            if(yy == World.origHighTiles[x]) highestTile[x] = World.origHighTiles[x];
+                            else if (yy > World.origHighTiles[x]) highestTile[x] = yy;
+                            else break;
                         }
+                        break;
                     }
                 }
-            }
-        }
 
-        for(int x = 0; x < World.w; x++) {
-            for(int y = 0; y < hh; y++) {
                 if(World.tiles[x][y] != 0) {
-                    if(hh - y < hh - highestTile[x] - 6) {
-                        newLm[x][hh - y - 1] -= Math.abs(hh - y - (hh - highestTile[x] - 3));
+                    if(hh - y == highestTile[x]) {
+                        for (int yy = y; yy < hh; yy++) {
+                            newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
+                        }
+                    } else if (hh - y < highestTile[x]) {
+                        newLm[x][hh - y - 1] = intensityLevel - Math.abs(hh - y - highestTile[x]);
                     }
                 }
             }

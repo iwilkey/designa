@@ -5,8 +5,8 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class GrassTile extends Tile {
 
-    public GrassTile(int ID) {
-        super(Assets.grass, ID, 4);
+    public GrassTile(int ID, int strength) {
+        super(Assets.grass, ID, strength);
     }
 
 }

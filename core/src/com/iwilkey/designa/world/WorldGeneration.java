@@ -10,10 +10,11 @@ import java.io.IOException;
 public class WorldGeneration {
 
     private static int[][] tiles;
+
     private static final int sampleDistance = 32;
     private static final PerlinNoise perlinNoise = new PerlinNoise(MathUtils.random(1000000, 10000000));
 
-    public static String GenerateWorld(String name, int width, int height) {
+    public static String GenerateTerrain(String name, int width, int height) {
 
         String path = "worlds/" + name + ".txt";
         File world = new File(path);
@@ -23,6 +24,7 @@ public class WorldGeneration {
                 return path;
             }
 
+            // Terrain Generation
             tiles = new int[width][height];
 
             for(int x = 0; x < width; x++) {
@@ -32,6 +34,7 @@ public class WorldGeneration {
                     tiles[x][y] = id;
                 }
             }
+            // End Terrain Generation
 
             FileWriter worldWriter = new FileWriter(path);
             worldWriter.write(width + " " + height + "\n");

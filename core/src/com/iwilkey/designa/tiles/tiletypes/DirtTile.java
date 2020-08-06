@@ -5,8 +5,8 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class DirtTile extends Tile {
 
-    public DirtTile(int ID) {
-        super(Assets.dirt, ID, 3);
+    public DirtTile(int ID, int strength) {
+        super(Assets.dirt, ID, strength);
     }
 
 }

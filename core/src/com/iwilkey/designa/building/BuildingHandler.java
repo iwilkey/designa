@@ -44,7 +44,7 @@ public class BuildingHandler {
                     // TODO: Replace @param ID '2' with ID of block selected in inventory.
                     if (InputHandler.rightMouseButtonDown) {
                         checkFace();
-                        placeTile(2, pointerOnTileX(), pointerOnTileY());
+                        placeTile(4, pointerOnTileX(), pointerOnTileY());
                         gb.getWorld().getLightManager().bakeLighting();
                         // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }

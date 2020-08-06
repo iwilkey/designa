@@ -6,8 +6,8 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class AirTile extends Tile {
 
-    public AirTile(int ID) {
-        super(Assets.air, ID, 0);
+    public AirTile(int ID, int strength) {
+        super(Assets.air, ID, strength);
     }
 
     @Override

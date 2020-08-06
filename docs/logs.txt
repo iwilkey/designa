@@ -112,3 +112,12 @@ Date || Build ||
         dimensional arrays of certain tiles that, together, make up an entire static entity that can give you resources
         on it's death. This makes it mesh better with the aesthetic of the game.
     - Fixed some more lighting bugs, increased high air tile threshold to 25. TODO: My method may need to be changed...
+
+8/6/2020 || pa_1.0.13 ||
+    - Added Oak Wood tile ID 3
+    - Added Item and ItemHandler class
+    - Added the dirtItem code 0 that grass tiles and dirt tiles will drop
+    - Updated the algorithm for finding the highest tile.
+        The lighting system now works pretty much as intended.
+    - The player now spawn directly in the middle of every map on the right y tile
+    - Working on giving items the ability to be affected by gravity unless on a solid tile.
