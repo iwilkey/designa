@@ -30,7 +30,7 @@ public class World {
     private final EntityHandler entityHandler;
 
     // Items
-    private final ItemHandler itemHandler;
+    private static ItemHandler itemHandler;
 
     // Light
     private final LightManager lightManager;
@@ -47,8 +47,6 @@ public class World {
         itemHandler = new ItemHandler(gb);
 
         loadWorld(path);
-
-        itemHandler.addItem(Item.dirtItem.createNew(500, 500));
     }
 
     public void tick() {
@@ -72,12 +70,19 @@ public class World {
                 ambientCycle.render(b, xx, yy);
                 if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
+            }
+        }
+
+        entityHandler.render(b);
+
+        for(int y = yStart; y < yEnd; y++) {
+            for (int x = xStart; x < xEnd; x++) {
                 lightManager.renderLight(b, x, y);
             }
         }
 
         itemHandler.render(b);
-        entityHandler.render(b);
+
         entityHandler.getPlayer().getBuildingHandler().render(b);
 
     }
@@ -122,7 +127,7 @@ public class World {
 
     public static void bake(int[][] lm) { lightMap = lm; }
     public GameBuffer getGameBuffer() { return gb; }
-    public ItemHandler getItemHandler() { return itemHandler; }
+    public static ItemHandler getItemHandler() { return itemHandler; }
     public EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }

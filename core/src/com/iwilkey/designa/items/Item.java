@@ -25,6 +25,7 @@ public class Item {
     // Mock physics
     protected float gravity = -3.5f;
     protected float timeInAir = 0.0f;
+    protected boolean isGrounded = false;
 
     public Item(TextureRegion tex, String name, int ID) {
         this.texture = tex;
@@ -47,21 +48,6 @@ public class Item {
                 getCollisionBounds(0f,0f).intersects(bounds)) {
             pickedUp = true;
             // Add to player inventory
-        }
-
-        moveY();
-    }
-
-    private boolean collisionWithTile(int x, int y) { return gb.getWorld().getTile(x, y).isSolid(); }
-
-    private void moveY() {
-        int ty = (int) (y - gravity - bounds.y - bounds.height + 24) / Tile.TILE_SIZE;
-        if(!collisionWithTile((int) (x + bounds.x) / Tile.TILE_SIZE, ty) &&
-                !collisionWithTile((int) (x + bounds.x + bounds.width) / Tile.TILE_SIZE, ty)){
-            y += gravity * timeInAir;
-        } else {
-            timeInAir = 0;
-            y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
     }
 

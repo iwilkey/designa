@@ -8,6 +8,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.tiles.tiletypes.AirTile;
 import com.iwilkey.designa.world.World;
@@ -43,17 +44,11 @@ public class BuildingHandler {
                 case Desktop:
                     // TODO: Replace @param ID '2' with ID of block selected in inventory.
                     if (InputHandler.rightMouseButtonDown) {
-                        checkFace();
                         placeTile(4, pointerOnTileX(), pointerOnTileY());
-                        gb.getWorld().getLightManager().bakeLighting();
-                        // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     if (InputHandler.leftMouseButtonDown) {
-                        checkFace();
                         damageTile(pointerOnTileX(), pointerOnTileY());
-                        gb.getWorld().getLightManager().bakeLighting();
-                        // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
                     }
 
                     break;
@@ -67,11 +62,8 @@ public class BuildingHandler {
 
         } else if (onTop) {
             if (InputHandler.rightMouseButtonDown) {
-                checkFace();
                 gb.getWorld().getEntityHandler().getPlayer().jump();
                 placeTile(2, pointerOnTileX(), pointerOnTileY());
-                gb.getWorld().getLightManager().bakeLighting();
-                // gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
             }
         }
 
@@ -85,21 +77,29 @@ public class BuildingHandler {
     }
 
     private void placeTile(int id, int x, int y) {
+        checkFace();
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+            gb.getWorld().getLightManager().bakeLighting();
         }
     }
 
     private void damageTile(int x, int y) {
+        checkFace();
         if(!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
 
             if(gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+
+                // Can use World.getTile at cursor points for spawning blocks.
+                World.getItemHandler().addItem(Item.dirtItem.createNew(pointerOnTileX() * Tile.TILE_SIZE + 4,
+                        pointerOnTileY() * Tile.TILE_SIZE + 8));
                 World.tiles[x][(World.h - y) - 1] = 0;
                 gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-            }
 
+                gb.getWorld().getLightManager().bakeLighting();
+            }
         }
     }
 

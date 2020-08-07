@@ -151,5 +151,6 @@ public abstract class Creature extends Entity {
     protected boolean collisionWithTile(int x, int y) { return gb.getWorld().getTile(x, y).isSolid(); }
 
     public float getSpeed() { return speed; }
+    public boolean facingLeft() { return facingLeft; }
 
 }

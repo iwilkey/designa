@@ -133,15 +133,14 @@ public class LightManager {
                     }
                 }
 
-                if(World.tiles[x][y] != 0) {
-                    if(hh - y == highestTile[x]) {
-                        for (int yy = y; yy < hh; yy++) {
-                            newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
-                        }
-                    } else if (hh - y < highestTile[x]) {
-                        newLm[x][hh - y - 1] = intensityLevel - Math.abs(hh - y - highestTile[x]);
+                if(hh - y == highestTile[x]) {
+                    for (int yy = y; yy < hh; yy++) {
+                        newLm[x][hh - yy - 1] = intensityLevel - Math.abs(y - yy) + 1;
                     }
+                } else if (hh - y < highestTile[x]) {
+                    newLm[x][hh - y - 1] = intensityLevel - Math.abs(hh - y - highestTile[x]);
                 }
+
             }
         }
 

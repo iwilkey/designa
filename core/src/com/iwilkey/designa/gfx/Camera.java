@@ -32,7 +32,7 @@ public class Camera {
     private void translate() {
         int hx = (int) ((World.w * scale.x * Tile.TILE_SIZE) - (Game.w));
         int hy = (int) (World.h * scale.y * Tile.TILE_SIZE) - (Game.h);
-        checkBounds(0, 8, hx, hy);
+        checkBounds(0, 0, hx, hy);
     }
 
     private void checkBounds(int lx, int ly, int hx, int hy) {

@@ -4,12 +4,7 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- REBUILD APP UP TO THIS POINT USING LIBGDX! <-- Almost done, except for Inventory and Item system.
-
-- The method I'm using to find the highest tile isn't really the best because, if there is a tile + threshold that is over the
-    world height, then the back dirt will spawn.
-
-- Tiles need to drop resources when broken!
+- Inventory system!
 		
 - Create a simple placement system
 	- If the item exists in the inventory of the Player, it can be placed.

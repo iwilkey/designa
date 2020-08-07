@@ -115,9 +115,11 @@ Date || Build ||
 
 8/6/2020 || pa_1.0.13 ||
     - Added Oak Wood tile ID 3
-    - Added Item and ItemHandler class
+    - Added Item class
+    - Added ItemHandler class
     - Added the dirtItem code 0 that grass tiles and dirt tiles will drop
     - Updated the algorithm for finding the highest tile.
         The lighting system now works pretty much as intended.
     - The player now spawn directly in the middle of every map on the right y tile
-    - Working on giving items the ability to be affected by gravity unless on a solid tile.
+    - Item drops are now affected by gravity
+    - Player now gets lost in darkness
