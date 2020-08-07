@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
+import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.World;
 
 public class Game extends ApplicationAdapter {
 
@@ -60,7 +63,8 @@ public class Game extends ApplicationAdapter {
 		h = Gdx.graphics.getHeight();
 
 		// Init camera
-		camera = new Camera(gb, 0, 0);
+		camera = new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
+				LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE);
 	}
 
 	private void tick() {

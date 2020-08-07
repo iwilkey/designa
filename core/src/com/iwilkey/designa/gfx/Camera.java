@@ -25,8 +25,8 @@ public class Camera {
 
     public Camera(GameBuffer gb, int x, int y) {
         this.gb = gb;
-        position = new Vector3(0,0,0);
-        offset = new Vector3(0,0,0);
+        position = new Vector3(x, y,0);
+        offset = new Vector3(x - (Game.w / 2f), y - (Game.h / 2f),0);
     }
 
     private void translate() {

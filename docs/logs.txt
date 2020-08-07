@@ -123,3 +123,4 @@ Date || Build ||
     - The player now spawn directly in the middle of every map on the right y tile
     - Item drops are now affected by gravity
     - Player now gets lost in darkness
+    - Camera now spawns in the correct place
