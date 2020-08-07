@@ -129,4 +129,5 @@ Date || Build ||
     - Added the inventory, accessed with "f" by default
     - Items stack in the inventory, looking for the next slot and if it can't find one, the item won't be picked up.
     - User can now select a inventory slot with the cursor to focus on
-    - TODO: Need to create a simple boolean to know when building is appropriate or not
+    - Building now can't happen when inventory is open
+    - There is now a tool slot on the HUD that will let the player use whatever is selected in the inventory

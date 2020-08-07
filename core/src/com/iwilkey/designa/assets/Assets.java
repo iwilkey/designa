@@ -18,7 +18,8 @@ public class Assets {
 
     // GUI
     public static TextureRegion[] heart, breakLevel;
-    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot;
+    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
+        toolSlot;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
@@ -75,6 +76,7 @@ public class Assets {
         breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
         inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        toolSlot = ss.crop(6, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

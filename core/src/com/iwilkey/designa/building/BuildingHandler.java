@@ -8,6 +8,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.tiles.tiletypes.AirTile;
@@ -35,40 +36,42 @@ public class BuildingHandler {
         selectorX = (pointerOnTileX() * Tile.TILE_SIZE);
         selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
 
-        // Building and Destroying
-        if(inRange && !onTop) {
+        if(!Inventory.active) {
+            // Building and Destroying
+            if (inRange && !onTop) {
 
-            // Controlling the building will be different depending on the platform...
-            // TODO: Implement these controls within the input manager and check if @bool isBuilding is on or something.
-            switch(Gdx.app.getType()) {
-                case Desktop:
-                    // TODO: Replace @param ID '2' with ID of block selected in inventory.
-                    if (InputHandler.rightMouseButtonDown) {
-                        placeTile(4, pointerOnTileX(), pointerOnTileY());
-                    }
+                // Controlling the building will be different depending on the platform...
+                // TODO: Implement these controls within the input manager and check if @bool isBuilding is on or something.
+                switch (Gdx.app.getType()) {
+                    case Desktop:
+                        // TODO: Replace @param ID '2' with ID of block selected in inventory.
+                        if (InputHandler.rightMouseButtonDown) {
+                            placeTile(4, pointerOnTileX(), pointerOnTileY());
+                        }
 
-                    if (InputHandler.leftMouseButtonDown) {
-                        damageTile(pointerOnTileX(), pointerOnTileY());
-                    }
+                        if (InputHandler.leftMouseButtonDown) {
+                            damageTile(pointerOnTileX(), pointerOnTileY());
+                        }
 
-                    break;
+                        break;
 
-                case iOS:
-                    break;
+                    case iOS:
+                        break;
 
-                case Android:
-                    break;
+                    case Android:
+                        break;
+                }
+
+            } else if (onTop) {
+                if (InputHandler.rightMouseButtonDown) {
+                    gb.getWorld().getEntityHandler().getPlayer().jump();
+                    placeTile(2, pointerOnTileX(), pointerOnTileY());
+                }
             }
 
-        } else if (onTop) {
-            if (InputHandler.rightMouseButtonDown) {
-                gb.getWorld().getEntityHandler().getPlayer().jump();
-                placeTile(2, pointerOnTileX(), pointerOnTileY());
-            }
+            selectorCollider.x = (int) selectorX;
+            selectorCollider.y = (int) selectorY;
         }
-
-        selectorCollider.x = (int) selectorX;
-        selectorCollider.y = (int) selectorY;
     }
 
     private void checkFace() {
@@ -81,7 +84,7 @@ public class BuildingHandler {
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
+            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 16);
             // gb.getWorld().getLightManager().bakeLighting();
         }
     }
@@ -116,30 +119,32 @@ public class BuildingHandler {
 
     public void render(Batch b) {
 
-        if(Math.abs(selectorX - player.getX()) < 1.5 * Tile.TILE_SIZE &&
-                Math.abs(selectorY - (player.getY() + 8)) < 2 * Tile.TILE_SIZE) {
-            inRange = true;
-            onTop = false;
+        if(!Inventory.active) {
+            if (Math.abs(selectorX - player.getX()) < 1.5 * Tile.TILE_SIZE &&
+                    Math.abs(selectorY - (player.getY() + 8)) < 2 * Tile.TILE_SIZE) {
+                inRange = true;
+                onTop = false;
 
-            if(!(gb.getWorld().getEntityHandler().getPlayer().getCollisionBounds(0f,0f).intersects(selectorCollider))) {
-                b.draw(Assets.selector, (int)(selectorX), (int)(selectorY),
-                        Tile.TILE_SIZE, Tile.TILE_SIZE);
+                if (!(gb.getWorld().getEntityHandler().getPlayer().getCollisionBounds(0f, 0f).intersects(selectorCollider))) {
+                    b.draw(Assets.selector, (int) (selectorX), (int) (selectorY),
+                            Tile.TILE_SIZE, Tile.TILE_SIZE);
+                } else {
+                    inRange = false;
+                    onTop = (selectorX - player.getX() < Tile.TILE_SIZE &&
+                            selectorY - player.getY() < Tile.TILE_SIZE);
+                    if (onTop)
+                        b.draw(Assets.jumpSelector, (int) (selectorX), (int) (selectorY),
+                                Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    else
+                        b.draw(Assets.errorSelector, (int) (selectorX), (int) (selectorY),
+                                Tile.TILE_SIZE, Tile.TILE_SIZE);
+                }
             } else {
                 inRange = false;
-                onTop = (selectorX - player.getX() < Tile.TILE_SIZE &&
-                        selectorY - player.getY() < Tile.TILE_SIZE);
-                if(onTop)
-                    b.draw(Assets.jumpSelector, (int)(selectorX), (int)(selectorY),
-                            Tile.TILE_SIZE, Tile.TILE_SIZE);
-                else
-                    b.draw(Assets.errorSelector, (int)(selectorX), (int)(selectorY),
+                onTop = false;
+                b.draw(Assets.transSelector, (int) (selectorX), (int) (selectorY),
                         Tile.TILE_SIZE, Tile.TILE_SIZE);
             }
-        } else {
-            inRange = false;
-            onTop = false;
-            b.draw(Assets.transSelector, (int)(selectorX), (int)(selectorY),
-                    Tile.TILE_SIZE, Tile.TILE_SIZE);
         }
 
     }

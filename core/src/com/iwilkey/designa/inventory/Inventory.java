@@ -11,14 +11,12 @@ import java.awt.Rectangle;
 
 public class Inventory {
 
-    public final int MAX_STACK = 5;
+    public final int MAX_STACK = 100;
 
     private GameBuffer gb;
-    private boolean active = false;
+    public static boolean active = false;
     private InventorySlot[][] slots;
-
     public final int invX, invY, invWidth, invHeight;
-
     public int[][] selector;
 
     public Inventory(GameBuffer gb) {

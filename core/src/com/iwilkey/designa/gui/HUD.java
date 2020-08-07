@@ -26,12 +26,19 @@ public class HUD {
         if(healthX != xx) healthX = xx;
         if(healthY != yy) healthY = yy;
 
+        // Toolslot
+        xx = (Game.w) - (player.getToolSlot().w) - 18;
+        yy = Game.h - (player.getToolSlot().h) - 34;
+        if(player.getToolSlot().x != xx) player.getToolSlot().x = xx;
+        if(player.getToolSlot().y != yy) player.getToolSlot().y = yy;
+
     }
 
     public void render(Batch b) {
         renderHealthBar(b);
         Text.draw(b, "designa pa1.0.13", 14, Game.h - 14 - 8);
         player.getInventory().render(b);
+        player.getToolSlot().render(b);
     }
 
     private void renderHealthBar(Batch b) {
