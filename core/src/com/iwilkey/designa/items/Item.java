@@ -46,8 +46,7 @@ public class Item {
     public void tick() {
         if(gb.getWorld().getEntityHandler().getPlayer().
                 getCollisionBounds(0f,0f).intersects(bounds)) {
-            pickedUp = true;
-            // Add to player inventory
+            if(gb.getWorld().getEntityHandler().getPlayer().getInventory().addItem(this) == 1) pickedUp = true;
         }
     }
 

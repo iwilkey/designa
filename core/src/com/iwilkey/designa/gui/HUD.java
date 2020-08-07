@@ -31,6 +31,7 @@ public class HUD {
     public void render(Batch b) {
         renderHealthBar(b);
         Text.draw(b, "designa pa1.0.13", 14, Game.h - 14 - 8);
+        player.getInventory().render(b);
     }
 
     private void renderHealthBar(Batch b) {

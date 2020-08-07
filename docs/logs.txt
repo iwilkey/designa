@@ -124,3 +124,9 @@ Date || Build ||
     - Item drops are now affected by gravity
     - Player now gets lost in darkness
     - Camera now spawns in the correct place
+
+8/7/2020 || pa_1.0.14 ||
+    - Added the inventory, accessed with "f" by default
+    - Items stack in the inventory, looking for the next slot and if it can't find one, the item won't be picked up.
+    - User can now select a inventory slot with the cursor to focus on
+    - TODO: Need to create a simple boolean to know when building is appropriate or not

@@ -14,7 +14,7 @@ public class InputHandler {
     private static boolean lmbd, rmbd, jcl, ccl, jcr, ccr;
 
     // Controls
-    public static boolean moveLeft, moveRight, jumpRequest;
+    public static boolean moveLeft, moveRight, jumpRequest, inventoryRequest;
     public static float zoomRequest = 0;
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
@@ -52,6 +52,7 @@ public class InputHandler {
                         if(key == Input.Keys.A) moveLeft = true;
 
                         if(key == Input.Keys.SPACE) jumpRequest = true;
+                        if(key == Input.Keys.F) inventoryRequest = true;
 
 
                         return true;
@@ -64,6 +65,7 @@ public class InputHandler {
                         if(key == Input.Keys.A) moveLeft = false;
 
                         if(key == Input.Keys.SPACE) jumpRequest = false;
+                        if(key == Input.Keys.F) inventoryRequest = false;
 
                         return true;
                     }

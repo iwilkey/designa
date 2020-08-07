@@ -117,7 +117,6 @@ public class World {
         }
 
         origHighTiles = LightManager.findHighestTiles();
-        // WorldGeneration.GenerateEnvironment(gb, entityHandler, LightManager.highestTile, w, h);
         lightMap = lightManager.buildAmbientLight(lightMap);
 
         entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);

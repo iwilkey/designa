@@ -81,7 +81,8 @@ public class BuildingHandler {
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            gb.getWorld().getLightManager().bakeLighting();
+            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 6);
+            // gb.getWorld().getLightManager().bakeLighting();
         }
     }
 

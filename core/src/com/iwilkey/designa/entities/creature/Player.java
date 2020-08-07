@@ -9,6 +9,7 @@ import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gui.HUD;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.Inventory;
 
 public class Player extends Creature {
 
@@ -20,6 +21,9 @@ public class Player extends Creature {
 
     // Building
     private final BuildingHandler buildingHandler;
+
+    // Inventory
+    private Inventory inventory;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -40,6 +44,9 @@ public class Player extends Creature {
 
         // Building
         buildingHandler = new BuildingHandler(gb, this);
+
+        // Inventory
+        inventory = new Inventory(gb);
 
     }
 
@@ -74,6 +81,9 @@ public class Player extends Creature {
 
         // Building
         buildingHandler.tick();
+
+        // Inventory
+        inventory.tick();
 
     }
 
@@ -128,5 +138,6 @@ public class Player extends Creature {
     public GameBuffer getGameBuffer() { return gb; }
     public HUD getHUD() { return hud; }
     public BuildingHandler getBuildingHandler() { return buildingHandler; }
+    public Inventory getInventory() { return inventory; }
 
 }
