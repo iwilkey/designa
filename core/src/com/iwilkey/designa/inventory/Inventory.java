@@ -24,11 +24,11 @@ public class Inventory {
 
         invX = 10;
         invY = Gdx.graphics.getHeight() / 2 - (700 / 2);
-        invWidth = 700; invHeight = 700;
+        invWidth = 700; invHeight = 500;
 
         slots = new InventorySlot[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector = new int[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
-        selector[0][invWidth / InventorySlot.SLOT_WIDTH - 1] = 1;
+        selector[0][invHeight / InventorySlot.SLOT_HEIGHT - 1] = 1;
 
         int slot = 0;
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
