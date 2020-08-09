@@ -33,7 +33,7 @@ public class ItemHandler {
 
     private void moveX(Item i) {
         if(!i.isGrounded) {
-            float v = MathUtils.random(1.70f, 2.30f);
+            float v = MathUtils.random(1.70f, 5.30f);
             if (gb.getWorld().getEntityHandler().getPlayer().facingLeft())
                 i.setPosition((int) (i.x + v), i.y);
             else i.setPosition((int) (i.x - v), i.y);

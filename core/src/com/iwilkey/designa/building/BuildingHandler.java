@@ -50,7 +50,7 @@ public class BuildingHandler {
                     InputHandler.placeRequest = false;
                 }
 
-                // TODO: If you have a itemtype tool selected, damage at the score it's rated at.
+                // TODO: If you have a item type tool selected, damage at the score it's rated at.
                 if (InputHandler.destroyRequest) {
                     damageTile(pointerOnTileX(), pointerOnTileY());
                     InputHandler.destroyRequest = false;
@@ -58,8 +58,13 @@ public class BuildingHandler {
 
             }  else if (onTop) {
                 if (InputHandler.placeRequest) {
-                    gb.getWorld().getEntityHandler().getPlayer().jump();
-                    placeTile(2, pointerOnTileX(), pointerOnTileY());
+                    if(ToolSlot.currentItem != null)
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock) {
+                            placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
+                                    pointerOnTileX(), pointerOnTileY());
+                            gb.getWorld().getEntityHandler().getPlayer().jump();
+                            placeTile(2, pointerOnTileX(), pointerOnTileY());
+                        }
                     InputHandler.placeRequest = false;
                 }
             }
@@ -94,9 +99,12 @@ public class BuildingHandler {
         if(!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
             if(gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+
+                // TODO: Make this general for all blocks.
                 // Can use World.getTile at cursor points for spawning blocks.
                 World.getItemHandler().addItem(Item.dirtItem.createNew(pointerOnTileX() * Tile.TILE_SIZE + 4,
-                        pointerOnTileY() * Tile.TILE_SIZE + 8));
+                        pointerOnTileY() * Tile.TILE_SIZE + 6));
+
                 World.tiles[x][(World.h - y) - 1] = 0;
                 gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
                 gb.getWorld().getLightManager().bakeLighting();

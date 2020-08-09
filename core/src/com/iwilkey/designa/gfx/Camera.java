@@ -23,6 +23,9 @@ public class Camera {
     private final static float camSpeed = 4.0f;
     private static float targetZoom = 1;
 
+    private static final float CAMERA_MAX_ZOOM = 6.0f,
+        CAMERA_MIN_ZOOM = 0.5f;
+
     public Camera(GameBuffer gb, int x, int y) {
         this.gb = gb;
         position = new Vector3(x, y,0);
@@ -49,10 +52,10 @@ public class Camera {
 
     public static void zoom(float amount, Entity e) {
 
-        if(targetZoom - amount > 3) {
-            targetZoom = 3;
-        } else if (targetZoom - amount < 1) {
-            targetZoom = 1;
+        if(targetZoom - amount > CAMERA_MAX_ZOOM) {
+            targetZoom = CAMERA_MAX_ZOOM;
+        } else if (targetZoom - amount < CAMERA_MIN_ZOOM) {
+            targetZoom = CAMERA_MIN_ZOOM;
         } else {
             targetZoom -= amount;
         }

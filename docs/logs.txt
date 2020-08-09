@@ -133,8 +133,11 @@ Date || Build ||
     - There is now a tool slot on the HUD that will let the player use whatever is selected in the inventory
 
 8/8/2020 || pa_1.0.15 ||
-    - ToolSlot now renders item and number of item of whatever slot is selected.
+    - ToolSlot now renders item and number of item of whatever slot is selected
     - Cleaned up building manager
-    - Now can only place a block if the item in the tool slot is classified a placeable block.
-    - Can't place blocks when you run out in inventory.
+    - Input handler now handles place and destroy requests
+    - Now can only place a block if the item in the tool slot is classified a placeable block
+    - Can't place blocks when you run out in inventory
+    - Tool slot items now render in player's hand
+    - Camera can now zoom in and out a little more
 

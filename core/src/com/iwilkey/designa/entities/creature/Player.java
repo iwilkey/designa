@@ -95,8 +95,20 @@ public class Player extends Creature {
     public void render(Batch b) {
         if(isFlashing && flashInterval >= flashIntervalTime) {
             b.draw(currentSprite(), x, y, width, height);
+            if(ToolSlot.currentItem != null) {
+                try {
+                    if (facingRight) b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 6, 6, 6);
+                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x - 2, y + 6, 6, 6);
+                } catch (NullPointerException ignored) {}
+            }
         } else if (!isFlashing) {
             b.draw(currentSprite(), x, y, width, height);
+            if(ToolSlot.currentItem != null) {
+                try {
+                    if (facingRight) b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 6, 6, 6);
+                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 6, 6, 6);
+                } catch (NullPointerException ignored) {}
+            }
         }
     }
 
