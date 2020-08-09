@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 
 public class Inventory {
 
-    public final int MAX_STACK = 100;
+    public final int MAX_STACK = 5;
 
     private GameBuffer gb;
     public static boolean active = false;
@@ -35,6 +35,12 @@ public class Inventory {
             for(int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 slots[x][y] = new InventorySlot(this, slot);
                 slot++;
+            }
+        }
+
+        for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                slots[x][y].isSelected = selector[x][y] == 1;
             }
         }
     }
@@ -98,7 +104,7 @@ public class Inventory {
             for(int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 if(slots[x][y].getItem() != null) { // If the slot isn't null...
                     if(slots[x][y].itemCount < MAX_STACK) {
-                        if (i.getID() == slots[x][y].getItem().getID()) { // And if the item we're adding has the same ID as the item in the slot...
+                        if (i.getItemID() == slots[x][y].getItem().getItemID()) { // And if the item we're adding has the same ID as the item in the slot...
                             if (slots[x][y].itemCount + 1 <= MAX_STACK) {
                                 slots[x][y].itemCount++;
                                 return 1;
@@ -118,6 +124,7 @@ public class Inventory {
     // Getters and setters
 
     public GameBuffer getBuffer() { return gb; }
+    public InventorySlot[][] getSlots() { return slots; }
     public void setGameBuffer(GameBuffer gb) { this.gb = gb; }
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }

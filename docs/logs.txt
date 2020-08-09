@@ -131,3 +131,10 @@ Date || Build ||
     - User can now select a inventory slot with the cursor to focus on
     - Building now can't happen when inventory is open
     - There is now a tool slot on the HUD that will let the player use whatever is selected in the inventory
+
+8/8/2020 || pa_1.0.15 ||
+    - ToolSlot now renders item and number of item of whatever slot is selected.
+    - Cleaned up building manager
+    - Now can only place a block if the item in the tool slot is classified a placeable block.
+    - Can't place blocks when you run out in inventory.
+

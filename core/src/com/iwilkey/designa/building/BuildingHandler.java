@@ -1,6 +1,5 @@
 package com.iwilkey.designa.building;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
@@ -9,7 +8,9 @@ import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.tiles.tiletypes.AirTile;
 import com.iwilkey.designa.world.World;
@@ -33,46 +34,45 @@ public class BuildingHandler {
     }
 
     public void tick() {
-        selectorX = (pointerOnTileX() * Tile.TILE_SIZE);
-        selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
+        setSelector();
 
-        if(!Inventory.active) {
-            // Building and Destroying
+        if (!Inventory.active) {
+
             if (inRange && !onTop) {
 
-                // Controlling the building will be different depending on the platform...
-                // TODO: Implement these controls within the input manager and check if @bool isBuilding is on or something.
-                switch (Gdx.app.getType()) {
-                    case Desktop:
-                        // TODO: Replace @param ID '2' with ID of block selected in inventory.
-                        if (InputHandler.rightMouseButtonDown) {
-                            placeTile(4, pointerOnTileX(), pointerOnTileY());
-                        }
+                if (InputHandler.placeRequest) {
 
-                        if (InputHandler.leftMouseButtonDown) {
-                            damageTile(pointerOnTileX(), pointerOnTileY());
-                        }
+                    if(ToolSlot.currentItem != null)
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
+                            placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
+                                    pointerOnTileX(), pointerOnTileY());
 
-                        break;
-
-                    case iOS:
-                        break;
-
-                    case Android:
-                        break;
+                    InputHandler.placeRequest = false;
                 }
 
-            } else if (onTop) {
-                if (InputHandler.rightMouseButtonDown) {
+                // TODO: If you have a itemtype tool selected, damage at the score it's rated at.
+                if (InputHandler.destroyRequest) {
+                    damageTile(pointerOnTileX(), pointerOnTileY());
+                    InputHandler.destroyRequest = false;
+                }
+
+            }  else if (onTop) {
+                if (InputHandler.placeRequest) {
                     gb.getWorld().getEntityHandler().getPlayer().jump();
                     placeTile(2, pointerOnTileX(), pointerOnTileY());
+                    InputHandler.placeRequest = false;
                 }
             }
-
-            selectorCollider.x = (int) selectorX;
-            selectorCollider.y = (int) selectorY;
         }
     }
+
+    private void setSelector() {
+        selectorX = (pointerOnTileX() * Tile.TILE_SIZE);
+        selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
+        selectorCollider.x = (int) selectorX;
+        selectorCollider.y = (int) selectorY;
+    }
+
 
     private void checkFace() {
         if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
@@ -82,10 +82,10 @@ public class BuildingHandler {
     private void placeTile(int id, int x, int y) {
         checkFace();
         if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
+            ToolSlot.currentItem.itemCount--;
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 16);
-            // gb.getWorld().getLightManager().bakeLighting();
+            gb.getWorld().getLightManager().bakeLighting();
         }
     }
 
@@ -93,15 +93,12 @@ public class BuildingHandler {
         checkFace();
         if(!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
-
             if(gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
-
                 // Can use World.getTile at cursor points for spawning blocks.
                 World.getItemHandler().addItem(Item.dirtItem.createNew(pointerOnTileX() * Tile.TILE_SIZE + 4,
                         pointerOnTileY() * Tile.TILE_SIZE + 8));
                 World.tiles[x][(World.h - y) - 1] = 0;
                 gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-
                 gb.getWorld().getLightManager().bakeLighting();
             }
         }
@@ -134,7 +131,7 @@ public class BuildingHandler {
                             selectorY - player.getY() < Tile.TILE_SIZE);
                     if (onTop)
                         b.draw(Assets.jumpSelector, (int) (selectorX), (int) (selectorY),
-                                Tile.TILE_SIZE, Tile.TILE_SIZE);
+                                    Tile.TILE_SIZE, Tile.TILE_SIZE);
                     else
                         b.draw(Assets.errorSelector, (int) (selectorX), (int) (selectorY),
                                 Tile.TILE_SIZE, Tile.TILE_SIZE);
@@ -146,7 +143,5 @@ public class BuildingHandler {
                         Tile.TILE_SIZE, Tile.TILE_SIZE);
             }
         }
-
     }
-
 }

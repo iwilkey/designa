@@ -6,6 +6,7 @@ import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.tiles.Tile;
 
 public class HUD {
@@ -36,9 +37,12 @@ public class HUD {
 
     public void render(Batch b) {
         renderHealthBar(b);
-        Text.draw(b, "designa pa1.0.14", 14, Game.h - 14 - 8);
         player.getInventory().render(b);
         player.getToolSlot().render(b);
+
+        Text.draw(b, "designa pa1.0.15", 14, Game.h - 14 - 8);
+
+        if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 12);
     }
 
     private void renderHealthBar(Batch b) {

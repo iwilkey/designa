@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.iwilkey.designa.Game;
+import com.iwilkey.designa.inventory.Inventory;
 
 public class InputHandler {
 
@@ -19,6 +20,7 @@ public class InputHandler {
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
     public static boolean leftMouseButton, rightMouseButton;
+    public static boolean placeRequest, destroyRequest;
 
 
     public InputHandler() {
@@ -72,7 +74,6 @@ public class InputHandler {
 
                     @Override
                     public boolean scrolled(int amount) {
-                        //zoomRequest += amount / Camera.scrollSensitivity;
                         return true;
                     }
 
@@ -87,17 +88,26 @@ public class InputHandler {
                         justClicked(button);
                         if(button == Input.Buttons.LEFT) {
                             lmbd = true;
+                            if(!Inventory.active) destroyRequest = true;
                         }
                         if(button == Input.Buttons.RIGHT) {
                             rmbd = true;
+                            if(!Inventory.active) placeRequest = true;
                         }
                         return true;
                     }
 
                     @Override
                     public boolean touchUp(int x, int y, int pointer, int button) {
-                        if(button == Input.Buttons.LEFT) lmbd = false;
-                        if(button == Input.Buttons.RIGHT) rmbd = false;
+                        if(button == Input.Buttons.LEFT) {
+                            lmbd = false;
+                            if(!Inventory.active) destroyRequest = false;
+                        }
+
+                        if(button == Input.Buttons.RIGHT) {
+                            rmbd = false;
+                            if(!Inventory.active) placeRequest = false;
+                        }
                         return true;
                     }
 

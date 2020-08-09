@@ -2,6 +2,7 @@ package com.iwilkey.designa.items;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.tiles.Tile;
@@ -11,13 +12,18 @@ import java.awt.Rectangle;
 public class Item {
 
     public static Item[] items = new Item[256];
-    public static Item dirtItem = new Item(Assets.dirt, "Dirt", 0);
+
+    // Items
+    public static Item dirtItem = new Item(Assets.dirt, "Dirt", 0,
+            new ItemType.PlaceableBlock(Tile.dirtTile.getID()));
+
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
 
     protected GameBuffer gb;
     protected TextureRegion texture;
     protected String name;
-    protected final int ID;
+    protected final int itemID;
+    protected ItemType type;
     protected Rectangle bounds;
     protected int x, y, count;
     protected boolean pickedUp = false;
@@ -27,18 +33,18 @@ public class Item {
     protected float timeInAir = 0.0f;
     protected boolean isGrounded = false;
 
-    public Item(TextureRegion tex, String name, int ID) {
+    public Item(TextureRegion tex, String name, int ID, ItemType t) {
         this.texture = tex;
         this.name = name;
-        this.ID = ID;
+        this.itemID = ID;
+        this.type = t;
         count = 1;
-
         bounds = new Rectangle(x, y, ITEM_WIDTH, ITEM_HEIGHT);
         items[ID] = this;
     }
 
     public Item createNew(int x, int y) {
-        Item i = new Item(texture, name, ID);
+        Item i = new Item(texture, name, itemID, type);
         i.setPosition(x, y);
         return i;
     }
@@ -82,7 +88,8 @@ public class Item {
     public int getCount() { return count; }
     public void setCount(int c) { count = c; }
 
-    public int getID() { return ID; }
+    public int getItemID() { return itemID; }
+    public ItemType getItemType() { return type; }
 
     public boolean isPickedUp() { return pickedUp; }
 

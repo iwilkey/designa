@@ -28,7 +28,12 @@ public class InventorySlot {
         itemCount = 0;
     }
 
-    public void tick() {}
+    public void tick() {
+        if(itemCount <= 0) {
+            item = null;
+            itemCount = 0;
+        }
+    }
 
     public void render(Batch b, int x, int y) {
 
