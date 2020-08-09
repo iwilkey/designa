@@ -7,10 +7,11 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.gfx.Animation;
-import com.iwilkey.designa.gui.HUD;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
+import com.iwilkey.designa.items.ItemType;
 
 public class Player extends Creature {
 
@@ -18,7 +19,7 @@ public class Player extends Creature {
     private final Animation[] animations;
 
     // HUD
-    private final HUD hud;
+    private final Hud hud;
 
     // Building
     private final BuildingHandler buildingHandler;
@@ -42,7 +43,7 @@ public class Player extends Creature {
         animations[1] = new Animation(100, Assets.walk_left);
 
         // HUD
-        hud = new HUD(this);
+        hud = new Hud(this);
 
         // Building
         buildingHandler = new BuildingHandler(gb, this);
@@ -50,6 +51,8 @@ public class Player extends Creature {
         // Inventory
         inventory = new Inventory(gb);
         toolSlot = new ToolSlot(inventory);
+
+        facingLeft = true;
 
     }
 
@@ -105,8 +108,22 @@ public class Player extends Creature {
             b.draw(currentSprite(), x, y, width, height);
             if(ToolSlot.currentItem != null) {
                 try {
-                    if (facingRight) b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 6, 6, 6);
-                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 6, 6, 6);
+                    if (facingRight)  {
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 4, 12, 12);
+                        } else {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 4, 6, 6);
+                        }
+                    }
+
+                    else {
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
+                                    6, 6, 12, 12, 1, 1, 180);
+                        } else {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 4, 6, 6);
+                        }
+                    }
                 } catch (NullPointerException ignored) {}
             }
         }
@@ -152,7 +169,7 @@ public class Player extends Creature {
     }
 
     public GameBuffer getGameBuffer() { return gb; }
-    public HUD getHUD() { return hud; }
+    public Hud getHUD() { return hud; }
     public BuildingHandler getBuildingHandler() { return buildingHandler; }
     public Inventory getInventory() { return inventory; }
     public ToolSlot getToolSlot() { return toolSlot; }

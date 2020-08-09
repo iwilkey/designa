@@ -141,3 +141,11 @@ Date || Build ||
     - Tool slot items now render in player's hand
     - Camera can now zoom in and out a little more
 
+8/9/2020 || pa_1.0.16 ||
+    - Stone tile added ID 5
+    - Stone item added ID 1
+    - Stone now spawns as a part of the terrain generation
+    - Now the correct item spawns when any tile is broken and vise versa when an item is used
+    - TPS now is rendered in the title
+    - Added Simple Drill to mine stone and dirt faster. Player gets this by default when they enter world.
+

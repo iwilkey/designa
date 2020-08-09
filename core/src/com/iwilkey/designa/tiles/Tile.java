@@ -17,6 +17,7 @@ public class Tile {
     public static Tile dirtTile = new DirtTile(2, 3);
     public static Tile oakWoodTile = new OakWoodTile(3, 8);
     public static Tile leafTile = new LeafTile(4, 2);
+    public static Tile stoneTile = new StoneTile(5, 16);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();
@@ -68,5 +69,6 @@ public class Tile {
         return ID;
     }
     public int getStrength() { return strength; }
+    public int getItemID() { return 0; }
 
 }

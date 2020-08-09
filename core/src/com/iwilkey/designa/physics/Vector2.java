@@ -25,7 +25,7 @@ public class Vector2 {
     }
 
     public static float magnitude(Vector2 v) {
-        return (float) Math.round(Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2))));
+        return (float) Math.sqrt((Math.pow(v.x, 2) + Math.pow(v.y, 2)));
     }
 
 }

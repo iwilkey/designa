@@ -13,9 +13,14 @@ public class Item {
 
     public static Item[] items = new Item[256];
 
-    // Items
+    // Item List
     public static Item dirtItem = new Item(Assets.dirt, "Dirt", 0,
             new ItemType.PlaceableBlock(Tile.dirtTile.getID()));
+    public static Item stoneItem = new Item(Assets.stone, "Stone", 1,
+            new ItemType.PlaceableBlock(Tile.stoneTile.getID()));
+    public static Item simpleDrill = new Item(Assets.simpleDrill, "Simple Drill", 10,
+            new ItemType.Drill("simple-drill", 5, 1));
+
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
 
@@ -41,6 +46,14 @@ public class Item {
         count = 1;
         bounds = new Rectangle(x, y, ITEM_WIDTH, ITEM_HEIGHT);
         items[ID] = this;
+    }
+
+    public static Item getItemByID(int ID) {
+        for(int i = 0; i < items.length; i++) {
+            if(items[i].getItemID() == ID) return items[i];
+        }
+
+        return null;
     }
 
     public Item createNew(int x, int y) {

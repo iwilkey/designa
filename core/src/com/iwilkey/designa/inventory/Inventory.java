@@ -11,7 +11,7 @@ import java.awt.Rectangle;
 
 public class Inventory {
 
-    public final int MAX_STACK = 5;
+    public final int MAX_STACK = 100;
 
     private GameBuffer gb;
     public static boolean active = false;

@@ -9,6 +9,7 @@ import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
@@ -46,6 +47,8 @@ public class World {
         itemHandler = new ItemHandler(gb);
 
         loadWorld(path);
+
+        entityHandler.getPlayer().getInventory().addItem(Item.simpleDrill);
     }
 
     public void tick() {

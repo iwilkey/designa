@@ -78,6 +78,7 @@ public class Game extends ApplicationAdapter {
 	long now = 0;
 	long timer = 0;
 	int ticks = 0;
+	public static int tps;
 
 	@Override
 	public void render () {
@@ -108,7 +109,7 @@ public class Game extends ApplicationAdapter {
 		guiBatch.end();
 
 		if(timer > 1000000000) {
-			System.out.println("tps: " + ticks);
+			tps = ticks;
 			ticks = 0;
 			timer = 0;
 		}

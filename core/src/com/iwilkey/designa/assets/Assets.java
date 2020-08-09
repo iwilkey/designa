@@ -18,12 +18,14 @@ public class Assets {
 
     // GUI
     public static TextureRegion[] heart, breakLevel;
-    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
-        toolSlot;
+    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
-        oakWood, leaf;
+        oakWood, leaf, stone;
+
+    // Tools
+    public static TextureRegion simpleDrill;
 
     // Player
     public static TextureRegion[] player, player_jump;
@@ -76,7 +78,6 @@ public class Assets {
         breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
         inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
-        toolSlot = ss.crop(6, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
@@ -85,6 +86,10 @@ public class Assets {
         backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
         oakWood = ss.crop(11, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         leaf = ss.crop(12, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Tools
+        simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
         // Init player
         player = new TextureRegion[2];

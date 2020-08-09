@@ -41,9 +41,12 @@ public class InventorySlot {
         collider.x = (int) (x + 12); collider.y = (int) (y + 12);
 
         if(item != null) {
-            if(itemCount < 10) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5, collider.y + PADDING + 2, 10);
-            else if(itemCount < 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 9, collider.y + PADDING + 2, 9);
-            else if(itemCount == 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 12, collider.y + PADDING + 2, 8);
+            if(itemCount < 10) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
+                    collider.y + PADDING + 3, 11);
+            else if(itemCount < 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 9,
+                    collider.y + PADDING + 3, 9);
+            else if(itemCount == 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
+                    collider.y + PADDING + 3, 11);
             b.draw(item.getTexture(), collider.x + (SLOT_WIDTH / 2f) - (TEXTURE_SIZE / 2f),
                     collider.y + (SLOT_HEIGHT / 2f) - (TEXTURE_SIZE / 2f) + PADDING, TEXTURE_SIZE, TEXTURE_SIZE);
         }

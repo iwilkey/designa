@@ -46,7 +46,7 @@ public class ToolSlot {
 
         if(itemTexture != null){
             b.draw(itemTexture, x + (25 / 2f), y + (25 / 2f), w - 25, h - 25);
-            Text.draw(b, Integer.toString(itemCount), x, y, 10);
+            Text.draw(b, Integer.toString(itemCount), x, y - 4, 11);
         }
 
     }

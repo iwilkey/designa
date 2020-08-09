@@ -23,4 +23,34 @@ public class ItemType {
 
     }
 
+    public static class Tool extends ItemType {
+
+        protected int level;
+
+        public Tool(int level) {
+            super("Tool");
+            this.level = level;
+        }
+
+        public int getLevel() { return level; }
+
+    }
+
+    public static class Drill extends Tool {
+
+        protected int strength;
+        protected String name;
+
+        public Drill(String name, int strength, int level) {
+            super(level);
+            this.strength = strength;
+            this.name = name;
+        }
+
+        public int getStrength() { return strength; }
+
+        public String getName() { return name; }
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.iwilkey.designa.gui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.Game;
@@ -9,13 +10,13 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.tiles.Tile;
 
-public class HUD {
+public class Hud {
     private final Player player;
 
     private int healthX, healthY;
     private final int heartSpacing = 16;
 
-    public HUD(Player player) {
+    public Hud(Player player) {
         this.player = player;
     }
 
@@ -27,7 +28,7 @@ public class HUD {
         if(healthX != xx) healthX = xx;
         if(healthY != yy) healthY = yy;
 
-        // Toolslot
+        // Tool slot
         xx = (Game.w) - (player.getToolSlot().w) - 18;
         yy = (player.getToolSlot().h) - 48;
         if(player.getToolSlot().x != xx) player.getToolSlot().x = xx;
@@ -40,9 +41,10 @@ public class HUD {
         player.getInventory().render(b);
         player.getToolSlot().render(b);
 
-        Text.draw(b, "designa pa1.0.15", 14, Game.h - 14 - 8);
+        Text.draw(b, "designa pa1.0.16 " + Integer.toString(Game.tps) + " tps",
+                14, Game.h - 14 - 8, 11);
 
-        if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 12);
+        if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 11);
     }
 
     private void renderHealthBar(Batch b) {

@@ -53,6 +53,8 @@ public class LightManager {
                 shade = Assets.light_colors[0];
         }
 
+        if(World.lightMap[x][y] > 6) shade = Assets.light_colors[6];
+
         b.draw(shade, xx, yy, Tile.TILE_SIZE, Tile.TILE_SIZE);
 
     }

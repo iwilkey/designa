@@ -24,8 +24,8 @@ public class Light {
                     Vector2 vec = new Vector2((x - xl), (y - yl));
                     float mag = Vector2.magnitude(vec);
                     int orig = oldLm[xl][yl];
-                    if(!(6 - (mag) < orig))
-                        newLm[xl][yl] = 6 - Math.round(mag);
+                    if(!(strength - (mag) < orig))
+                        newLm[xl][yl] = strength - Math.round(mag);
 
                     if(yl == y + strength && xl == x + strength)
                         newLm[xl][yl] = orig;

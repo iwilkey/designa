@@ -1,9 +1,10 @@
 package com.iwilkey.designa.world;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.utils.PerlinNoise;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -16,12 +17,14 @@ public class WorldGeneration {
 
     public static String GenerateTerrain(String name, int width, int height) {
 
+        // TODO: This method causes the desktop version not to run after being built by gradle.
+
         String path = "worlds/" + name + ".txt";
-        File world = new File(path);
+        FileHandle world = Gdx.files.internal(path);
 
         try {
-            if(!world.createNewFile()) {
-                return path;
+            if(world.exists()) {
+                return world.path();
             }
 
             // Terrain Generation
@@ -30,13 +33,18 @@ public class WorldGeneration {
             for(int x = 0; x < width; x++) {
                 int columnHeight = perlinNoise.getNoise(x, height, sampleDistance);
                 for(int y = 0; y < columnHeight; y++) {
-                    int id = (y == columnHeight - 1) ? 1 : 2;
+                    int id;
+                    if(y == columnHeight - 1) id = 1;
+                    else if (y < columnHeight - 1 && y
+                            >= columnHeight - MathUtils.random(4, 10)) id = 2;
+                    else id = 5;
+
                     tiles[x][y] = id;
                 }
             }
             // End Terrain Generation
 
-            FileWriter worldWriter = new FileWriter(path);
+            FileWriter worldWriter = new FileWriter(world.path());
             worldWriter.write(width + " " + height + "\n");
 
             for(int y = 0; y < height; y++) {
@@ -53,7 +61,7 @@ public class WorldGeneration {
             e.printStackTrace();
         }
 
-        return path;
+        return world.path();
 
     }
 
