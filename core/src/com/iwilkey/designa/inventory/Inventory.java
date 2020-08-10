@@ -46,6 +46,7 @@ public class Inventory {
     }
 
     public void tick() {
+
         if(InputHandler.inventoryRequest) active = !active;
         InputHandler.inventoryRequest = false;
         if(!active) return;

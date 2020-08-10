@@ -4,9 +4,6 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create a simple placement system
-	- If the item exists in the inventory of the Player, it can be placed.
-
 - Create the "crafting" system on the other side that will show all the things you can make. (Sectioned off
     by different categories)
 

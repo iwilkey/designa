@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.items.ItemType;
 
 import java.awt.Rectangle;
 
@@ -41,14 +42,20 @@ public class InventorySlot {
         collider.x = (int) (x + 12); collider.y = (int) (y + 12);
 
         if(item != null) {
-            if(itemCount < 10) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
-                    collider.y + PADDING + 3, 11);
-            else if(itemCount < 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 9,
-                    collider.y + PADDING + 3, 9);
-            else if(itemCount == 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
-                    collider.y + PADDING + 3, 11);
-            b.draw(item.getTexture(), collider.x + (SLOT_WIDTH / 2f) - (TEXTURE_SIZE / 2f),
-                    collider.y + (SLOT_HEIGHT / 2f) - (TEXTURE_SIZE / 2f) + PADDING, TEXTURE_SIZE, TEXTURE_SIZE);
+            if(!(item.getItemType() instanceof ItemType.Drill)) {
+                if (itemCount < 10) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
+                        collider.y + PADDING + 3, 11);
+                else if (itemCount < 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 9,
+                        collider.y + PADDING + 3, 9);
+                else if (itemCount == 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 5,
+                        collider.y + PADDING + 3, 11);
+                b.draw(item.getTexture(), collider.x + (SLOT_WIDTH / 2f) - (TEXTURE_SIZE / 2f),
+                        collider.y + (SLOT_HEIGHT / 2f) - (TEXTURE_SIZE / 2f) + PADDING, TEXTURE_SIZE, TEXTURE_SIZE);
+            } else {
+                int altered = TEXTURE_SIZE + 8;
+                b.draw(item.getTexture(), collider.x + (SLOT_WIDTH / 2f) - (altered / 2f),
+                        collider.y + (SLOT_HEIGHT / 2f) - (altered / 2f), altered, altered);
+            }
         }
 
         if(isSelected) {

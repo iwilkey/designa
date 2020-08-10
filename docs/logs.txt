@@ -148,4 +148,6 @@ Date || Build ||
     - Now the correct item spawns when any tile is broken and vise versa when an item is used
     - TPS now is rendered in the title
     - Added Simple Drill to mine stone and dirt faster. Player gets this by default when they enter world.
+    - Fixed lighting strength bug
+    - Tweaked how drills render in inventory, tool slot, and player's hand.
 

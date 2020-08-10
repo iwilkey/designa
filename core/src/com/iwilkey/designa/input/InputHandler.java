@@ -16,7 +16,7 @@ public class InputHandler {
 
     // Controls
     public static boolean moveLeft, moveRight, jumpRequest, inventoryRequest;
-    public static float zoomRequest = 0;
+    public static float zoomRequest = 0, invCursor = 0;
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
     public static boolean leftMouseButton, rightMouseButton;
@@ -74,6 +74,7 @@ public class InputHandler {
 
                     @Override
                     public boolean scrolled(int amount) {
+                        invCursor = amount;
                         return true;
                     }
 
