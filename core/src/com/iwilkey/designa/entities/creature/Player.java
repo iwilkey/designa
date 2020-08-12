@@ -100,8 +100,22 @@ public class Player extends Creature {
             b.draw(currentSprite(), x, y, width, height);
             if(ToolSlot.currentItem != null) {
                 try {
-                    if (facingRight) b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 6, 6, 6);
-                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x - 2, y + 6, 6, 6);
+                    if (facingRight)  {
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
+                        } else {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
+                        }
+                    }
+
+                    else {
+                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
+                                    6, 6, 12, 12, 1, 1, 180);
+                        } else {
+                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
+                        }
+                    }
                 } catch (NullPointerException ignored) {}
             }
         } else if (!isFlashing) {

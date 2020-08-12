@@ -10,7 +10,7 @@ public class ToolSlot {
 
     private final Inventory inventory;
     public int x, y;
-    public final int w, h;
+    public final int w = 64, h = 64;
 
     private TextureRegion itemTexture;
     private int itemCount;
@@ -19,7 +19,6 @@ public class ToolSlot {
 
     public ToolSlot(Inventory i) {
         this.inventory = i;
-        w = 64; h = 64;
         currentItem = null;
         itemTexture = null;
     }
@@ -53,6 +52,9 @@ public class ToolSlot {
             } else {
                 b.draw(itemTexture, x + (15 / 2f), y + (15 / 2f), w - 15, h - 15);
             }
+
+            // TODO: Render the name of the item with the correct space based off of the size of the name.
+            // Text.draw(b, currentItem.getItem().getName(), x, y, 11);
         }
 
     }

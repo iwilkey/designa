@@ -33,4 +33,8 @@ public class Utils {
         }
     }
 
+    public static String toString(int n) {
+        return Integer.toString(n);
+    }
+
 }

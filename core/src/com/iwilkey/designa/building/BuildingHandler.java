@@ -104,8 +104,8 @@ public class BuildingHandler {
                     if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
                         Tile tile = gb.getWorld().getTile(x, y);
 
-                        World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 4,
-                                pointerOnTileY() * Tile.TILE_SIZE + 6));
+                        World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                                pointerOnTileY() * Tile.TILE_SIZE + 8));
 
                         World.tiles[x][(World.h - y) - 1] = 0;
                         gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
@@ -114,7 +114,8 @@ public class BuildingHandler {
                 }
             } else {
                 if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof DirtTile ||
-                        gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof GrassTile) {
+                        gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof GrassTile ||
+                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock) {
                     gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
                     if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
                         Tile tile = gb.getWorld().getTile(x, y);

@@ -11,6 +11,19 @@ import java.awt.Rectangle;
 
 public class Item {
 
+    public enum Items {
+
+        DIRT(0),
+        STONE(1),
+        SIMPLE_DRILL(10);
+
+        private int ID;
+        Items(int ID) {
+            this.ID = ID;
+        }
+        public int ID() { return ID; }
+    }
+
     public static Item[] items = new Item[256];
 
     // Item List
@@ -19,7 +32,7 @@ public class Item {
     public static Item stoneItem = new Item(Assets.stone, "Stone", 1,
             new ItemType.PlaceableBlock(Tile.stoneTile.getID()));
     public static Item simpleDrill = new Item(Assets.simpleDrill, "Simple Drill", 10,
-            new ItemType.Drill("simple-drill", 5, 1));
+            new ItemType.Drill("simple-drill", 5, 1, ItemRecipe.SIMPLE_DRILL_RECIPE));
 
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
@@ -105,11 +118,5 @@ public class Item {
     public ItemType getItemType() { return type; }
 
     public boolean isPickedUp() { return pickedUp; }
-
-
-
-
-
-
 
 }

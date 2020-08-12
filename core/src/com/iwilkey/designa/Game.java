@@ -9,6 +9,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
 import com.iwilkey.designa.tiles.Tile;

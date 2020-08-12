@@ -23,12 +23,25 @@ public class ItemType {
 
     }
 
-    public static class Tool extends ItemType {
+    public static class CreatableItem extends ItemType {
+
+        protected ItemRecipe recipe;
+
+        public CreatableItem(String type, ItemRecipe ir) {
+            super(type);
+            this.recipe = ir;
+        }
+
+        public ItemRecipe getRecipe() { return recipe; }
+
+    }
+
+    public static class Tool extends CreatableItem {
 
         protected int level;
 
-        public Tool(int level) {
-            super("Tool");
+        public Tool(int level, ItemRecipe recipe) {
+            super("Tool", recipe);
             this.level = level;
         }
 
@@ -41,8 +54,8 @@ public class ItemType {
         protected int strength;
         protected String name;
 
-        public Drill(String name, int strength, int level) {
-            super(level);
+        public Drill(String name, int strength, int level, ItemRecipe recipe) {
+            super(level, recipe);
             this.strength = strength;
             this.name = name;
         }

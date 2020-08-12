@@ -151,3 +151,14 @@ Date || Build ||
     - Fixed lighting strength bug
     - Tweaked how drills render in inventory, tool slot, and player's hand.
 
+8/12/2020 || pa_1.0.17 ||
+    - Fixed item spawning X movement toward player
+    - Began creating crafting system, called "Blueprints"
+    - Blueprints are now broken up into three different sub categories,
+        Tools, weapons, and machines
+    - Each sub category has its own list of what items it can craft represented in
+        bubbles to be clicked on.
+    - Every creatable item will now have a recipe, which the item representation understands and will
+        render what is needed to create the selected item.
+    - Created a way to give all creatable items a recipe of any amount of items that exist in the game
+    - Now selected item representations will tell you thee recipe of itself

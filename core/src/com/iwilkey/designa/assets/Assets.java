@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.gfx.SpriteSheet;
+import com.iwilkey.designa.items.ItemRecipe;
 
 public class Assets {
 
@@ -17,8 +18,9 @@ public class Assets {
     public static TextureRegion[] sky_colors, light_colors;
 
     // GUI
-    public static TextureRegion[] heart, breakLevel;
-    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot;
+    public static TextureRegion[] heart, breakLevel, craftingTabs;
+    public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
+            itemRep;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
@@ -78,6 +80,11 @@ public class Assets {
         breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
         inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        craftingTabs = new TextureRegion[3];
+        craftingTabs[0] = ss.crop(6, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        craftingTabs[1] = ss.crop(9, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        craftingTabs[2] = ss.crop(12, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        itemRep = ss.crop(15, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

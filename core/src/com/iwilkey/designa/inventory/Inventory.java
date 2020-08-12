@@ -3,7 +3,9 @@ package com.iwilkey.designa.inventory;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.blueprints.Blueprints;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.items.Item;
 
@@ -14,6 +16,7 @@ public class Inventory {
     public final int MAX_STACK = 100;
 
     private GameBuffer gb;
+    private Blueprints workbench;
     public static boolean active = false;
     private InventorySlot[][] slots;
     public final int invX, invY, invWidth, invHeight;
@@ -29,6 +32,8 @@ public class Inventory {
         slots = new InventorySlot[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector = new int[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector[0][invHeight / InventorySlot.SLOT_HEIGHT - 1] = 1;
+
+        workbench = new Blueprints(gb, this, invWidth + 192, 550);
 
         int slot = 0;
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -57,6 +62,8 @@ public class Inventory {
                 slots[x][y].isSelected = selector[x][y] == 1;
             }
         }
+
+        workbench.tick();
 
         // Input handling
         input();
@@ -87,6 +94,8 @@ public class Inventory {
                 slots[x][y].render(b, x * InventorySlot.SLOT_WIDTH, y * InventorySlot.SLOT_HEIGHT);
             }
         }
+
+        workbench.render(b);
     }
 
     // Inventory methods
