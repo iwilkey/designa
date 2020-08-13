@@ -6,12 +6,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
+import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.items.ItemType;
+
+import java.awt.*;
 
 public class Player extends Creature {
 
@@ -25,8 +28,8 @@ public class Player extends Creature {
     private final BuildingHandler buildingHandler;
 
     // Inventory
-    private Inventory inventory;
-    private ToolSlot toolSlot;
+    private final Inventory inventory;
+    private final ToolSlot toolSlot;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -88,9 +91,42 @@ public class Player extends Creature {
         // Building
         buildingHandler.tick();
 
+        // Attack
+        checkAttacks();
+
         // Inventory
         inventory.tick();
         toolSlot.tick();
+
+    }
+
+    private void checkAttacks() {
+
+        Rectangle cb = getCollisionBounds(0,0); // Get coords of the colision box of player
+        Rectangle ar = new Rectangle();
+        int arSize = 20; // If a player is within 20 px of an entity and they attack, they will hurt the entity
+        ar.width = arSize;
+        ar.height = arSize;
+
+        if(InputHandler.attack && facingLeft) {
+            ar.x = cb.x - arSize;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
+        } else if(InputHandler.attack && facingRight) {
+            ar.x = cb.x + cb.width;
+            ar.y = cb.y + cb.height / 2 - arSize / 2;
+        } else {
+            return;
+        }
+
+        InputHandler.attack = false;
+
+        for (Entity e : gb.getWorld().getEntityHandler().getEntities()) {
+            if(e.equals(this)) continue;
+            if(e.getCollisionBounds(0, 0).intersects(ar)) {
+                e.hurt(1);
+                return;
+            }
+        }
 
     }
 
@@ -141,6 +177,8 @@ public class Player extends Creature {
                 } catch (NullPointerException ignored) {}
             }
         }
+
+        // renderCollider(b);
     }
 
     @Override

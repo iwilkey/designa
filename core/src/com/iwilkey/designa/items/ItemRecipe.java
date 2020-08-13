@@ -10,9 +10,9 @@ public abstract class ItemRecipe {
     public static class SimpleDrillRecipe extends ItemRecipe {
         public SimpleDrillRecipe(Item item) { super(item); }
         @Override
-        public void init() {
-            add(Item.Items.DIRT.ID(), 2); // 2 dirt.
-            add(Item.Items.STONE.ID(), 2); // 2 stone.
+        public void create() {
+            add(Item.dirtItem, 2); // 2 dirt.
+            add(Item.stoneItem, 2); // 2 stone.
         }
     }
 
@@ -21,20 +21,19 @@ public abstract class ItemRecipe {
 
     // Class
     public Item item;
-    protected HashMap<String, String> recipe = new HashMap<String, String>();
+    protected HashMap<Item, String> recipe = new HashMap<Item, String>();
     public ItemRecipe(Item item) {
         this.item = item;
-        init();
+        create();
     }
-    public abstract void init();
-    public void add(int key, int amount) {
-        String k = Utils.toString(key);
+    public abstract void create();
+    public void add(Item i, int amount) {
         String a = Utils.toString(amount);
-        this.recipe.put(k, a);
+        this.recipe.put(i, a);
     }
-    public void setRecipe(HashMap<String, String> recipe) {
+    public void setRecipe(HashMap<Item, String> recipe) {
         this.recipe = recipe;
     }
-    public HashMap<String, String> getRecipe() { return this.recipe; }
+    public HashMap<Item, String> getRecipe() { return this.recipe; }
 
 }

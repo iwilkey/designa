@@ -3,6 +3,7 @@ package com.iwilkey.designa.entities;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.assets.Assets;
 
 import java.awt.Rectangle;
 
@@ -38,9 +39,24 @@ public abstract class Entity {
         }
     }
 
+    public boolean checkEntityCollisions(float xOffset, float yOffset) {
+        for (Entity e : gb.getWorld().getEntityHandler().getEntities()) {
+            if(e.equals(this)) continue;
+            if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public Rectangle getCollisionBounds(float xOff, float yOff) {
         return new Rectangle((int) (x + collider.x + xOff),
                 (int) (y + collider.y + yOff), collider.width, collider.height);
+    }
+
+    protected void renderCollider(Batch b) {
+        b.draw(Assets.selector, getCollisionBounds(0f,0f).x, getCollisionBounds(0f,0f).y, collider.width, collider.height);
     }
 
     public float getX() { return x; }

@@ -4,49 +4,34 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create the "crafting" system on the other side that will show all the things you can make. (Sectioned off
-    by different categories)
+- Fix the torch NullPointerException
+
+- Create minerals such as Copper and Tin
+	- These can not be mined by hand, but a Drill can be placed on them to mine them.
+
+- Create the drill and pipe system.
+	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
+	- Just start with one.
+	- This will need it's own package most likely. Very complex.
+
+- Create simple Turrets and / or weapons
+	- Simple AI will need to be created.
+
+- Create ground and air enemies
+    - These are Creatures in the Entity package.
+    - Simple AI must be created.
 
 For later on
 ------------
 
-- Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
+- Create different textures of trees to render at different times of the day
 
-- Consider changing the inventory graphic?
+- Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
 
 - Create more tiles! (See Tiles list in docs)
 
 - Create more items! (See Items list in docs)
 
-- Create the Crate item.
-	- Another inventory with many slots (depending on level) For now, 25 should be fine.
-
-- Create resources such as Trees and Scrap (Most general)
-	- Either make a sprite for them or...
-	- Make them as an array of tiles?
-	
-- Make workbench (Standing near it gives a GUI to make items)
-	- The item workbench
-
-- Make workbench GUI
-	- When player is near workbench and press 'E' a GUI will be brought up of all items they can craft with things
-	in their crate and inventory
-
-- Create minerals such as Copper and Tin
-	- These can not be mined by hand, but a Drill can be placed on them to mine them.
-
-- Create the drill and pipe system. lamo I'm thinking Mindustry
-	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
-	- Just start with one.
-	- This will need it's own package most likely. Very complex. Look at Mindustry's code for inspiration?
-	
-- Create simple Turrets and / or weapons
-	- Simple AI will need to be created.
-
-- Create ground and air enemies
-	- These are Creatures in the Entity package.
-	- Simple AI must be created.
-	
 - Create worlds for players to try and beat
 
 - Make more pleasing backgrounds, and try and use the layer system to parallax them when moving

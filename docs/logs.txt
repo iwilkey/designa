@@ -147,7 +147,7 @@ Date || Build ||
     - Stone now spawns as a part of the terrain generation
     - Now the correct item spawns when any tile is broken and vise versa when an item is used
     - TPS now is rendered in the title
-    - Added Simple Drill to mine stone and dirt faster. Player gets this by default when they enter world.
+    - Added Simple Drill to mine stone and dirt faster. Player gets this by default when they enter world?
     - Fixed lighting strength bug
     - Tweaked how drills render in inventory, tool slot, and player's hand.
 
@@ -162,3 +162,11 @@ Date || Build ||
         render what is needed to create the selected item.
     - Created a way to give all creatable items a recipe of any amount of items that exist in the game
     - Now selected item representations will tell you thee recipe of itself
+
+8/13/2020 || pa_1.0.18 ||
+    - Added trees, three different textures for now
+    - Created entity collision system
+    - StaticEntities render before Creatures but before BottomDirt
+    - World now generates random trees
+    - Trees now drop wood as they fall
+    - Added torches

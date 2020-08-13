@@ -13,7 +13,7 @@ import java.awt.Rectangle;
 
 public class Inventory {
 
-    public final int MAX_STACK = 100;
+    public final int MAX_STACK = 99;
 
     private GameBuffer gb;
     private Blueprints workbench;

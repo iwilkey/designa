@@ -16,6 +16,7 @@ public class InputHandler {
 
     // Controls
     public static boolean moveLeft, moveRight, jumpRequest, inventoryRequest;
+    public static boolean attack;
     public static float zoomRequest = 0, invCursor = 0;
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
@@ -90,10 +91,12 @@ public class InputHandler {
                         if(button == Input.Buttons.LEFT) {
                             lmbd = true;
                             if(!Inventory.active) destroyRequest = true;
+                            attack = true;
                         }
                         if(button == Input.Buttons.RIGHT) {
                             rmbd = true;
                             if(!Inventory.active) placeRequest = true;
+                            attack = true;
                         }
                         return true;
                     }
@@ -103,11 +106,13 @@ public class InputHandler {
                         if(button == Input.Buttons.LEFT) {
                             lmbd = false;
                             if(!Inventory.active) destroyRequest = false;
+                            attack = false;
                         }
 
                         if(button == Input.Buttons.RIGHT) {
                             rmbd = false;
                             if(!Inventory.active) placeRequest = false;
+                            attack = false;
                         }
                         return true;
                     }

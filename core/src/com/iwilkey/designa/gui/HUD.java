@@ -40,7 +40,7 @@ public class Hud {
         player.getInventory().render(b);
         player.getToolSlot().render(b);
 
-        Text.draw(b, "designa pa1.0.17 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.18 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
 
         if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 11);

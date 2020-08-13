@@ -18,6 +18,7 @@ public class Tile {
     public static Tile oakWoodTile = new OakWoodTile(3, 8);
     public static Tile leafTile = new LeafTile(4, 2);
     public static Tile stoneTile = new StoneTile(5, 16);
+    public static Tile torchTile = new TorchTile(6, 1);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();
@@ -36,7 +37,9 @@ public class Tile {
         tiles[ID] = this;
     }
 
-    public void tick() {}
+    public void tick() {
+        torchTile.tick();
+    }
 
     public void render(Batch b, int x, int y, int bl, int id) { // This will render a tile at the x and y of it the world has set
         b.draw(texture, x, y, TILE_SIZE, TILE_SIZE);

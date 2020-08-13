@@ -7,6 +7,7 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.items.Item;
@@ -49,12 +50,17 @@ public class World {
         loadWorld(path);
 
         entityHandler.getPlayer().getInventory().addItem(Item.simpleDrill);
+        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
+        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
+        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
+
     }
 
     public void tick() {
         ambientCycle.tick();
         itemHandler.tick();
         entityHandler.tick();
+
     }
 
     public void render(Batch b) {
@@ -70,12 +76,22 @@ public class World {
                 int yy = y * Tile.TILE_SIZE;
 
                 ambientCycle.render(b, xx, yy);
-                if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
-                getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
             }
         }
 
-        entityHandler.render(b);
+        entityHandler.staticRender(b);
+
+        for(int y = yStart; y < yEnd; y++) {
+            for (int x = xStart; x < xEnd; x++) {
+                int xx = x * Tile.TILE_SIZE;
+                int yy = y * Tile.TILE_SIZE;
+                if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
+                getTile(x, y).tick();
+            }
+        }
+
+        entityHandler.creatureRender(b);
 
         for(int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {
@@ -121,6 +137,8 @@ public class World {
 
         origHighTiles = LightManager.findHighestTiles();
         lightMap = lightManager.buildAmbientLight(lightMap);
+
+        WorldGeneration.EnvironmentGeneration(gb, entityHandler);
 
         entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
         entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);

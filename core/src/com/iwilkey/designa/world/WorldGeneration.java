@@ -3,10 +3,17 @@ package com.iwilkey.designa.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
+
+import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.entities.EntityHandler;
+import com.iwilkey.designa.entities.statics.Tree;
+import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.PerlinNoise;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class WorldGeneration {
 
@@ -65,13 +72,24 @@ public class WorldGeneration {
 
     }
 
-    private static void writeTile(int id, int x, int y, int w, int h) {
-        for(int yy = 0; yy < h; yy++) {
-            for(int xx = 0; xx < w; xx++) {
-                if(yy == y && xx == x) {
-                    tiles[xx][yy] = id;
-                }
-            }
+    public static void EnvironmentGeneration(GameBuffer gb, EntityHandler e) {
+
+        final int TREE_AMOUNT = World.w / 6;
+
+        ArrayList<Integer> trees = new ArrayList<Integer>();
+        for(int i = 0; i < TREE_AMOUNT; i++) {
+            int tileX = MathUtils.random(0, World.w);
+            if(tileX == World.w / 2) continue;
+            trees.add(tileX);
+
         }
+
+        for (int tree : trees) {
+            try {
+                int y = LightManager.highestTile[tree];
+                e.addEntity(new Tree(gb, tree * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+            } catch (ArrayIndexOutOfBoundsException ignored) {}
+        }
+
     }
 }

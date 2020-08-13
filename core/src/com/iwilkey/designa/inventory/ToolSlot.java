@@ -44,18 +44,20 @@ public class ToolSlot {
 
     public void render(Batch b) {
 
-        if(itemTexture != null){
-            if(!(currentItem.getItem().getItemType() instanceof ItemType.Drill)) {
+        try {
+            if (itemTexture != null) {
+                if (!(currentItem.getItem().getItemType() instanceof ItemType.Drill)) {
 
-                b.draw(itemTexture, x + (25 / 2f), y + (25 / 2f), w - 25, h - 25);
-                Text.draw(b, Integer.toString(itemCount), x, y - 4, 11);
-            } else {
-                b.draw(itemTexture, x + (15 / 2f), y + (15 / 2f), w - 15, h - 15);
+                    b.draw(itemTexture, x + (25 / 2f), y + (25 / 2f), w - 25, h - 25);
+                    Text.draw(b, Integer.toString(itemCount), x, y - 4, 11);
+                } else {
+                    b.draw(itemTexture, x + (15 / 2f), y + (15 / 2f), w - 15, h - 15);
+                }
+
+                // TODO: Render the name of the item with the correct space based off of the size of the name.
+                // Text.draw(b, currentItem.getItem().getName(), x, y, 11);
             }
-
-            // TODO: Render the name of the item with the correct space based off of the size of the name.
-            // Text.draw(b, currentItem.getItem().getName(), x, y, 11);
-        }
+        } catch (NullPointerException ignored) {}
 
     }
 

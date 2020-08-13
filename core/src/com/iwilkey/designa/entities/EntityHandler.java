@@ -3,14 +3,28 @@ package com.iwilkey.designa.entities;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.entities.statics.StaticEntity;
+import com.iwilkey.designa.entities.statics.Tree;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class EntityHandler {
 
     private final Player player;
     private final ArrayList<Entity> entities;
+
+    /*
+    private Comparator<Entity> renderSorter = new Comparator<Entity>() {
+        @Override
+        public int compare(Entity o1, Entity o2) {
+            if(o1 instanceof StaticEntity && !(o2 instanceof StaticEntity)) return -1;
+            else return 1;
+        }
+    };
+
+     */
 
     // TODO: I'm thinking here will be a couple 1-D arrays that will hold x values for trees, rocks, and other static
     // TODO: that need to be placed randomly by the World Generator.
@@ -30,13 +44,20 @@ public class EntityHandler {
         while(it.hasNext()) {
             Entity e = it.next();
             e.tick();
-            if(!e.isActive()) it.remove();
+            if(!(e instanceof Tree)) if(!e.isActive()) it.remove();
+            else if (e.y < 0) it.remove();
         }
     }
 
-    public void render(Batch b) {
+    public void creatureRender(Batch b) {
         for(Entity e : entities) {
-            e.render(b);
+            if(!(e instanceof StaticEntity)) e.render(b);
+        }
+    }
+
+    public void staticRender(Batch b) {
+        for(Entity e : entities) {
+            if((e instanceof StaticEntity)) e.render(b);
         }
     }
 

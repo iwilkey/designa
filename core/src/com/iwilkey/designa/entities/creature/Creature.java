@@ -44,13 +44,17 @@ public abstract class Creature extends Entity {
     }
 
     public void move() {
-        moveX();
+        if(!checkEntityCollisions(xMove, 0f)) moveX();
+        else isMoving = false;
         if(isJumping && (jumpTimer <= jumpTime)) jump();
         else {
             isJumping = false;
             jumpTimer = 0;
-            moveY();
+            if(!checkEntityCollisions(0f, yMove)) moveY();
+            else isMoving = false;
         }
+
+        if(isJumping && checkEntityCollisions(0f, 0f)) y -= 8;
 
         if(jumpTimer > jumpTime - 1f && jumpTimer < jumpTime) timeInAir = 0;
 

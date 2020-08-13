@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.gfx.SpriteSheet;
-import com.iwilkey.designa.items.ItemRecipe;
 
 public class Assets {
 
@@ -25,6 +24,10 @@ public class Assets {
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
         oakWood, leaf, stone;
+    public static TextureRegion[] torch;
+
+    // Environment
+    public static TextureRegion[] trees;
 
     // Tools
     public static TextureRegion simpleDrill;
@@ -94,6 +97,17 @@ public class Assets {
         oakWood = ss.crop(11, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         leaf = ss.crop(12, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        torch = new TextureRegion[4];
+        torch[0] = ss.crop(11, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Environment
+        trees = new TextureRegion[3];
+        trees[0] = ss.crop(10, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
+        trees[1] = ss.crop(11, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
+        trees[2] = ss.crop(12, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
 
         // Tools
         simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);

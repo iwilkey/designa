@@ -1,6 +1,7 @@
 package com.iwilkey.designa.blueprints;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.blueprints.sections.MachineSection;
@@ -66,18 +67,7 @@ public class Blueprints {
 
     private void updateSelector(int select) {
         clearSelection();
-        switch(select) {
-            case 0:
-                sections[0].isSelected = true;
-                break;
-            case 1:
-                sections[1].isSelected = true;
-                break;
-            case 2:
-                sections[2].isSelected = true;
-                break;
-        }
-
+        sections[select].isSelected = true;
         sectionSelected = select;
     }
 

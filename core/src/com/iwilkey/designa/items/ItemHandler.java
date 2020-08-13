@@ -31,7 +31,7 @@ public class ItemHandler {
     }
 
     private void moveX(Item i) {
-        if(!i.isGrounded) {
+        if(!i.isGrounded && !(i.name.equals("OakWood"))) {
 
             int x = i.x;
             float xx = gb.getWorld().getEntityHandler().getPlayer().getX() + 8;
@@ -47,7 +47,7 @@ public class ItemHandler {
         if(!collisionWithTile((i.x) / Tile.TILE_SIZE, ty) &&
                 !collisionWithTile((i.x + i.bounds.width) / Tile.TILE_SIZE, ty)){
             i.isGrounded = false;
-            i.timeInAir += 0.09f;
+            i.timeInAir += 0.02f;
             i.setPosition(i.x, (int) (i.y + i.gravity * i.timeInAir));
         } else {
             i.isGrounded = true;

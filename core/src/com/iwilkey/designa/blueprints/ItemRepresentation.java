@@ -55,9 +55,8 @@ public class ItemRepresentation {
             // TODO: Make this centered and maybe more efficient
             int recipeSize = recipe.getRecipe().size();
             int c = 0;
-            for(Map.Entry<String, String> entry : recipe.getRecipe().entrySet()) {
-                Item i = Item.getItemByID(Utils.parseInt(entry.getKey()));
-                b.draw(i.getTexture(), 892 + 32 + c, 175, 16, 16);
+            for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
+                b.draw(entry.getKey().getTexture(), 892 + 32 + c, 175, 16, 16);
                 Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())), 892 + 32 + c + 8, 175, 8);
                 c += 40;
                 if(c + 40 > 80) c = 0;
