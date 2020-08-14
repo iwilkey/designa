@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
@@ -55,17 +56,21 @@ public class Tree extends StaticEntity {
 
     @Override
     public void hurt(int amt) {
-        health -= amt;
+        if(!Inventory.active) {
+            health -= amt;
 
-        if(MathUtils.random(0, 2) == 2) {
-            int yy = MathUtils.random(50, 200);
-            int xx = MathUtils.random(-4, 26);
-            World.getItemHandler().addItem(Item.oakWoodItem.createNew((int) x + 16 + xx, (int) y + yy));
-        }
+            if (MathUtils.random(0, 2) == 2) {
+                int yy = MathUtils.random(50, 200);
+                int xx = MathUtils.random(-4, 26);
+                World.getItemHandler().addItem(Item.oakWoodItem.createNew((int) x + 16 + xx, (int) y + yy));
+            }
 
-        if(health <= 0) {
-            active = false;
-            die();
+            Assets.treeHit[MathUtils.random(0, 2)].play();
+
+            if (health <= 0) {
+                active = false;
+                die();
+            }
         }
 
     }
@@ -73,6 +78,7 @@ public class Tree extends StaticEntity {
     @Override
     public void die() {
         if(health > -1) {
+            Assets.treeFall[MathUtils.random(0,2)].play();
             int spawnAmount = MathUtils.random(2, 8);
             for(int i = 0; i < spawnAmount; i++) {
                 int yy = MathUtils.random(50, 200);

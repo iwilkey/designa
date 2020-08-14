@@ -6,10 +6,9 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import com.iwilkey.designa.Game;
 
-import java.io.File;
-
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.title = "Designa";
@@ -19,5 +18,6 @@ public class DesktopLauncher {
 		config.addIcon("icon.png", Files.FileType.Internal);
 
 		new LwjglApplication(new Game(), config);
+
 	}
 }

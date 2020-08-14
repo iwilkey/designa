@@ -54,7 +54,10 @@ public class Blueprints {
         if (InputHandler.leftMouseButtonDown) {
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
             for(int i = 0; i < sections.length; i++) {
-                if(rect.intersects(sections[i].collider)) updateSelector(i);
+                if(rect.intersects(sections[i].collider)) {
+                    updateSelector(i);
+                    Assets.invClick.play(0.3f);
+                }
             }
         }
     }

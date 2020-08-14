@@ -96,10 +96,10 @@ public class Game extends ApplicationAdapter {
 
 		// Render game
 		gameBatch.begin();
-		gameBatch.setTransformMatrix(Camera.mat);
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().render(gameBatch);
 		}
+		gameBatch.setTransformMatrix(Camera.mat);
 		gameBatch.end();
 
 		// Render GUI

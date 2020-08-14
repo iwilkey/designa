@@ -3,6 +3,7 @@ package com.iwilkey.designa.items;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.tiles.Tile;
@@ -69,7 +70,12 @@ public class Item {
     public void tick() {
         if(gb.getWorld().getEntityHandler().getPlayer().
                 getCollisionBounds(0f,0f).intersects(bounds)) {
-            if(gb.getWorld().getEntityHandler().getPlayer().getInventory().addItem(this) == 1) pickedUp = true;
+            if(gb.getWorld().getEntityHandler().getPlayer().getInventory().addItem(this) == 1) {
+                pickedUp = true;
+
+                Assets.itemPickup[MathUtils.random(0,2)].play();
+
+            }
         }
     }
 

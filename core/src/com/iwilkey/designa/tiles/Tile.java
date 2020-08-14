@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.tiles.tiletypes.*;
+import com.iwilkey.designa.world.AmbientCycle;
 
 public class Tile {
 
@@ -44,6 +45,24 @@ public class Tile {
     public void render(Batch b, int x, int y, int bl, int id) { // This will render a tile at the x and y of it the world has set
         b.draw(texture, x, y, TILE_SIZE, TILE_SIZE);
         renderBreakLevel(b, x, y, bl, id);
+    }
+
+    public void renderBackTile(Batch b, int x, int y, int bl, int id) {
+        if(!(this instanceof AirTile)) {
+            b.draw(texture, x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            renderBreakLevel(b, x, y, bl, id);
+            b.draw(Assets.light_colors[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        }
+    }
+
+    public void renderAmbientLight(Batch b, int x, int y) {
+        if(this instanceof AirTile) {
+            if(AmbientCycle.percentOfDay <= 100 && AmbientCycle.percentOfDay > 80) b.draw(Assets.light_colors[6], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            if(AmbientCycle.percentOfDay <= 80 && AmbientCycle.percentOfDay > 60) b.draw(Assets.light_colors[6], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            if(AmbientCycle.percentOfDay <= 60 && AmbientCycle.percentOfDay > 40) b.draw(Assets.light_colors[5], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            if(AmbientCycle.percentOfDay <= 40 && AmbientCycle.percentOfDay > 20) b.draw(Assets.light_colors[4], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            if(AmbientCycle.percentOfDay <= 20 && AmbientCycle.percentOfDay >= 0) b.draw(Assets.light_colors[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        }
     }
 
     private void renderBreakLevel(Batch b, int x, int y, int bl, int id) {

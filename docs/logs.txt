@@ -174,3 +174,11 @@ Date || Build ||
     - Now item blueprints can be created if you have the resources in your inventory. (Still needs a little tweaking, but
     basic idea is there)
 
+8/14/2020 || pa_1.0.19 ||
+    - Fixed the crafting to now take tabs of all needed ingredients and use them accordingly
+    - Added sound effects to most integral actions
+    - Added "Back Tile" building option
+    - Created a prolonged action timer for repeatedly doing a repetitive task automatically at a cool down time limit
+        (Like breaking a block or chopping a tree down)
+    - Items in inventory can now be picked up and moved around to any slot the player wants, still working on adding like items.
+

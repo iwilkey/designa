@@ -21,7 +21,9 @@ public class World {
 
     // Rendering
     public static int[][] tiles;
+    public static int[][] backTiles;
     public int[][] tileBreakLevel;
+    public int[][] backTileBreakLevel;
     public static int[][] lightMap;
     public int[][] origLightMap;
     public static int[] origHighTiles;
@@ -48,8 +50,9 @@ public class World {
 
         loadWorld(path);
 
-        for(int i = 0; i < 64; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
+        for(int i = 0; i < 99; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
         for(int i = 0; i < 32; i++) entityHandler.getPlayer().getInventory().addItem(Item.stoneItem);
+        for(int i = 0; i < 10; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
     }
 
     public void tick() {
@@ -82,6 +85,8 @@ public class World {
                 int xx = x * Tile.TILE_SIZE;
                 int yy = y * Tile.TILE_SIZE;
                 if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                getBackTile(x, y).renderBackTile(b, xx, yy, backTileBreakLevel[x][(h - y) - 1], getBackTile(x, y).getID());
+                getTile(x, y).renderAmbientLight(b, xx, yy);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
                 getTile(x, y).tick();
             }
@@ -108,6 +113,13 @@ public class World {
         return t;
     }
 
+    public Tile getBackTile(int x, int y) {
+        if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
+        Tile t = Tile.tiles[backTiles[x][Math.abs(h - y) - 1]];
+        if(t == null) return Tile.airTile;
+        return t;
+    }
+
     private void loadWorld(String path) {
         String file = Utils.loadFileAsString(path);
         String[] tokens = file.split("\\s+");
@@ -116,7 +128,9 @@ public class World {
         h = Utils.parseInt(tokens[1]);
 
         tiles = new int[w][h];
+        backTiles = new int[w][h];
         tileBreakLevel = new int[w][h];
+        backTileBreakLevel = new int[w][h];
         lightMap = new int[w][h];
         origLightMap = new int[w][h];
         origHighTiles = new int[w];

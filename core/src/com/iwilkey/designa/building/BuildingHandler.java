@@ -1,6 +1,7 @@
 package com.iwilkey.designa.building;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
@@ -25,7 +26,10 @@ public class BuildingHandler {
     private final Player player;
     private float selectorX = 0, selectorY = 0;
     private boolean inRange = false, onTop = false;
+    public static boolean backBuilding = false;
     private final Rectangle selectorCollider;
+
+    private long timer = 0, actionCooldown = 15;
 
     public BuildingHandler(GameBuffer gb, Player p) {
         this.gb = gb;
@@ -39,6 +43,12 @@ public class BuildingHandler {
         setSelector();
 
         if (!Inventory.active) {
+
+            if(InputHandler.backBuildingToggleRequest) {
+                backBuilding = !backBuilding;
+                Assets.invClick.play(0.5f);
+            }
+            InputHandler.backBuildingToggleRequest = false;
 
             if (inRange && !onTop) {
 
@@ -68,6 +78,22 @@ public class BuildingHandler {
                     InputHandler.placeRequest = false;
                 }
             }
+
+            try {
+                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) actionCooldown = 5;
+                else actionCooldown = 15;
+            } catch (NullPointerException ignored) {}
+
+
+            if(InputHandler.prolongedActionRequest) {
+                timer++;
+                if(timer > actionCooldown) {
+                    damageTile(pointerOnTileX(), pointerOnTileY());
+                    timer = 0;
+                }
+            } else {
+                timer = 0;
+            }
         }
     }
 
@@ -86,49 +112,111 @@ public class BuildingHandler {
 
     private void placeTile(int id, int x, int y) {
         checkFace();
-        if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
-            if(id == 6) {
-                gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+        if(!backBuilding) {
+            if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
+
+                if (id == 6) {
+                    gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+                }
+
+                ToolSlot.currentItem.itemCount--;
+
+                World.tiles[x][(World.h - y) - 1] = id;
+                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
             }
-            ToolSlot.currentItem.itemCount--;
-            World.tiles[x][(World.h - y) - 1] = id;
-            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            gb.getWorld().getLightManager().bakeLighting();
+        } else {
+            if (gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile) {
+
+                ToolSlot.currentItem.itemCount--;
+
+                World.backTiles[x][(World.h - y) - 1] = id;
+                gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+            }
         }
+
+            gb.getWorld().getLightManager().bakeLighting();
+
+            // Sounds
+            if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof GrassTile ||
+                    gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof DirtTile)
+                Assets.dirtHit[MathUtils.random(0,2)].play(0.3f);
+            else Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+
+
     }
 
     private void damageTile(int x, int y) {
         checkFace();
-        if (!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
-            if (ToolSlot.currentItem != null) {
-                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                    gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -=
-                            ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();;
+        if (!backBuilding) {
+            if (!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
+                if (ToolSlot.currentItem != null) {
+                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                        gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -=
+                                ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
+                    } else {
+                        gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
+                    }
+
                 } else {
                     gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
                 }
                 checkBreak(x, y);
-            } else {
-                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
+                playSound();
+            }
+        } else {
+            if (!(gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
+                if (ToolSlot.currentItem != null) {
+                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                        gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] -=
+                                ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
+                    } else {
+                        gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] -= 1;
+                    }
+
+                } else {
+                    gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] -= 1;
+                }
                 checkBreak(x, y);
+                playSound();
             }
         }
+
+    }
+
+    private void playSound() {
+        if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof GrassTile ||
+                gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof DirtTile)
+            Assets.dirtHit[MathUtils.random(0, 2)].play(0.3f);
+        else Assets.stoneHit[MathUtils.random(0, 2)].play(0.5f);
     }
 
     private void checkBreak(int x, int y) {
-        if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
-            Tile tile = gb.getWorld().getTile(x, y);
+        if(!backBuilding) {
+            if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+                Tile tile = gb.getWorld().getTile(x, y);
 
-            if(tile == Tile.torchTile) {
-                gb.getWorld().getLightManager().removeLight(x, y);
+                if (tile == Tile.torchTile) {
+                    gb.getWorld().getLightManager().removeLight(x, y);
+                }
+
+                World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                        pointerOnTileY() * Tile.TILE_SIZE + 8));
+
+                World.tiles[x][(World.h - y) - 1] = 0;
+                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+                gb.getWorld().getLightManager().bakeLighting();
             }
+        } else {
+            if (gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] <= 0) {
+                Tile tile = gb.getWorld().getBackTile(x, y);
 
-            World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
-                    pointerOnTileY() * Tile.TILE_SIZE + 8));
+                World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                        pointerOnTileY() * Tile.TILE_SIZE + 8));
 
-            World.tiles[x][(World.h - y) - 1] = 0;
-            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-            gb.getWorld().getLightManager().bakeLighting();
+                World.backTiles[x][(World.h - y) - 1] = 0;
+                gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+                gb.getWorld().getLightManager().bakeLighting();
+            }
         }
     }
 

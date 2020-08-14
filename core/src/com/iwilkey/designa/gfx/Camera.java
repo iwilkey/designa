@@ -1,11 +1,13 @@
 package com.iwilkey.designa.gfx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.tiles.Tile;
@@ -67,6 +69,8 @@ public class Camera {
         offset.y = e.getY() * scale.y - (Game.h / 2f) + e.getHeight() / 2f;
 
         InputHandler.zoomRequest = 0;
+
+        Assets.zoom[MathUtils.random(0,2)].play(0.5f);
 
     }
 

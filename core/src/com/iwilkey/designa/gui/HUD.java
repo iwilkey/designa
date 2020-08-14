@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.inventory.Inventory;
@@ -40,7 +41,16 @@ public class Hud {
         player.getInventory().render(b);
         player.getToolSlot().render(b);
 
-        Text.draw(b, "designa pa1.0.18 " + Integer.toString(Game.tps) + " tps",
+        if(BuildingHandler.backBuilding){
+            b.draw(Assets.backBuilding[1], Game.w - 80, 100, 64, 64);
+            Text.draw(b, "Back", Game.w - 80, 155, 11);
+        }
+        else {
+            b.draw(Assets.backBuilding[0], Game.w - 80, 100, 64, 64);
+            Text.draw(b, "Front", Game.w - 80, 155, 11);
+        }
+
+        Text.draw(b, "designa pa1.0.19 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
 
         if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 11);

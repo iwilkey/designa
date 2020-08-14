@@ -1,7 +1,9 @@
 package com.iwilkey.designa.entities.creature;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.tiles.Tile;
 
@@ -110,6 +112,10 @@ public abstract class Creature extends Entity {
 
             if(timeInAir > 2.1f) {
                 fallDamage();
+            }
+
+            if(timeInAir > 0.1f) {
+                Assets.jumpLand[MathUtils.random(0,2)].play(0.5f);
             }
 
             timeInAir = 0;

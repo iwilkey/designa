@@ -3,6 +3,7 @@ package com.iwilkey.designa.inventory;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemType;
 
@@ -17,7 +18,7 @@ public class InventorySlot {
     private Rectangle collider;
     private Item item;
     public int itemCount;
-    public boolean isSelected = false;
+    public boolean isSelected = false, itemUp = false;
 
     public InventorySlot(Inventory i, int num) {
         this.inventory = i;
@@ -58,6 +59,10 @@ public class InventorySlot {
 
         if(isSelected) {
             b.draw(Assets.inventorySelector, collider.x, collider.y, SLOT_WIDTH, SLOT_HEIGHT);
+        }
+
+        if(itemUp) {
+            b.draw(item.getTexture(), InputHandler.cursorX, InputHandler.cursorY, TEXTURE_SIZE, TEXTURE_SIZE);
         }
 
     }

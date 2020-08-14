@@ -1,5 +1,6 @@
 package com.iwilkey.designa.entities.creature;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -13,6 +14,7 @@ import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.items.ItemType;
+import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.*;
 
@@ -30,6 +32,8 @@ public class Player extends Creature {
     // Inventory
     private final Inventory inventory;
     private final ToolSlot toolSlot;
+
+    private long timer, actionCooldown = 20;
 
     public Player(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -104,7 +108,7 @@ public class Player extends Creature {
 
         Rectangle cb = getCollisionBounds(0,0); // Get coords of the colision box of player
         Rectangle ar = new Rectangle();
-        int arSize = 20; // If a player is within 20 px of an entity and they attack, they will hurt the entity
+        int arSize = Tile.TILE_SIZE; // If a player is within 20 px of an entity and they attack, they will hurt the entity
         ar.width = arSize;
         ar.height = arSize;
 
@@ -114,20 +118,39 @@ public class Player extends Creature {
         } else if(InputHandler.attack && facingRight) {
             ar.x = cb.x + cb.width;
             ar.y = cb.y + cb.height / 2 - arSize / 2;
+        }
+
+        if(InputHandler.prolongedActionRequest) {
+            timer++;
+            if(timer > actionCooldown) {
+                if(facingLeft) {
+                    ar.x = cb.x - arSize;
+                    ar.y = cb.y + cb.height / 2 - arSize / 2;
+                } else if(facingRight) {
+                    ar.x = cb.x + cb.width;
+                    ar.y = cb.y + cb.height / 2 - arSize / 2;
+                }
+                attack(ar, 1);
+                timer = 0;
+            }
         } else {
-            return;
+            timer = 0;
         }
 
         InputHandler.attack = false;
 
+        attack(ar, 1);
+
+    }
+
+    private void attack(Rectangle ar, int amt) {
         for (Entity e : gb.getWorld().getEntityHandler().getEntities()) {
             if(e.equals(this)) continue;
             if(e.getCollisionBounds(0, 0).intersects(ar)) {
-                e.hurt(1);
+                e.hurt(amt);
                 return;
             }
         }
-
     }
 
     @Override

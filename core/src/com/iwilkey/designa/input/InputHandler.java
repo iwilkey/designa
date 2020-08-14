@@ -21,7 +21,9 @@ public class InputHandler {
     public static int cursorX, cursorY;
     public static boolean leftMouseButtonDown, rightMouseButtonDown; // iOS will trigger left version as pointer.
     public static boolean leftMouseButton, rightMouseButton;
-    public static boolean placeRequest, destroyRequest;
+    public static boolean placeRequest, destroyRequest, backBuildingToggleRequest;
+    public static boolean prolongedActionRequest;
+    public static boolean itemPickupRequest;
 
 
     public InputHandler() {
@@ -57,6 +59,8 @@ public class InputHandler {
                         if(key == Input.Keys.SPACE) jumpRequest = true;
                         if(key == Input.Keys.F) inventoryRequest = true;
 
+                        if(key == Input.Keys.X) backBuildingToggleRequest = true;
+
 
                         return true;
                     }
@@ -69,6 +73,8 @@ public class InputHandler {
 
                         if(key == Input.Keys.SPACE) jumpRequest = false;
                         if(key == Input.Keys.F) inventoryRequest = false;
+
+                        if(key == Input.Keys.X) backBuildingToggleRequest = false;
 
                         return true;
                     }
@@ -92,11 +98,13 @@ public class InputHandler {
                             lmbd = true;
                             if(!Inventory.active) destroyRequest = true;
                             attack = true;
+                            prolongedActionRequest = true;
                         }
                         if(button == Input.Buttons.RIGHT) {
                             rmbd = true;
                             if(!Inventory.active) placeRequest = true;
                             attack = true;
+                            itemPickupRequest = true;
                         }
                         return true;
                     }
@@ -107,12 +115,14 @@ public class InputHandler {
                             lmbd = false;
                             if(!Inventory.active) destroyRequest = false;
                             attack = false;
+                            prolongedActionRequest = false;
                         }
 
                         if(button == Input.Buttons.RIGHT) {
                             rmbd = false;
                             if(!Inventory.active) placeRequest = false;
                             attack = false;
+                            itemPickupRequest = false;
                         }
                         return true;
                     }

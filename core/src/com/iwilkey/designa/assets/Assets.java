@@ -1,5 +1,7 @@
 package com.iwilkey.designa.assets;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -17,7 +19,7 @@ public class Assets {
     public static TextureRegion[] sky_colors, light_colors;
 
     // GUI
-    public static TextureRegion[] heart, breakLevel, craftingTabs;
+    public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding;
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
             itemRep;
 
@@ -36,6 +38,11 @@ public class Assets {
     public static TextureRegion[] player, player_jump;
         // Animations
         public static TextureRegion[] walk_right, walk_left;
+
+    // Sounds
+    public static Sound[] itemPickup, treeHit, treeFall, jumpLand, zoom, dirtHit, stoneHit,
+        closeInv, openInv, createItem;
+    public static Sound invClick;
 
     public static void init() {
 
@@ -88,6 +95,9 @@ public class Assets {
         craftingTabs[1] = ss.crop(9, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         craftingTabs[2] = ss.crop(12, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         itemRep = ss.crop(15, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        backBuilding = new TextureRegion[2];
+        backBuilding[0] = ss.crop(11, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        backBuilding[1] = ss.crop(12, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
@@ -127,6 +137,49 @@ public class Assets {
             walk_left = new TextureRegion[2];
             walk_left[0] = ss.crop(7, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
             walk_left[1] = ss.crop(9, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+
+        // Sounds
+        itemPickup = new Sound[3];
+        itemPickup[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/item-pickup.ogg"));
+        itemPickup[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/item-pickup-2.ogg"));
+        itemPickup[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/item-pickup-3.ogg"));
+        treeHit = new Sound[3];
+        treeHit[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-hit.ogg"));
+        treeHit[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-hit-2.ogg"));
+        treeHit[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-hit-3.ogg"));
+        treeFall = new Sound[3];
+        treeFall[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-fall.ogg"));
+        treeFall[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-fall-2.ogg"));
+        treeFall[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/tree-fall-3.ogg"));
+        jumpLand = new Sound[3];
+        jumpLand[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/jump-land.ogg"));
+        jumpLand[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/jump-land-2.ogg"));
+        jumpLand[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/jump-land-3.ogg"));
+        zoom = new Sound[3];
+        zoom[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/zoom.ogg"));
+        zoom[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/zoom-2.ogg"));
+        zoom[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/zoom-3.ogg"));
+        dirtHit = new Sound[3];
+        dirtHit[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/dirt-hit.ogg"));
+        dirtHit[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/dirt-hit-2.ogg"));
+        dirtHit[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/dirt-hit-3.ogg"));
+        stoneHit = new Sound[3];
+        stoneHit[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/stone-hit.ogg"));
+        stoneHit[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/stone-hit-2.ogg"));
+        stoneHit[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/stone-hit-3.ogg"));
+        closeInv = new Sound[3];
+        closeInv[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/close-inv.ogg"));
+        closeInv[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/close-inv-2.ogg"));
+        closeInv[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/close-inv-3.ogg"));
+        openInv = new Sound[3];
+        openInv[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/open-inv.ogg"));
+        openInv[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/open-inv-2.ogg"));
+        openInv[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/open-inv-3.ogg"));
+        invClick = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/inv-click.ogg"));
+        createItem = new Sound[3];
+        createItem[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item.ogg"));
+        createItem[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item-2.ogg"));
+        createItem[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item-3.ogg"));
 
     }
 

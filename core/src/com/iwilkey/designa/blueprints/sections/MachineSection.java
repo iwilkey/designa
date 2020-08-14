@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.blueprints.BlueprintSection;
 import com.iwilkey.designa.blueprints.Blueprints;
-import com.iwilkey.designa.blueprints.ItemRepresentation;
+import com.iwilkey.designa.blueprints.ItemBlueprint;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.items.Item;
 
@@ -12,16 +12,16 @@ public class MachineSection extends BlueprintSection {
 
     public MachineSection(Blueprints workbench, int x, int y) {
         super("Machines", workbench, x, y);
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
     }
 
     @Override
     public void tick() {
         if(items.size() > 0) {
-            for(ItemRepresentation ir : items) {
+            for(ItemBlueprint ir : items) {
                 ir.tick();
             }
         }
@@ -37,7 +37,7 @@ public class MachineSection extends BlueprintSection {
             Text.draw(b, "Machines", (tabX + 64) - 96 - 44, tabY - 24, 11);
 
             if (items.size() > 0) {
-                for (ItemRepresentation ir : items) {
+                for (ItemBlueprint ir : items) {
                     ir.render(b);
                 }
             }
