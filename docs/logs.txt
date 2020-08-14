@@ -171,6 +171,6 @@ Date || Build ||
     - Trees now drop wood as they fall
     - Added torches
     - Cleaned up building manager
-    - Started on a checkResource function that will tell if the player can craft an item or not based on whats in
-        their inventory (Doesn't work yet tho)
+    - Now item blueprints can be created if you have the resources in your inventory. (Still needs a little tweaking, but
+    basic idea is there)
 

@@ -21,11 +21,11 @@ public class ItemRepresentation {
     private int number;
 
     private boolean isSelected = false;
-    public Rectangle collider;
+    public Rectangle collider, createCollider;
 
     private final int x, y, w, h, i, ROW_CAP = 5;
 
-    private boolean canCreate = false;
+    public boolean canCreate = false;
 
     public ItemRepresentation(BlueprintSection bs, Item item, int n) {
         this.bs = bs;
@@ -45,13 +45,19 @@ public class ItemRepresentation {
         this.y = bs.tabY - (88 - 50) - (50 * nextY);
 
         collider = new Rectangle(this.x, this.y, this.w, this.h);
+        createCollider = new Rectangle(892 + 32 + 22, 84, 82, 42);
     }
 
-    public void tick() {}
+    public void tick() {
+        if(isSelected) checkResources();
+        else canCreate = false;
+    }
 
     private boolean checkResources() {
         // TODO: Make this work.
         InventorySlot[][] slots = bs.workbench.inventory.slots;
+
+        // TODO: This works, but only if an inventory slot has the right amount. Make it so it takes a tab of ALL like items in inventory.
 
         int checkout = 0;
         for(int y = 0; y < bs.workbench.inventory.invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -59,7 +65,7 @@ public class ItemRepresentation {
                 if(slots[x][y] != null) {
                     for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
                         if(slots[x][y].getItem() != null) {
-                            if (slots[x][y].getItem() == entry.getKey()) {
+                            if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
                                 if (slots[x][y].itemCount >= Utils.parseInt(entry.getValue())) {
                                     checkout++;
                                     break;
@@ -73,6 +79,28 @@ public class ItemRepresentation {
 
         canCreate = checkout >= recipe.getRecipe().size();
         return canCreate;
+    }
+
+    public void create() {
+        InventorySlot[][] slots = bs.workbench.inventory.slots;
+
+        for(int y = 0; y < bs.workbench.inventory.invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            for (int x = 0; x < bs.workbench.inventory.invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                if (slots[x][y] != null) {
+                    for (Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
+                        if(slots[x][y].getItem() != null) {
+                            if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
+                                if (slots[x][y].itemCount >= Utils.parseInt(entry.getValue())) {
+                                    slots[x][y].itemCount -= Utils.parseInt(entry.getValue());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        bs.workbench.inventory.addItem(item);
     }
 
     public void render(Batch b) {
@@ -94,7 +122,10 @@ public class ItemRepresentation {
                 if(c + 40 > 80) c = 0;
             }
 
-            System.out.println(checkResources());
+            if(canCreate) {
+                b.draw(Assets.inventorySlot, createCollider.x, createCollider.y, createCollider.width, createCollider.height);
+                Text.draw(b, "Create", 892 + 32 + 27, 100, 11);
+            }
 
         }
     }

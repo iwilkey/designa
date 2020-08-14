@@ -7,7 +7,6 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.Player;
-import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.items.Item;
@@ -49,11 +48,8 @@ public class World {
 
         loadWorld(path);
 
-        entityHandler.getPlayer().getInventory().addItem(Item.simpleDrill);
-        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
-        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
-        entityHandler.getPlayer().getInventory().addItem(Item.torchItem);
-
+        for(int i = 0; i < 64; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
+        for(int i = 0; i < 32; i++) entityHandler.getPlayer().getInventory().addItem(Item.stoneItem);
     }
 
     public void tick() {

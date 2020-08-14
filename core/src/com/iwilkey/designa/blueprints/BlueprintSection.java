@@ -37,10 +37,18 @@ public abstract class BlueprintSection {
 
     public void input() {
         if (InputHandler.leftMouseButtonDown) {
-            clearSelection();
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+            Rectangle cc = new Rectangle(892 + 32 + 22, 84, 82, 42);
             for (int i = 0; i < items.size(); i++) {
-                if(rect.intersects(items.get(i).collider)) items.get(i).setSelected(true);
+                if(rect.intersects(items.get(i).collider) &&
+                        !(rect.intersects(cc))) {
+                    clearSelection();
+                    items.get(i).setSelected(true);
+                }
+
+                if(rect.intersects(cc) && items.get(i).canCreate) {
+                    items.get(i).create();
+                }
             }
         }
     }
