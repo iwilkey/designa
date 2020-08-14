@@ -22,8 +22,8 @@ public class Item {
             new ItemType.PlaceableBlock(Tile.oakWoodTile.getID()));
     public static Item simpleDrill = new Item(Assets.simpleDrill, "Simple Drill", 10,
             new ItemType.Drill("simple-drill", 5, 1, ItemRecipe.SIMPLE_DRILL_RECIPE));
-    public static Item torchItem = new Item(Assets.torch[0], "Torch", 20,
-            new ItemType.PlaceableBlock(Tile.torchTile.getID()));
+    public static Item torchItem = new Item(Assets.torchThumb, "Torch", 20,
+            new ItemType.CreatableTile(Tile.torchTile.getID(), ItemRecipe.TORCH_RECIPE));
 
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
@@ -53,11 +53,11 @@ public class Item {
     }
 
     public static Item getItemByID(int ID) {
-        for(int i = 0; i < items.length; i++) {
-            if(items[i].getItemID() == ID) return items[i];
+        for (Item item : items) {
+            if(item != null) if (item.getItemID() == ID) return item;
         }
 
-        return null;
+        return Item.dirtItem;
     }
 
     public Item createNew(int x, int y) {

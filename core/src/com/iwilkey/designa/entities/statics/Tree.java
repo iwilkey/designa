@@ -31,6 +31,8 @@ public class Tree extends StaticEntity {
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
+
+        health = MathUtils.random(35, 40);
     }
 
     @Override
@@ -52,15 +54,31 @@ public class Tree extends StaticEntity {
     }
 
     @Override
+    public void hurt(int amt) {
+        health -= amt;
+
+        if(MathUtils.random(0, 2) == 2) {
+            int yy = MathUtils.random(50, 200);
+            int xx = MathUtils.random(-4, 26);
+            World.getItemHandler().addItem(Item.oakWoodItem.createNew((int) x + 16 + xx, (int) y + yy));
+        }
+
+        if(health <= 0) {
+            active = false;
+            die();
+        }
+
+    }
+
+    @Override
     public void die() {
         if(health > -1) {
-            int spawnAmount = MathUtils.random(8, 15);
+            int spawnAmount = MathUtils.random(2, 8);
             for(int i = 0; i < spawnAmount; i++) {
                 int yy = MathUtils.random(50, 200);
                 int xx = MathUtils.random(-4, 26);
                 World.getItemHandler().addItem(Item.oakWoodItem.createNew((int)x + 16 + xx, (int)y + yy));
             }
-
         }
     }
 }

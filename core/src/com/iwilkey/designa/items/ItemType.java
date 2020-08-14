@@ -36,6 +36,19 @@ public class ItemType {
 
     }
 
+    public static class CreatableTile extends PlaceableBlock {
+
+        protected ItemRecipe recipe;
+
+        public CreatableTile(int ID, ItemRecipe ir) {
+            super(ID);
+            this.recipe = ir;
+        }
+
+        public ItemRecipe getRecipe() { return recipe; }
+
+    }
+
     public static class Tool extends CreatableItem {
 
         protected int level;

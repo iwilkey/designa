@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
@@ -24,11 +25,16 @@ public class ItemRepresentation {
 
     private final int x, y, w, h, i, ROW_CAP = 5;
 
+    private boolean canCreate = false;
+
     public ItemRepresentation(BlueprintSection bs, Item item, int n) {
         this.bs = bs;
         this.item = item;
 
-        this.recipe = (((ItemType.CreatableItem) item.getItemType()).getRecipe());
+        if(item.getItemType() instanceof  ItemType.CreatableItem)
+            this.recipe = (((ItemType.CreatableItem) item.getItemType()).getRecipe());
+        else if(item.getItemType() instanceof  ItemType.CreatableTile)
+            this.recipe = (((ItemType.CreatableTile) item.getItemType()).getRecipe());
 
         this.number = n + 1;
 
@@ -42,6 +48,32 @@ public class ItemRepresentation {
     }
 
     public void tick() {}
+
+    private boolean checkResources() {
+        // TODO: Make this work.
+        InventorySlot[][] slots = bs.workbench.inventory.slots;
+
+        int checkout = 0;
+        for(int y = 0; y < bs.workbench.inventory.invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            for(int x = 0; x < bs.workbench.inventory.invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                if(slots[x][y] != null) {
+                    for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
+                        if(slots[x][y].getItem() != null) {
+                            if (slots[x][y].getItem() == entry.getKey()) {
+                                if (slots[x][y].itemCount >= Utils.parseInt(entry.getValue())) {
+                                    checkout++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        canCreate = checkout >= recipe.getRecipe().size();
+        return canCreate;
+    }
 
     public void render(Batch b) {
         b.draw(Assets.itemRep, x, y, w, h);
@@ -62,6 +94,7 @@ public class ItemRepresentation {
                 if(c + 40 > 80) c = 0;
             }
 
+            System.out.println(checkResources());
 
         }
     }

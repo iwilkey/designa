@@ -133,52 +133,42 @@ public class Player extends Creature {
     @Override
     public void render(Batch b) {
         if(isFlashing && flashInterval >= flashIntervalTime) {
-            b.draw(currentSprite(), x, y, width, height);
-            if(ToolSlot.currentItem != null) {
-                try {
-                    if (facingRight)  {
-                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
-                        } else {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
-                        }
-                    }
-
-                    else {
-                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
-                                    6, 6, 12, 12, 1, 1, 180);
-                        } else {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
-                        }
-                    }
-                } catch (NullPointerException ignored) {}
-            }
+            renderBody(b);
         } else if (!isFlashing) {
-            b.draw(currentSprite(), x, y, width, height);
-            if(ToolSlot.currentItem != null) {
-                try {
-                    if (facingRight)  {
-                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
-                        } else {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
-                        }
-                    }
-
-                    else {
-                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
-                                    6, 6, 12, 12, 1, 1, 180);
-                        } else {
-                            b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
-                        }
-                    }
-                } catch (NullPointerException ignored) {}
-            }
+            renderBody(b);
         }
 
         // renderCollider(b);
+    }
+
+    private void renderBody(Batch b) {
+        b.draw(currentSprite(), x, y, width, height);
+        if(ToolSlot.currentItem != null) {
+            try {
+                if (facingRight)  {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
+                    } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 4, y + 2,
+                                6, 6, 8, 8, 1, 1, -90);
+                    } else {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
+                    }
+                }
+
+                else {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
+                                6, 6, 12, 12, 1, 1, 180);
+                    } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 6, y + 6,
+                                6, 6, 8, 8, 1, 1, 90);
+                    } else {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
+                    }
+                }
+            } catch (NullPointerException ignored) {}
+        }
     }
 
     @Override

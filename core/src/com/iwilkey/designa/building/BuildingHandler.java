@@ -98,42 +98,38 @@ public class BuildingHandler {
     }
 
     private void damageTile(int x, int y) {
-
-            checkFace();
-            if (!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
-                if (ToolSlot.currentItem != null) {
-                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
-                        gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
-                        if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
-                            Tile tile = gb.getWorld().getTile(x, y);
-
-                            World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
-                                    pointerOnTileY() * Tile.TILE_SIZE + 8));
-
-                            World.tiles[x][(World.h - y) - 1] = 0;
-                            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-                            gb.getWorld().getLightManager().bakeLighting();
-                        }
-                    }
+        checkFace();
+        if (!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
+            if (ToolSlot.currentItem != null) {
+                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                    gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -=
+                            ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();;
                 } else {
-                    if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof DirtTile ||
-                            gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof GrassTile ||
-                            ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock) {
-                        gb.getWorld().tileBreakLevel[x][(World.h - y) - 1]--;
-                        if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
-                            Tile tile = gb.getWorld().getTile(x, y);
-
-                            World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 4,
-                                    pointerOnTileY() * Tile.TILE_SIZE + 6));
-
-                            World.tiles[x][(World.h - y) - 1] = 0;
-                            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-                            gb.getWorld().getLightManager().bakeLighting();
-                        }
-                    }
+                    gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
                 }
+                checkBreak(x, y);
+            } else {
+                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
+                checkBreak(x, y);
+            }
+        }
+    }
+
+    private void checkBreak(int x, int y) {
+        if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+            Tile tile = gb.getWorld().getTile(x, y);
+
+            if(tile == Tile.torchTile) {
+                gb.getWorld().getLightManager().removeLight(x, y);
             }
 
+            World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                    pointerOnTileY() * Tile.TILE_SIZE + 8));
+
+            World.tiles[x][(World.h - y) - 1] = 0;
+            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+            gb.getWorld().getLightManager().bakeLighting();
+        }
     }
 
     private int pointerOnTileX() {

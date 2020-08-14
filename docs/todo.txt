@@ -4,8 +4,6 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Fix the torch NullPointerException
-
 - Create minerals such as Copper and Tin
 	- These can not be mined by hand, but a Drill can be placed on them to mine them.
 

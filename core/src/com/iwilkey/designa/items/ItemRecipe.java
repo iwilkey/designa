@@ -11,13 +11,22 @@ public abstract class ItemRecipe {
         public SimpleDrillRecipe(Item item) { super(item); }
         @Override
         public void create() {
-            add(Item.dirtItem, 2); // 2 dirt.
-            add(Item.stoneItem, 2); // 2 stone.
+            add(Item.oakWoodItem, 64);
+            add(Item.stoneItem, 32);
+        }
+    }
+
+    public static class TorchRecipe extends  ItemRecipe {
+        public TorchRecipe(Item item) { super(item); }
+        @Override
+        public void create() {
+            add(Item.oakWoodItem, 4);
         }
     }
 
     // Statics (Shell)
     public static ItemRecipe SIMPLE_DRILL_RECIPE = new SimpleDrillRecipe(Item.simpleDrill);
+    public static ItemRecipe TORCH_RECIPE = new TorchRecipe(Item.torchItem);
 
     // Class
     public Item item;

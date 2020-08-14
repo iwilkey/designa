@@ -11,30 +11,7 @@ import com.iwilkey.designa.items.Item;
 public class ToolSection extends BlueprintSection {
     public ToolSection(Blueprints workbench, int x, int y) {
         super("Tools", workbench, x, y);
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemRepresentation(this, Item.torchItem, items.size() - 1));
         items.add(new ItemRepresentation(this, Item.simpleDrill, items.size() - 1));
 
     }

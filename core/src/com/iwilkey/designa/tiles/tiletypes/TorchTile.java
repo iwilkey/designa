@@ -8,7 +8,7 @@ public class TorchTile extends Tile {
 
     private int itemID = 20;
 
-    private Animation animation;
+    private final Animation animation;
 
     public TorchTile(int ID, int strength) {
         super(Assets.torch[1], ID, strength);

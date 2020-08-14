@@ -16,7 +16,7 @@ import java.awt.*;
 public class Blueprints {
 
     private final GameBuffer gb;
-    private final Inventory inventory;
+    public final Inventory inventory;
     public static boolean active = false;
     public int sectionSelected;
 

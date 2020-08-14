@@ -23,7 +23,7 @@ public class Assets {
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
-        oakWood, leaf, stone;
+        oakWood, leaf, stone, torchThumb;
     public static TextureRegion[] torch;
 
     // Environment
@@ -102,6 +102,7 @@ public class Assets {
         torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
         torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
         torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Environment
         trees = new TextureRegion[3];

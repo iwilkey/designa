@@ -18,7 +18,7 @@ public class Inventory {
     private GameBuffer gb;
     private Blueprints workbench;
     public static boolean active = false;
-    private InventorySlot[][] slots;
+    public InventorySlot[][] slots;
     public final int invX, invY, invWidth, invHeight;
     public int[][] selector;
 
