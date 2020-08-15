@@ -1,6 +1,5 @@
 package com.iwilkey.designa.entities.creature;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

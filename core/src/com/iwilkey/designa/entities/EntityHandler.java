@@ -2,6 +2,7 @@ package com.iwilkey.designa.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.iwilkey.designa.entities.creature.Npc;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.entities.statics.StaticEntity;
 import com.iwilkey.designa.entities.statics.Tree;
@@ -49,10 +50,12 @@ public class EntityHandler {
         }
     }
 
-    public void creatureRender(Batch b) {
-        for(Entity e : entities) {
-            if(!(e instanceof StaticEntity)) e.render(b);
-        }
+    public void playerRender(Batch b) {
+        for(Entity e : entities) if((e instanceof Player)) e.render(b);
+    }
+
+    public void npcRender(Batch b) {
+        for(Entity e : entities) if((e instanceof Npc)) e.render(b);
     }
 
     public void staticRender(Batch b) {

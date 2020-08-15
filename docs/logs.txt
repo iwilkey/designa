@@ -181,4 +181,9 @@ Date || Build ||
     - Created a prolonged action timer for repeatedly doing a repetitive task automatically at a cool down time limit
         (Like breaking a block or chopping a tree down)
     - Items in inventory can now be picked up and moved around to any slot the player wants, still working on adding like items.
+    - Introduced NCPs with simple decision-making capabilities.
+    - Every NPC has a random name, a random speed, and a random decision time
+    - Fixed some NPC tile-trap bugs, still not all fixed though
+
+
 

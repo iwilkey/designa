@@ -6,6 +6,7 @@ import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
+import com.iwilkey.designa.entities.creature.Npc;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
@@ -53,6 +54,11 @@ public class World {
         for(int i = 0; i < 99; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
         for(int i = 0; i < 32; i++) entityHandler.getPlayer().getInventory().addItem(Item.stoneItem);
         for(int i = 0; i < 10; i++) entityHandler.getPlayer().getInventory().addItem(Item.oakWoodItem);
+
+        for(int i = 1; i < 12; i++) {
+            entityHandler.addEntity(new Npc(gb, ((w / 2f) + (i * 2)) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
+            entityHandler.addEntity(new Npc(gb, ((w / 2f) - (i * 2)) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 1)]) * Tile.TILE_SIZE));
+        }
     }
 
     public void tick() {
@@ -92,7 +98,8 @@ public class World {
             }
         }
 
-        entityHandler.creatureRender(b);
+        entityHandler.npcRender(b);
+        entityHandler.playerRender(b);
 
         for(int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {

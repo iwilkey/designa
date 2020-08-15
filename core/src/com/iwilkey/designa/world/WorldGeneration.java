@@ -79,7 +79,7 @@ public class WorldGeneration {
         ArrayList<Integer> trees = new ArrayList<Integer>();
         for(int i = 0; i < TREE_AMOUNT; i++) {
             int tileX = MathUtils.random(0, World.w);
-            if(tileX == World.w / 2) continue;
+            if(tileX >= World.w / 2 - 30 && tileX <= World.w / 2 + 30) continue;
             trees.add(tileX);
 
         }

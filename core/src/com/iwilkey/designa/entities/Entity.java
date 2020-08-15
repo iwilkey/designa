@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.entities.statics.StaticEntity;
 
 import java.awt.Rectangle;
 
@@ -12,11 +13,11 @@ public abstract class Entity {
     public static final int DEFAULT_HEALTH = 10;
 
     protected GameBuffer gb;
-    protected float x, y;
+    public float x, y;
     protected int width, height;
     protected int health;
     protected boolean active;
-    protected Rectangle collider;
+    public Rectangle collider;
 
     public Entity(GameBuffer gb, float x, float y, int w, int h) {
         this.gb = gb;
@@ -42,9 +43,10 @@ public abstract class Entity {
     public boolean checkEntityCollisions(float xOffset, float yOffset) {
         for (Entity e : gb.getWorld().getEntityHandler().getEntities()) {
             if(e.equals(this)) continue;
-            if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
-                return true;
-            }
+            if(e instanceof StaticEntity)
+                if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset))) {
+                    return true;
+                }
         }
 
         return false;

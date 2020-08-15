@@ -5,7 +5,10 @@ import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.tiles.Tile;
+
+import java.awt.*;
 
 public abstract class Creature extends Entity {
 
@@ -122,6 +125,13 @@ public abstract class Creature extends Entity {
             y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
 
+    }
+
+    protected void checkStuck() {
+        if(collisionWithTile((int) (x + 16) / Tile.TILE_SIZE, (int) y / Tile.TILE_SIZE)) {
+            jump();
+            y = (LightManager.highestTile[(int) x / Tile.TILE_SIZE] * Tile.TILE_SIZE) + Tile.TILE_SIZE;
+        }
     }
 
     public void checkFlash() {
