@@ -15,7 +15,7 @@ import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public class Player extends Creature {
 
@@ -44,9 +44,11 @@ public class Player extends Creature {
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
         // Init Animations
-        animations = new Animation[2];
+        animations = new Animation[4];
         animations[0] = new Animation(100, Assets.walk_right);
         animations[1] = new Animation(100, Assets.walk_left);
+        animations[2] = new Animation(100, Assets.playerGunWalkRight);
+        animations[3] = new Animation(100, Assets.playerGunWalkLeft);
 
         // HUD
         hud = new Hud(this);
@@ -105,9 +107,9 @@ public class Player extends Creature {
 
     private void checkAttacks() {
 
-        Rectangle cb = getCollisionBounds(0,0); // Get coords of the colision box of player
+        Rectangle cb = getCollisionBounds(0,0);
         Rectangle ar = new Rectangle();
-        int arSize = Tile.TILE_SIZE; // If a player is within 20 px of an entity and they attack, they will hurt the entity
+        int arSize = Tile.TILE_SIZE;
         ar.width = arSize;
         ar.height = arSize;
 
@@ -168,7 +170,7 @@ public class Player extends Creature {
         if(ToolSlot.currentItem != null) {
             try {
                 if (facingRight)  {
-                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
                     } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 4, y + 2,
@@ -179,7 +181,7 @@ public class Player extends Creature {
                 }
 
                 else {
-                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
                                 6, 6, 12, 12, 1, 1, 180);
                     } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
@@ -199,23 +201,45 @@ public class Player extends Creature {
     }
 
     private TextureRegion currentSprite() {
-        if(isMoving && isGrounded) {
-            if(facingLeft) {
-                return animations[1].getCurrentFrame();
-            } else if (facingRight){
-                return animations[0].getCurrentFrame();
-            }
-        } else if (isMoving) {
-            if(facingLeft) {
-                return Assets.player_jump[0];
+        if(!gunWielding) {
+            if (isMoving && isGrounded) {
+                if (facingLeft) {
+                    return animations[1].getCurrentFrame();
+                } else if (facingRight) {
+                    return animations[0].getCurrentFrame();
+                }
+            } else if (isMoving) {
+                if (facingLeft) {
+                    return Assets.player_jump[0];
+                } else {
+                    return Assets.player_jump[1];
+                }
             } else {
-                return Assets.player_jump[1];
+                if (facingLeft) {
+                    return Assets.player[0];
+                } else {
+                    return Assets.player[1];
+                }
             }
         } else {
-            if(facingLeft) {
-                return Assets.player[0];
+            if (isMoving && isGrounded) {
+                if (facingLeft) {
+                    return animations[3].getCurrentFrame();
+                } else if (facingRight) {
+                    return animations[2].getCurrentFrame();
+                }
+            } else if (isMoving) {
+                if (facingLeft) {
+                    return Assets.playerGun[0];
+                } else {
+                    return Assets.playerGun[1];
+                }
             } else {
-                return Assets.player[1];
+                if (facingLeft) {
+                    return Assets.playerGun[0];
+                } else {
+                    return Assets.playerGun[1];
+                }
             }
         }
 

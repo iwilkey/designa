@@ -195,5 +195,10 @@ Date || Build ||
     - Fixed inventory add item splitting issue
     - Fixed inventory bounds issue
 
+8/16/2020 || pa_1.0.20 p2 ||
+    - Added gun wielding animations and graphics to player sprite
+    - Created ItemType Weapon and Gun to create LaserGun class that can shoot and reload
+    - Restructured ItemType class to encapsulate static ItemTypes of inherited type
+
 
 

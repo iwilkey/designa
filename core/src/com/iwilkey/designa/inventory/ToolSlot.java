@@ -46,7 +46,7 @@ public class ToolSlot {
 
         try {
             if (itemTexture != null) {
-                if (!(currentItem.getItem().getItemType() instanceof ItemType.Drill)) {
+                if (!(currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill)) {
 
                     b.draw(itemTexture, x + (25 / 2f), y + (25 / 2f), w - 25, h - 25);
                     Text.draw(b, Integer.toString(itemCount), x, y - 4, 11);

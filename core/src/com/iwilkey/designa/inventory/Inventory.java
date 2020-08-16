@@ -199,11 +199,6 @@ public class Inventory {
                                 selector[x][y] = 1;
                                 return;
                             }
-                        // It was outside a slot
-                        } else {
-                            is.putItem(i, count);
-                            itemUp = false;
-                            return;
                         }
                     }
                 }

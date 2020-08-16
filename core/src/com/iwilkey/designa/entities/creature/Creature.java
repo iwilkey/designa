@@ -18,7 +18,7 @@ public abstract class Creature extends Entity {
 
     // State
     protected boolean facingRight, facingLeft;
-    protected boolean isMoving;
+    protected boolean isMoving, gunWielding = false;
 
     // Mock physics
     protected float speed;

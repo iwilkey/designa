@@ -35,9 +35,9 @@ public class Assets {
     public static TextureRegion simpleDrill;
 
     // Player
-    public static TextureRegion[] player, player_jump;
+    public static TextureRegion[] player, player_jump, playerGun;
         // Animations
-        public static TextureRegion[] walk_right, walk_left;
+        public static TextureRegion[] walk_right, walk_left, playerGunWalkRight, playerGunWalkLeft;
 
     // NPCs
     public static TextureRegion[] man, manJump, manWalkRight, manWalkLeft;
@@ -144,6 +144,15 @@ public class Assets {
             walk_left = new TextureRegion[2];
             walk_left[0] = ss.crop(7, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
             walk_left[1] = ss.crop(9, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        playerGun = new TextureRegion[2];
+        playerGun[0] = ss.crop(13, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        playerGun[1] = ss.crop(15, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkRight = new TextureRegion[2];
+            playerGunWalkRight[0] = ss.crop(17, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkRight[1] = ss.crop(19, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkLeft = new TextureRegion[2];
+            playerGunWalkLeft[0] = ss.crop(17, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkLeft[1] = ss.crop(19, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
         // Init NPCs
         man = new TextureRegion[2];

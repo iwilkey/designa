@@ -80,7 +80,7 @@ public class BuildingHandler {
             }
 
             try {
-                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) actionCooldown = 5;
+                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) actionCooldown = 5;
                 else actionCooldown = 15;
             } catch (NullPointerException ignored) {}
 
@@ -150,9 +150,9 @@ public class BuildingHandler {
         if (!backBuilding) {
             if (!(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
                 if (ToolSlot.currentItem != null) {
-                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
                         gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -=
-                                ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
+                                ((ItemType.CreatableItem.Tool.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
                     } else {
                         gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] -= 1;
                     }
@@ -166,9 +166,9 @@ public class BuildingHandler {
         } else {
             if (!(gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof AirTile)) {
                 if (ToolSlot.currentItem != null) {
-                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Drill) {
+                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
                         gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] -=
-                                ((ItemType.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
+                                ((ItemType.CreatableItem.Tool.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
                     } else {
                         gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] -= 1;
                     }

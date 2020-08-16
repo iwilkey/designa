@@ -22,9 +22,9 @@ public class Item {
     public static Item oakWoodItem = new Item(Assets.oakWood, "OakWood", 2,
             new ItemType.PlaceableBlock(Tile.oakWoodTile.getID()));
     public static Item simpleDrill = new Item(Assets.simpleDrill, "Simple Drill", 10,
-            new ItemType.Drill("simple-drill", 5, 1, ItemRecipe.SIMPLE_DRILL_RECIPE));
+            new ItemType.CreatableItem.Tool.Drill("simple-drill", 5, 1, ItemRecipe.SIMPLE_DRILL_RECIPE));
     public static Item torchItem = new Item(Assets.torchThumb, "Torch", 20,
-            new ItemType.CreatableTile(Tile.torchTile.getID(), ItemRecipe.TORCH_RECIPE));
+            new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID(), ItemRecipe.TORCH_RECIPE));
 
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;

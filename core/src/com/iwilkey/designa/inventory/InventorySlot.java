@@ -43,7 +43,7 @@ public class InventorySlot {
         collider.x = (int) (x + 12); collider.y = (int) (y + 12);
 
         if(item != null) {
-            if(!(item.getItemType() instanceof ItemType.Drill)) {
+            if(!(item.getItemType() instanceof ItemType.CreatableItem.Tool.Drill)) {
                 if (itemCount < 10) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 4,
                         collider.y + PADDING + 3, 9);
                 else if (itemCount < 100) Text.draw(b, Integer.toString(itemCount), collider.x + (SLOT_WIDTH / 2) - 9,

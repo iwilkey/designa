@@ -36,8 +36,8 @@ public class ItemBlueprint {
 
         if(item.getItemType() instanceof  ItemType.CreatableItem)
             this.recipe = (((ItemType.CreatableItem) item.getItemType()).getRecipe());
-        else if(item.getItemType() instanceof  ItemType.CreatableTile)
-            this.recipe = (((ItemType.CreatableTile) item.getItemType()).getRecipe());
+        else if(item.getItemType() instanceof  ItemType.PlaceableBlock.CreatableTile)
+            this.recipe = (((ItemType.PlaceableBlock.CreatableTile) item.getItemType()).getRecipe());
 
         this.number = n + 1;
 
@@ -123,7 +123,7 @@ public class ItemBlueprint {
 
     public void render(Batch b) {
         b.draw(Assets.itemRep, x, y, w, h);
-        b.draw(item.getTexture(), x + (i / 4), y + (i / 4), i, i);
+        b.draw(item.getTexture(), x + (i / 4f), y + (i / 4f), i, i);
 
         if(isSelected) {
             b.draw(Assets.inventorySelector, x, y, w, h);
