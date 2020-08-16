@@ -42,18 +42,18 @@ public class Hud {
         player.getToolSlot().render(b);
 
         if(BuildingHandler.backBuilding){
-            b.draw(Assets.backBuilding[1], Game.w - 80, 100, 64, 64);
-            Text.draw(b, "Back", Game.w - 80, 155, 11);
+            b.draw(Assets.backBuilding[1], Game.w - 80, 72, 64, 64);
+            Text.draw(b, "Back", Game.w - 80, 132, 11);
         }
         else {
-            b.draw(Assets.backBuilding[0], Game.w - 80, 100, 64, 64);
-            Text.draw(b, "Front", Game.w - 80, 155, 11);
+            b.draw(Assets.backBuilding[0], Game.w - 80, 72, 64, 64);
+            Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.19 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.20 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
 
-        if(Inventory.active) Text.draw(b, "Inventory", 14, Game.h - 196, 11);
+        if(Inventory.active) Text.draw(b, "Inventory", 398, Game.h - 92, 11);
         else Text.draw(b, "press 'F' to open inventory", 14, 14, 8);
     }
 

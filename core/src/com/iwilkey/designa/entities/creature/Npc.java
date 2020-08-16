@@ -6,15 +6,20 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gfx.Text;
 
 public class Npc extends Creature {
+
+    // Animations
+    private Animation[] animations;
 
     TextureRegion currentTexture;
     long DECISION_TIME = 100;
     long timer = 0;
     boolean walkLeft = true;
     String name;
+    int heartSpacing = 4;
 
     public Npc(GameBuffer gb, float x, float y) {
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
@@ -31,6 +36,11 @@ public class Npc extends Creature {
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
+        // Init Animations
+        animations = new Animation[2];
+        animations[0] = new Animation(MathUtils.random(80, 150), Assets.manWalkRight);
+        animations[1] = new Animation(MathUtils.random(80, 150), Assets.manWalkLeft);
+
     }
 
     // TODO: Make an AI Behavior web that Npcs can choose actions on.
@@ -40,6 +50,8 @@ public class Npc extends Creature {
     public void tick() {
 
         checkStuck();
+
+        for(Animation anim : animations) anim.tick();
 
         timer++;
         if(timer > DECISION_TIME) {
@@ -59,12 +71,45 @@ public class Npc extends Creature {
     @Override
     public void render(Batch b) {
 
-        if(facingLeft) currentTexture = Assets.man[0];
-        else currentTexture = Assets.man[1];
+        b.draw(currentSprite(), x, y, width, height);
 
-        b.draw(currentTexture, x, y, width, height);
-        Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 4) / 2), (int)y + 36, 4);
+        for (int i = 0; i < 10; i++) {
+            if (getHealth() >= i + 1) {
+                // Down, to the left
+                b.draw(Assets.heart[0], (x + (i * heartSpacing)) - 10,
+                        y + 33, 4, 4);
+            } else {
+                b.draw(Assets.heart[1], (x + (i * heartSpacing)) - 10,
+                        y + 33, 4, 4);
+            }
+        }
 
+        Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 5) / 2), (int)y + 40, 4);
+
+    }
+
+    private TextureRegion currentSprite() {
+        if(isMoving && isGrounded) {
+            if(facingLeft) {
+                return animations[1].getCurrentFrame();
+            } else if (facingRight){
+                return animations[0].getCurrentFrame();
+            }
+        } else if (isMoving) {
+            if(facingLeft) {
+                return Assets.manJump[0];
+            } else {
+                return Assets.manJump[1];
+            }
+        } else {
+            if(facingLeft) {
+                return Assets.man[0];
+            } else {
+                return Assets.man[1];
+            }
+        }
+
+        return null;
     }
 
     @Override

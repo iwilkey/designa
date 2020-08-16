@@ -153,6 +153,7 @@ Date || Build ||
 
 8/12/2020 || pa_1.0.17 ||
     - Fixed item spawning X movement toward player
+
     - Began creating crafting system, called "Blueprints"
     - Blueprints are now broken up into three different sub categories,
         Tools, weapons, and machines
@@ -184,6 +185,15 @@ Date || Build ||
     - Introduced NCPs with simple decision-making capabilities.
     - Every NPC has a random name, a random speed, and a random decision time
     - Fixed some NPC tile-trap bugs, still not all fixed though
+
+8/15/2020 || pa_1.0.20 ||
+    - NPCs now are animated
+    - Updated the look, and position, of the GUI
+    - Game now is forced to run fullscreen at 1920 x 1080 resolution
+    - Fixed inventory stacking issue
+    - Fixed wrong item creation issue
+    - Fixed inventory add item splitting issue
+    - Fixed inventory bounds issue
 
 
 

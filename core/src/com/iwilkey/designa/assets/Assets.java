@@ -21,7 +21,7 @@ public class Assets {
     // GUI
     public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding;
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
-            itemRep;
+            itemRep, blueprintGUI;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
@@ -40,7 +40,7 @@ public class Assets {
         public static TextureRegion[] walk_right, walk_left;
 
     // NPCs
-    public static TextureRegion[] man;
+    public static TextureRegion[] man, manJump, manWalkRight, manWalkLeft;
 
     // Sounds
     public static Sound[] itemPickup, treeHit, treeFall, jumpLand, zoom, dirtHit, stoneHit,
@@ -104,6 +104,7 @@ public class Assets {
         backBuilding = new TextureRegion[2];
         backBuilding[0] = ss.crop(11, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
         backBuilding[1] = ss.crop(12, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        blueprintGUI = ss.crop(0, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
@@ -148,6 +149,16 @@ public class Assets {
         man = new TextureRegion[2];
         man[0] = ss.crop(0, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
         man[1] = ss.crop(2, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        manJump = new TextureRegion[2];
+        manJump[1] = ss.crop(4, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        manJump[0] = ss.crop(6, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            // Animations
+            manWalkRight = new TextureRegion[2];
+            manWalkRight[0] = ss.crop(4, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkRight[1] = ss.crop(6, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkLeft = new TextureRegion[2];
+            manWalkLeft[0] = ss.crop(4, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkLeft[1] = ss.crop(6, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
         // Sounds
         itemPickup = new Sound[3];

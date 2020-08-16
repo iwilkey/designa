@@ -76,7 +76,10 @@ public class Blueprints {
 
     public void render(Batch b) {
 
-        Text.draw(b, "Blueprints", x + 41, y + 78, 11);
+        b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
+                Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+
+        Text.draw(b, "Blueprints", x + 41, y + 86, 11);
         for(BlueprintSection cs : sections) {
             cs.render(b);
 

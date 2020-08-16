@@ -2,8 +2,10 @@ package com.iwilkey.designa.blueprints;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
@@ -41,12 +43,12 @@ public class ItemBlueprint {
 
         this.i = 32;
         this.w = 48; this.h = 48;
-        this.x = (892 + (((number) % ROW_CAP) * w)) - (w / 2);
+        this.x = (Inventory.BLUEPRINT_X + (((number) % ROW_CAP) * w)) - (w / 2);
         int nextY = ((int)((double)(number / ROW_CAP))) + 1;
         this.y = bs.tabY - (88 - 50) - (50 * nextY);
 
         collider = new Rectangle(this.x, this.y, this.w, this.h);
-        createCollider = new Rectangle(892 + 32 + 22, 84, 82, 42);
+        createCollider = new Rectangle(Inventory.BLUEPRINT_X + 32 + 22, Inventory.BLUEPRINT_Y - 360 - 116, 82, 42);
     }
 
     public void tick() {
@@ -54,7 +56,7 @@ public class ItemBlueprint {
         else canCreate = false;
     }
 
-    private void checkResources() {
+    public void checkResources() {
         InventorySlot[][] slots = bs.blueprints.inventory.slots;
         HashMap<String, Integer> invTally = new HashMap<String, Integer>();
 
@@ -126,21 +128,21 @@ public class ItemBlueprint {
         if(isSelected) {
             b.draw(Assets.inventorySelector, x, y, w, h);
 
-            Text.draw(b, "Items Required", 892 + 32, 210, 8);
+            Text.draw(b, "Items Required", Inventory.BLUEPRINT_X + 32, Inventory.BLUEPRINT_Y - 360, 8);
 
             // TODO: Make this centered and maybe more efficient
             int recipeSize = recipe.getRecipe().size();
             int c = 0;
             for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
-                b.draw(entry.getKey().getTexture(), 892 + 32 + c, 175, 16, 16);
-                Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())), 892 + 32 + c + 8, 175, 8);
+                b.draw(entry.getKey().getTexture(), Inventory.BLUEPRINT_X + 32 + c, Inventory.BLUEPRINT_Y - 360 - 32, 16, 16);
+                Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())), Inventory.BLUEPRINT_X + 32 + c + 8, Inventory.BLUEPRINT_Y - 360 - 32, 8);
                 c += 40;
                 if(c + 40 > 80) c = 0;
             }
 
             if(canCreate) {
                 b.draw(Assets.inventorySlot, createCollider.x, createCollider.y, createCollider.width, createCollider.height);
-                Text.draw(b, "Create", 892 + 32 + 27, 100, 11);
+                Text.draw(b, "Create", Inventory.BLUEPRINT_X + 32 + 27, Inventory.BLUEPRINT_Y - 360 - 100, 11);
             }
 
         }

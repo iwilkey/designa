@@ -12,17 +12,6 @@ public class WeaponSection extends BlueprintSection {
 
     public WeaponSection(Blueprints workbench, int x, int y) {
         super("Weapons", workbench, x, y);
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
-
     }
 
     @Override

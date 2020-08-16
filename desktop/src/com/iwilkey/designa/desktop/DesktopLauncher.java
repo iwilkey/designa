@@ -12,9 +12,10 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.title = "Designa";
-		config.width = 1280;
-		config.height = 720;
+		config.width = 1920;
+		config.height = 1080;
 		config.resizable = false;
+		config.fullscreen = true;
 		config.addIcon("icon.png", Files.FileType.Internal);
 
 		new LwjglApplication(new Game(), config);

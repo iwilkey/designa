@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.Inventory;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -41,18 +42,20 @@ public abstract class BlueprintSection {
     public void input() {
         if (InputHandler.leftMouseButtonDown) {
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
-            Rectangle cc = new Rectangle(892 + 32 + 22, 84, 82, 42);
-            for (int i = 0; i < items.size(); i++) {
-                if(rect.intersects(items.get(i).collider) &&
-                        !(rect.intersects(cc))) {
+            Rectangle cc = new Rectangle(Inventory.BLUEPRINT_X + 32 + 22, Inventory.BLUEPRINT_Y - 360 - 116, 82, 42);
+
+            for (ItemBlueprint item : items) {
+                if (rect.intersects(item.collider)) {
                     clearSelection();
-                    items.get(i).setSelected(true);
+                    item.setSelected(true);
+
                     break;
                 }
 
-                if(rect.intersects(cc) && items.get(i).canCreate) {
-                    items.get(i).create();
-                    Assets.createItem[MathUtils.random(0,2)].play(0.35f);
+                if (rect.intersects(cc) && item.canCreate) {
+                    item.create();
+                    Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
+                    break;
                 }
             }
         }
