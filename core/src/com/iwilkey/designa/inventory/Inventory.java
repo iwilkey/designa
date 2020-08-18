@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
-import com.iwilkey.designa.blueprints.Blueprints;
+import com.iwilkey.designa.inventory.blueprints.Blueprints;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.inventory.resource.ResourceTree;
 
 import java.awt.Rectangle;
 
@@ -18,16 +19,17 @@ public class Inventory {
 
     private GameBuffer gb;
     private Blueprints blueprints;
+    private ResourceTree resourceTree;
     public static boolean active = false;
     public InventorySlot[][] slots;
     public final int invX, invY, invWidth, invHeight;
     public int[][] selector;
     public boolean itemUp = false;
 
-    private final int INV_SLOT_X = 120, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 250;
-    private final static int bw = 300 + 64, bh = 300 + 200 + 150;
-    public final static int BLUEPRINT_X = (Gdx.graphics.getWidth() / 2) + ((Gdx.graphics.getWidth() / 2) - (int)(bw / 0.85f)),
-            BLUEPRINT_Y = (Gdx.graphics.getHeight() / 2) + ((Gdx.graphics.getHeight() / 2) - (int)(bh / 2.59f));
+    private final int INV_SLOT_X = (60) - 19, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 250;
+    public final static int bw = 300 + 64, bh = 300 + 200 + 150;
+    public final static int BLUEPRINT_X = ((Gdx.graphics.getWidth()) - bw + 50) - 19,
+            BLUEPRINT_Y = (Gdx.graphics.getHeight() / 2) + 200;
     public static final Rectangle BLUEPRINT_SIZE = new Rectangle(BLUEPRINT_X - 52 - 32, BLUEPRINT_Y - 370 - 140,
             bw, bh);
 
@@ -43,6 +45,7 @@ public class Inventory {
         selector[0][invHeight / InventorySlot.SLOT_HEIGHT - 1] = 1;
 
         blueprints = new Blueprints(gb, this, BLUEPRINT_X, BLUEPRINT_Y);
+        resourceTree = new ResourceTree(this);
 
         int slot = 0;
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -78,6 +81,7 @@ public class Inventory {
         }
 
         blueprints.tick();
+        resourceTree.tick();
 
         // Input handling
         input();
@@ -227,6 +231,7 @@ public class Inventory {
         }
 
         blueprints.render(b);
+        resourceTree.render(b);
     }
 
     // Inventory methods

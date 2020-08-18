@@ -4,8 +4,16 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create minerals such as Copper and Tin
-	- These can not be mined by hand, but a Drill can be placed on them to mine them.
+- Create all resource sprites
+
+- Make a way to create resources when they are selected and put them into the inventory
+
+- Clean up the look / GUI of the blueprint system. It changes now that resources are added.
+
+- Change trees and stone to drop bark and rocks
+
+For later on
+------------
 
 - Create the drill and pipe system.
 	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
@@ -19,21 +27,12 @@ Important now
     - These are Creatures in the Entity package.
     - Simple AI must be created.
 
-For later on
-------------
+- Create a save / load system that saves the world file and the inventory
 
-- Create different textures of trees to render at different times of the day
+- Create main menu / world creator / settings state
 
 - Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
 
-- Create more tiles! (See Tiles list in docs)
-
-- Create more items! (See Items list in docs)
-
-- Create worlds for players to try and beat
-
 - Make more pleasing backgrounds, and try and use the layer system to parallax them when moving
 
-- Check out how this can become an iOS / Android app
-
-- Add more to this list.
+- Release for alpha on Itch and Steam, and make the github repo public. Keep the game open source.

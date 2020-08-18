@@ -87,6 +87,28 @@ public class Text {
         }
     }
 
+    public static void draw(Batch b, String message, int x, int y, int size, boolean center) {
+
+        if(runtimeMessages.contains(message)) {
+            int index = runtimeMessages.indexOf(message);
+            for(int i = 0; i < message.length(); i++) {
+                if(center) b.draw(allProcessedMessages.get(index)[i], (x + (i * (int)(size + (1 * 1.12f)))) - ((message.length() * size) / 2f), y, size, size);
+                else b.draw(allProcessedMessages.get(index)[i], x + (i * (int)(size + (1 * 1.12f))), y, size, size);
+            }
+            return;
+        }
+
+        TextureRegion[] phrase = process(message);
+
+        recordMessage(message, phrase);
+
+        for(int i = 0; i < message.length(); i++) {
+            if(center) b.draw(phrase[i], (x + (i * (int)(size + (1 * 1.12f)))) - ((message.length() * size) / 2f),
+                    y, size, size);
+            else b.draw(phrase[i], x + (i * (int)(size + (1 * 1.12f))), y, size, size);
+        }
+    }
+
     private static void recordMessage(String mes, TextureRegion[] pm) {
         runtimeMessages.add(mes);
         allProcessedMessages.add(pm);

@@ -21,7 +21,7 @@ public class Assets {
     // GUI
     public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding;
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
-            itemRep, blueprintGUI;
+            itemRep, blueprintGUI, nodeConnector;
 
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
@@ -105,6 +105,7 @@ public class Assets {
         backBuilding[0] = ss.crop(11, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
         backBuilding[1] = ss.crop(12, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
         blueprintGUI = ss.crop(0, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 3);
+        nodeConnector = ss.crop(1, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

@@ -11,8 +11,8 @@ import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.PerlinNoise;
 
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 
 public class WorldGeneration {
@@ -26,8 +26,8 @@ public class WorldGeneration {
 
         // TODO: This method causes the desktop version not to run after being built by gradle.
 
-        String path = "worlds/" + name + ".txt";
-        FileHandle world = Gdx.files.internal(path);
+        String path = "worlds/" + name + ".dw";
+        FileHandle world = Gdx.files.local(path);
 
         try {
             if(world.exists()) {
@@ -51,18 +51,18 @@ public class WorldGeneration {
             }
             // End Terrain Generation
 
-            FileWriter worldWriter = new FileWriter(world.path());
-            worldWriter.write(width + " " + height + "\n");
+            Writer w = world.writer(true);
+            w.write(width + " " + height + "\n");
 
             for(int y = 0; y < height; y++) {
                 for(int x = 0; x < width; x++) {
                     int num = tiles[x][height - y - 1];
-                    worldWriter.write(num + " ");
+                    w.write(num + " ");
                 }
-                worldWriter.write("\n");
+                w.write("\n");
             }
 
-            worldWriter.close();
+            w.close();
 
         } catch (IOException e) {
             e.printStackTrace();

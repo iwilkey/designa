@@ -8,6 +8,17 @@ public class ItemType {
     }
     public String getType() { return this.type; }
 
+    // Resource
+    public static class Resource extends ItemType {
+        protected String baseResource;
+        protected String name;
+        public Resource(String baseResource, String type) {
+            super(type);
+        }
+        public String getName() { return name; }
+        public String getBaseResource() { return baseResource; }
+    }
+
     // PlaceableBlock
     public static class PlaceableBlock extends ItemType {
         private final int tileID;

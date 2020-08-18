@@ -152,13 +152,42 @@ public class InputHandler {
                 break;
 
             case iOS:
+                Gdx.input.setInputProcessor(new InputAdapter() {
+
+                });
                 break;
 
             case Android:
+                Gdx.input.setInputProcessor(new InputAdapter() {
+
+                });
                 break;
 
         }
     }
+
+    public static void initTechTreeStateInput() {
+        switch(Gdx.app.getType()) {
+            case Desktop:
+                Gdx.input.setInputProcessor(new InputAdapter() {
+
+                });
+                break;
+
+            case iOS:
+                Gdx.input.setInputProcessor(new InputAdapter() {
+
+                });
+                break;
+
+            case Android:
+                Gdx.input.setInputProcessor(new InputAdapter() {
+
+                });
+                break;
+        }
+    }
+
 
     public void tick() {
        switch(Gdx.app.getType()) {
@@ -176,25 +205,21 @@ public class InputHandler {
                        jp[i] = true;
                    }
                }
-
                if(ccl && !lmbd) {
                    ccl = false;
                } else if (jcl) {
                    ccl = true;
                    jcl = false;
                }
-
                if(!ccl && lmbd) {
                    jcl = true;
                }
-
                if(ccr && !rmbd) {
                    ccr = false;
                } else if (jcr) {
                    ccr = true;
                    jcr = false;
                }
-
                if(!ccr && rmbd) {
                    jcr = true;
                }

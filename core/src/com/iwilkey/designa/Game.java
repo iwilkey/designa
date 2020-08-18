@@ -7,65 +7,39 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
-import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
-import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.State;
-import com.iwilkey.designa.tiles.Tile;
-import com.iwilkey.designa.world.World;
 
 public class Game extends ApplicationAdapter {
 
-	// Define dimensions
 	public static int w;
 	public static int h;
-
-	// GameBuffer
 	private GameBuffer gb;
-
-	// Graphics
 	SpriteBatch gameBatch;
 	SpriteBatch guiBatch;
-
-	// States
 	private State gameState;
-
-	// Camera
 	private Camera camera;
-
-	// Input
 	private InputHandler input;
 
 	@Override
 	public void create () {
-		// Init graphics batch
-		gameBatch = new SpriteBatch();
-		guiBatch = new SpriteBatch();
-
-		// Init assets
-		Assets.init();
-
-		// Game Buffer
-		gb = new GameBuffer(this);
-
-		// Input
-		input = new InputHandler();
-
-		// Init states
-		gameState = new GameState(gb);
-
-		// Init the starting state
-		State.setState(gameState);
-		State.getCurrentState().start();
-
-		// Init dimensions
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
 
-		// Init camera
-		camera = new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
-				LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE);
+		Assets.init();
+
+		gameBatch = new SpriteBatch();
+		guiBatch = new SpriteBatch();
+
+		gb = new GameBuffer(this);
+
+		input = new InputHandler();
+
+		gameState = new GameState(gb);
+
+		State.setState(gameState);
+		State.getCurrentState().start();
 	}
 
 	private void tick() {
@@ -94,7 +68,6 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		// Render game
 		gameBatch.begin();
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().render(gameBatch);
@@ -102,7 +75,6 @@ public class Game extends ApplicationAdapter {
 		gameBatch.setTransformMatrix(Camera.mat);
 		gameBatch.end();
 
-		// Render GUI
 		guiBatch.begin();
 		if(State.getCurrentState() != null) {
 			State.getCurrentState().onGUI(guiBatch);
@@ -126,5 +98,13 @@ public class Game extends ApplicationAdapter {
 		}
 	}
 
-	public Camera getCamera() { return camera; }
+	public Camera getCamera() {
+		if(State.getCurrentState() == gameState) return camera;
+		else return null;
+	}
+
+	public void setCamera(Camera camera) {
+		if(State.getCurrentState() == gameState) this.camera = camera;
+		else this.camera = null;
+	}
 }

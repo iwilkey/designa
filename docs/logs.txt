@@ -200,5 +200,17 @@ Date || Build ||
     - Created ItemType Weapon and Gun to create LaserGun class that can shoot and reload
     - Restructured ItemType class to encapsulate static ItemTypes of inherited type
 
+8/18/2020 || pa_1.0.21 ||
+    - Gradle build runs with no problems, Designa can run as a standalone .jar file now.
+    - Added Resource Tree GUI to show the interactive trees for each resource base
+    - There are now siz resource bases that all items will be crafted from
+    - Nodes will now render dim when they aren't available
+    - To make something in the blueprint section, you must first create all required resources in the resource
+        tree
+    - You can use the blueprints to create actual in-game items that can be used. The resources can't be placed
+        or used on their own in the game world, only the base ones that are found can be picked up
+    - Created a Resource item type
+    - Updated todo list
+
 
 

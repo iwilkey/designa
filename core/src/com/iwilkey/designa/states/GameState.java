@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 import com.iwilkey.designa.world.WorldGeneration;
 
@@ -17,6 +20,8 @@ public class GameState extends State {
         this.gb = gb;
         world = new World(gb, WorldGeneration.GenerateTerrain("World" + MathUtils.random(10, 100000), 300, 100));
         gb.setWorld(world);
+        gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
+                LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));
     }
 
     @Override
@@ -41,8 +46,6 @@ public class GameState extends State {
     }
 
     @Override
-    public void dispose() {
-
-    }
+    public void dispose() {}
 
 }
