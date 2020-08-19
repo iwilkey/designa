@@ -12,11 +12,16 @@ public class ItemType {
     public static class Resource extends ItemType {
         protected String baseResource;
         protected String name;
-        public Resource(String baseResource, String type) {
-            super(type);
+        protected ItemRecipe itemRecipe;
+        public Resource(String baseResource, String name, ItemRecipe ir) {
+            super("Resource");
+            this.name = name;
+            this.baseResource = baseResource;
+            this.itemRecipe = ir;
         }
         public String getName() { return name; }
         public String getBaseResource() { return baseResource; }
+        public ItemRecipe getItemRecipe() { return itemRecipe; }
     }
 
     // PlaceableBlock

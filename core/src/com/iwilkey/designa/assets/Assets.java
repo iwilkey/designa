@@ -28,6 +28,9 @@ public class Assets {
         oakWood, leaf, stone, torchThumb;
     public static TextureRegion[] torch;
 
+    // Resources
+    public static TextureRegion[] wood, rock;
+
     // Environment
     public static TextureRegion[] trees;
 
@@ -121,6 +124,27 @@ public class Assets {
         torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
         torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
         torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Resources
+            // Wood
+            wood = new TextureRegion[7];
+            wood[0] = ss.crop(0, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[1] = ss.crop(1, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[2] = ss.crop(2, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[3] = ss.crop(3, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[4] = ss.crop(4, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[5] = ss.crop(5, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            wood[6] = ss.crop(6, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+            // Stone
+            rock = new TextureRegion[7];
+            rock[0] = ss.crop(0, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[1] = ss.crop(1, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[2] = ss.crop(2, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[3] = ss.crop(3, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[4] = ss.crop(4, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[5] = ss.crop(5, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            rock[6] = ss.crop(6, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Environment
         trees = new TextureRegion[3];

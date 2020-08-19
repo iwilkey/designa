@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.items.ItemRecipe;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -21,9 +23,12 @@ public class VerticalTree {
         public int x, y, w, h;
         public Rectangle collider;
 
-        public Node(String label, int level) {
+        private Item item;
+
+        public Node(String label, int level, Item item) {
             this.label = label;
             this.level = level;
+            this.item = item;
             isAvailable = false;
             isSelected = false;
             w = label.length() * 14;
@@ -41,7 +46,7 @@ public class VerticalTree {
 
         public void updateCollider(int x, int y) {
             int dif = Math.abs(label.length() * 9 - w);
-            collider.x = x - (dif / 2); collider.y = y - ((h / 2) - (h / 5));
+            collider.x = x - (dif / 2) - 2; collider.y = y - ((h / 2) - (h / 5));
         }
     }
 
@@ -120,18 +125,18 @@ public class VerticalTree {
         nodes.add(node);
     }
 
-    public void createNode(String label, int level) {
-        Node node = new Node(label, level);
+    public void createNode(String label, int level, Item item) {
+        Node node = new Node(label, level, item);
         nodes.add(node);
     }
 
-    public void createNode(String label) {
-        Node node = new Node(label, nodes.size());
+    public void createNode(String label, Item item) {
+        Node node = new Node(label, nodes.size(), item);
         nodes.add(node);
     }
 
-    public void createNode(String label, boolean available) {
-        Node node = new Node(label, nodes.size());
+    public void createNode(String label, Item item, boolean available) {
+        Node node = new Node(label, nodes.size(), item);
         node.setAvailable(available);
         nodes.add(node);
     }

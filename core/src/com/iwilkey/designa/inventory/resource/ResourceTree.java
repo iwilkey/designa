@@ -8,6 +8,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.items.Item;
 
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -53,22 +54,24 @@ public class ResourceTree {
 
         trees = new VerticalTree[6];
         trees[0] = new VerticalTree("Wood");
-            trees[0].createNode("Bark", true);
-            trees[0].createNode("Sticks");
-            trees[0].createNode("Plywood");
-            trees[0].createNode("Hardwood");
-            trees[0].createNode("Reinforced Hardwood");
-            trees[0].createNode("Strongwood");
-            trees[0].createNode("Reinforced Strongwood");
+
+        // TODO: Make items for all these resources
+            trees[0].createNode("Bark", Item.barkResource, true);
+            trees[0].createNode("Sticks", Item.stickResource);
+            trees[0].createNode("Plywood", Item.plywoodResource);
+            trees[0].createNode("Hardwood", Item.hardwoodResource);
+            trees[0].createNode("Reinforced Hardwood", Item.reinforcedHardwoodResource);
+            trees[0].createNode("Strongwood", Item.strongwoodResource);
+            trees[0].createNode("Reinforced Strongwood", Item.reinforcedStrongwoodResource);
 
         trees[1] = new VerticalTree("Stone");
-            trees[1].createNode("Rocks", true);
-            trees[1].createNode("Gravel");
-            trees[1].createNode("Weak Concrete");
-            trees[1].createNode("Reinforced Concrete");
-            trees[1].createNode("Condensed Slab");
-            trees[1].createNode("Strongstone");
-            trees[1].createNode("Reinforced Strongstone");
+            trees[1].createNode("Rocks", Item.rockResource, true);
+            trees[1].createNode("Gravel", Item.gravelResource);
+            trees[1].createNode("Weak Concrete", Item.concreteResource);
+            trees[1].createNode("Reinforced Concrete", Item.reinforcedConcreteResource);
+            trees[1].createNode("Condensed Slab", Item.condensedSlabResource);
+            trees[1].createNode("Strongstone", Item.strongstoneResource);
+            trees[1].createNode("Reinforced Strongstone", Item.reinforcedStrongstoneResource);
 
         trees[2] = new VerticalTree("Copper");
             trees[2].createNode("Copper Scrap", true);
@@ -148,22 +151,22 @@ public class ResourceTree {
     private void renderAvailableNodes(Batch b, int resource) {
         switch(resource) {
             case 0:
-                trees[0].renderAvailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[0].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 1:
-                trees[1].renderAvailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[1].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 2:
-                trees[2].renderAvailable(b, x, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[2].renderAvailable(b, x - 4, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 3:
-                trees[3].renderAvailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[3].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 4:
-                trees[4].renderAvailable(b, x, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[4].renderAvailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 5:
-                trees[5].renderAvailable(b, x, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[5].renderAvailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
         }
     }
@@ -171,22 +174,22 @@ public class ResourceTree {
     private void renderUnavailableNodes(Batch b, int resource) {
         switch(resource) {
             case 0:
-                trees[0].renderUnavailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[0].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 1:
-                trees[1].renderUnavailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[1].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 2:
-                trees[2].renderUnavailable(b, x, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[2].renderUnavailable(b, x - 4, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 3:
-                trees[3].renderUnavailable(b, x, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[3].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 4:
-                trees[4].renderUnavailable(b, x, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[4].renderUnavailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 5:
-                trees[5].renderUnavailable(b, x, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[5].renderUnavailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
         }
     }
