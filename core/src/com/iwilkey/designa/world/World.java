@@ -52,7 +52,8 @@ public class World {
         loadWorld(path);
 
         entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
-
+        entityHandler.getPlayer().getInventory().addItem(Assets.barkResource);
+        entityHandler.getPlayer().getInventory().addItem(Assets.barkResource);
     }
 
     public void tick() {

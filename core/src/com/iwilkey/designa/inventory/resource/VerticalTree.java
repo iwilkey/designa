@@ -3,9 +3,12 @@ package com.iwilkey.designa.inventory.resource;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
@@ -13,6 +16,7 @@ import com.iwilkey.designa.utils.Utils;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VerticalTree {
@@ -21,6 +25,7 @@ public class VerticalTree {
         private String label;
         private int level;
         private boolean isAvailable;
+        private boolean canCreate = false;
 
         public boolean isSelected;
         public int x, y, w, h;
@@ -53,14 +58,19 @@ public class VerticalTree {
         }
     }
 
+    private Inventory inventory;
     private String name;
     public ArrayList<Node> nodes;
     private TextureRegion nodeConnector;
+    private Rectangle createCollider;
 
-    public VerticalTree(String name) {
+    public VerticalTree(String name, Inventory inventory) {
         this.name = name;
         this.nodes = new ArrayList<>();
+        this.inventory = inventory;
         nodeConnector = Assets.nodeConnector;
+
+        createCollider = new Rectangle(Inventory.BLUEPRINT_X - 344, Inventory.BLUEPRINT_Y - 360 - 116, 82, 42);;
     }
 
     public void tick() {
@@ -74,7 +84,15 @@ public class VerticalTree {
                 if(rect.intersects(node.collider)) {
                     clearSelected();
                     node.isSelected = true;
+                    checkResources(node);
                     Assets.invClick.play(0.35f);
+                }
+
+                if(rect.intersects(createCollider) && node.canCreate) {
+                    create(node);
+                    Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
+                    for(Node n : nodes) checkResources(n);
+                    break;
                 }
             }
         }
@@ -114,6 +132,13 @@ public class VerticalTree {
                 checkNodeCords(node, xx, yy);
                 Text.draw(b, node.getLabel(), xx, yy, 8);
                 if(node.getLevel() + 1 < nodes.size()) b.draw(nodeConnector, x + (w / 2f), yy + 12, 8, 32);
+            }
+
+            if(node.canCreate && node.isSelected) {
+                if(node.getLevel() > 0) {
+                    b.draw(Assets.inventorySlot, createCollider.x, createCollider.y, createCollider.width, createCollider.height);
+                    Text.draw(b, "Create", createCollider.x + 6, createCollider.y + 14, 11);
+                }
             }
         }
     }
@@ -167,6 +192,81 @@ public class VerticalTree {
         }
     }
 
+    public void checkResources(Node node) {
+
+        InventorySlot[][] slots = Inventory.slots;
+        HashMap<String, Integer> invTally = new HashMap<String, Integer>();
+
+        try {
+            ((ItemType.Resource) node.item.getItemType()).getItemRecipe().getRecipe();
+        } catch (NullPointerException e) { return; }
+
+        for(Map.Entry<Item, String> entry : ((ItemType.Resource) node.item.getItemType()).getItemRecipe().getRecipe().entrySet()) {
+
+            for(int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
+                    if (slots[x][y] != null) {
+                        try {
+                            if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
+                                if (!(invTally.containsKey(slots[x][y].getItem().getName()))) {
+                                    invTally.put(slots[x][y].getItem().getName(), slots[x][y].itemCount);
+                                } else {
+                                    invTally.put(slots[x][y].getItem().getName(),
+                                            invTally.get(slots[x][y].getItem().getName()) + slots[x][y].itemCount);
+                                }
+                            }
+                        } catch (NullPointerException ignored) {}
+                    }
+                }
+            }
+
+        }
+
+        int checkout = 0;
+        for(Map.Entry<String, Integer> invTal : invTally.entrySet()) {
+            for(Map.Entry<Item, String> recipe : ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().entrySet()) {
+                if(invTal.getKey().equals(recipe.getKey().getName())) {
+                    if(invTal.getValue() >= Utils.parseInt(recipe.getValue())) {
+                        checkout++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        node.canCreate = checkout >= ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().size();
+        node.isAvailable = node.canCreate;
+        System.out.println(node.getLabel() + " checked and it's " + node.canCreate);
+
+    }
+
+    public void create(Node node) {
+
+        // Not quite.
+
+        InventorySlot[][] slots = Inventory.slots;
+
+        try {
+            ((ItemType.Resource) node.item.getItemType()).getItemRecipe().getRecipe();
+        } catch (NullPointerException e) { return; }
+
+        for (Map.Entry<Item, String> entry : ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().entrySet()) {
+            for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
+                    if (slots[x][y] != null) {
+                        try {
+                            if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
+                                slots[x][y].itemCount -= Math.min(slots[x][y].itemCount, Utils.parseInt(entry.getValue()));
+                            }
+                        } catch (NullPointerException ignored) {}
+                    }
+                }
+            }
+        }
+
+        inventory.addItem(node.item);
+    }
+
     private void checkNodeCords(Node node, int x, int y) {
         if(node.x != x && node.y != y) {
             node.x = x; node.y = y;
@@ -202,15 +302,4 @@ public class VerticalTree {
         return null;
     }
 
-    public void setNodeLabel(int index, String label) {
-        for(int i = 0; i < nodes.size(); i++) {
-            if(i == index) nodes.get(i).setLabel(label);
-        }
-    }
-
-    public void setNodeLevel(int index, int lvl) {
-        for(int i = 0; i < nodes.size(); i++) {
-            if(i == index) nodes.get(i).setLevel(lvl);
-        }
-    }
 }

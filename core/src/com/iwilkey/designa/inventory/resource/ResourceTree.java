@@ -8,7 +8,6 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
-import com.iwilkey.designa.items.Item;
 
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -24,7 +23,7 @@ public class ResourceTree {
     private final int buttonW = 64, buttonH = 32;
     private final Rectangle[] buttonColliders;
 
-    private final VerticalTree[] trees;
+    public static VerticalTree[] trees;
 
     public ResourceTree(Inventory inv) {
         this.inventory = inv;
@@ -53,7 +52,7 @@ public class ResourceTree {
         resourceNames[5] = "Carbon";
 
         trees = new VerticalTree[6];
-        trees[0] = new VerticalTree("Wood");
+        trees[0] = new VerticalTree("Wood", inventory);
 
         // TODO: Make items for all these resources
             trees[0].createNode("Bark", Assets.barkResource, true);
@@ -64,7 +63,7 @@ public class ResourceTree {
             trees[0].createNode("Strongwood", Assets.strongwoodResource);
             trees[0].createNode("Reinforced Strongwood", Assets.reinforcedStrongwoodResource);
 
-        trees[1] = new VerticalTree("Stone");
+        trees[1] = new VerticalTree("Stone", inventory);
             trees[1].createNode("Rocks", Assets.rockResource, true);
             trees[1].createNode("Gravel", Assets.gravelResource);
             trees[1].createNode("Weak Concrete", Assets.concreteResource);
@@ -73,14 +72,14 @@ public class ResourceTree {
             trees[1].createNode("Strongstone", Assets.strongstoneResource);
             trees[1].createNode("Reinforced Strongstone", Assets.reinforcedStrongstoneResource);
 
-        trees[2] = new VerticalTree("Copper");
+        trees[2] = new VerticalTree("Copper", inventory);
             trees[2].createNode("Copper Scrap", Assets.copperScrapResource, true);
             trees[2].createNode("Recycled Copper", Assets.recycledCopperResource);
             trees[2].createNode("Bluestone", Assets.bluestoneResource);
             trees[2].createNode("Reinforced Bluestone", Assets.reinforcedBluestoneResource);
             trees[2].createNode("Roman Vitriol", Assets.romanVitriolResource);
 
-        trees[3] = new VerticalTree("Silver");
+        trees[3] = new VerticalTree("Silver", inventory);
             trees[3].createNode("Silver Scrap", Assets.silverScrapResource, true);
             trees[3].createNode("Recycled Silver", Assets.recycledSilverResource);
             trees[3].createNode("Coin Silver", Assets.coinSilverResource);
@@ -89,7 +88,7 @@ public class ResourceTree {
             trees[3].createNode("Fine Silver", Assets.fineSilverResource);
             trees[3].createNode("Reinforced Fine Silver", Assets.reinforcedFineSilverResource);
 
-        trees[4] = new VerticalTree("Iron");
+        trees[4] = new VerticalTree("Iron", inventory);
             trees[4].createNode("Iron Scrap", Assets.ironScrapResource, true);
             trees[4].createNode("Recycled Iron", Assets.recycledIronResource);
             trees[4].createNode("Cast Iron", Assets.castIronResource);
@@ -97,7 +96,7 @@ public class ResourceTree {
             trees[4].createNode("Steel", Assets.steelResource);
             trees[4].createNode("Reinforced Steel", Assets.reinforcedSteelResource);
 
-        trees[5] = new VerticalTree("Carbon");
+        trees[5] = new VerticalTree("Carbon", inventory);
             trees[5].createNode("Carbon Sample", Assets.carbonSampleResource,true);
             trees[5].createNode("Graphite", Assets.graphiteResource);
             trees[5].createNode("Compressed Graphite", Assets.compressedGraphite);
@@ -114,10 +113,12 @@ public class ResourceTree {
 
     private void input() {
         if(InputHandler.leftMouseButtonDown) {
+
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
             for(int i = 0; i < buttonColliders.length; i++) {
                 if(rect.intersects(buttonColliders[i])) chooseResource(i);
             }
+
         }
     }
 

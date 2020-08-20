@@ -19,6 +19,7 @@ public class InventorySlot {
     private Item item;
     public int itemCount;
     public boolean isSelected = false, itemUp = false;
+    public boolean mouseOver = false;
 
     public InventorySlot(Inventory i, int num) {
         this.inventory = i;
@@ -63,6 +64,12 @@ public class InventorySlot {
 
         if(itemUp) {
             b.draw(item.getTexture(), InputHandler.cursorX, InputHandler.cursorY, TEXTURE_SIZE, TEXTURE_SIZE);
+        }
+
+        if(mouseOver) {
+            try {
+                Text.draw(b, item.getName(), x + ((SLOT_WIDTH / 2) - ((item.getName().length() * 11) / 2)) + 10, y, 11);
+            } catch (NullPointerException ignored) {}
         }
 
     }

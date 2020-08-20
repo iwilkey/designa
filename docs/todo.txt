@@ -4,7 +4,7 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Make a way to create resources when they are selected and put them into the inventory
+- Fix resource crafting
 
 - Clean up the look / GUI of the blueprint system. It changes now that resources are added.
 

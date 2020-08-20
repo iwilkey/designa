@@ -225,3 +225,6 @@ Date || Build ||
     - Created a way to see the recipe of a resource on the resource tree
     - Trees now drop bark
     - Stone now drops rocks
+    - You can now create resources with other resources and add them into the inventory to make blueprint items with
+        TODO: Fix it. It's close, but right now it's not creating the node selected, instead it's just traveling up
+        TODO: the tree automatically.

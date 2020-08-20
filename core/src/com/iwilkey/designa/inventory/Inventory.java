@@ -8,10 +8,12 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.inventory.blueprints.Blueprints;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.resource.VerticalTree;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.inventory.resource.ResourceTree;
 
 import java.awt.Rectangle;
+import java.util.Arrays;
 
 public class Inventory {
 
@@ -21,7 +23,7 @@ public class Inventory {
     private Blueprints blueprints;
     private ResourceTree resourceTree;
     public static boolean active = false;
-    public InventorySlot[][] slots;
+    public static InventorySlot[][] slots;
     public final int invX, invY, invWidth, invHeight;
     public int[][] selector;
     public boolean itemUp = false;
@@ -68,6 +70,14 @@ public class Inventory {
             if(!active) Assets.openInv[MathUtils.random(0,2)].play(0.3f);
             else Assets.closeInv[MathUtils.random(0,2)].play(0.3f);
 
+            // If active is about to turn true
+            if(!active) {
+                for(VerticalTree tree : ResourceTree.trees) {
+                    tree.tick();
+                    for(VerticalTree.Node node : tree.nodes) tree.checkResources(node);
+                }
+            }
+
             active = !active;
         }
         InputHandler.inventoryRequest = false;
@@ -87,8 +97,28 @@ public class Inventory {
         input();
     }
 
+    private void mouseNotOver() {
+        for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                slots[x][y].mouseOver = false;
+            }
+        }
+    }
+
     private void input() {
         if(!itemUp) {
+            mouseNotOver();
+            Rectangle r = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+            for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                    if (slots[x][y].getCollider().intersects(r)) {
+                        mouseNotOver();
+                        slots[x][y].mouseOver = true;
+                        break;
+                    }
+                }
+            }
+
             if (InputHandler.leftMouseButtonDown) {
                 clearSelector();
                 Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
@@ -189,10 +219,12 @@ public class Inventory {
                                 // Otherwise, the new slot doesn't have the same item, but is not null. In this case, we need
                                     // to swap the two like regular.
                                 } else {
-                                    is.putItem(slots[x][y].getItem(), slots[x][y].itemCount);
-                                    slots[x][y].putItem(i, count);
-                                    itemUp = false;
-                                    selector[x][y] = 1;
+                                    try {
+                                        is.putItem(slots[x][y].getItem(), slots[x][y].itemCount);
+                                        slots[x][y].putItem(i, count);
+                                        itemUp = false;
+                                        selector[x][y] = 1;
+                                    } catch (NullPointerException ignored) {}
                                     return;
                                 }
 

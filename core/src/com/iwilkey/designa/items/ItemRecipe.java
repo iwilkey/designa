@@ -262,7 +262,7 @@ public abstract class ItemRecipe {
             public TorchRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Assets.oakWoodItem, 4);
+                add(Assets.stickResource, 1);
             }
         }
 
