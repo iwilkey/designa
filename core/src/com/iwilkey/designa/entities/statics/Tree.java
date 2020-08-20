@@ -62,7 +62,7 @@ public class Tree extends StaticEntity {
             if (MathUtils.random(0, 2) == 2) {
                 int yy = MathUtils.random(50, 200);
                 int xx = MathUtils.random(-4, 26);
-                World.getItemHandler().addItem(Item.oakWoodItem.createNew((int) x + 16 + xx, (int) y + yy));
+                World.getItemHandler().addItem(Assets.barkResource.createNew((int) x + 16 + xx, (int) y + yy));
             }
 
             Assets.treeHit[MathUtils.random(0, 2)].play();
@@ -83,7 +83,7 @@ public class Tree extends StaticEntity {
             for(int i = 0; i < spawnAmount; i++) {
                 int yy = MathUtils.random(50, 200);
                 int xx = MathUtils.random(-4, 26);
-                World.getItemHandler().addItem(Item.oakWoodItem.createNew((int)x + 16 + xx, (int)y + yy));
+                World.getItemHandler().addItem(Assets.barkResource.createNew((int)x + 16 + xx, (int)y + yy));
             }
         }
     }

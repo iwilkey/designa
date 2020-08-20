@@ -16,6 +16,7 @@ import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.tiles.tiletypes.AirTile;
 import com.iwilkey.designa.tiles.tiletypes.DirtTile;
 import com.iwilkey.designa.tiles.tiletypes.GrassTile;
+import com.iwilkey.designa.tiles.tiletypes.StoneTile;
 import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
@@ -199,8 +200,13 @@ public class BuildingHandler {
                     gb.getWorld().getLightManager().removeLight(x, y);
                 }
 
-                World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
-                        pointerOnTileY() * Tile.TILE_SIZE + 8));
+                if(!(tile instanceof StoneTile)) {
+                    World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                            pointerOnTileY() * Tile.TILE_SIZE + 8));
+                } else {
+                    World.getItemHandler().addItem(Assets.rockResource.createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                            pointerOnTileY() * Tile.TILE_SIZE + 8));
+                }
 
                 World.tiles[x][(World.h - y) - 1] = 0;
                 gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);

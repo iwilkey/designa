@@ -4,13 +4,9 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create all resource sprites
-
 - Make a way to create resources when they are selected and put them into the inventory
 
 - Clean up the look / GUI of the blueprint system. It changes now that resources are added.
-
-- Change trees and stone to drop bark and rocks
 
 For later on
 ------------

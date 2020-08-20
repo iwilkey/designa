@@ -56,54 +56,54 @@ public class ResourceTree {
         trees[0] = new VerticalTree("Wood");
 
         // TODO: Make items for all these resources
-            trees[0].createNode("Bark", Item.barkResource, true);
-            trees[0].createNode("Sticks", Item.stickResource);
-            trees[0].createNode("Plywood", Item.plywoodResource);
-            trees[0].createNode("Hardwood", Item.hardwoodResource);
-            trees[0].createNode("Reinforced Hardwood", Item.reinforcedHardwoodResource);
-            trees[0].createNode("Strongwood", Item.strongwoodResource);
-            trees[0].createNode("Reinforced Strongwood", Item.reinforcedStrongwoodResource);
+            trees[0].createNode("Bark", Assets.barkResource, true);
+            trees[0].createNode("Sticks", Assets.stickResource);
+            trees[0].createNode("Plywood", Assets.plywoodResource);
+            trees[0].createNode("Hardwood", Assets.hardwoodResource);
+            trees[0].createNode("Reinforced Hardwood", Assets.reinforcedHardwoodResource);
+            trees[0].createNode("Strongwood", Assets.strongwoodResource);
+            trees[0].createNode("Reinforced Strongwood", Assets.reinforcedStrongwoodResource);
 
         trees[1] = new VerticalTree("Stone");
-            trees[1].createNode("Rocks", Item.rockResource, true);
-            trees[1].createNode("Gravel", Item.gravelResource);
-            trees[1].createNode("Weak Concrete", Item.concreteResource);
-            trees[1].createNode("Reinforced Concrete", Item.reinforcedConcreteResource);
-            trees[1].createNode("Condensed Slab", Item.condensedSlabResource);
-            trees[1].createNode("Strongstone", Item.strongstoneResource);
-            trees[1].createNode("Reinforced Strongstone", Item.reinforcedStrongstoneResource);
+            trees[1].createNode("Rocks", Assets.rockResource, true);
+            trees[1].createNode("Gravel", Assets.gravelResource);
+            trees[1].createNode("Weak Concrete", Assets.concreteResource);
+            trees[1].createNode("Reinforced Concrete", Assets.reinforcedConcreteResource);
+            trees[1].createNode("Condensed Slab", Assets.condensedSlabResource);
+            trees[1].createNode("Strongstone", Assets.strongstoneResource);
+            trees[1].createNode("Reinforced Strongstone", Assets.reinforcedStrongstoneResource);
 
         trees[2] = new VerticalTree("Copper");
-            trees[2].createNode("Copper Scrap", true);
-            trees[2].createNode("Recycled Copper");
-            trees[2].createNode("Bluestone");
-            trees[2].createNode("Reinforced Bluestone");
-            trees[2].createNode("Roman Vitriol");
+            trees[2].createNode("Copper Scrap", Assets.copperScrapResource, true);
+            trees[2].createNode("Recycled Copper", Assets.recycledCopperResource);
+            trees[2].createNode("Bluestone", Assets.bluestoneResource);
+            trees[2].createNode("Reinforced Bluestone", Assets.reinforcedBluestoneResource);
+            trees[2].createNode("Roman Vitriol", Assets.romanVitriolResource);
 
         trees[3] = new VerticalTree("Silver");
-            trees[3].createNode("Silver Scrap", true);
-            trees[3].createNode("Recycled Silver");
-            trees[3].createNode("Coin Silver");
-            trees[3].createNode("Sterling Silver");
-            trees[3].createNode("Reinforced Sterling Silver");
-            trees[3].createNode("Fine Silver");
-            trees[3].createNode("Reinforced Fine Silver");
+            trees[3].createNode("Silver Scrap", Assets.silverScrapResource, true);
+            trees[3].createNode("Recycled Silver", Assets.recycledSilverResource);
+            trees[3].createNode("Coin Silver", Assets.coinSilverResource);
+            trees[3].createNode("Sterling Silver", Assets.sterlingSilverResource);
+            trees[3].createNode("Reinforced Sterling Silver", Assets.reinforcedSterlingSilverResource);
+            trees[3].createNode("Fine Silver", Assets.fineSilverResource);
+            trees[3].createNode("Reinforced Fine Silver", Assets.reinforcedFineSilverResource);
 
         trees[4] = new VerticalTree("Iron");
-            trees[4].createNode("Iron Scrap", true);
-            trees[4].createNode("Recycled Iron");
-            trees[4].createNode("Cast Iron");
-            trees[4].createNode("Reinforced Cast Iron");
-            trees[4].createNode("Steel");
-            trees[4].createNode("Reinforced Steel");
+            trees[4].createNode("Iron Scrap", Assets.ironScrapResource, true);
+            trees[4].createNode("Recycled Iron", Assets.recycledIronResource);
+            trees[4].createNode("Cast Iron", Assets.castIronResource);
+            trees[4].createNode("Reinforced Cast Iron", Assets.reinforcedCastIronResource);
+            trees[4].createNode("Steel", Assets.steelResource);
+            trees[4].createNode("Reinforced Steel", Assets.reinforcedSteelResource);
 
         trees[5] = new VerticalTree("Carbon");
-            trees[5].createNode("Carbon Sample", true);
-            trees[5].createNode("Graphite");
-            trees[5].createNode("Compressed Graphite");
-            trees[5].createNode("Weak Diamond");
-            trees[5].createNode("Diamond");
-            trees[5].createNode("Reinforced Diamond");
+            trees[5].createNode("Carbon Sample", Assets.carbonSampleResource,true);
+            trees[5].createNode("Graphite", Assets.graphiteResource);
+            trees[5].createNode("Compressed Graphite", Assets.compressedGraphite);
+            trees[5].createNode("Weak Diamond", Assets.weakDiamondResource);
+            trees[5].createNode("Diamond", Assets.diamondResource);
+            trees[5].createNode("Reinforced Diamond", Assets.reinforcedDiamondResource);
 
     }
 
@@ -149,47 +149,49 @@ public class ResourceTree {
     }
 
     private void renderAvailableNodes(Batch b, int resource) {
+        int yy = 196;
         switch(resource) {
             case 0:
-                trees[0].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[0].renderAvailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 1:
-                trees[1].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[1].renderAvailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 2:
-                trees[2].renderAvailable(b, x - 4, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[2].renderAvailable(b, x - 4, y + yy + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 3:
-                trees[3].renderAvailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[3].renderAvailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 4:
-                trees[4].renderAvailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[4].renderAvailable(b, x - 4, y + yy + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 5:
-                trees[5].renderAvailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[5].renderAvailable(b, x - 4, y + yy + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
         }
     }
 
     private void renderUnavailableNodes(Batch b, int resource) {
+        int yy = 196;
         switch(resource) {
             case 0:
-                trees[0].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[0].renderUnavailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 1:
-                trees[1].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[1].renderUnavailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 2:
-                trees[2].renderUnavailable(b, x - 4, y + 140 + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[2].renderUnavailable(b, x - 4, y + yy + 44, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 3:
-                trees[3].renderUnavailable(b, x - 4, y + 140, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[3].renderUnavailable(b, x - 4, y + yy, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 4:
-                trees[4].renderUnavailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[4].renderUnavailable(b, x - 4, y + yy + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
             case 5:
-                trees[5].renderUnavailable(b, x - 4, y + 140 + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
+                trees[5].renderUnavailable(b, x - 4, y + yy + 22, Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
                 break;
         }
     }

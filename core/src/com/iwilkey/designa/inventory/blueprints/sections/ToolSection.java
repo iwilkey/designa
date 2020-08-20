@@ -6,16 +6,14 @@ import com.iwilkey.designa.inventory.blueprints.Blueprints;
 import com.iwilkey.designa.inventory.blueprints.ItemBlueprint;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.inventory.blueprints.BlueprintSection;
-import com.iwilkey.designa.items.Item;
 
 public class ToolSection extends BlueprintSection {
     public ToolSection(Blueprints workbench, int x, int y) {
         super("Tools", workbench, x, y);
-        items.add(new ItemBlueprint(this, Item.torchItem, items.size() - 1));
-        items.add(new ItemBlueprint(this, Item.simpleDrill, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.torchItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.simpleDrillItem, items.size() - 1));
 
         items.get(0).isSelected = true;
-
     }
 
     @Override

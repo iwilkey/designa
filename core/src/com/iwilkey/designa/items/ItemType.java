@@ -13,15 +13,15 @@ public class ItemType {
         protected String baseResource;
         protected String name;
         protected ItemRecipe itemRecipe;
-        public Resource(String baseResource, String name, ItemRecipe ir) {
+        public Resource(String baseResource, String name) {
             super("Resource");
             this.name = name;
             this.baseResource = baseResource;
-            this.itemRecipe = ir;
         }
         public String getName() { return name; }
         public String getBaseResource() { return baseResource; }
         public ItemRecipe getItemRecipe() { return itemRecipe; }
+        public void setItemRecipe(ItemRecipe r) { this.itemRecipe = r; }
     }
 
     // PlaceableBlock
@@ -35,29 +35,29 @@ public class ItemType {
 
         // CreatableTile
         public static class CreatableTile extends PlaceableBlock {
-            protected ItemRecipe recipe;
-            public CreatableTile(int ID, ItemRecipe ir) {
+            protected ItemRecipe itemRecipe;
+            public CreatableTile(int ID) {
                 super(ID);
-                this.recipe = ir;
             }
-            public ItemRecipe getRecipe() { return recipe; }
+            public ItemRecipe getRecipe() { return itemRecipe; }
+            public void setItemRecipe(ItemRecipe r) { this.itemRecipe = r; }
         }
     }
 
     // CreatableItem
     public static class CreatableItem extends ItemType {
-        protected ItemRecipe recipe;
-        public CreatableItem(String type, ItemRecipe ir) {
+        protected ItemRecipe itemRecipe;
+        public CreatableItem(String type) {
             super(type);
-            this.recipe = ir;
         }
-        public ItemRecipe getRecipe() { return recipe; }
+        public ItemRecipe getRecipe() { return itemRecipe; }
+        public void setItemRecipe(ItemRecipe r) { this.itemRecipe = r; }
 
         // Tool
         public static class Tool extends CreatableItem {
             protected int level;
-            public Tool(int level, ItemRecipe recipe) {
-                super("Tool", recipe);
+            public Tool(int level) {
+                super("Tool");
                 this.level = level;
             }
             public int getLevel() { return level; }
@@ -66,8 +66,8 @@ public class ItemType {
             public static class Drill extends Tool {
                 protected int strength;
                 protected String name;
-                public Drill(String name, int strength, int level, ItemRecipe recipe) {
-                    super(level, recipe);
+                public Drill(String name, int strength, int level) {
+                    super(level);
                     this.strength = strength;
                     this.name = name;
                 }
@@ -79,8 +79,8 @@ public class ItemType {
         // Weapon
         public static class Weapon extends CreatableItem {
             protected String name;
-            public Weapon(String name, ItemRecipe ir) {
-                super("Weapon", ir);
+            public Weapon(String name) {
+                super("Weapon");
             }
             public String getName() { return name; }
 
@@ -88,8 +88,8 @@ public class ItemType {
             public static abstract class Gun extends Weapon {
                 protected int ammo;
                 protected int strength;
-                public Gun(String name, int strength, ItemRecipe ir) {
-                    super(name, ir);
+                public Gun(String name, int strength) {
+                    super(name);
                     reload();
                 }
                 public abstract void fire();

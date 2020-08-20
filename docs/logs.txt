@@ -211,6 +211,17 @@ Date || Build ||
         or used on their own in the game world, only the base ones that are found can be picked up
     - Created a Resource item type
     - Updated todo list
+    - Began defining some resource items into the game
+    - All wood and stone items all have items to match and item recipes that build off each other by 2^2
+        NOTE: As of p2, the game won't run because I still need to finish defining all resource items into the game.
 
+8/19/2020 || pa_1.0.22 ||
+    - Defined the rest of the resources in the game
+        NOTE: That sucked.
 
-
+8/20/2020 || pa_1.0.23 ||
+    - Reorganized static object instantiation into Assets class. Now all object instances used in the game are
+        loaded in the Assets class statically to be used.
+    - Created a way to see the recipe of a resource on the resource tree
+    - Trees now drop bark
+    - Stone now drops rocks

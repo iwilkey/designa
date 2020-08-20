@@ -8,9 +8,12 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
+import com.iwilkey.designa.items.ItemType;
+import com.iwilkey.designa.utils.Utils;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class VerticalTree {
 
@@ -23,7 +26,7 @@ public class VerticalTree {
         public int x, y, w, h;
         public Rectangle collider;
 
-        private Item item;
+        public Item item;
 
         public Node(String label, int level, Item item) {
             this.label = label;
@@ -85,6 +88,7 @@ public class VerticalTree {
         for(Node node : nodes) {
             if(node.isSelected) {
                 b.draw(Assets.selector, node.collider.x, node.collider.y, node.collider.width, node.collider.height);
+                renderRecipe(b, node, x, y, w, h);
             }
 
             if(!node.isAvailable()) {
@@ -101,6 +105,7 @@ public class VerticalTree {
         for(Node node : nodes) {
             if(node.isSelected) {
                 b.draw(Assets.selector, node.collider.x, node.collider.y, node.collider.width, node.collider.height);
+                renderRecipe(b, node, x, y, w, h);
             }
 
             if(node.isAvailable()) {
@@ -113,13 +118,61 @@ public class VerticalTree {
         }
     }
 
+    private void renderRecipe(Batch b, Node node, int x, int y, int w, int h) {
+        Text.draw(b, "Resources Required", x + 100, y - 40, 8);
+        ItemRecipe r = ((ItemType.Resource)(node.item.getItemType())).getItemRecipe();
+
+        if(r == null) {
+            if(node.item == Assets.barkResource) {
+                Text.draw(b, "Find bark by chopping at trees!", x + 100
+                        - (("Find bark by chopping at trees!".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+            else if (node.item == Assets.rockResource) {
+                Text.draw(b, "Find rocks underground!", x + 100
+                        - (("Find rocks underground!".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+            else if (node.item == Assets.copperScrapResource) {
+                Text.draw(b, "Find copper scrap by mining underground!", x + 100
+                        - (("Find copper scrap by mining underground!".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+            else if (node.item == Assets.silverScrapResource) {
+                Text.draw(b, "Find silver scrap by mining underground!", x + 100
+                        - (("Find silver scrap by mining underground!".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+            else if (node.item == Assets.ironScrapResource) {
+                Text.draw(b, "Find iron scrap by mining underground!", x + 100
+                        - (("Find iron scrap by mining underground!".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+            else if (node.item == Assets.carbonSampleResource) {
+                Text.draw(b, "Find carbon samples by killing life", x + 100
+                        - (("Find carbon samples by killing life".length() - "Resources Required".length()) * 8 / 2), y - 60, 8);
+                return;
+            }
+        }
+
+        int recipeSize = r.getRecipe().size();
+        int c = 0;
+        for(Map.Entry<Item, String> entry : r.getRecipe().entrySet()) {
+            b.draw(entry.getKey().getTexture(), x + 100 + 68 + c, y - 74, 24, 24);
+            Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())), x + 100 + 68 + c + 8, y - 74 - 8, 8);
+            Text.draw(b, entry.getKey().getName(), x + 100 + Math.abs(((entry.getKey().getName().length() * 8) / 2) -
+                    (("Resources Required".length() * 8) / 2)) + 4, y - 100, 8);
+            c += 40;
+            if(c + 40 > 80) c = 0;
+        }
+    }
+
     private void checkNodeCords(Node node, int x, int y) {
         if(node.x != x && node.y != y) {
             node.x = x; node.y = y;
             node.updateCollider(x, y);
         }
     }
-
 
     public void createNode(Node node) {
         nodes.add(node);

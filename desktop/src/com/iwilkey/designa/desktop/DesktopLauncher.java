@@ -15,7 +15,7 @@ public class DesktopLauncher {
 		config.width = 1920;
 		config.height = 1280;
 		config.resizable = false;
-		config.fullscreen = true;
+		config.fullscreen = false;
 		config.addIcon("icon.png", Files.FileType.Internal);
 
 		new LwjglApplication(new Game(), config);

@@ -5,8 +5,8 @@ import com.iwilkey.designa.items.ItemType;
 
 public class LaserGun extends ItemType.CreatableItem.Weapon.Gun {
 
-    public LaserGun(String name, int strength, ItemRecipe ir) {
-        super(name, strength, ir);
+    public LaserGun(String name, int strength) {
+        super(name, strength);
     }
 
     @Override

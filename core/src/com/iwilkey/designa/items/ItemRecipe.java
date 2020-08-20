@@ -1,5 +1,6 @@
 package com.iwilkey.designa.items;
 
+import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.utils.Utils;
 
 import java.util.HashMap;
@@ -14,42 +15,42 @@ public abstract class ItemRecipe {
             public SticksRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.barkResource, 2);
+                add(Assets.barkResource, 2);
             }
         }
         public static class PlywoodRecipe extends ItemRecipe {
             public PlywoodRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.stickResource, 2);
+                add(Assets.stickResource, 2);
             }
         }
         public static class HardwoodRecipe extends ItemRecipe {
             public HardwoodRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.plywoodResource, 2);
+                add(Assets.plywoodResource, 2);
             }
         }
         public static class ReinforcedHardwoodRecipe extends ItemRecipe {
             public ReinforcedHardwoodRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.hardwoodResource, 2);
+                add(Assets.hardwoodResource, 2);
             }
         }
         public static class StrongwoodRecipe extends ItemRecipe {
             public StrongwoodRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.reinforcedHardwoodResource, 2);
+                add(Assets.reinforcedHardwoodResource, 2);
             }
         }
         public static class ReinforcedStrongwoodRecipe extends ItemRecipe {
             public ReinforcedStrongwoodRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.strongwoodResource, 2);
+                add(Assets.strongwoodResource, 2);
             }
         }
 
@@ -58,44 +59,193 @@ public abstract class ItemRecipe {
             public GravelRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.rockResource, 2);
+                add(Assets.rockResource, 2);
             }
         }
         public static class ConcreteRecipe extends ItemRecipe {
             public ConcreteRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.gravelResource, 2);
+                add(Assets.gravelResource, 2);
             }
         }
         public static class ReinforcedConcreteRecipe extends ItemRecipe {
             public ReinforcedConcreteRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.concreteResource, 2);
+                add(Assets.concreteResource, 2);
             }
         }
         public static class CondensedSlabRecipe extends ItemRecipe {
             public CondensedSlabRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.reinforcedConcreteResource, 2);
+                add(Assets.reinforcedConcreteResource, 2);
             }
         }
         public static class StrongstoneRecipe extends ItemRecipe {
             public StrongstoneRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.condensedSlabResource, 2);
+                add(Assets.condensedSlabResource, 2);
             }
         }
         public static class ReinforcedStrongstoneRecipe extends ItemRecipe {
             public ReinforcedStrongstoneRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.strongstoneResource, 2);
+                add(Assets.strongstoneResource, 2);
             }
         }
+
+        // Copper
+        public static class RecycledCopperRecipe extends ItemRecipe {
+            public RecycledCopperRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.copperScrapResource, 2);
+            }
+        }
+        public static class BluestoneRecipe extends ItemRecipe {
+            public BluestoneRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.recycledCopperResource, 2);
+            }
+        }
+        public static class ReinforcedBluestoneRecipe extends ItemRecipe {
+            public ReinforcedBluestoneRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.bluestoneResource, 2);
+            }
+        }
+        public static class RomanVitriolRecipe extends ItemRecipe {
+            public RomanVitriolRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.reinforcedBluestoneResource, 2);
+            }
+        }
+
+        // Silver
+        public static class RecycledSilverRecipe extends ItemRecipe {
+            public RecycledSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.silverScrapResource, 2);
+            }
+        }
+        public static class CoinSilverRecipe extends ItemRecipe {
+            public CoinSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.recycledSilverResource, 2);
+            }
+        }
+        public static class SterlingSilverRecipe extends ItemRecipe {
+            public SterlingSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.coinSilverResource, 2);
+            }
+        }
+        public static class ReinforcedSterlingSilverRecipe extends ItemRecipe {
+            public ReinforcedSterlingSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.sterlingSilverResource, 2);
+            }
+        }
+        public static class FineSilverRecipe extends ItemRecipe {
+            public FineSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.reinforcedSterlingSilverResource, 2);
+            }
+        }
+        public static class ReinforcedFineSilverRecipe extends ItemRecipe {
+            public ReinforcedFineSilverRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.fineSilverResource, 2);
+            }
+        }
+
+        // Iron
+        public static class RecycledIronRecipe extends ItemRecipe {
+            public RecycledIronRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.ironScrapResource, 2);
+            }
+        }
+        public static class CastIronRecipe extends ItemRecipe {
+            public CastIronRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.recycledIronResource, 2);
+            }
+        }
+        public static class ReinforcedCastIronRecipe extends ItemRecipe {
+            public ReinforcedCastIronRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+               add(Assets.castIronResource, 2);
+            }
+        }
+        public static class SteelRecipe extends ItemRecipe {
+            public SteelRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.reinforcedCastIronResource, 2);
+            }
+        }
+        public static class ReinforcedSteelRecipe extends ItemRecipe {
+            public ReinforcedSteelRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.steelResource, 2);
+            }
+        }
+
+        // Carbon
+        public static class GraphiteRecipe extends ItemRecipe {
+            public GraphiteRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.carbonSampleResource, 2);
+            }
+        }
+        public static class CompressedGraphiteRecipe extends ItemRecipe {
+            public CompressedGraphiteRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.graphiteResource, 2);
+            }
+        }
+        public static class WeakDiamondRecipe extends ItemRecipe {
+            public WeakDiamondRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.compressedGraphite, 2);
+            }
+        }
+        public static class DiamondRecipe extends ItemRecipe {
+            public DiamondRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.weakDiamondResource, 2);
+            }
+        }
+        public static class ReinforcedDiamondRecipe extends ItemRecipe {
+            public ReinforcedDiamondRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.diamondResource, 2);
+            }
+        }
+
     // CreatableItems
         // Tools
             // Drills
@@ -103,8 +253,8 @@ public abstract class ItemRecipe {
                 public SimpleDrillRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Item.oakWoodItem, 64);
-                    add(Item.stoneItem, 32);
+                    add(Assets.oakWoodItem, 64);
+                    add(Assets.stoneItem, 32);
                 }
             }
 
@@ -112,39 +262,23 @@ public abstract class ItemRecipe {
             public TorchRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Item.oakWoodItem, 4);
+                add(Assets.oakWoodItem, 4);
             }
         }
-
-    // Statics (Shell)
-    // Resources
-        // Wood
-        public static ItemRecipe STICK_RESOURCE_RECIPE = new SticksRecipe(Item.stickResource);
-        public static ItemRecipe PLYWOOD_RESOURCE_RECIPE = new PlywoodRecipe(Item.plywoodResource);
-        public static ItemRecipe HARDWOOD_RESOURCE_RECIPE = new HardwoodRecipe(Item.hardwoodResource);
-        public static ItemRecipe REINFORCED_HARDWOOD_RECIPE = new ReinforcedHardwoodRecipe(Item.reinforcedHardwoodResource);
-        public static ItemRecipe STRONGWOOD_RECIPE = new StrongwoodRecipe(Item.strongwoodResource);
-        public static ItemRecipe REINFORCED_STRONGWOOD_RECIPE = new ReinforcedStrongwoodRecipe(Item.reinforcedStrongwoodResource);
-
-        // Stone
-        public static ItemRecipe GRAVEL_RESOURCE_RECIPE = new GravelRecipe(Item.gravelResource);
-        public static ItemRecipe CONCRETE_RESOURCE_RECIPE = new ConcreteRecipe(Item.concreteResource);
-        public static ItemRecipe REINFORCED_CONCRETE_RESOURCE_RECIPE = new ReinforcedConcreteRecipe(Item.reinforcedConcreteResource);
-        public static ItemRecipe CONDENSED_SLAB_RESOURCE_RECIPE = new CondensedSlabRecipe(Item.condensedSlabResource);
-        public static ItemRecipe STRONGSTONE_RESOURCE_RECIPE = new StrongstoneRecipe(Item.strongstoneResource);
-        public static ItemRecipe REINFORCED_STRONGSTONE_RESOURCE_RECIPE = new ReinforcedStrongstoneRecipe(Item.reinforcedStrongstoneResource);
-
-
-
-    // CreatableItems
-    public static ItemRecipe SIMPLE_DRILL_RECIPE = new SimpleDrillRecipe(Item.simpleDrill);
-    public static ItemRecipe TORCH_RECIPE = new TorchRecipe(Item.torchItem);
 
     // Class
     public Item item;
     protected HashMap<Item, String> recipe = new HashMap<Item, String>();
     public ItemRecipe(Item item) {
         this.item = item;
+
+        if(item.getItemType() instanceof ItemType.Resource)
+            ((ItemType.Resource)item.getItemType()).setItemRecipe(this);
+        else if (item.getItemType() instanceof ItemType.CreatableItem)
+            ((ItemType.CreatableItem)item.getItemType()).setItemRecipe(this);
+        else if (item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile)
+            ((ItemType.PlaceableBlock.CreatableTile)item.getItemType()).setItemRecipe(this);
+
         create();
     }
     public abstract void create();

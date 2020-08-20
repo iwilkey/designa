@@ -17,7 +17,6 @@ public class Tile {
     public static Tile grassTile = new GrassTile(1, 4);
     public static Tile dirtTile = new DirtTile(2, 3);
     public static Tile oakWoodTile = new OakWoodTile(3, 8);
-    public static Tile leafTile = new LeafTile(4, 2);
     public static Tile stoneTile = new StoneTile(5, 16);
     public static Tile torchTile = new TorchTile(6, 1);
 
