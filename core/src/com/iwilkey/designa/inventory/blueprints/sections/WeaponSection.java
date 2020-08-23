@@ -33,6 +33,12 @@ public class WeaponSection extends BlueprintSection {
 
             if (items.size() > 0) {
                 for (ItemBlueprint ir : items) {
+                    if(ir.canCreate) {
+                        Blueprints.renderUnderneath.removeIf(i -> i == ir);
+                        ir.renderRep(b);
+                    }
+                    else Blueprints.renderUnderneath.add(ir);
+
                     ir.render(b);
                 }
             }

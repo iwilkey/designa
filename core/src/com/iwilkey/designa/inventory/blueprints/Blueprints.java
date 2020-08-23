@@ -12,6 +12,7 @@ import com.iwilkey.designa.inventory.blueprints.sections.ToolSection;
 import com.iwilkey.designa.inventory.blueprints.sections.WeaponSection;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Blueprints {
 
@@ -25,6 +26,8 @@ public class Blueprints {
     public int x, y;
     public final int w = 300, h = 300;
 
+    public static ArrayList<ItemBlueprint> renderUnderneath = new ArrayList<>();
+
     public Blueprints(GameBuffer gb, Inventory i, int x, int y) {
         this.gb = gb;
         this.inventory = i;
@@ -37,6 +40,7 @@ public class Blueprints {
 
         sectionSelected = 0;
         updateSelector(sectionSelected);
+
     }
 
     public void tick() {
@@ -72,9 +76,12 @@ public class Blueprints {
         clearSelection();
         sections[select].isSelected = true;
         sectionSelected = select;
+        renderUnderneath.clear();
     }
 
     public void render(Batch b) {
+
+        for(ItemBlueprint i : renderUnderneath) i.renderRep(b);
 
         b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);

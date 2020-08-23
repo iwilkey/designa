@@ -46,6 +46,7 @@ public class Npc extends Creature {
     // TODO: Make an AI Behavior web that Npcs can choose actions on.
     // TODO: Then, apply perlin noise with time and see that happens.
 
+    // The brain
     @Override
     public void tick() {
 
@@ -56,8 +57,7 @@ public class Npc extends Creature {
         timer++;
         if(timer > DECISION_TIME) {
             walkLeft = MathUtils.random(0, 1) != 1;
-            facingLeft = walkLeft;
-            facingRight = !facingLeft;
+            facingLeft = walkLeft; facingRight = !facingLeft;
             if(!isJumping && isGrounded) jump();
             DECISION_TIME = MathUtils.random(1, 200);
             timer = 0;

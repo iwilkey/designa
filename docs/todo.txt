@@ -4,9 +4,12 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Fix resource crafting
-
 - Clean up the look / GUI of the blueprint system. It changes now that resources are added.
+
+- Add the resource tiles to the blueprints and add a next page if it spills over
+
+- Frame rate drops when you open inventory because the item blueprints check every tick if they can be created. Doesn't need
+to happen that way.
 
 For later on
 ------------

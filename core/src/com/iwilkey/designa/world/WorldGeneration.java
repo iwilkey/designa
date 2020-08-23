@@ -41,14 +41,14 @@ public class WorldGeneration {
                 int columnHeight = perlinNoise.getNoise(x, height, sampleDistance);
                 for(int y = 0; y < columnHeight; y++) {
                     int id;
-                    if(y == columnHeight - 1) id = 1;
+                    if(y == columnHeight - 1) id = Tile.grassTile.getID();
                     else if (y < columnHeight - 1 && y
-                            >= columnHeight - MathUtils.random(4, 10)) id = 2;
-                    else id = 5;
-
+                            >= columnHeight - MathUtils.random(4, 10)) id = Tile.dirtTile.getID();
+                    else id = Tile.stoneTile.getID();
                     tiles[x][y] = id;
                 }
             }
+
             // End Terrain Generation
 
             Writer w = world.writer(true);
@@ -92,4 +92,34 @@ public class WorldGeneration {
         }
 
     }
+
+    public static void OreGeneration() {
+        for(int x = 0; x < World.w; x++) {
+            for(int yy = 0; yy < World.h; yy++) {
+                if(yy > World.h - LightManager.highestTile[x] - 1) {
+                    if(World.tiles[x][yy] == Tile.stoneTile.getID()) {
+                        int id = Tile.stoneTile.getID();
+                        // This is a simple alg for now, I'll change it later
+
+                        if(percentChance(10)) id = Tile.copperOreTile.getID();
+
+                        if(yy > World.h - LightManager.highestTile[x] + 10) {
+                            if (percentChance(5)) id = Tile.silverOreTile.getID();
+
+                            if(yy > World.h - LightManager.highestTile[x] + 16) {
+                                if (percentChance(2)) id = Tile.ironOreTile.getID();
+                            }
+                        }
+                        World.tiles[x][yy] = id;
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean percentChance(int percent) {
+        if(percent > 100) return true;
+        return MathUtils.random(0, 100) > 100 - percent;
+    }
+
 }

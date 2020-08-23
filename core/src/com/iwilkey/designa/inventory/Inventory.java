@@ -191,7 +191,7 @@ public class Inventory {
                                         //  which is (count + slots[x][y].itemCount) - 99
                                     if (slots[x][y].itemCount + count > MAX_STACK && slots[x][y].itemCount != MAX_STACK) {
 
-                                        int remain = (count + slots[x][y].itemCount) - 99;
+                                        int remain = (count + slots[x][y].itemCount) - MAX_STACK;
                                         slots[x][y].itemCount = MAX_STACK;
                                         is.putItem(slots[x][y].getItem(), remain);
                                         itemUp = false;
@@ -257,8 +257,9 @@ public class Inventory {
         if(!active) return;
 
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            // y = Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y) - 1;
             for(int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
-                slots[x][y].render(b, (x * InventorySlot.SLOT_WIDTH) + INV_SLOT_X, (y * InventorySlot.SLOT_HEIGHT) + INV_SLOT_Y);
+                slots[x][Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y) - 1].render(b, (x * InventorySlot.SLOT_WIDTH) + INV_SLOT_X, (y * InventorySlot.SLOT_HEIGHT) + INV_SLOT_Y);
             }
         }
 
@@ -278,7 +279,6 @@ public class Inventory {
 
     public int addItem(Item i) {
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
-            y = Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y) - 1;
             for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 if (slots[x][y].getItem() == i) {
                     if (slots[x][y].itemCount + 1 <= MAX_STACK) {
@@ -290,7 +290,7 @@ public class Inventory {
         }
 
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
-            y = Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y) - 1;
+            // y = Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y);
             for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 if(slots[x][y].getItem() != null) { // If the slot isn't null...
                     if(slots[x][y].itemCount < MAX_STACK) {

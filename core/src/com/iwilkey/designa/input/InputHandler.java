@@ -92,6 +92,12 @@ public class InputHandler {
                     }
 
                     @Override
+                    public boolean touchDragged(int x, int y, int pointer) {
+                        cursorX = x; cursorY = Game.h - y;
+                        return true;
+                    }
+
+                    @Override
                     public boolean touchDown(int x, int y, int pointer, int button) {
                         justClicked(button);
                         if(button == Input.Buttons.LEFT) {

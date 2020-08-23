@@ -228,3 +228,16 @@ Date || Build ||
     - You can now create resources with other resources and add them into the inventory to make blueprint items with
         TODO: Fix it. It's close, but right now it's not creating the node selected, instead it's just traveling up
         TODO: the tree automatically.
+
+8/22/2020 || pa_1.0.24 ||
+    - Fixed the cursor freezing when a mouse button is clicked
+    - Fixed resource crafting the wrong node
+    - Fixed resource crafting taking too many of a resource
+    - Patched a bug that broke blocks out of range
+
+8/23/2020 || pa_1.0.25 ||
+    - Copper, silver and iron ores are now spawning underground with a certain probability
+    - Fixed numerous inventory bugs like stacking, placement, and creating resources and items
+    - Made items in the blueprint section gray if you can't make them
+    - Started putting construction tiles into the game. You can now place plywood -> reinforced strongwood tiles.
+    - You can now craft the wood construction tiles with a blueprint

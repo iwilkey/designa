@@ -58,9 +58,7 @@ public class Item {
                 getCollisionBounds(0f,0f).intersects(bounds)) {
             if(gb.getWorld().getEntityHandler().getPlayer().getInventory().addItem(this) == 1) {
                 pickedUp = true;
-
                 Assets.itemPickup[MathUtils.random(0,2)].play();
-
             }
         }
     }

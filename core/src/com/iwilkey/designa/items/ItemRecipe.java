@@ -253,7 +253,6 @@ public abstract class ItemRecipe {
                 public SimpleDrillRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.oakWoodItem, 64);
                     add(Assets.stoneItem, 32);
                 }
             }
@@ -263,6 +262,43 @@ public abstract class ItemRecipe {
             @Override
             public void create() {
                 add(Assets.stickResource, 1);
+            }
+        }
+
+        // Construction
+        public static class PlywoodTileRecipe extends ItemRecipe {
+            public PlywoodTileRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.plywoodResource, 2);
+            }
+        }
+        public static class HardwoodTileRecipe extends ItemRecipe {
+            public HardwoodTileRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.hardwoodResource, 2);
+            }
+        }
+        public static class ReinforcedHardwoodTileRecipe extends ItemRecipe {
+            public ReinforcedHardwoodTileRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.reinforcedHardwoodResource, 2);
+            }
+        }
+        public static class StrongwoodTileRecipe extends ItemRecipe {
+            public StrongwoodTileRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.strongwoodResource, 2);
+            }
+        }
+        public static class ReinforcedStrongwoodTileRecipe extends ItemRecipe {
+            public ReinforcedStrongwoodTileRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.reinforcedStrongwoodResource, 2);
             }
         }
 

@@ -4,21 +4,160 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
-import com.iwilkey.designa.tiles.tiletypes.*;
+import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.world.AmbientCycle;
 
 public class Tile {
 
     // Statics
+
+    // Tile types
+
+    // Natural Tiles
+    public static class AirTile extends Tile {
+        public AirTile(int ID, int strength) { super(Assets.air, ID, strength); }
+        @Override
+        public boolean isSolid() {
+            return false;
+        }
+    }
+    public static class DirtTile extends Tile {
+        // What item ID will it create?
+        private int itemID = 0;
+        public DirtTile(int ID, int strength) {
+            super(Assets.dirt, ID, strength);
+        }
+        @Override
+        public int getItemID() { return itemID; }
+    }
+    public static class GrassTile extends Tile {
+        public int itemID = 0;
+        public GrassTile(int ID, int strength) {
+            super(Assets.grass, ID, strength);
+        }
+        @Override
+        public int getItemID() { return itemID; }
+    }
+    public static class StoneTile extends Tile {
+        private int itemID = 1;
+        public StoneTile(int ID, int strength) {
+            super(Assets.stone, ID, strength);
+        }
+        @Override
+        public int getItemID() { return itemID; }
+    }
+
+    // Ores
+    public static class CopperOreTile extends Tile {
+        private int itemID = 114;
+        public CopperOreTile(int ID, int strength) {
+            super(Assets.copperOre, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class SilverOreTile extends Tile {
+        private int itemID = 119;
+        public SilverOreTile(int ID, int strength) {
+            super(Assets.silverOre, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class IronOreTile extends Tile {
+        private int itemID = 126;
+
+        public IronOreTile(int ID, int strength) {
+            super(Assets.ironOre, ID, strength);
+        }
+
+        public int getItemID() {
+            return itemID;
+        }
+    }
+
+    // Animated Tiles
+    public static class TorchTile extends Tile {
+        private int itemID = 20;
+        private final Animation animation;
+        public TorchTile(int ID, int strength) {
+            super(Assets.torch[1], ID, strength);
+            animation = new Animation(75, Assets.torch);
+        }
+        @Override
+        public int getItemID() {
+            return itemID;
+        }
+        @Override
+        public void tick() {
+            animation.tick();
+            texture = animation.getCurrentFrame();
+        }
+        @Override
+        public boolean isSolid() {
+            return false;
+        }
+    }
+
+    // Construction bricks
+    public static class PlywoodTile extends Tile {
+        public int itemID = 2;
+        public PlywoodTile(int ID, int strength) {
+            super(Assets.plywood, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class HardwoodTile extends Tile {
+        public int itemID = 3;
+        public HardwoodTile(int ID, int strength) {
+            super(Assets.hardwood, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class ReinforcedHardwoodTile extends Tile {
+        public int itemID = 4;
+        public ReinforcedHardwoodTile(int ID, int strength) {
+            super(Assets.reinforcedHardwood, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class StrongwoodTile extends Tile {
+        public int itemID = 5;
+        public StrongwoodTile(int ID, int strength) {
+            super(Assets.strongwood, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+    public static class ReinforcedStrongwoodTile extends Tile {
+        public int itemID = 6;
+        public ReinforcedStrongwoodTile(int ID, int strength) {
+            super(Assets.reinforcedStrongwood, ID, strength);
+        }
+        public int getItemID() { return itemID; }
+    }
+
     public static Tile[] tiles = new Tile[256];
     public static final int TILE_SIZE = 16;
 
+    // Instances (May need to be moved to Assets)
+    // Natural
     public static Tile airTile = new AirTile(0, 0);
     public static Tile grassTile = new GrassTile(1, 4);
     public static Tile dirtTile = new DirtTile(2, 3);
-    public static Tile oakWoodTile = new OakWoodTile(3, 8);
-    public static Tile stoneTile = new StoneTile(5, 16);
-    public static Tile torchTile = new TorchTile(6, 1);
+    public static Tile stoneTile = new StoneTile(3, 16);
+
+    // Animated
+    public static Tile torchTile = new TorchTile(4, 1);
+
+    // Ores
+    public static Tile copperOreTile = new CopperOreTile(5, 20);
+    public static Tile silverOreTile = new SilverOreTile(6, 20);
+    public static Tile ironOreTile = new IronOreTile(7, 20);
+
+    // Construction
+    public static Tile plywoodTile = new PlywoodTile(8, 5);
+    public static Tile hardwoodTile = new HardwoodTile(9, 10);
+    public static Tile reinforcedHardwoodTile = new ReinforcedHardwoodTile(10, 15);
+    public static Tile strongwoodTile = new StrongwoodTile(11, 20);
+    public static Tile reinforcedStrongwoodTile = new ReinforcedStrongwoodTile(12, 25);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();

@@ -23,6 +23,7 @@ public class VerticalTree {
 
     public static class Node {
         private String label;
+        private int resource;
         private int level;
         private boolean isAvailable;
         private boolean canCreate = false;
@@ -33,10 +34,11 @@ public class VerticalTree {
 
         public Item item;
 
-        public Node(String label, int level, Item item) {
+        public Node(String label, int level, Item item, int resource) {
             this.label = label;
             this.level = level;
             this.item = item;
+            this.resource = resource;
             isAvailable = false;
             isSelected = false;
             w = label.length() * 14;
@@ -88,7 +90,7 @@ public class VerticalTree {
                     Assets.invClick.play(0.35f);
                 }
 
-                if(rect.intersects(createCollider) && node.canCreate) {
+                if(rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
                     create(node);
                     Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
                     for(Node n : nodes) checkResources(n);
@@ -236,13 +238,10 @@ public class VerticalTree {
 
         node.canCreate = checkout >= ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().size();
         node.isAvailable = node.canCreate;
-        System.out.println(node.getLabel() + " checked and it's " + node.canCreate);
 
     }
 
     public void create(Node node) {
-
-        // Not quite.
 
         InventorySlot[][] slots = Inventory.slots;
 
@@ -251,12 +250,13 @@ public class VerticalTree {
         } catch (NullPointerException e) { return; }
 
         for (Map.Entry<Item, String> entry : ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().entrySet()) {
-            for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
+            yLoop: for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
                 for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
                     if (slots[x][y] != null) {
                         try {
                             if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
                                 slots[x][y].itemCount -= Math.min(slots[x][y].itemCount, Utils.parseInt(entry.getValue()));
+                                break yLoop;
                             }
                         } catch (NullPointerException ignored) {}
                     }
@@ -278,18 +278,13 @@ public class VerticalTree {
         nodes.add(node);
     }
 
-    public void createNode(String label, int level, Item item) {
-        Node node = new Node(label, level, item);
+    public void createNode(String label, Item item, int resource) {
+        Node node = new Node(label, nodes.size(), item, resource);
         nodes.add(node);
     }
 
-    public void createNode(String label, Item item) {
-        Node node = new Node(label, nodes.size(), item);
-        nodes.add(node);
-    }
-
-    public void createNode(String label, Item item, boolean available) {
-        Node node = new Node(label, nodes.size(), item);
+    public void createNode(String label, Item item, boolean available, int resource) {
+        Node node = new Node(label, nodes.size(), item, resource);
         node.setAvailable(available);
         nodes.add(node);
     }

@@ -112,15 +112,8 @@ public abstract class Creature extends Entity {
             y += gravity * timeInAir;
         } else {
             isGrounded = true;
-
-            if(timeInAir > 2.1f) {
-                fallDamage();
-            }
-
-            if(timeInAir > 0.1f) {
-                Assets.jumpLand[MathUtils.random(0,2)].play(0.5f);
-            }
-
+            if(timeInAir > 2.1f) fallDamage();
+            if(timeInAir > 0.1f) Assets.jumpLand[MathUtils.random(0,2)].play(0.5f);
             timeInAir = 0;
             y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
@@ -137,18 +130,13 @@ public abstract class Creature extends Entity {
     public void checkFlash() {
         flashDurationTimer += 0.01f;
         flashInterval += 0.01f;
+        if(flashDurationTimer >= flashTime) isFlashing = false;
+        if(flashInterval >= flashIntervalTime * 2) flashInterval = 0;
 
-        if(flashDurationTimer >= flashTime) {
-            isFlashing = false;
-        }
-        if(flashInterval >= flashIntervalTime * 2) {
-            flashInterval = 0;
-        }
     }
 
     private void fallDamage() {
-        hurt((int)(Math.floor(timeInAir) / 1.4f)); // Fall damage
-
+        hurt((int)(Math.floor(timeInAir) / 1.4f));
         flashDurationTimer = 0;
         flashInterval = 0;
         isFlashing = true;

@@ -19,6 +19,7 @@ public class ResourceTree {
 
     private final int[] resourceCheckout;
     private final String[] resourceNames;
+    public static int currentResource = 0;
 
     private final int buttonW = 64, buttonH = 32;
     private final Rectangle[] buttonColliders;
@@ -32,6 +33,7 @@ public class ResourceTree {
 
         resourceCheckout = new int[6];
         resourceCheckout[0] = 1;
+        currentResource = 0;
 
         int xx = ((buttonW * 3) / 2) - 12;
         int yy = Gdx.graphics.getHeight() - 120 + buttonH + 4;
@@ -55,54 +57,54 @@ public class ResourceTree {
         trees[0] = new VerticalTree("Wood", inventory);
 
         // TODO: Make items for all these resources
-            trees[0].createNode("Bark", Assets.barkResource, true);
-            trees[0].createNode("Sticks", Assets.stickResource);
-            trees[0].createNode("Plywood", Assets.plywoodResource);
-            trees[0].createNode("Hardwood", Assets.hardwoodResource);
-            trees[0].createNode("Reinforced Hardwood", Assets.reinforcedHardwoodResource);
-            trees[0].createNode("Strongwood", Assets.strongwoodResource);
-            trees[0].createNode("Reinforced Strongwood", Assets.reinforcedStrongwoodResource);
+            trees[0].createNode("Bark", Assets.barkResource, true, 0);
+            trees[0].createNode("Sticks", Assets.stickResource, 0);
+            trees[0].createNode("Plywood", Assets.plywoodResource, 0);
+            trees[0].createNode("Hardwood", Assets.hardwoodResource, 0);
+            trees[0].createNode("Reinforced Hardwood", Assets.reinforcedHardwoodResource, 0);
+            trees[0].createNode("Strongwood", Assets.strongwoodResource, 0);
+            trees[0].createNode("Reinforced Strongwood", Assets.reinforcedStrongwoodResource, 0);
 
         trees[1] = new VerticalTree("Stone", inventory);
-            trees[1].createNode("Rocks", Assets.rockResource, true);
-            trees[1].createNode("Gravel", Assets.gravelResource);
-            trees[1].createNode("Weak Concrete", Assets.concreteResource);
-            trees[1].createNode("Reinforced Concrete", Assets.reinforcedConcreteResource);
-            trees[1].createNode("Condensed Slab", Assets.condensedSlabResource);
-            trees[1].createNode("Strongstone", Assets.strongstoneResource);
-            trees[1].createNode("Reinforced Strongstone", Assets.reinforcedStrongstoneResource);
+            trees[1].createNode("Rocks", Assets.rockResource, true, 1);
+            trees[1].createNode("Gravel", Assets.gravelResource, 1);
+            trees[1].createNode("Weak Concrete", Assets.concreteResource, 1);
+            trees[1].createNode("Reinforced Concrete", Assets.reinforcedConcreteResource, 1);
+            trees[1].createNode("Condensed Slab", Assets.condensedSlabResource, 1);
+            trees[1].createNode("Strongstone", Assets.strongstoneResource, 1);
+            trees[1].createNode("Reinforced Strongstone", Assets.reinforcedStrongstoneResource, 1);
 
         trees[2] = new VerticalTree("Copper", inventory);
-            trees[2].createNode("Copper Scrap", Assets.copperScrapResource, true);
-            trees[2].createNode("Recycled Copper", Assets.recycledCopperResource);
-            trees[2].createNode("Bluestone", Assets.bluestoneResource);
-            trees[2].createNode("Reinforced Bluestone", Assets.reinforcedBluestoneResource);
-            trees[2].createNode("Roman Vitriol", Assets.romanVitriolResource);
+            trees[2].createNode("Copper Scrap", Assets.copperScrapResource, true, 2);
+            trees[2].createNode("Recycled Copper", Assets.recycledCopperResource, 2);
+            trees[2].createNode("Bluestone", Assets.bluestoneResource, 2);
+            trees[2].createNode("Reinforced Bluestone", Assets.reinforcedBluestoneResource, 2);
+            trees[2].createNode("Roman Vitriol", Assets.romanVitriolResource, 2);
 
         trees[3] = new VerticalTree("Silver", inventory);
-            trees[3].createNode("Silver Scrap", Assets.silverScrapResource, true);
-            trees[3].createNode("Recycled Silver", Assets.recycledSilverResource);
-            trees[3].createNode("Coin Silver", Assets.coinSilverResource);
-            trees[3].createNode("Sterling Silver", Assets.sterlingSilverResource);
-            trees[3].createNode("Reinforced Sterling Silver", Assets.reinforcedSterlingSilverResource);
-            trees[3].createNode("Fine Silver", Assets.fineSilverResource);
-            trees[3].createNode("Reinforced Fine Silver", Assets.reinforcedFineSilverResource);
+            trees[3].createNode("Silver Scrap", Assets.silverScrapResource, true, 3);
+            trees[3].createNode("Recycled Silver", Assets.recycledSilverResource, 3);
+            trees[3].createNode("Coin Silver", Assets.coinSilverResource, 3);
+            trees[3].createNode("Sterling Silver", Assets.sterlingSilverResource, 3);
+            trees[3].createNode("Reinforced Sterling Silver", Assets.reinforcedSterlingSilverResource, 3);
+            trees[3].createNode("Fine Silver", Assets.fineSilverResource, 3);
+            trees[3].createNode("Reinforced Fine Silver", Assets.reinforcedFineSilverResource, 3);
 
         trees[4] = new VerticalTree("Iron", inventory);
-            trees[4].createNode("Iron Scrap", Assets.ironScrapResource, true);
-            trees[4].createNode("Recycled Iron", Assets.recycledIronResource);
-            trees[4].createNode("Cast Iron", Assets.castIronResource);
-            trees[4].createNode("Reinforced Cast Iron", Assets.reinforcedCastIronResource);
-            trees[4].createNode("Steel", Assets.steelResource);
-            trees[4].createNode("Reinforced Steel", Assets.reinforcedSteelResource);
+            trees[4].createNode("Iron Scrap", Assets.ironScrapResource, true, 4);
+            trees[4].createNode("Recycled Iron", Assets.recycledIronResource, 4);
+            trees[4].createNode("Cast Iron", Assets.castIronResource, 4);
+            trees[4].createNode("Reinforced Cast Iron", Assets.reinforcedCastIronResource, 4);
+            trees[4].createNode("Steel", Assets.steelResource, 4);
+            trees[4].createNode("Reinforced Steel", Assets.reinforcedSteelResource, 4);
 
         trees[5] = new VerticalTree("Carbon", inventory);
-            trees[5].createNode("Carbon Sample", Assets.carbonSampleResource,true);
-            trees[5].createNode("Graphite", Assets.graphiteResource);
-            trees[5].createNode("Compressed Graphite", Assets.compressedGraphite);
-            trees[5].createNode("Weak Diamond", Assets.weakDiamondResource);
-            trees[5].createNode("Diamond", Assets.diamondResource);
-            trees[5].createNode("Reinforced Diamond", Assets.reinforcedDiamondResource);
+            trees[5].createNode("Carbon Sample", Assets.carbonSampleResource,true, 5);
+            trees[5].createNode("Graphite", Assets.graphiteResource, 5);
+            trees[5].createNode("Compressed Graphite", Assets.compressedGraphite, 5);
+            trees[5].createNode("Weak Diamond", Assets.weakDiamondResource, 5);
+            trees[5].createNode("Diamond", Assets.diamondResource, 5);
+            trees[5].createNode("Reinforced Diamond", Assets.reinforcedDiamondResource, 5);
 
     }
 
@@ -201,6 +203,12 @@ public class ResourceTree {
         Assets.invClick.play(0.35f);
         Arrays.fill(resourceCheckout, 0);
         resourceCheckout[index] = 1;
+        currentResource = index;
+        for(VerticalTree tree : trees) {
+            for(VerticalTree.Node node : tree.nodes) {
+                node.isSelected = false;
+            }
+        }
     }
 
     private int selected() {

@@ -28,6 +28,7 @@ public class ItemBlueprint {
     private final int x, y, w, h, i, ROW_CAP = 5;
 
     public boolean canCreate = false;
+    public boolean mouseOver = false;
 
     public ItemBlueprint(BlueprintSection bs, Item item, int n) {
         this.bs = bs;
@@ -51,12 +52,11 @@ public class ItemBlueprint {
     }
 
     public void tick() {
-        if(isSelected) checkResources();
-        else canCreate = false;
+        checkResources();
     }
 
     public void checkResources() {
-        InventorySlot[][] slots = bs.blueprints.inventory.slots;
+        InventorySlot[][] slots = Inventory.slots;
         HashMap<String, Integer> invTally = new HashMap<String, Integer>();
 
         for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
@@ -97,19 +97,16 @@ public class ItemBlueprint {
     }
 
     public void create() {
-        InventorySlot[][] slots = bs.blueprints.inventory.slots;
+        InventorySlot[][] slots = Inventory.slots;
 
         for (Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
-            for (int y = 0; y < bs.blueprints.inventory.invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+            yLoop: for (int y = 0; y < bs.blueprints.inventory.invHeight / InventorySlot.SLOT_HEIGHT; y++) {
                 for (int x = 0; x < bs.blueprints.inventory.invWidth / InventorySlot.SLOT_WIDTH; x++) {
                     if (slots[x][y] != null) {
                         try {
                             if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
-                                if (slots[x][y].itemCount >= Utils.parseInt(entry.getValue())) {
-                                    slots[x][y].itemCount -= Utils.parseInt(entry.getValue());
-                                } else {
-                                    slots[x][y].itemCount -= slots[x][y].itemCount;
-                                }
+                                slots[x][y].itemCount -= Math.min(slots[x][y].itemCount, Utils.parseInt(entry.getValue()));
+                                break yLoop;
                             }
                         } catch (NullPointerException ignored) {}
                     }
@@ -120,12 +117,18 @@ public class ItemBlueprint {
         bs.blueprints.inventory.addItem(item);
     }
 
-    public void render(Batch b) {
+    public void renderRep(Batch b) {
         b.draw(Assets.itemRep, x, y, w, h);
         b.draw(item.getTexture(), x + (i / 4f), y + (i / 4f), i, i);
+    }
 
-        if(isSelected) {
-            b.draw(Assets.inventorySelector, x, y, w, h);
+    public void render(Batch b) {
+
+        if(mouseOver) {
+            try {
+                Text.draw(b, item.getName(), Inventory.BLUEPRINT_X + 32 + ((("Items Required".length() / 2) -
+                        (item.getName().length() / 2)) * 11) - 20, Inventory.BLUEPRINT_Y - 340, 11);
+            } catch (NullPointerException ignored) {}
 
             Text.draw(b, "Items Required", Inventory.BLUEPRINT_X + 32, Inventory.BLUEPRINT_Y - 360, 8);
 
@@ -138,6 +141,10 @@ public class ItemBlueprint {
                 c += 40;
                 if(c + 40 > 80) c = 0;
             }
+        }
+
+        if(isSelected) {
+            b.draw(Assets.inventorySelector, x, y, w, h);
 
             if(canCreate) {
                 b.draw(Assets.inventorySlot, createCollider.x, createCollider.y, createCollider.width, createCollider.height);

@@ -10,6 +10,7 @@ import com.iwilkey.designa.entities.creature.Npc;
 import com.iwilkey.designa.entities.creature.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.tiles.Tile;
@@ -52,8 +53,9 @@ public class World {
         loadWorld(path);
 
         entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
-        entityHandler.getPlayer().getInventory().addItem(Assets.barkResource);
-        entityHandler.getPlayer().getInventory().addItem(Assets.barkResource);
+        giveItem(Assets.barkResource, 4);
+        giveItem(Assets.torchItem, 2);
+        giveItem(Assets.simpleDrillItem);
     }
 
     public void tick() {
@@ -61,6 +63,16 @@ public class World {
         itemHandler.tick();
         entityHandler.tick();
 
+    }
+
+    private void giveItem(Item item) {
+        Inventory inv = entityHandler.getPlayer().getInventory();
+        inv.addItem(item);
+    }
+
+    private void giveItem(Item item, int stacks) {
+        Inventory inv = entityHandler.getPlayer().getInventory();
+        for(int i = 0; i < stacks; i++) for(int ii = 0; ii < 99; ii++) inv.addItem(item);
     }
 
     public void render(Batch b) {
@@ -151,6 +163,7 @@ public class World {
         lightMap = lightManager.buildAmbientLight(lightMap);
 
         WorldGeneration.EnvironmentGeneration(gb, entityHandler);
+        WorldGeneration.OreGeneration();
 
         entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
         entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);

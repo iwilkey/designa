@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
-import com.iwilkey.designa.inventory.blueprints.ItemBlueprint;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -40,7 +39,22 @@ public abstract class BlueprintSection {
         }
     }
 
+    private void mouseNotOver() {
+        for (ItemBlueprint item : items) item.mouseOver = false;
+    }
+
     public void input() {
+
+        mouseNotOver();
+        Rectangle r = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+        for (ItemBlueprint item : items) {
+            if(item.collider.intersects(r)) {
+                mouseNotOver();
+                item.mouseOver = true;
+                break;
+            }
+        }
+
         if (InputHandler.leftMouseButtonDown) {
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
             Rectangle cc = new Rectangle(Inventory.BLUEPRINT_X + 32 + 22, Inventory.BLUEPRINT_Y - 360 - 116, 82, 42);
@@ -53,7 +67,7 @@ public abstract class BlueprintSection {
                     break;
                 }
 
-                if (rect.intersects(cc) && item.canCreate) {
+                if (rect.intersects(cc) && item.canCreate && item.isSelected) {
                     item.create();
                     Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
                     break;

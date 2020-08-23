@@ -25,7 +25,8 @@ public class Assets {
             itemRep, blueprintGUI, nodeConnector;
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
-        oakWood, leaf, stone, torchThumb;
+        stone, torchThumb, copperOre, silverOre, ironOre,
+        plywood, hardwood, reinforcedHardwood, strongwood, reinforcedStrongwood;
     public static TextureRegion[] torch;
     // Resources
     public static TextureRegion[] wood, rock, copper, silver, iron, carbon;
@@ -68,7 +69,9 @@ public class Assets {
                 diamondResource, reinforcedDiamondResource;
 
     // PlaceableBlocks
-    public static Item dirtItem, stoneItem, oakWoodItem;
+    public static Item dirtItem, stoneItem,
+        plywoodTileItem, hardwoodTileItem, reinforcedHardwoodTileItem,
+        strongwoodTileItem, reinforcedStrongwoodTileItem;
     // CreatableTiles
     public static Item torchItem;
 
@@ -107,6 +110,10 @@ public class Assets {
                 public static ItemRecipe SIMPLE_DRILL_RECIPE;
 
             public static ItemRecipe TORCH_RECIPE;
+
+            // Construction
+            public static ItemRecipe PLYWOOD_TILE_RECIPE, HARDWOOD_TILE_RECIPE, REINFORCED_HARDWOOD_TILE_RECIPE,
+                STRONGWOOD_TILE_RECIPE, REINFORCED_STRONGWOOD_TILE_RECIPE;
 
     public static void init() {
         initTextures();
@@ -171,19 +178,32 @@ public class Assets {
         nodeConnector = ss.crop(1, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
+        // Natural Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         grass = ss.crop(0, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         dirt = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        oakWood = ss.crop(11, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        leaf = ss.crop(12, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Animated tiles
         torch = new TextureRegion[4];
-        torch[0] = ss.crop(11, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-        torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            torch[0] = ss.crop(11, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Ores
+        copperOre = ss.crop(2, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        silverOre = ss.crop(3, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        ironOre = ss.crop(4, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Construction Tiles
+        plywood = ss.crop(0, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        hardwood = ss.crop(1, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        reinforcedHardwood = ss.crop(2, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        strongwood = ss.crop(3, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        reinforcedStrongwood = ss.crop(4, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Resources
         // Wood
@@ -431,9 +451,19 @@ public class Assets {
                 new ItemType.PlaceableBlock(Tile.dirtTile.getID()));
         stoneItem = new Item(Assets.stone, "Stone", 1,
                 new ItemType.PlaceableBlock(Tile.stoneTile.getID()));
-        oakWoodItem = new Item(Assets.oakWood, "OakWood", 2,
-                new ItemType.PlaceableBlock(Tile.oakWoodTile.getID()));
-        // CreatableTiles
+            // Construction
+            plywoodTileItem = new Item(Assets.plywood, "Plywood Tile", 2,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.plywoodTile.getID()));
+            hardwoodTileItem = new Item(Assets.hardwood, "Hardwood Tile", 3,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.hardwoodTile.getID()));
+            reinforcedHardwoodTileItem = new Item(Assets.reinforcedHardwood, "Reinforced Hardwood Tile", 4,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.reinforcedHardwoodTile.getID()));
+            strongwoodTileItem = new Item(Assets.strongwood, "Strongwood Tile", 5,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.strongwoodTile.getID()));
+            reinforcedStrongwoodTileItem = new Item(Assets.reinforcedStrongwood, "Reinforced Strongwood Tile", 6,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.reinforcedStrongwoodTile.getID()));
+
+        // Non-construction creatable tiles
         torchItem = new Item(Assets.torchThumb, "Torch", 20,
                 new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID()));
 
@@ -496,6 +526,12 @@ public class Assets {
 
             TORCH_RECIPE = new ItemRecipe.TorchRecipe(Assets.torchItem);
 
+        // Construction
+        PLYWOOD_TILE_RECIPE = new ItemRecipe.PlywoodTileRecipe(Assets.plywoodTileItem);
+        HARDWOOD_TILE_RECIPE = new ItemRecipe.HardwoodTileRecipe(Assets.hardwoodTileItem);
+        REINFORCED_HARDWOOD_TILE_RECIPE = new ItemRecipe.ReinforcedHardwoodTileRecipe(Assets.reinforcedHardwoodTileItem);
+        STRONGWOOD_TILE_RECIPE = new ItemRecipe.StrongwoodTileRecipe(Assets.strongwoodTileItem);
+        REINFORCED_STRONGWOOD_TILE_RECIPE = new ItemRecipe.ReinforcedStrongwoodTileRecipe(Assets.reinforcedStrongwoodTileItem);
 
         maleNames = new String[] { "Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd",
                 "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch",
