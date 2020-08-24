@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
-import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.tiles.Tile;
@@ -37,6 +37,7 @@ public class Hud {
     }
 
     public void render(Batch b) {
+
         renderHealthBar(b);
         player.getInventory().render(b);
         player.getToolSlot().render(b);

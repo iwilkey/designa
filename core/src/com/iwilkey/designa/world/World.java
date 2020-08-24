@@ -6,8 +6,9 @@ import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
-import com.iwilkey.designa.entities.creature.Npc;
-import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.entities.creature.passive.Npc;
+import com.iwilkey.designa.entities.creature.passive.Player;
+import com.iwilkey.designa.entities.creature.violent.GroundBot;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.inventory.Inventory;
@@ -53,7 +54,8 @@ public class World {
         loadWorld(path);
 
         entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
-        giveItem(Assets.barkResource, 4);
+        entityHandler.addEntity(new GroundBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
+        giveItem(Assets.barkResource, 2);
         giveItem(Assets.torchItem, 2);
         giveItem(Assets.simpleDrillItem);
     }
@@ -62,7 +64,7 @@ public class World {
         ambientCycle.tick();
         itemHandler.tick();
         entityHandler.tick();
-
+        for(WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.tick();
     }
 
     private void giveItem(Item item) {
@@ -81,7 +83,6 @@ public class World {
         int xEnd = (int) Math.min(w, ((((-Camera.position.x + Game.w) / Camera.scale.x) / Tile.TILE_SIZE) + 4));
         int yStart = (int) Math.max(0, ((-Camera.position.y / Camera.scale.y) / Tile.TILE_SIZE) - 1);
         int yEnd = (int) Math.min(h, ((((-Camera.position.y + Game.h) / Camera.scale.y) / Tile.TILE_SIZE) + 4));
-
         for(int y = yStart; y < yEnd; y++) {
             for(int x = xStart; x < xEnd; x++) {
                 int xx = x * Tile.TILE_SIZE;
@@ -90,6 +91,10 @@ public class World {
                 ambientCycle.render(b, xx, yy);
             }
         }
+
+        // Draw environment
+        for(WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.render(b);
+        // for(WorldGeneration.Mountain mountain : WorldGeneration.mountains) mountain.render(b);
 
         entityHandler.staticRender(b);
 

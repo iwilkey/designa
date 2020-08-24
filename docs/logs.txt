@@ -241,3 +241,10 @@ Date || Build ||
     - Made items in the blueprint section gray if you can't make them
     - Started putting construction tiles into the game. You can now place plywood -> reinforced strongwood tiles.
     - You can now craft the wood construction tiles with a blueprint
+    - You can now hold your mouse on the create button to automatically create items
+    - You can now hold the right mouse button while you create things to create 10 at a time (if possible)
+
+8/24/2020 || pa_1.0.26 ||
+    - Added clouds
+    - Blueprints now list the names of the resources needed
+    - Began adding the first enemy to the game: GroundBot

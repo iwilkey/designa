@@ -137,9 +137,11 @@ public class ItemBlueprint {
             int c = 0;
             for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {
                 b.draw(entry.getKey().getTexture(), Inventory.BLUEPRINT_X + 32 + c, Inventory.BLUEPRINT_Y - 360 - 32, 16, 16);
-                Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())), Inventory.BLUEPRINT_X + 32 + c + 8, Inventory.BLUEPRINT_Y - 360 - 32, 8);
+                Text.draw(b, "x" + Utils.toString(Utils.parseInt(entry.getValue())),
+                        Inventory.BLUEPRINT_X + 32 + c + 8, Inventory.BLUEPRINT_Y - 360 - 32, 8);
+                Text.draw(b, entry.getKey().getName(), Inventory.BLUEPRINT_X + 32, Inventory.BLUEPRINT_Y - 360 - 32 - 16 - (c/4), 8);
                 c += 40;
-                if(c + 40 > 80) c = 0;
+                if(c + 40 > 120) c = 0;
             }
         }
 

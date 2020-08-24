@@ -2,13 +2,12 @@ package com.iwilkey.designa.entities;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.entities.creature.Npc;
-import com.iwilkey.designa.entities.creature.Player;
+import com.iwilkey.designa.entities.creature.passive.Npc;
+import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.entities.statics.StaticEntity;
 import com.iwilkey.designa.entities.statics.Tree;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 
 public class EntityHandler {

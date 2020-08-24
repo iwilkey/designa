@@ -2,12 +2,16 @@ package com.iwilkey.designa.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.physics.Vector2;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.PerlinNoise;
 
@@ -17,10 +21,49 @@ import java.util.ArrayList;
 
 public class WorldGeneration {
 
+    public static class Cloud {
+        public Texture texture;
+        public Vector2 position;
+        private static final int cloudW = 100, cloudH = (int) (100 / 2.27f);
+        public Cloud(Vector2 pos) {
+            this.position = pos;
+            texture = Assets.clouds[MathUtils.random(0,3)];
+        }
+
+        public void tick() {
+            position.x %= World.w * Tile.TILE_SIZE;
+            position.x += 0.04f;
+        }
+
+        public void render(Batch b) {
+            b.draw(texture, position.x, position.y, cloudW, cloudH);
+        }
+    }
+
+    public static class Mountain {
+        public Texture texture;
+        public Vector2 position;
+        private static final int mountainW = 444, mountainH = (int) (444 / 2.33f);
+        public Mountain(Vector2 pos) {
+            this.position = pos;
+            texture = Assets.mountains;
+        }
+        public void tick() {}
+
+        public void render(Batch b) {
+            b.draw(texture, position.x, position.y, mountainW, mountainH);
+        }
+
+    }
+
     private static int[][] tiles;
 
     private static final int sampleDistance = 32;
     private static final PerlinNoise perlinNoise = new PerlinNoise(MathUtils.random(1000000, 10000000));
+
+    // Clouds & mountains
+    public static ArrayList<Cloud> clouds = new ArrayList<>();
+    public static ArrayList<Mountain> mountains = new ArrayList<>();
 
     public static String GenerateTerrain(String name, int width, int height) {
 
@@ -91,6 +134,24 @@ public class WorldGeneration {
             } catch (ArrayIndexOutOfBoundsException ignored) {}
         }
 
+        AmbientGeneration();
+
+    }
+
+    private static void AmbientGeneration() {
+        int pixW = World.w * Tile.TILE_SIZE, pixH = World.h * Tile.TILE_SIZE;
+
+        int numClouds = pixW / Cloud.cloudW;
+        for(int x = 0; x < numClouds + 1; x++) {
+            int xx = x * Cloud.cloudW;
+            clouds.add(new Cloud(new Vector2(xx, MathUtils.random((World.h * Tile.TILE_SIZE) - 1200, (World.h * Tile.TILE_SIZE) - 100))));
+        }
+
+        int numMountains = pixW / Mountain.mountainW;
+        for(int x = 0; x < numMountains + 1; x++) {
+            int xx = x * Mountain.mountainW;
+            mountains.add(new Mountain(new Vector2(xx, (World.h * Tile.TILE_SIZE) - 1200)));
+        }
     }
 
     public static void OreGeneration() {

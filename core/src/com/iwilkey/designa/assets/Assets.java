@@ -31,6 +31,8 @@ public class Assets {
     // Resources
     public static TextureRegion[] wood, rock, copper, silver, iron, carbon;
     // Environment
+    public static Texture[] clouds;
+    public static Texture mountains;
     public static TextureRegion[] trees;
     // Tools
     public static TextureRegion simpleDrill;
@@ -40,6 +42,8 @@ public class Assets {
         public static TextureRegion[] walk_right, walk_left, playerGunWalkRight, playerGunWalkLeft;
     // NPCs
     public static TextureRegion[] man, manJump, manWalkRight, manWalkLeft;
+    // Enemies
+    public static TextureRegion[] groundBotRight, groundBotLeft;
     // Sounds
     public static Sound[] itemPickup, treeHit, treeFall, jumpLand, zoom, dirtHit, stoneHit,
         closeInv, openInv, createItem;
@@ -122,6 +126,7 @@ public class Assets {
     }
 
     private static void initTextures() {
+
         SpriteSheet ss = new SpriteSheet(new Texture("textures/spritesheet.png"));
 
         // Cursor
@@ -267,6 +272,12 @@ public class Assets {
         trees[0] = ss.crop(10, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
         trees[1] = ss.crop(11, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
         trees[2] = ss.crop(12, 7, ss.SLOT_SIZE, ss.SLOT_SIZE * 4);
+        clouds = new Texture[4];
+        clouds[0] = new Texture("textures/environment/clouds/cloud-1.png");
+        clouds[1] = new Texture("textures/environment/clouds/cloud-2.png");
+        clouds[2] = new Texture("textures/environment/clouds/cloud-3.png");
+        clouds[3] = new Texture("textures/environment/clouds/cloud-4.png");
+        mountains = new Texture("textures/environment/mountain-range.png");
 
         // Tools
         simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
@@ -279,21 +290,21 @@ public class Assets {
         player_jump[0] = ss.crop(7, 5, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2); // Jump left
         player_jump[1] = ss.crop(9, 5, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2); // Jump right
         // Animations
-        walk_right = new TextureRegion[2];
-        walk_right[0] = ss.crop(7, 1, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        walk_right[1] = ss.crop(9, 1, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        walk_left = new TextureRegion[2];
-        walk_left[0] = ss.crop(7, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        walk_left[1] = ss.crop(9, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGun = new TextureRegion[2];
-        playerGun[0] = ss.crop(13, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGun[1] = ss.crop(15, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGunWalkRight = new TextureRegion[2];
-        playerGunWalkRight[0] = ss.crop(17, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGunWalkRight[1] = ss.crop(19, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGunWalkLeft = new TextureRegion[2];
-        playerGunWalkLeft[0] = ss.crop(17, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        playerGunWalkLeft[1] = ss.crop(19, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            walk_right = new TextureRegion[2];
+            walk_right[0] = ss.crop(7, 1, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            walk_right[1] = ss.crop(9, 1, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            walk_left = new TextureRegion[2];
+            walk_left[0] = ss.crop(7, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            walk_left[1] = ss.crop(9, 3, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGun = new TextureRegion[2];
+            playerGun[0] = ss.crop(13, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGun[1] = ss.crop(15, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkRight = new TextureRegion[2];
+            playerGunWalkRight[0] = ss.crop(17, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkRight[1] = ss.crop(19, 2, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkLeft = new TextureRegion[2];
+            playerGunWalkLeft[0] = ss.crop(17, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            playerGunWalkLeft[1] = ss.crop(19, 4, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
         // Init NPCs
         man = new TextureRegion[2];
@@ -303,12 +314,18 @@ public class Assets {
         manJump[1] = ss.crop(4, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
         manJump[0] = ss.crop(6, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
         // Animations
-        manWalkRight = new TextureRegion[2];
-        manWalkRight[0] = ss.crop(4, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        manWalkRight[1] = ss.crop(6, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        manWalkLeft = new TextureRegion[2];
-        manWalkLeft[0] = ss.crop(4, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        manWalkLeft[1] = ss.crop(6, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkRight = new TextureRegion[2];
+            manWalkRight[0] = ss.crop(4, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkRight[1] = ss.crop(6, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkLeft = new TextureRegion[2];
+            manWalkLeft[0] = ss.crop(4, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            manWalkLeft[1] = ss.crop(6, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+
+        // Init Enemies
+        groundBotRight = new TextureRegion[2];
+        groundBotRight[0] = ss.crop(8, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        groundBotRight[0] = ss.crop(10, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+
     }
 
     private static void initSounds() {

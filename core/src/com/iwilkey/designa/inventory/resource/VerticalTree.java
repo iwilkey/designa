@@ -66,6 +66,8 @@ public class VerticalTree {
     private TextureRegion nodeConnector;
     private Rectangle createCollider;
 
+    private long timer = 0, createTimer = 15;
+
     public VerticalTree(String name, Inventory inventory) {
         this.name = name;
         this.nodes = new ArrayList<>();
@@ -91,13 +93,32 @@ public class VerticalTree {
                 }
 
                 if(rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
-                    create(node);
+                    if(InputHandler.rightMouseButton) for(int i = 0; i < 10; i++) create(node);
+                    else create(node);
                     Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
                     for(Node n : nodes) checkResources(n);
                     break;
                 }
             }
         }
+
+        if(InputHandler.prolongedActionRequest) {
+            timer++;
+            if(timer > createTimer) {
+                Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+                for(Node node : nodes) {
+                    if(rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
+                        if(InputHandler.rightMouseButton) for(int i = 0; i < 10; i++) create(node);
+                        else create(node);
+                        Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
+                        for(Node n : nodes) checkResources(n);
+                        break;
+                    }
+                }
+                timer = 0;
+            }
+        }
+
     }
 
     private void clearSelected() {
@@ -242,6 +263,9 @@ public class VerticalTree {
     }
 
     public void create(Node node) {
+
+        checkResources(node);
+        if(!node.canCreate) return;
 
         InventorySlot[][] slots = Inventory.slots;
 

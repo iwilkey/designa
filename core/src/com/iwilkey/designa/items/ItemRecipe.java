@@ -253,7 +253,9 @@ public abstract class ItemRecipe {
                 public SimpleDrillRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.stoneItem, 32);
+                    add(Assets.plywoodResource, 16);
+                    add(Assets.recycledCopperResource, 8);
+                    add(Assets.coinSilverResource, 2);
                 }
             }
 
