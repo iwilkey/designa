@@ -51,7 +51,7 @@ public class Hud {
             Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.25 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.27 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
 
         if(Inventory.active) Text.draw(b, "Inventory", 398, Game.h - 92, 11);

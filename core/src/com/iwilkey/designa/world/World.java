@@ -53,9 +53,10 @@ public class World {
 
         loadWorld(path);
 
-        entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
+        // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         entityHandler.addEntity(new GroundBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
-        giveItem(Assets.barkResource, 2);
+        entityHandler.addEntity(new GroundBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
+        giveItem(Assets.dirtItem, 2);
         giveItem(Assets.torchItem, 2);
         giveItem(Assets.simpleDrillItem);
     }

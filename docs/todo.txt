@@ -8,11 +8,12 @@ Important now
 
 - Add the resource tiles to the blueprints and add a next page if it spills over
 
-- Frame rate drops when you open inventory because the item blueprints check every tick if they can be created. Doesn't need
-to happen that way.
+- Continue to brush up the GroundBot AI.
 
 For later on
 ------------
+
+- Create a wave system (Brought on by nightfall)
 
 - Create the drill and pipe system.
 	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
@@ -21,10 +22,6 @@ For later on
 
 - Create simple Turrets and / or weapons
 	- Simple AI will need to be created.
-
-- Create ground and air enemies
-    - These are Creatures in the Entity package.
-    - Simple AI must be created.
 
 - Create a save / load system that saves the world file and the inventory
 

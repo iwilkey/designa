@@ -9,6 +9,8 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
+import com.iwilkey.designa.inventory.blueprints.ItemBlueprint;
+import com.iwilkey.designa.inventory.blueprints.sections.ToolSection;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;

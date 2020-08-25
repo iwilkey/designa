@@ -248,3 +248,7 @@ Date || Build ||
     - Added clouds
     - Blueprints now list the names of the resources needed
     - Began adding the first enemy to the game: GroundBot
+
+8/25/2020 || pa_1.0.27 ||
+    - Made good progress on GroundBot AI.
+        Still needs little work, they get stuck sometimes during complex block structures.

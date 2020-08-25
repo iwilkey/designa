@@ -26,7 +26,7 @@ public class Camera {
     private static float targetZoom = 1;
 
     private static final float CAMERA_MAX_ZOOM = 6.0f,
-        CAMERA_MIN_ZOOM = 0.5f;
+        CAMERA_MIN_ZOOM = 0.65f;
 
     public Camera(GameBuffer gb, int x, int y) {
         this.gb = gb;

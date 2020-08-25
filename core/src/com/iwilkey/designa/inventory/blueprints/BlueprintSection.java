@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.inventory.blueprints.ItemBlueprint;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public abstract class BlueprintSection {
     protected boolean isSelected = false;
     protected Rectangle collider;
 
-    protected ArrayList<com.iwilkey.designa.inventory.blueprints.ItemBlueprint> items;
+    protected ArrayList<ItemBlueprint> items;
 
     public BlueprintSection(String name, Blueprints workbench, int tabX, int tabY) {
         this.blueprints = workbench;

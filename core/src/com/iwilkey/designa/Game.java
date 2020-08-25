@@ -2,7 +2,6 @@ package com.iwilkey.designa;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -70,16 +69,13 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		gameBatch.begin();
-		if(State.getCurrentState() != null) {
-			State.getCurrentState().render(gameBatch);
-		}
 		gameBatch.setTransformMatrix(Camera.mat);
+		if(State.getCurrentState() != null) State.getCurrentState().render(gameBatch);
 		gameBatch.end();
 
 		guiBatch.begin();
-		if(State.getCurrentState() != null) {
-			State.getCurrentState().onGUI(guiBatch);
-		}
+		if(State.getCurrentState() != null) State.getCurrentState().onGUI(guiBatch);
+
 		guiBatch.end();
 
 		if(timer > 1000000000) {

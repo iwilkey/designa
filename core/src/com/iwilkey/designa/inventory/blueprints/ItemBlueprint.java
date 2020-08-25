@@ -51,8 +51,13 @@ public class ItemBlueprint {
         createCollider = new Rectangle(Inventory.BLUEPRINT_X + 32 + 22, Inventory.BLUEPRINT_Y - 360 - 116, 82, 42);
     }
 
+    long timer, cap = 120; // roughly two seconds
     public void tick() {
-        checkResources();
+        timer++;
+        if(timer > cap) {
+            checkResources();
+            timer = 0;
+        }
     }
 
     public void checkResources() {
@@ -132,7 +137,7 @@ public class ItemBlueprint {
 
             Text.draw(b, "Items Required", Inventory.BLUEPRINT_X + 32, Inventory.BLUEPRINT_Y - 360, 8);
 
-            // TODO: Make this centered and maybe more efficient
+            // TODO: Make this centered and maybe more efficient?
             int recipeSize = recipe.getRecipe().size();
             int c = 0;
             for(Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {

@@ -324,7 +324,10 @@ public class Assets {
         // Init Enemies
         groundBotRight = new TextureRegion[2];
         groundBotRight[0] = ss.crop(8, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
-        groundBotRight[0] = ss.crop(10, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        groundBotRight[1] = ss.crop(10, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        groundBotLeft = new TextureRegion[2];
+        groundBotLeft[0] = ss.crop(12, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        groundBotLeft[1] = ss.crop(14, 16, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
     }
 

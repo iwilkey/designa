@@ -144,7 +144,13 @@ public class WorldGeneration {
         int numClouds = pixW / Cloud.cloudW;
         for(int x = 0; x < numClouds + 1; x++) {
             int xx = x * Cloud.cloudW;
-            clouds.add(new Cloud(new Vector2(xx, MathUtils.random((World.h * Tile.TILE_SIZE) - 1200, (World.h * Tile.TILE_SIZE) - 100))));
+            float yy = MathUtils.random((World.h * Tile.TILE_SIZE) - 1200, (World.h * Tile.TILE_SIZE) - 100);
+            /*
+            do {
+                yy = MathUtils.random((World.h * Tile.TILE_SIZE) - 1200, (World.h * Tile.TIL
+            } while (yy < LightManager.highestTile[xx / Tile.TILE_SIZE])
+             */
+            clouds.add(new Cloud(new Vector2(xx, yy)));
         }
 
         int numMountains = pixW / Mountain.mountainW;
@@ -160,13 +166,9 @@ public class WorldGeneration {
                 if(yy > World.h - LightManager.highestTile[x] - 1) {
                     if(World.tiles[x][yy] == Tile.stoneTile.getID()) {
                         int id = Tile.stoneTile.getID();
-                        // This is a simple alg for now, I'll change it later
-
                         if(percentChance(10)) id = Tile.copperOreTile.getID();
-
                         if(yy > World.h - LightManager.highestTile[x] + 10) {
                             if (percentChance(5)) id = Tile.silverOreTile.getID();
-
                             if(yy > World.h - LightManager.highestTile[x] + 16) {
                                 if (percentChance(2)) id = Tile.ironOreTile.getID();
                             }
