@@ -11,7 +11,7 @@ import com.iwilkey.designa.inventory.blueprints.sections.MachineSection;
 import com.iwilkey.designa.inventory.blueprints.sections.ToolSection;
 import com.iwilkey.designa.inventory.blueprints.sections.WeaponSection;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class Blueprints {
@@ -20,24 +20,19 @@ public class Blueprints {
     public final Inventory inventory;
     public static boolean active = false;
     public int sectionSelected;
-
     public BlueprintSection[] sections;
-
     public int x, y;
     public final int w = 300, h = 300;
-
     public static ArrayList<ItemBlueprint> renderUnderneath = new ArrayList<>();
 
     public Blueprints(GameBuffer gb, Inventory i, int x, int y) {
         this.gb = gb;
         this.inventory = i;
         this.x = x; this.y = y;
-
         sections = new BlueprintSection[3];
         sections[0] = new ToolSection( this, x, y);
         sections[1] = new WeaponSection(this, x + 64, y);
         sections[2] = new MachineSection(this, x + (64 * 2), y);
-
         sectionSelected = 0;
         updateSelector(sectionSelected);
 
@@ -45,13 +40,8 @@ public class Blueprints {
 
     public void tick() {
         active = inventory.isActive();
-
-        for(BlueprintSection cs : sections) {
-            cs.tick();
-        }
-
+        for(BlueprintSection cs : sections) cs.tick();
         input();
-
     }
 
     private void input() {
@@ -67,9 +57,7 @@ public class Blueprints {
     }
 
     private void clearSelection() {
-        for(BlueprintSection cs : sections) {
-            cs.isSelected = false;
-        }
+        for(BlueprintSection cs : sections) cs.isSelected = false;
     }
 
     private void updateSelector(int select) {
@@ -80,19 +68,13 @@ public class Blueprints {
     }
 
     public void render(Batch b) {
-
         for(ItemBlueprint i : renderUnderneath) i.renderRep(b);
-
         b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
-
         Text.draw(b, "Blueprints", x + 41, y + 86, 11);
         for(BlueprintSection cs : sections) {
             cs.render(b);
-
             if(cs.isSelected) b.draw(Assets.inventorySelector, cs.tabX, cs.tabY, 64, 64);
         }
-
     }
-
 }

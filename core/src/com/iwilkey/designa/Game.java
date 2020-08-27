@@ -26,27 +26,19 @@ public class Game extends ApplicationAdapter {
 	public void create () {
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
-
 		Assets.init();
-
 		gameBatch = new SpriteBatch();
 		guiBatch = new SpriteBatch();
-
 		gb = new GameBuffer(this);
-
 		input = new InputHandler();
-
 		gameState = new GameState(gb);
-
 		State.setState(gameState);
 		State.getCurrentState().start();
 	}
 
 	private void tick() {
 		input.tick();
-		if(State.getCurrentState() != null) {
-			State.getCurrentState().tick();
-		}
+		if(State.getCurrentState() != null) State.getCurrentState().tick();
 	}
 
 	long lt = System.nanoTime();
@@ -68,14 +60,15 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		gameBatch.begin();
-		gameBatch.setTransformMatrix(Camera.mat);
-		if(State.getCurrentState() != null) State.getCurrentState().render(gameBatch);
-		gameBatch.end();
+		if(!Camera.isZooming) {
+			gameBatch.begin();
+			gameBatch.setTransformMatrix(Camera.mat);
+			if (State.getCurrentState() != null) State.getCurrentState().render(gameBatch);
+			gameBatch.end();
+		}
 
 		guiBatch.begin();
 		if(State.getCurrentState() != null) State.getCurrentState().onGUI(guiBatch);
-
 		guiBatch.end();
 
 		if(timer > 1000000000) {
@@ -89,10 +82,7 @@ public class Game extends ApplicationAdapter {
 	public void dispose () {
 		gameBatch.dispose();
 		guiBatch.dispose();
-
-		if(State.getCurrentState() != null) {
-			State.getCurrentState().dispose();
-		}
+		if(State.getCurrentState() != null) State.getCurrentState().dispose();
 	}
 
 	public Camera getCamera() {

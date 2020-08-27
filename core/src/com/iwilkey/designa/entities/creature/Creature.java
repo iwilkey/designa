@@ -1,14 +1,12 @@
 package com.iwilkey.designa.entities.creature;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
+import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.tiles.Tile;
-
-import java.awt.*;
 
 public abstract class Creature extends Entity {
 
@@ -40,10 +38,8 @@ public abstract class Creature extends Entity {
 
     public Creature(GameBuffer gb, float x, float y, int w, int h) {
         super(gb, x, y, w, h);
-
         width = w;
         height = h;
-
         speed = DEFAULT_SPEED;
         xMove = 0; yMove = 0;
     }
@@ -58,15 +54,9 @@ public abstract class Creature extends Entity {
             if(!checkEntityCollisions(0f, yMove)) moveY();
             else isMoving = false;
         }
-
         if(isJumping && checkEntityCollisions(0f, 0f)) y -= 8;
-
         if(jumpTimer > jumpTime - 1f && jumpTimer < jumpTime) timeInAir = 0;
-
-        if(!isGrounded) {
-            timeInAir += 0.1;
-        }
-
+        if(!isGrounded) timeInAir += 0.1;
         if(isFlashing) checkFlash();
     }
 
@@ -81,12 +71,9 @@ public abstract class Creature extends Entity {
                 facingRight = true;
                 facingLeft = false;
                 isMoving = true;
-            } else {
-                isMoving = false;
-            }
+            } else isMoving = false;
 
         } else if (xMove < 0) { // Moving left
-
             int tx = (int) (x + xMove + collider.x) / Tile.TILE_SIZE;
             if(!collisionWithTile(tx, (int)(y + collider.y) / Tile.TILE_SIZE) &&
                     !collisionWithTile(tx, (int)(y + collider.y + collider.height) / Tile.TILE_SIZE)) {
@@ -94,13 +81,8 @@ public abstract class Creature extends Entity {
                 facingLeft = true;
                 facingRight = false;
                 isMoving = true;
-            } else {
-                isMoving = false;
-            }
-        } else {
-            isMoving = false;
-        }
-
+            } else isMoving = false;
+        } else isMoving = false;
     }
 
     private void moveY() {
@@ -113,7 +95,17 @@ public abstract class Creature extends Entity {
         } else {
             isGrounded = true;
             if(timeInAir > 2.1f) fallDamage();
-            if(timeInAir > 0.1f) Assets.jumpLand[MathUtils.random(0,2)].play(0.5f);
+            if(timeInAir > 0.1f) {
+
+                // TODO: Make a sound class that does this for all sounds...
+                float vol = 0;
+                if(!(this instanceof Player)) {
+                    float dist = com.iwilkey.designa.physics.MathUtils.distance(this, gb.getWorld().getEntityHandler().getPlayer());
+                    vol = (1 / dist) * 20;
+                }
+                Assets.jumpLand[MathUtils.random(0,2)].play(Math.max(0.5f - vol, 0));
+
+            }
             timeInAir = 0;
             y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }

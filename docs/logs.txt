@@ -250,5 +250,11 @@ Date || Build ||
     - Began adding the first enemy to the game: GroundBot
 
 8/25/2020 || pa_1.0.27 ||
-    - Made good progress on GroundBot AI.
+    - Made good progress on TerraBot AI.
         Still needs little work, they get stuck sometimes during complex block structures.
+
+8/26/2020 || pa_1.0.28 ||
+    - TerraBots can now build up or destroy down in order to get to the player
+    - TerraBots are now unlikely to get stuck in their pursuit
+    - TerraBots now make sound when falling, destroying, or building
+    - Fixed incorrect layer rendering when zooming the camera

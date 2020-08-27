@@ -4,11 +4,11 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
+- Make Sound engine that plays volumes according to the distance between the entity and the player
+
 - Clean up the look / GUI of the blueprint system. It changes now that resources are added.
 
 - Add the resource tiles to the blueprints and add a next page if it spills over
-
-- Continue to brush up the GroundBot AI.
 
 For later on
 ------------

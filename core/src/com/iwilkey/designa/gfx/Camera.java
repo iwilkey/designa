@@ -25,6 +25,8 @@ public class Camera {
     private final static float camSpeed = 4.0f;
     private static float targetZoom = 1;
 
+    public static boolean isZooming = false;
+
     private static final float CAMERA_MAX_ZOOM = 6.0f,
         CAMERA_MIN_ZOOM = 0.65f;
 
@@ -53,6 +55,8 @@ public class Camera {
     }
 
     public static void zoom(float amount, Entity e) {
+
+        isZooming = true;
 
         if(targetZoom - amount > CAMERA_MAX_ZOOM) {
             targetZoom = CAMERA_MAX_ZOOM;
@@ -85,9 +89,18 @@ public class Camera {
         if(InputHandler.zoomRequest < 0 || InputHandler.zoomRequest > 0) zoom(InputHandler.zoomRequest, e);
     }
 
+    long timer = 0, zoomBlack = 5;
     public void tick() {
         mat.getTranslation(position);
         translate();
+
+        if(isZooming) {
+            timer++;
+            if(timer > zoomBlack) {
+                isZooming = false;
+                timer = 0;
+            }
+        }
     }
 
 }
