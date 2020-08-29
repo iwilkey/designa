@@ -74,27 +74,35 @@ public class Tile {
         }
     }
 
-    // Animated Tiles
-    public static class TorchTile extends Tile {
-        private int itemID = 20;
-        private final Animation animation;
-        public TorchTile(int ID, int strength) {
-            super(Assets.torch[1], ID, strength);
-            animation = new Animation(75, Assets.torch);
+    // Non-construction creatable tiles
+        // Animated Tiles
+        public static class TorchTile extends Tile {
+            private int itemID = 20;
+            private final Animation animation;
+            public TorchTile(int ID, int strength) {
+                super(Assets.torch[1], ID, strength);
+                animation = new Animation(75, Assets.torch);
+            }
+            @Override
+            public int getItemID() {
+                return itemID;
+            }
+            @Override
+            public void tick() {
+                animation.tick();
+                texture = animation.getCurrentFrame();
+            }
+            @Override
+            public boolean isSolid() {
+                return false;
+            }
         }
-        @Override
-        public int getItemID() {
-            return itemID;
+    public static class CrateTile extends Tile {
+        public int itemID = 21;
+        public CrateTile(int ID, int strength) {
+            super(Assets.crate, ID, strength);
         }
-        @Override
-        public void tick() {
-            animation.tick();
-            texture = animation.getCurrentFrame();
-        }
-        @Override
-        public boolean isSolid() {
-            return false;
-        }
+        public int getItemID() { return itemID; }
     }
 
     // Construction bricks
@@ -144,8 +152,10 @@ public class Tile {
     public static Tile dirtTile = new DirtTile(2, 3);
     public static Tile stoneTile = new StoneTile(3, 16);
 
-    // Animated
-    public static Tile torchTile = new TorchTile(4, 1);
+    // Non-construction
+        // Animated
+        public static Tile torchTile = new TorchTile(4, 1);
+    public static Tile crateTile = new CrateTile(13, 20);
 
     // Ores
     public static Tile copperOreTile = new CopperOreTile(5, 20);

@@ -82,7 +82,6 @@ public class ItemBlueprint {
                     }
                 }
             }
-
         }
 
         int checkout = 0;
@@ -102,6 +101,10 @@ public class ItemBlueprint {
     }
 
     public void create() {
+
+        checkResources();
+        if(!canCreate) return;
+
         InventorySlot[][] slots = Inventory.slots;
 
         for (Map.Entry<Item, String> entry : recipe.getRecipe().entrySet()) {

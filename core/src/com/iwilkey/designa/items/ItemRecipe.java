@@ -267,6 +267,16 @@ public abstract class ItemRecipe {
             }
         }
 
+        // Storage
+        public static class CrateRecipe extends ItemRecipe {
+            public CrateRecipe(Item item) { super(item); }
+            @Override
+            public void create() {
+                add(Assets.plywoodTileItem, 4);
+                add(Assets.silverScrapResource, 8);
+            }
+        }
+
         // Construction
         public static class PlywoodTileRecipe extends ItemRecipe {
             public PlywoodTileRecipe(Item item) { super(item); }

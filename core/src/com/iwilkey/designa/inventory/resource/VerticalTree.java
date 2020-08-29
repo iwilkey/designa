@@ -86,41 +86,23 @@ public class VerticalTree {
     private void input() {
         if(InputHandler.leftMouseButtonDown) {
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
-            for(Node node : nodes) {
-                if(rect.intersects(node.collider)) {
+            for (Node node : nodes) {
+                if (rect.intersects(node.collider)) {
                     clearSelected();
                     node.isSelected = true;
                     checkResources(node);
                     Assets.invClick.play(0.35f);
                 }
 
-                if(rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
-                    if(InputHandler.rightMouseButton) for(int i = 0; i < 10; i++) create(node);
+                if (rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
+                    if (InputHandler.rightMouseButton) for (int i = 0; i < 10; i++) create(node);
                     else create(node);
                     Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
-                    for(Node n : nodes) checkResources(n);
+                    for (Node n : nodes) checkResources(n);
                     break;
                 }
             }
         }
-
-        if(InputHandler.prolongedActionRequest) {
-            timer++;
-            if(timer > createTimer) {
-                Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
-                for(Node node : nodes) {
-                    if(rect.intersects(createCollider) && node.canCreate && node.isSelected && (node.resource == ResourceTree.currentResource)) {
-                        if(InputHandler.rightMouseButton) for(int i = 0; i < 10; i++) create(node);
-                        else create(node);
-                        Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
-                        for(Node n : nodes) checkResources(n);
-                        break;
-                    }
-                }
-                timer = 0;
-            }
-        }
-
     }
 
     private void clearSelected() {

@@ -8,6 +8,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.physics.Vector2;
 
 import java.awt.Rectangle;
 import java.util.Arrays;
@@ -26,10 +27,18 @@ public class ResourceTree {
 
     public static VerticalTree[] trees;
 
+    // Tab
+    private Rectangle tabRect;
+    public static boolean isDown = false;
+    private static int upY, downY;
+
+
     public ResourceTree(Inventory inv) {
         this.inventory = inv;
         x = ((Gdx.graphics.getWidth()) - Inventory.bw - (Inventory.bw + 64)) - 19;
         y = (Gdx.graphics.getHeight() / 2) - (Inventory.bh / 2) + 15;
+
+        tabRect = new Rectangle(x + 85, y + Inventory.bh - 55, 200, 50);
 
         resourceCheckout = new int[6];
         resourceCheckout[0] = 1;
@@ -117,6 +126,13 @@ public class ResourceTree {
         if(InputHandler.leftMouseButtonDown) {
 
             Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+
+            if(rect.intersects(tabRect)) {
+                isDown = !isDown;
+                Assets.invClick.play(0.35f);
+                return;
+            }
+
             for(int i = 0; i < buttonColliders.length; i++) {
                 if(rect.intersects(buttonColliders[i])) chooseResource(i);
             }
@@ -124,7 +140,17 @@ public class ResourceTree {
         }
     }
 
+    private void switchTab() {
+        if(isDown) {
+
+        }
+    }
+
+
     public void render(Batch b) {
+
+        b.draw(Assets.errorSelector, tabRect.x, tabRect.y, tabRect.width, tabRect.height);
+
         renderUnavailableNodes(b, selected());
         b.draw(Assets.blueprintGUI, x, y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);

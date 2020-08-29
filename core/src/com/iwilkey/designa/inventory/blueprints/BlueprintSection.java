@@ -69,7 +69,8 @@ public abstract class BlueprintSection {
                 }
 
                 if (rect.intersects(cc) && item.canCreate && item.isSelected) {
-                    item.create();
+                    if(InputHandler.rightMouseButton) for(int i = 0; i < 10; i++) item.create();
+                    else item.create();
                     Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
                     break;
                 }

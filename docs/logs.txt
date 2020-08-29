@@ -258,3 +258,16 @@ Date || Build ||
     - TerraBots are now unlikely to get stuck in their pursuit
     - TerraBots now make sound when falling, destroying, or building
     - Fixed incorrect layer rendering when zooming the camera
+
+8/28/2020 || pa_1.0.29 ||
+    - You can now craft 10 item blueprints at a time if you have the resources.
+    - Fixed the crafting bug where you get one more than you have
+    - Had an idea where you cna click at the top of the blueprint or resource tree and have them go to the bottom of the
+        screen. Like a tab.
+
+8/29/2020 || pa_1.0.30 ||
+    - Added crates!
+    - You can now transfer items from the inventory to a crate.
+    - You can now transfer items from the crate to the inventory.
+    - You can now separate items in the crate or inventory
+    - Crate added to construction blueprint section

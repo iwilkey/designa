@@ -26,7 +26,7 @@ public class Assets {
     // Tiles
     public static TextureRegion air, grass, dirt, backDirt,
         stone, torchThumb, copperOre, silverOre, ironOre,
-        plywood, hardwood, reinforcedHardwood, strongwood, reinforcedStrongwood;
+        plywood, hardwood, reinforcedHardwood, strongwood, reinforcedStrongwood, crate;
     public static TextureRegion[] torch;
     // Resources
     public static TextureRegion[] wood, rock, copper, silver, iron, carbon;
@@ -36,6 +36,8 @@ public class Assets {
     public static TextureRegion[] trees;
     // Tools
     public static TextureRegion simpleDrill;
+    // Machines
+    public static TextureRegion[] copperMechanicalDrill;
     // Player
     public static TextureRegion[] player, player_jump, playerGun;
         // Animations
@@ -77,12 +79,15 @@ public class Assets {
         plywoodTileItem, hardwoodTileItem, reinforcedHardwoodTileItem,
         strongwoodTileItem, reinforcedStrongwoodTileItem;
     // CreatableTiles
-    public static Item torchItem;
+    public static Item torchItem, crateItem;
 
     //CreatableItems
         // Tools
             // Drills
             public static Item simpleDrillItem;
+
+            // Mechanical Drills
+            public static Item copperMechanicalDrillItem;
 
     // Item Recipe
         // Wood
@@ -113,7 +118,10 @@ public class Assets {
                 // Drills
                 public static ItemRecipe SIMPLE_DRILL_RECIPE;
 
-            public static ItemRecipe TORCH_RECIPE;
+                // Mechanical Drills
+                public static ItemRecipe COPPER_MECHANICAL_DRILL_RECIPE;
+
+            public static ItemRecipe TORCH_RECIPE, CRATE_RECIPE;
 
             // Construction
             public static ItemRecipe PLYWOOD_TILE_RECIPE, HARDWOOD_TILE_RECIPE, REINFORCED_HARDWOOD_TILE_RECIPE,
@@ -190,13 +198,15 @@ public class Assets {
         backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
         stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
-        // Animated tiles
-        torch = new TextureRegion[4];
-            torch[0] = ss.crop(11, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        // CreatableTiles
+            // Animated tiles
+            torch = new TextureRegion[4];
+                torch[0] = ss.crop(11, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                torch[1] = ss.crop(12, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                torch[2] = ss.crop(13, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        crate = ss.crop(2, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
 
         // Ores
         copperOre = ss.crop(2, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
@@ -281,6 +291,13 @@ public class Assets {
 
         // Tools
         simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+
+        // Machines
+        copperMechanicalDrill = new TextureRegion[4];
+            copperMechanicalDrill[0] = ss.crop(8, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            copperMechanicalDrill[1] = ss.crop(9, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            copperMechanicalDrill[2] = ss.crop(10, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            copperMechanicalDrill[3] = ss.crop(11, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];
@@ -486,12 +503,18 @@ public class Assets {
         // Non-construction creatable tiles
         torchItem = new Item(Assets.torchThumb, "Torch", 20,
                 new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID()));
+        crateItem = new Item(Assets.crate, "Crate", 21,
+                new ItemType.PlaceableBlock.CreatableTile.Storage(Tile.crateTile.getID()));
 
         //CreatableItems
-        // Tools
-        // Drills
-        simpleDrillItem = new Item(Assets.simpleDrill, "Simple Drill", 10,
-                new ItemType.CreatableItem.Tool.Drill("simple-drill", 5, 1));
+            // Tools
+                // Drills
+                simpleDrillItem = new Item(Assets.simpleDrill, "Simple Drill", 10,
+                    new ItemType.CreatableItem.Tool.Drill("simple-drill", 5, 1));
+
+                // Mechanical Drill
+                // copperMechanicalDrillItem = Item(Assets.copperMechanicalDrill[0], 10,
+                    // new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill())
 
         // Item Recipes
 
@@ -544,7 +567,11 @@ public class Assets {
                 // Drills
                 SIMPLE_DRILL_RECIPE = new ItemRecipe.SimpleDrillRecipe(Assets.simpleDrillItem);
 
+                // Mechanical Drills
+
+
             TORCH_RECIPE = new ItemRecipe.TorchRecipe(Assets.torchItem);
+            CRATE_RECIPE = new ItemRecipe.CrateRecipe(Assets.crateItem);
 
         // Construction
         PLYWOOD_TILE_RECIPE = new ItemRecipe.PlywoodTileRecipe(Assets.plywoodTileItem);

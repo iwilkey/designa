@@ -69,6 +69,8 @@ public class WorldGeneration {
 
         // TODO: This method causes the desktop version not to run after being built by gradle.
 
+        TEST_TOOLS_DELETE_ALL_WORLDS();
+
         String path = "worlds/" + name + ".dw";
         FileHandle world = Gdx.files.local(path);
 
@@ -113,6 +115,12 @@ public class WorldGeneration {
 
         return world.path();
 
+    }
+
+    private static void TEST_TOOLS_DELETE_ALL_WORLDS() {
+        FileHandle[] allWorlds;
+        allWorlds = Gdx.files.local("/worlds").list();
+        for(FileHandle fh : allWorlds) fh.delete();
     }
 
     public static void EnvironmentGeneration(GameBuffer gb, EntityHandler e) {

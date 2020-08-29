@@ -25,6 +25,8 @@ public class Blueprints {
     public final int w = 300, h = 300;
     public static ArrayList<ItemBlueprint> renderUnderneath = new ArrayList<>();
 
+    private Rectangle tabRect;
+
     public Blueprints(GameBuffer gb, Inventory i, int x, int y) {
         this.gb = gb;
         this.inventory = i;
@@ -35,6 +37,8 @@ public class Blueprints {
         sections[2] = new MachineSection(this, x + (64 * 2), y);
         sectionSelected = 0;
         updateSelector(sectionSelected);
+
+        tabRect = new Rectangle(x, y + 85, 200, 50);
 
     }
 
@@ -68,6 +72,9 @@ public class Blueprints {
     }
 
     public void render(Batch b) {
+
+        b.draw(Assets.errorSelector, tabRect.x, tabRect.y, tabRect.width, tabRect.height);
+
         for(ItemBlueprint i : renderUnderneath) i.renderRep(b);
         b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);

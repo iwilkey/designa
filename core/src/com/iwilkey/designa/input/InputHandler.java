@@ -24,6 +24,7 @@ public class InputHandler {
     public static boolean placeRequest, destroyRequest, backBuildingToggleRequest;
     public static boolean prolongedActionRequest;
     public static boolean itemPickupRequest;
+    public static boolean exitCrateRequest;
 
 
     public InputHandler() {
@@ -61,6 +62,8 @@ public class InputHandler {
 
                         if(key == Input.Keys.X) backBuildingToggleRequest = true;
 
+                        if(key == Input.Keys.ESCAPE) exitCrateRequest = true;
+
 
                         return true;
                     }
@@ -75,6 +78,8 @@ public class InputHandler {
                         if(key == Input.Keys.F) inventoryRequest = false;
 
                         if(key == Input.Keys.X) backBuildingToggleRequest = false;
+
+                        if(key == Input.Keys.ESCAPE) exitCrateRequest = false;
 
                         return true;
                     }

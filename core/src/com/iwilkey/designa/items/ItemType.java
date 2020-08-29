@@ -1,5 +1,8 @@
 package com.iwilkey.designa.items;
 
+import com.iwilkey.designa.entities.creature.passive.Player;
+import com.iwilkey.designa.inventory.crate.Crate;
+
 public class ItemType {
 
     protected String type;
@@ -41,6 +44,15 @@ public class ItemType {
             }
             public ItemRecipe getRecipe() { return itemRecipe; }
             public void setItemRecipe(ItemRecipe r) { this.itemRecipe = r; }
+
+            public static class Storage extends CreatableTile {
+                public Storage(int ID) { super(ID); }
+            }
+
+            public static class MechanicalDrill extends CreatableTile {
+                public MechanicalDrill(int ID) { super(ID); }
+            }
+
         }
     }
 

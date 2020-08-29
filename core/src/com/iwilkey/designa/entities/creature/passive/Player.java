@@ -13,10 +13,12 @@ import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
+import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 public class Player extends Creature {
 
@@ -32,6 +34,9 @@ public class Player extends Creature {
     // Inventory
     private final Inventory inventory;
     private final ToolSlot toolSlot;
+
+    // Player owned Crates
+    public ArrayList<Crate> crates = new ArrayList<Crate>();
 
     private long timer, actionCooldown = 20;
 
@@ -62,7 +67,6 @@ public class Player extends Creature {
         toolSlot = new ToolSlot(inventory);
 
         facingLeft = true;
-
     }
 
     private void control() {
@@ -103,6 +107,10 @@ public class Player extends Creature {
         // Inventory
         inventory.tick();
         toolSlot.tick();
+
+        if(crates.size() != 0) {
+            for(Crate crate : crates) crate.tick();
+        }
 
     }
 
@@ -153,6 +161,10 @@ public class Player extends Creature {
                 return;
             }
         }
+    }
+
+    public void addCrate(int x, int y) {
+        crates.add(new Crate(inventory, x, y));
     }
 
     @Override

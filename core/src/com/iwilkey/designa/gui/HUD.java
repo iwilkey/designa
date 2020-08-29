@@ -8,6 +8,7 @@ import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.tiles.Tile;
 
 public class Hud {
@@ -41,6 +42,9 @@ public class Hud {
         renderHealthBar(b);
         player.getInventory().render(b);
         player.getToolSlot().render(b);
+        if(player.crates.size() != 0) for(Crate crate : player.crates) {
+            if(crate.isActive) crate.render(b);
+        }
 
         if(BuildingHandler.backBuilding){
             b.draw(Assets.backBuilding[1], Game.w - 80, 72, 64, 64);
@@ -51,7 +55,7 @@ public class Hud {
             Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.28 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.30 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
 
         if(Inventory.active) Text.draw(b, "Inventory", 398, Game.h - 92, 11);

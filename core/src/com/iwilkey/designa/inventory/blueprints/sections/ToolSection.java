@@ -17,6 +17,7 @@ public class ToolSection extends BlueprintSection {
         items.add(new ItemBlueprint(this, Assets.reinforcedStrongwoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.torchItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.simpleDrillItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.crateItem, items.size() - 1));
 
         items.get(0).isSelected = true;
     }

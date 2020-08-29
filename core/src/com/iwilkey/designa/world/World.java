@@ -7,7 +7,6 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.passive.Player;
-import com.iwilkey.designa.entities.creature.violent.TerraBot;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.inventory.Inventory;
@@ -52,9 +51,10 @@ public class World {
 
         loadWorld(path);
 
+        giveItem(Assets.crateItem, 1);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
-        entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
-        entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
+        // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
+        // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
     }
 
     public void tick() {

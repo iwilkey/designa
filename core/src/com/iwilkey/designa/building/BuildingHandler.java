@@ -10,12 +10,16 @@ import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
+import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BuildingHandler {
 
@@ -55,6 +59,9 @@ public class BuildingHandler {
                         if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
                             placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                     pointerOnTileX(), pointerOnTileY());
+
+                    if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CrateTile)
+                        toggleCrate(pointerOnTileX(), pointerOnTileY());
 
                     InputHandler.placeRequest = false;
                 }
@@ -114,9 +121,8 @@ public class BuildingHandler {
         if(!backBuilding) {
             if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
-                if (id == Tile.torchTile.getID()) {
-                    gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
-                }
+                // Handing special tiles!
+                specialTilesAdd(id, x, y);
 
                 ToolSlot.currentItem.itemCount--;
 
@@ -142,6 +148,20 @@ public class BuildingHandler {
             else Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
 
 
+    }
+
+    private void specialTilesAdd(int id, int x, int y) {
+
+        if (id == Tile.torchTile.getID())
+            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+
+        if(id == Tile.crateTile.getID()) player.addCrate(x, y);
+
+    }
+
+    private void toggleCrate(int x, int y) {
+        for(Crate crate : player.crates) crate.isActive = crate.x == x && crate.y == y;
+        Assets.createItem[0].play(0.3f);
     }
 
     private void damageTile(int x, int y) {
@@ -196,9 +216,7 @@ public class BuildingHandler {
             if (gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] <= 0) {
                 Tile tile = gb.getWorld().getTile(x, y);
 
-                if (tile == Tile.torchTile) {
-                    gb.getWorld().getLightManager().removeLight(x, y);
-                }
+                specialTilesRemove(tile, x, y);
 
                 if(!(tile instanceof Tile.StoneTile)) {
                     World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
@@ -222,6 +240,25 @@ public class BuildingHandler {
                 World.backTiles[x][(World.h - y) - 1] = 0;
                 gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
                 gb.getWorld().getLightManager().bakeLighting();
+            }
+        }
+    }
+
+    private void specialTilesRemove(Tile tile, int x, int y) {
+        if (tile == Tile.torchTile) gb.getWorld().getLightManager().removeLight(x, y);
+
+        if(tile == Tile.crateTile) {
+            HashMap<Item, Integer> items = new HashMap<>();
+            for(Crate crate : gb.getWorld().getEntityHandler().getPlayer().crates) {
+                if(crate.x == x && crate.y == y) items = crate.destroy();
+            }
+
+            for(Map.Entry<Item, Integer> item : items.entrySet()) {
+                try {
+                    for(int i = 0; i < item.getValue(); i++)
+                        World.getItemHandler().addItem(Item.getItemByID(item.getKey().getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                            pointerOnTileY() * Tile.TILE_SIZE + 8));
+                } catch (NullPointerException ignored) {}
             }
         }
     }
