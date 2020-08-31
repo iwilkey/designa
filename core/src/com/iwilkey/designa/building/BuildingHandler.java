@@ -7,6 +7,7 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
@@ -118,6 +119,10 @@ public class BuildingHandler {
 
     private void placeTile(int id, int x, int y) {
         checkFace();
+
+        if(mechDrillHandler(id, x, y)) return;
+        if(pipePlacementHandler(id, x, y)) return;
+
         if(!backBuilding) {
             if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
@@ -158,6 +163,44 @@ public class BuildingHandler {
         if(id == Tile.crateTile.getID()) player.addCrate(x, y);
 
     }
+
+    private boolean mechDrillHandler(int id, int x, int y) {
+
+        Item item = ToolSlot.currentItem.getItem();
+        if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.MechanicalDrill)) return false;
+
+        if(gb.getWorld().getTile(x, y) instanceof Tile.CopperOreTile ||
+                gb.getWorld().getTile(x, y) instanceof Tile.SilverOreTile ||
+                gb.getWorld().getTile(x, y) instanceof Tile.IronOreTile) {
+
+            ToolSlot.currentItem.itemCount--;
+            World.tiles[x][(World.h - y) - 1] = id;
+            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+
+            Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean pipePlacementHandler(int id, int x, int y) {
+        Item item = ToolSlot.currentItem.getItem();
+        if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe)) return false;
+
+        if (gb.getWorld().getBackTile(x, y) instanceof Tile.AirTile) {
+            ToolSlot.currentItem.itemCount--;
+            World.tiles[x][(World.h - y) - 1] = id;
+            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+            World.pipeMap[x][(World.h - y) - 1] = Hud.SELECTED_PIPE_DIRECTION;
+            gb.getWorld().getLightManager().bakeLighting();
+            Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+            return true;
+        }
+
+        return false;
+    }
+
 
     private void toggleCrate(int x, int y) {
         for(Crate crate : player.crates) crate.isActive = crate.x == x && crate.y == y;

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.machines.PipeHandler;
 import com.iwilkey.designa.world.AmbientCycle;
 
 public class Tile {
@@ -142,6 +143,45 @@ public class Tile {
         public int getItemID() { return itemID; }
     }
 
+    // Machines
+        // Mech Drills
+        public static class CopperMechanicalDrill extends Tile {
+            private int itemID = 22;
+            private final Animation animation;
+            public CopperMechanicalDrill(int ID, int strength) {
+                super(Assets.copperMechanicalDrill[1], ID, strength);
+                animation = new Animation(75, Assets.copperMechanicalDrill);
+            }
+            @Override
+            public int getItemID() {
+                return itemID;
+            }
+            @Override
+            public void tick() {
+                animation.tick();
+                texture = animation.getCurrentFrame();
+            }
+        }
+
+        // Pipe
+        public static class Pipe extends Tile {
+            public TextureRegion upDown, rightLeft;
+            public Pipe(TextureRegion tex, int ID, int strength) { super(tex, ID, strength); }
+            public static class StonePipe extends Pipe {
+                private int itemID = 23;
+                public StonePipe(int ID, int strength) {
+                    super(Assets.stonePipe[0], ID, strength);
+                    upDown = Assets.stonePipe[0];
+                    rightLeft = Assets.stonePipe[1];
+                }
+                @Override
+                public void render(Batch b, int x, int y, int bl, int id) {
+                    PipeHandler.render(b, x, y, bl, id);
+                }
+                public int getItemID() { return itemID; }
+            }
+        }
+
     public static Tile[] tiles = new Tile[256];
     public static final int TILE_SIZE = 16;
 
@@ -169,12 +209,19 @@ public class Tile {
     public static Tile strongwoodTile = new StrongwoodTile(11, 20);
     public static Tile reinforcedStrongwoodTile = new ReinforcedStrongwoodTile(12, 25);
 
+    // Machines
+        // Mech Drills
+        public static Tile copperMechanicalDrillTile = new CopperMechanicalDrill(14, 40);
+
+        // Pipes
+        public static Tile stonePipeTile = new Pipe.StonePipe(15, 12);
+
     public static int getStrength(int id) {
         return tiles[id].getStrength();
     }
 
     // Class
-    protected TextureRegion texture;
+    public TextureRegion texture;
     protected final int ID;
     protected int strength;
 
@@ -182,12 +229,13 @@ public class Tile {
         this.texture = tex;
         this.ID = ID;
         this.strength = strength;
-
         tiles[ID] = this;
     }
 
     public void tick() {
+        // Tick animated tiles
         torchTile.tick();
+        copperMechanicalDrillTile.tick();
     }
 
     public void render(Batch b, int x, int y, int bl, int id) { // This will render a tile at the x and y of it the world has set
@@ -213,7 +261,7 @@ public class Tile {
         }
     }
 
-    private void renderBreakLevel(Batch b, int x, int y, int bl, int id) {
+    public static void renderBreakLevel(Batch b, int x, int y, int bl, int id) {
         float pd;
         if(getStrength(id) > 0)
             pd = Math.abs((float)(getStrength(id) - bl) / bl) * 100;

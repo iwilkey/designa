@@ -20,7 +20,7 @@ public class Assets {
     // Colors
     public static TextureRegion[] sky_colors, light_colors;
     // GUI
-    public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding;
+    public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding, arrow;
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
             itemRep, blueprintGUI, nodeConnector;
     // Tiles
@@ -37,7 +37,10 @@ public class Assets {
     // Tools
     public static TextureRegion simpleDrill;
     // Machines
-    public static TextureRegion[] copperMechanicalDrill;
+        // Mech Drills
+        public static TextureRegion[] copperMechanicalDrill;
+        // Pipes
+        public static TextureRegion[] stonePipe;
     // Player
     public static TextureRegion[] player, player_jump, playerGun;
         // Animations
@@ -89,6 +92,9 @@ public class Assets {
             // Mechanical Drills
             public static Item copperMechanicalDrillItem;
 
+            // Pipes
+            public static Item stonePipeItem;
+
     // Item Recipe
         // Wood
         public static ItemRecipe STICK_RESOURCE_RECIPE, PLYWOOD_RESOURCE_RECIPE, HARDWOOD_RESOURCE_RECIPE, REINFORCED_HARDWOOD_RECIPE,
@@ -118,14 +124,18 @@ public class Assets {
                 // Drills
                 public static ItemRecipe SIMPLE_DRILL_RECIPE;
 
-                // Mechanical Drills
-                public static ItemRecipe COPPER_MECHANICAL_DRILL_RECIPE;
-
             public static ItemRecipe TORCH_RECIPE, CRATE_RECIPE;
 
             // Construction
             public static ItemRecipe PLYWOOD_TILE_RECIPE, HARDWOOD_TILE_RECIPE, REINFORCED_HARDWOOD_TILE_RECIPE,
                 STRONGWOOD_TILE_RECIPE, REINFORCED_STRONGWOOD_TILE_RECIPE;
+
+            // Machines
+                // Mech Drills
+                public static ItemRecipe COPPER_MECHANICAL_DRILL_RECIPE;
+
+                // Pipes
+                public static ItemRecipe STONE_PIPE_RECIPE;
 
     public static void init() {
         initTextures();
@@ -189,6 +199,11 @@ public class Assets {
         backBuilding[1] = ss.crop(12, 6, ss.SLOT_SIZE, ss.SLOT_SIZE);
         blueprintGUI = ss.crop(0, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 3);
         nodeConnector = ss.crop(1, 9, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        arrow = new TextureRegion[4];
+        arrow[0] = ss.crop(8, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        arrow[1] = ss.crop(9, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        arrow[2] = ss.crop(10, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        arrow[3] = ss.crop(11, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
         // Natural Tiles
@@ -293,11 +308,16 @@ public class Assets {
         simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
 
         // Machines
-        copperMechanicalDrill = new TextureRegion[4];
-            copperMechanicalDrill[0] = ss.crop(8, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            copperMechanicalDrill[1] = ss.crop(9, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            copperMechanicalDrill[2] = ss.crop(10, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-            copperMechanicalDrill[3] = ss.crop(11, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            // Mech Drills
+            copperMechanicalDrill = new TextureRegion[4];
+                copperMechanicalDrill[0] = ss.crop(8, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                copperMechanicalDrill[1] = ss.crop(9, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                copperMechanicalDrill[2] = ss.crop(10, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                copperMechanicalDrill[3] = ss.crop(11, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            //Pipes
+            stonePipe = new TextureRegion[2];
+                stonePipe[0] = ss.crop(8, 19, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                stonePipe[1] = ss.crop(9, 19, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];
@@ -513,8 +533,12 @@ public class Assets {
                     new ItemType.CreatableItem.Tool.Drill("simple-drill", 5, 1));
 
                 // Mechanical Drill
-                // copperMechanicalDrillItem = Item(Assets.copperMechanicalDrill[0], 10,
-                    // new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill())
+                copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", 22,
+                    new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(Tile.copperMechanicalDrillTile.getID()));
+
+                // Pipes
+                stonePipeItem = new Item(Assets.stonePipe[0], "Stone Pipe", 23,
+                    new ItemType.PlaceableBlock.CreatableTile.Pipe(Tile.stonePipeTile.getID()));
 
         // Item Recipes
 
@@ -579,6 +603,13 @@ public class Assets {
         REINFORCED_HARDWOOD_TILE_RECIPE = new ItemRecipe.ReinforcedHardwoodTileRecipe(Assets.reinforcedHardwoodTileItem);
         STRONGWOOD_TILE_RECIPE = new ItemRecipe.StrongwoodTileRecipe(Assets.strongwoodTileItem);
         REINFORCED_STRONGWOOD_TILE_RECIPE = new ItemRecipe.ReinforcedStrongwoodTileRecipe(Assets.reinforcedStrongwoodTileItem);
+
+        // Machines
+            // Mech Drills
+            COPPER_MECHANICAL_DRILL_RECIPE = new ItemRecipe.CopperMechanicalDrillRecipe(Assets.copperMechanicalDrillItem);
+
+            // Pipes
+            STONE_PIPE_RECIPE = new ItemRecipe.StonePipeRecipe(Assets.stonePipeItem);
 
         maleNames = new String[] { "Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd",
                 "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch",

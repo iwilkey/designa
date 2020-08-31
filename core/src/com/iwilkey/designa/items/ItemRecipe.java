@@ -314,6 +314,24 @@ public abstract class ItemRecipe {
             }
         }
 
+        // Machines
+            // Mech Drills
+            public static class CopperMechanicalDrillRecipe extends ItemRecipe {
+                public CopperMechanicalDrillRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.recycledCopperResource, 8);
+                }
+            }
+
+            // Pipes
+            public static class StonePipeRecipe extends ItemRecipe {
+                public StonePipeRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.concreteResource, 1);
+                }
+            }
     // Class
     public Item item;
     protected HashMap<Item, String> recipe = new HashMap<Item, String>();

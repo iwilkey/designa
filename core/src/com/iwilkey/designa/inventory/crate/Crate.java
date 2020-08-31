@@ -18,7 +18,7 @@ public class Crate {
     public InventorySlot[][] storage;
     public int x, y;
     public static final int w = 400, h = 400, MAX_STACK = 99;
-    public boolean isActive = false, itemUp = false;
+    public boolean isActive = true, itemUp = false;
 
     public int[][] selector;
 

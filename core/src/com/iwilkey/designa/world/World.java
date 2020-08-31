@@ -12,6 +12,7 @@ import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
+import com.iwilkey.designa.machines.MachineHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
@@ -23,6 +24,7 @@ public class World {
     // Rendering
     public static int[][] tiles;
     public static int[][] backTiles;
+    public static int[][] pipeMap;
     public int[][] tileBreakLevel;
     public int[][] backTileBreakLevel;
     public static int[][] lightMap;
@@ -41,6 +43,9 @@ public class World {
     // Environment
     private final AmbientCycle ambientCycle;
 
+    // Machines
+    private final MachineHandler machineHandler;
+
     public World(GameBuffer gb, String path) {
         this.gb = gb;
         lightManager = new LightManager(gb, this);
@@ -48,10 +53,15 @@ public class World {
         entityHandler = new EntityHandler(new Player(gb, 0,
                 0));
         itemHandler = new ItemHandler(gb);
+        machineHandler = new MachineHandler(gb);
 
         loadWorld(path);
 
         giveItem(Assets.crateItem, 1);
+        giveItem(Assets.copperMechanicalDrillItem, 2);
+        giveItem(Assets.torchItem, 2);
+        giveItem(Assets.simpleDrillItem);
+        giveItem(Assets.stonePipeItem, 2);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -61,6 +71,7 @@ public class World {
         ambientCycle.tick();
         itemHandler.tick();
         entityHandler.tick();
+        machineHandler.tick();
         for(WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.tick();
     }
 
@@ -107,6 +118,8 @@ public class World {
             }
         }
 
+        machineHandler.render(b);
+
         entityHandler.npcRender(b);
         entityHandler.playerRender(b);
 
@@ -122,7 +135,7 @@ public class World {
 
     }
 
-    public Tile getTile(int x, int y) {
+    public static Tile getTile(int x, int y) {
         if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
         Tile t = Tile.tiles[tiles[x][Math.abs(h - y) - 1]];
         if(t == null) return Tile.airTile;
@@ -145,6 +158,7 @@ public class World {
 
         tiles = new int[w][h];
         backTiles = new int[w][h];
+        pipeMap = new int[w][h];
         tileBreakLevel = new int[w][h];
         backTileBreakLevel = new int[w][h];
         lightMap = new int[w][h];
@@ -155,6 +169,7 @@ public class World {
             for(int x = 0; x < w; x++) {
                 int id = Utils.parseInt(tokens[x + y * w + 2]);
                 tiles[x][y] = id;
+                pipeMap[x][y] = -1;
                 tileBreakLevel[x][y] = Tile.getStrength(id);
                 lightMap[x][h - y - 1] = 0;
                 origLightMap[x][h - y - 1] = 0;

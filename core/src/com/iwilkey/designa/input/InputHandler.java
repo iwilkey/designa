@@ -25,6 +25,7 @@ public class InputHandler {
     public static boolean prolongedActionRequest;
     public static boolean itemPickupRequest;
     public static boolean exitCrateRequest;
+    public static boolean pipeRotateRequest;
 
 
     public InputHandler() {
@@ -64,6 +65,8 @@ public class InputHandler {
 
                         if(key == Input.Keys.ESCAPE) exitCrateRequest = true;
 
+                        if(key == Input.Keys.R) pipeRotateRequest = true;
+
 
                         return true;
                     }
@@ -80,6 +83,8 @@ public class InputHandler {
                         if(key == Input.Keys.X) backBuildingToggleRequest = false;
 
                         if(key == Input.Keys.ESCAPE) exitCrateRequest = false;
+
+                        if(key == Input.Keys.R) pipeRotateRequest = false;
 
                         return true;
                     }

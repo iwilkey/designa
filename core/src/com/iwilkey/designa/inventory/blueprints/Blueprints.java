@@ -73,8 +73,6 @@ public class Blueprints {
 
     public void render(Batch b) {
 
-        b.draw(Assets.errorSelector, tabRect.x, tabRect.y, tabRect.width, tabRect.height);
-
         for(ItemBlueprint i : renderUnderneath) i.renderRep(b);
         b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);

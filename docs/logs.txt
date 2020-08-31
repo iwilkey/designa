@@ -271,3 +271,9 @@ Date || Build ||
     - You can now transfer items from the crate to the inventory.
     - You can now separate items in the crate or inventory
     - Crate added to construction blueprint section
+
+8/30/2020 || pa_1.0.31 ||
+    - Copper Mechanical Drills are now in the game!
+    - Began working on machines
+    - Stone pipes are partially added. Need to make it work.
+    NOTE: Lots of code and new algs today, so some are subject to change.

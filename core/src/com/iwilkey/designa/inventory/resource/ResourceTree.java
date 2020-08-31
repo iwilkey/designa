@@ -149,8 +149,6 @@ public class ResourceTree {
 
     public void render(Batch b) {
 
-        b.draw(Assets.errorSelector, tabRect.x, tabRect.y, tabRect.width, tabRect.height);
-
         renderUnavailableNodes(b, selected());
         b.draw(Assets.blueprintGUI, x, y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
