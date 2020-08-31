@@ -192,7 +192,7 @@ public class BuildingHandler {
             ToolSlot.currentItem.itemCount--;
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            World.pipeMap[x][(World.h - y) - 1] = Hud.SELECTED_PIPE_DIRECTION;
+            World.pipeMap[x][y] = Hud.SELECTED_PIPE_DIRECTION;
             gb.getWorld().getLightManager().bakeLighting();
             Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
             return true;
@@ -303,6 +303,12 @@ public class BuildingHandler {
                             pointerOnTileY() * Tile.TILE_SIZE + 8));
                 } catch (NullPointerException ignored) {}
             }
+        }
+
+        if(tile == Tile.stonePipeTile) {
+            World.pipeMap[x][y] = -1;
+            gb.getWorld().getLightManager().bakeLighting();
+            Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
         }
     }
 

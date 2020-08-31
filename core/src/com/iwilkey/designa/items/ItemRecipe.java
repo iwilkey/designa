@@ -324,12 +324,22 @@ public abstract class ItemRecipe {
                 }
             }
 
+            // Offloader
+            public static class OffloaderRecipe extends ItemRecipe {
+                public OffloaderRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.recycledCopperResource, 2);
+                    add(Assets.silverScrapResource, 2);
+                }
+            }
+
             // Pipes
             public static class StonePipeRecipe extends ItemRecipe {
                 public StonePipeRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.concreteResource, 1);
+                    add(Assets.rockResource, 2);
                 }
             }
     // Class

@@ -276,4 +276,13 @@ Date || Build ||
     - Copper Mechanical Drills are now in the game!
     - Began working on machines
     - Stone pipes are partially added. Need to make it work.
+    - When a pipe is selected, you can now use 'R' to change the direction it will be placed.
     NOTE: Lots of code and new algs today, so some are subject to change.
+
+8/31/2020 || pa_1.0.32 ||
+    - Pipe rendering fixed with the pipe map
+    - Pipe animations now discern what direction pipes are headed
+    - All machine logic is now encapsulated in the MachineType class
+    - Added the Offloader
+    - TODO: BAD BUG found when breaking crate. Didn't get the right amount of items back and placing another crate in that
+        TODO: same position, there was a stange graphical behavior showing what used to be in the slots transparently

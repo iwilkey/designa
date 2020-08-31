@@ -8,7 +8,7 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.blueprints.sections.MachineSection;
-import com.iwilkey.designa.inventory.blueprints.sections.ToolSection;
+import com.iwilkey.designa.inventory.blueprints.sections.UtilitiesSection;
 import com.iwilkey.designa.inventory.blueprints.sections.WeaponSection;
 
 import java.awt.Rectangle;
@@ -32,7 +32,7 @@ public class Blueprints {
         this.inventory = i;
         this.x = x; this.y = y;
         sections = new BlueprintSection[3];
-        sections[0] = new ToolSection( this, x, y);
+        sections[0] = new UtilitiesSection( this, x, y);
         sections[1] = new WeaponSection(this, x + 64, y);
         sections[2] = new MachineSection(this, x + (64 * 2), y);
         sectionSelected = 0;
@@ -76,7 +76,7 @@ public class Blueprints {
         for(ItemBlueprint i : renderUnderneath) i.renderRep(b);
         b.draw(Assets.blueprintGUI, Inventory.BLUEPRINT_SIZE.x, Inventory.BLUEPRINT_SIZE.y,
                 Inventory.BLUEPRINT_SIZE.width, Inventory.BLUEPRINT_SIZE.height);
-        Text.draw(b, "Blueprints", x + 41, y + 86, 11);
+        Text.draw(b, "Technology", x + 41, y + 86, 11);
         for(BlueprintSection cs : sections) {
             cs.render(b);
             if(cs.isSelected) b.draw(Assets.inventorySelector, cs.tabX, cs.tabY, 64, 64);

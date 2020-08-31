@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.machines.MachineType;
 import com.iwilkey.designa.machines.PipeHandler;
 import com.iwilkey.designa.world.AmbientCycle;
 
@@ -163,16 +164,39 @@ public class Tile {
             }
         }
 
+        // Offloader
+        public static class Offloader extends Tile {
+            private int itemID = 24;
+            public Offloader(int ID, int strength) {
+                super(Assets.offloader[0], ID, strength);
+            }
+            @Override
+            public int getItemID() {
+                return itemID;
+            }
+            @Override
+            public void render(Batch b, int x, int y, int bl, int id) {
+                MachineType.Offloader.render(b, x, y, bl, id);
+            }
+        }
+
         // Pipe
         public static class Pipe extends Tile {
-            public TextureRegion upDown, rightLeft;
+            public static Animation[] animations;
             public Pipe(TextureRegion tex, int ID, int strength) { super(tex, ID, strength); }
             public static class StonePipe extends Pipe {
                 private int itemID = 23;
                 public StonePipe(int ID, int strength) {
-                    super(Assets.stonePipe[0], ID, strength);
-                    upDown = Assets.stonePipe[0];
-                    rightLeft = Assets.stonePipe[1];
+                    super(Assets.stonePipeUp[0], ID, strength);
+                    animations = new Animation[4];
+                    animations[0] = new Animation(100, Assets.stonePipeRight); // Right
+                    animations[1] = new Animation(100, Assets.stonePipeDown);// Down
+                    animations[2] = new Animation(100, Assets.stonePipeLeft);// Left
+                    animations[3] = new Animation(100, Assets.stonePipeUp);// Up
+                }
+                @Override
+                public void tick() {
+                    for(Animation anim : animations) anim.tick();
                 }
                 @Override
                 public void render(Batch b, int x, int y, int bl, int id) {
@@ -213,6 +237,9 @@ public class Tile {
         // Mech Drills
         public static Tile copperMechanicalDrillTile = new CopperMechanicalDrill(14, 40);
 
+        // Offloader
+        public static Tile offloaderTile = new Offloader(16, 30);
+
         // Pipes
         public static Tile stonePipeTile = new Pipe.StonePipe(15, 12);
 
@@ -236,6 +263,7 @@ public class Tile {
         // Tick animated tiles
         torchTile.tick();
         copperMechanicalDrillTile.tick();
+        stonePipeTile.tick();
     }
 
     public void render(Batch b, int x, int y, int bl, int id) { // This will render a tile at the x and y of it the world has set

@@ -6,7 +6,14 @@ Important now
 
 - Make Sound engine that plays volumes according to the distance between the entity and the player
 
-- Clean up the look / GUI of the blueprint system. It changes now that resources are added.
+- Fix the Crate bug!
+
+- Keep working on the pipes and machines! These things need to at least be done before early access release
+    - Each machine type needs to be linked to the position where the machine tile is at?
+    - Offloaders need to offload items to pipes / crates in the right direction
+    - Pipes need to be able to transport items from one side to the next
+    - Mechanical drills need to be able to offload whatever resource they are mining at a certain speed
+    - There needs to be a machine that can change the direction of a pipe. Offloaders?
 
 - Add the resource tiles to the blueprints and add a next page if it spills over
 
@@ -14,11 +21,6 @@ For later on
 ------------
 
 - Create a wave system (Brought on by nightfall)
-
-- Create the drill and pipe system.
-	- This won't be terrible for just one drill and pipe, but they will get more complex as drills are near each other.
-	- Just start with one.
-	- This will need it's own package most likely. Very complex.
 
 - Create simple Turrets and / or weapons
 	- Simple AI will need to be created.
@@ -28,7 +30,5 @@ For later on
 - Create main menu / world creator / settings state
 
 - Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
-
-- Make more pleasing backgrounds, and try and use the layer system to parallax them when moving
 
 - Release for alpha on Itch and Steam, and make the github repo public. Keep the game open source.

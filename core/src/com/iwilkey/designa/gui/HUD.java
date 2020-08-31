@@ -76,7 +76,7 @@ public class Hud {
             Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.30 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.32 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
         try {
             if (ToolSlot.currentItem.getItem() != null) {
@@ -86,7 +86,7 @@ public class Hud {
             }
         } catch (NullPointerException ignored) {}
 
-        if(Inventory.active) Text.draw(b, "Inventory", 398, Game.h - 92, 11);
+        if(Inventory.active) Text.draw(b, "Inventory", 350, Game.h - 160, 11);
         else Text.draw(b, "press 'F' to open inventory", 14, 14, 8);
     }
 

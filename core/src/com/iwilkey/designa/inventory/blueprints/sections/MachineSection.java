@@ -11,16 +11,16 @@ public class MachineSection extends BlueprintSection {
 
     public MachineSection(Blueprints workbench, int x, int y) {
         super("Machines", workbench, x, y);
+        items.add(new ItemBlueprint(this, Assets.stonePipeItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.offloaderItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.copperMechanicalDrillItem, items.size() - 1));
     }
 
     @Override
     public void tick() {
         if(items.size() > 0) {
-            for(ItemBlueprint ir : items) {
-                ir.tick();
-            }
+            for(ItemBlueprint ir : items) ir.tick();
         }
-
         input();
     }
 
