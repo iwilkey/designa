@@ -259,6 +259,15 @@ public abstract class ItemRecipe {
                 }
             }
 
+            // Wrench
+            public static class WrenchRecipe extends ItemRecipe {
+                public WrenchRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.recycledCopperResource, 4);
+                }
+            }
+
         public static class TorchRecipe extends  ItemRecipe {
             public TorchRecipe(Item item) { super(item); }
             @Override

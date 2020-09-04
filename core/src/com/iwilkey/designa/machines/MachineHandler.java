@@ -23,8 +23,8 @@ public class MachineHandler {
         drills.add(new MachineType.MechanicalDrill(x, y, miningResource, resourceType));
     }
 
-    public static void addOffloader(int x, int y, MachineType.Offloader.Direction direction) {
-        offloaders.add(new MachineType.Offloader(x, y, direction));
+    public static void addOffloader(int x, int y) {
+        offloaders.add(new MachineType.Offloader(x, y));
     }
 
     public void tick() {

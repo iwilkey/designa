@@ -166,6 +166,7 @@ public class Player extends Creature {
     public void addCrate(int x, int y) {
         crates.add(new Crate(inventory, x, y));
     }
+    public void removeCrate(int x, int y) { crates.removeIf(crate -> crate.x == x && crate.y == y); }
 
     @Override
     public void render(Batch b) {
@@ -188,6 +189,9 @@ public class Player extends Creature {
                     } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 4, y + 2,
                                 6, 6, 8, 8, 1, 1, -90);
+                    } else if (ToolSlot.currentItem.getItem().getName().equals("Wrench")) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x - 2.5f, y,
+                                6, 6, 8, 8, 1, 1, 180);
                     } else {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
                     }
@@ -200,6 +204,9 @@ public class Player extends Creature {
                     } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 6, y + 6,
                                 6, 6, 8, 8, 1, 1, 90);
+                    } else if (ToolSlot.currentItem.getItem().getName().equals("Wrench")) {
+                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 8.5f, y,
+                                6, 6, 8, 8, 1, 1, 180);
                     } else {
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
                     }

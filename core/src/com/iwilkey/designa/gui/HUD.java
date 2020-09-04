@@ -47,7 +47,8 @@ public class Hud {
     private void input() {
         try {
             if (ToolSlot.currentItem.getItem() != null) {
-                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe) {
+                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe ||
+                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Offloader) {
                     if(InputHandler.pipeRotateRequest) {
                         SELECTED_PIPE_DIRECTION++;
                         if(SELECTED_PIPE_DIRECTION + 1 == 5) SELECTED_PIPE_DIRECTION = 0;
@@ -76,11 +77,12 @@ public class Hud {
             Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.32 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, "designa pa1.0.34 " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
         try {
             if (ToolSlot.currentItem.getItem() != null) {
-                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe) {
+                if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe ||
+                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Offloader) {
                     b.draw(Assets.arrow[SELECTED_PIPE_DIRECTION], Game.w - 80 + 14, 160, 32, 32);
                 }
             }

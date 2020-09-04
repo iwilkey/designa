@@ -94,6 +94,12 @@ public class ItemType {
                 public int getStrength() { return strength; }
                 public String getName() { return name; }
             }
+            //Wrench
+            public static class Wrench extends Tool {
+                public Wrench(int level) {
+                    super(level);
+                }
+            }
         }
 
         // Weapon

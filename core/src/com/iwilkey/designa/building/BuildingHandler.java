@@ -18,7 +18,6 @@ import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +75,16 @@ public class BuildingHandler {
                 if (InputHandler.placeRequest) {
                     if(ToolSlot.currentItem != null)
                         if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock) {
+
+                            Player player = gb.getWorld().getEntityHandler().getPlayer();
+                            if(!(World.getTile((int) ((player.getX()) / Tile.TILE_SIZE),
+                                    (int) (player.getY() / Tile.TILE_SIZE) + 2) instanceof Tile.AirTile) ||
+                                    !(World.getTile((int) ((player.getX() + 4) / Tile.TILE_SIZE),
+                                            (int) (player.getY() / Tile.TILE_SIZE) + 2) instanceof Tile.AirTile)) {
+                                InputHandler.placeRequest = false;
+                                return;
+                            }
+
                             placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                     pointerOnTileX(), pointerOnTileY());
                             gb.getWorld().getEntityHandler().getPlayer().jump();
@@ -127,7 +136,7 @@ public class BuildingHandler {
             if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
                 // Handing special tiles!
-                specialTilesAdd(id, x, y);
+                if(!(specialTilesAdd(id, x, y))) return;
 
                 ToolSlot.currentItem.itemCount--;
 
@@ -155,12 +164,25 @@ public class BuildingHandler {
 
     }
 
-    private void specialTilesAdd(int id, int x, int y) {
+    private boolean specialTilesAdd(int id, int x, int y) {
 
         if (id == Tile.torchTile.getID())
-            gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+            if(World.backTiles[x][World.h - y - 1] != 0) {
+                gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+                return true;
+            } else if (World.tiles[x][World.h - y] != 0 && World.tiles[x][World.h - y] != Tile.torchTile.getID()) {
+                gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+                return true;
+            } else {
+                return false;
+            }
 
-        if(id == Tile.crateTile.getID()) player.addCrate(x, y);
+        if(id == Tile.crateTile.getID()) {
+            player.addCrate(x, y);
+            return true;
+        }
+
+        return true;
 
     }
 
@@ -188,7 +210,7 @@ public class BuildingHandler {
         Item item = ToolSlot.currentItem.getItem();
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe)) return false;
 
-        if (gb.getWorld().getBackTile(x, y) instanceof Tile.AirTile) {
+        if (gb.getWorld().getTile(x, y) instanceof Tile.AirTile) {
             ToolSlot.currentItem.itemCount--;
             World.tiles[x][(World.h - y) - 1] = id;
             gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
@@ -261,6 +283,17 @@ public class BuildingHandler {
 
                 specialTilesRemove(tile, x, y);
 
+                // Torch above
+                if(World.tiles[x][World.h - y - 2] == Tile.torchTile.getID()) {
+                    System.out.println("Torch broken!");
+                    specialTilesRemove(Tile.torchTile, x, y + 1);
+                    World.getItemHandler().addItem(Item.getItemByID(Tile.torchTile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
+                            pointerOnTileY() * Tile.TILE_SIZE + 8));
+                    World.tiles[x][(World.h - y) - 2] = 0;
+                    gb.getWorld().tileBreakLevel[x][(World.h - y) - 2] = Tile.getStrength(0);
+                    gb.getWorld().getLightManager().bakeLighting();
+                }
+
                 if(!(tile instanceof Tile.StoneTile)) {
                     World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + 8,
                             pointerOnTileY() * Tile.TILE_SIZE + 8));
@@ -303,6 +336,8 @@ public class BuildingHandler {
                             pointerOnTileY() * Tile.TILE_SIZE + 8));
                 } catch (NullPointerException ignored) {}
             }
+
+            gb.getWorld().getEntityHandler().getPlayer().removeCrate(x, y);
         }
 
         if(tile == Tile.stonePipeTile) {

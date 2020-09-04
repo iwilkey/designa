@@ -30,6 +30,7 @@ public class World {
     public static int[][] lightMap;
     public int[][] origLightMap;
     public static int[] origHighTiles;
+    public static int[] origHighBackTiles;
 
     // Entities
     private final EntityHandler entityHandler;
@@ -63,6 +64,7 @@ public class World {
         giveItem(Assets.simpleDrillItem);
         giveItem(Assets.stonePipeItem, 2);
         giveItem(Assets.offloaderItem, 1);
+        giveItem(Assets.wrenchItem);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -96,7 +98,6 @@ public class World {
             for(int x = xStart; x < xEnd; x++) {
                 int xx = x * Tile.TILE_SIZE;
                 int yy = y * Tile.TILE_SIZE;
-
                 ambientCycle.render(b, xx, yy);
             }
         }
@@ -105,21 +106,27 @@ public class World {
         for(WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.render(b);
         // for(WorldGeneration.Mountain mountain : WorldGeneration.mountains) mountain.render(b);
 
+        for(int y = yStart; y < yEnd; y++) {
+            for (int x = xStart; x < xEnd; x++) {
+                int xx = x * Tile.TILE_SIZE;
+                int yy = y * Tile.TILE_SIZE;
+                if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                if(yy < (origHighBackTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
+                getBackTile(x, y).renderBackTile(b, xx, yy, backTileBreakLevel[x][(h - y) - 1], getBackTile(x, y).getID());
+            }
+        }
+
         entityHandler.staticRender(b);
 
         for(int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {
                 int xx = x * Tile.TILE_SIZE;
                 int yy = y * Tile.TILE_SIZE;
-                if(yy < (origHighTiles[x]) * Tile.TILE_SIZE) b.draw(Assets.backDirt, xx, yy, 16, 16);
-                getBackTile(x, y).renderBackTile(b, xx, yy, backTileBreakLevel[x][(h - y) - 1], getBackTile(x, y).getID());
                 getTile(x, y).renderAmbientLight(b, xx, yy);
                 getTile(x, y).render(b, xx, yy, tileBreakLevel[x][(h - y) - 1], getTile(x, y).getID());
                 getTile(x, y).tick();
             }
         }
-
-        machineHandler.render(b);
 
         entityHandler.npcRender(b);
         entityHandler.playerRender(b);
@@ -131,8 +138,8 @@ public class World {
         }
 
         itemHandler.render(b);
-
         entityHandler.getPlayer().getBuildingHandler().render(b);
+        machineHandler.render(b);
 
     }
 
@@ -165,6 +172,7 @@ public class World {
         lightMap = new int[w][h];
         origLightMap = new int[w][h];
         origHighTiles = new int[w];
+        origHighBackTiles = new int[w];
 
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
@@ -181,7 +189,16 @@ public class World {
         lightMap = lightManager.buildAmbientLight(lightMap);
 
         WorldGeneration.EnvironmentGeneration(gb, entityHandler);
+        for(int yy = 0; yy < World.h; yy++) {
+            for(int xx = 0; xx < World.w; xx++) {
+                this.backTiles[xx][yy] = WorldGeneration.backTiles[xx][World.h - yy - 1];
+                backTileBreakLevel[xx][yy] =
+                        Tile.getStrength(WorldGeneration.backTiles[xx][World.h - yy - 1]);
+            }
+        }
         WorldGeneration.OreGeneration();
+
+        origHighBackTiles = LightManager.findHighestBackTiles();
 
         entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
         entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);

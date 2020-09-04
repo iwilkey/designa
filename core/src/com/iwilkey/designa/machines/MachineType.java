@@ -2,7 +2,7 @@ package com.iwilkey.designa.machines;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.tiles.Tile;
 
 public class MachineType {
@@ -28,18 +28,49 @@ public class MachineType {
         public enum Direction { RIGHT, DOWN, LEFT, UP }
         public Direction direction;
         public int x, y;
-        public Offloader(int x, int y, Direction direction) {
+        public Offloader(int x, int y) {
             this.x = x; this.y = y;
-            this.direction = direction;
+            direction = Direction.RIGHT;
+            switch(Hud.SELECTED_PIPE_DIRECTION) {
+                case 0:
+                    direction = Direction.RIGHT;
+                    break;
+                case 1:
+                    direction = Direction.DOWN;
+                    break;
+                case 2:
+                    direction = Direction.LEFT;
+                    break;
+                case 3:
+                    direction = Direction.UP;
+                    break;
+            }
         }
+
         public void setDirection(Direction direction) {
             this.direction = direction;
         }
-        public void tick() {
 
-        }
+        public void tick() {}
+
         public static void render(Batch b, int x, int y, int bl, int id) {
-            b.draw(Assets.offloader[0], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            /*
+            switch(direction) {
+                case RIGHT:
+                    b.draw(Assets.offloader[0], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    break;
+                case DOWN:
+                    b.draw(Assets.offloader[1], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    break;
+                case LEFT:
+                    b.draw(Assets.offloader[2], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    break;
+                case UP:
+                    b.draw(Assets.offloader[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    break;
+            }
+
+             */
         }
     }
 }

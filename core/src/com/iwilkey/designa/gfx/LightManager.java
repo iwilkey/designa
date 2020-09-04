@@ -17,6 +17,7 @@ public class LightManager {
     private final ArrayList<Light> lights = new ArrayList<Light>();
 
     public static int[] highestTile; // Highest tile (at that x value)
+    public static int[] highestBackTile;
     private static final int ambientLightSourceBlockLimit = 25;
 
     public LightManager(GameBuffer gb, World world) {
@@ -96,6 +97,24 @@ public class LightManager {
                 for(int yy = World.h - 1; yy > 0; yy--) {
                     if(World.tiles[x][World.h - yy] != 0) {
                         highestTile[x] = yy;
+                        oht[x] = yy;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return oht;
+    }
+
+    public static int[] findHighestBackTiles() {
+        int[] oht = new int[World.w];
+        highestBackTile = new int[World.w];
+        for(int x = 0; x < World.w; x++) {
+            for(int y = 0; y < World.h; y++) {
+                for(int yy = World.h - 1; yy > 0; yy--) {
+                    if(World.backTiles[x][World.h - yy] != 0) {
+                        highestBackTile[x] = yy;
                         oht[x] = yy;
                         break;
                     }

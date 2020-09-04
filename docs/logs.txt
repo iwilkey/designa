@@ -285,4 +285,22 @@ Date || Build ||
     - All machine logic is now encapsulated in the MachineType class
     - Added the Offloader
     - TODO: BAD BUG found when breaking crate. Didn't get the right amount of items back and placing another crate in that
-        TODO: same position, there was a stange graphical behavior showing what used to be in the slots transparently
+        TODO: same position, there was a strange graphical behavior showing what used to be in the slots transparently
+    - Added the Wrench to the game, but TODO: it needs functionality and to be flipped when player aholds it.
+    - The world now generates another backTile environment to give the World more dimension
+
+9/2/2020 || pa_1.0.33 ||
+    - Fixed the crate graphical error when placed in same place as previous crate
+    - TODO: The crate doesn't give you back stacks of the same object, so I need a way to keep track of that
+    - TODO: Also, this problem with the splitting of items in the inventory of the same type seems to happen when
+        TODO: Picking up an item. It can't seem to do two things at once.
+
+9/4/2020 || pa_1.0.34 || DEBUGGING! YAY
+    - Wrench now renders correctly in players hand
+    - Crates now give back the correct amount of items when broken
+    - Player can no longer jump and place a block when there is no space to
+    - Back dirt tiles now also render for the back environment
+    - You can't now just place a torch in mid-air, it needs to be either on a back tile or
+        needs a supporting front tile underneath.
+    - When you break a front tile that supports a torch, the torch will break as well
+    - Back tiles now primitively reflect lighting

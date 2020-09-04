@@ -397,7 +397,12 @@ public class Crate {
         for(int y = 0; y < h / InventorySlot.SLOT_HEIGHT; y++) {
             for (int x = 0; x < w / InventorySlot.SLOT_WIDTH; x++) {
                 if(storage[x][y] != null) {
-                    items.put(storage[x][y].getItem(), storage[x][y].itemCount);
+                    if(!(items.containsKey(storage[x][y].getItem()))) {
+                        items.put(storage[x][y].getItem(), storage[x][y].itemCount);
+                    } else {
+                        items.put(storage[x][y].getItem(),
+                                items.get(storage[x][y].getItem()) + storage[x][y].itemCount);
+                    }
                 }
             }
         }

@@ -35,7 +35,7 @@ public class Assets {
     public static Texture mountains;
     public static TextureRegion[] trees;
     // Tools
-    public static TextureRegion simpleDrill;
+    public static TextureRegion simpleDrill, wrench;
     // Machines
         // Mech Drills
         public static TextureRegion[] copperMechanicalDrill;
@@ -89,7 +89,9 @@ public class Assets {
     //CreatableItems
         // Tools
             // Drills
-            public static Item simpleDrillItem;
+            public static Item simpleDrillItem, wrenchItem;
+
+        // Machines
 
             // Mechanical Drills
             public static Item copperMechanicalDrillItem;
@@ -127,7 +129,7 @@ public class Assets {
         // CreatableItems
             // Tools
                 // Drills
-                public static ItemRecipe SIMPLE_DRILL_RECIPE;
+                public static ItemRecipe SIMPLE_DRILL_RECIPE, WRENCH_RECIPE;
 
             public static ItemRecipe TORCH_RECIPE, CRATE_RECIPE;
 
@@ -314,6 +316,7 @@ public class Assets {
 
         // Tools
         simpleDrill = ss.crop(4, 6, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+        wrench = ss.crop(10, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Machines
             // Mech Drills
@@ -558,8 +561,11 @@ public class Assets {
         //CreatableItems
             // Tools
                 // Drills
-                simpleDrillItem = new Item(Assets.simpleDrill, "Simple Drill", 10,
-                    new ItemType.CreatableItem.Tool.Drill("simple-drill", 5, 1));
+                simpleDrillItem = new Item(Assets.simpleDrill, "Copper Drill", 10,
+                    new ItemType.CreatableItem.Tool.Drill("copper-drill", 5, 1));
+
+                wrenchItem = new Item(Assets.wrench, "Wrench", 25,
+                    new ItemType.CreatableItem.Tool.Wrench(1));
 
                 // Mechanical Drill
                 copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", 22,
@@ -620,12 +626,12 @@ public class Assets {
         REINFORCED_DIAMOND_RECIPE = new ItemRecipe.ReinforcedDiamondRecipe(Assets.reinforcedDiamondResource);
 
         // CreatableItems
-            // Tools
+            // Utilities (Tools above)
                 // Drills
                 SIMPLE_DRILL_RECIPE = new ItemRecipe.SimpleDrillRecipe(Assets.simpleDrillItem);
 
-                // Mechanical Drills
-
+                // Wrench
+                WRENCH_RECIPE = new ItemRecipe.WrenchRecipe(Assets.wrenchItem);
 
             TORCH_RECIPE = new ItemRecipe.TorchRecipe(Assets.torchItem);
             CRATE_RECIPE = new ItemRecipe.CrateRecipe(Assets.crateItem);

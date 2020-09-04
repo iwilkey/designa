@@ -56,10 +56,12 @@ public class WorldGeneration {
 
     }
 
-    private static int[][] tiles;
+    public static int[][] tiles, backTiles;
 
     private static final int sampleDistance = 32;
     private static final PerlinNoise perlinNoise = new PerlinNoise(MathUtils.random(1000000, 10000000));
+    private static final PerlinNoise backTilePerlin = new PerlinNoise(MathUtils.random(10000000, 10000000 + 10000));
+
 
     // Clouds & mountains
     public static ArrayList<Cloud> clouds = new ArrayList<>();
@@ -81,6 +83,7 @@ public class WorldGeneration {
 
             // Terrain Generation
             tiles = new int[width][height];
+            backTiles = new int[width][height];
 
             for(int x = 0; x < width; x++) {
                 int columnHeight = perlinNoise.getNoise(x, height, sampleDistance);
@@ -91,6 +94,16 @@ public class WorldGeneration {
                             >= columnHeight - MathUtils.random(4, 10)) id = Tile.dirtTile.getID();
                     else id = Tile.stoneTile.getID();
                     tiles[x][y] = id;
+                }
+
+                int backTileColumnHeight = backTilePerlin.getNoise(x, height, sampleDistance);
+                for(int yy = 0; yy < backTileColumnHeight; yy++){
+                    int id;
+                    if(yy == backTileColumnHeight - 1) id = Tile.grassTile.getID();
+                    else if (yy < backTileColumnHeight - 1 && yy
+                            >= backTileColumnHeight - MathUtils.random(4, 10)) id = Tile.dirtTile.getID();
+                    else id = Tile.stoneTile.getID();
+                    backTiles[x][yy] = id;
                 }
             }
 

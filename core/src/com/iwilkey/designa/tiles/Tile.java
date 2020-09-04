@@ -8,6 +8,7 @@ import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.machines.MachineType;
 import com.iwilkey.designa.machines.PipeHandler;
 import com.iwilkey.designa.world.AmbientCycle;
+import com.iwilkey.designa.world.World;
 
 public class Tile {
 
@@ -275,7 +276,32 @@ public class Tile {
         if(!(this instanceof AirTile)) {
             b.draw(texture, x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
             renderBreakLevel(b, x, y, bl, id);
-            b.draw(Assets.light_colors[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            TextureRegion shade;
+            switch (World.lightMap[x / Tile.TILE_SIZE][y / Tile.TILE_SIZE]) {
+                case 6:
+                case 5:
+                    shade = Assets.light_colors[5];
+                    break;
+                case 4:
+                    shade = Assets.light_colors[4];
+                    break;
+                case 3:
+                    shade = Assets.light_colors[3];
+                    break;
+                case 2:
+                    shade = Assets.light_colors[2];
+                    break;
+                case 1:
+                    shade = Assets.light_colors[1];
+                    break;
+                default:
+                    shade = Assets.light_colors[0];
+            }
+
+            if(World.lightMap[x / Tile.TILE_SIZE][y / Tile.TILE_SIZE] > 6) shade = Assets.light_colors[6];
+            b.draw(shade, x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            b.draw(Assets.light_colors[4], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+
         }
     }
 
