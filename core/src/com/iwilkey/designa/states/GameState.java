@@ -18,7 +18,9 @@ public class GameState extends State {
 
     public GameState(GameBuffer gb) {
         this.gb = gb;
-        world = new World(gb, WorldGeneration.GenerateTerrain("World" + MathUtils.random(10, 100000), 3000, 100));
+
+        world = new World(gb, WorldGeneration.initWorld("World" + MathUtils.random(10, 100000), 3000, 100));
+
         gb.setWorld(world);
         gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
                 LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));

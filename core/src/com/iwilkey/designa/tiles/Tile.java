@@ -279,6 +279,8 @@ public class Tile {
             TextureRegion shade;
             switch (World.lightMap[x / Tile.TILE_SIZE][y / Tile.TILE_SIZE]) {
                 case 6:
+                    shade = Assets.light_colors[6];
+                    break;
                 case 5:
                     shade = Assets.light_colors[5];
                     break;

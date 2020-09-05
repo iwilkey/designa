@@ -158,48 +158,93 @@ public class World {
     }
 
     private void loadWorld(String path) {
-        String file = Utils.loadFileAsString(path);
-        String[] tokens = file.split("\\s+");
-
-        w = Utils.parseInt(tokens[0]);
-        h = Utils.parseInt(tokens[1]);
-
+        // Init front tiles
+        String ft = Utils.loadFileAsString(path + "ft.dsw");
+        String[] ftTokens = ft.split("\\s+");
+        w = Utils.parseInt(ftTokens[0]);
+        h = Utils.parseInt(ftTokens[1]);
         tiles = new int[w][h];
-        backTiles = new int[w][h];
-        pipeMap = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int id = Utils.parseInt(ftTokens[x + y * w + 2]);
+                tiles[x][y] = id;
+            }
+        }
+
+        // Init front back tiles
+        String ftblf = Utils.loadFileAsString(path + "ftbl.dsw");
+        String[] ftblTokens = ftblf.split("\\s+");
         tileBreakLevel = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int s = Utils.parseInt(ftblTokens[x + y * w + 2]);
+                tileBreakLevel[x][y] = s;
+            }
+        }
+
+        // Init back tiles
+        String btf = Utils.loadFileAsString(path + "bt.dsw");
+        String[] btTokens = btf.split("\\s+");
+        backTiles = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int bid = Utils.parseInt(btTokens[x + y * w + 2]);
+                backTiles[x][y] = bid;
+            }
+        }
+
+        // Init back tile break level
+        String btblf = Utils.loadFileAsString(path + "btbl.dsw");
+        String[] btblTokens = btblf.split("\\s+");
         backTileBreakLevel = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int btbl = Utils.parseInt(btblTokens[x + y * w + 2]);
+                backTileBreakLevel[x][y] = btbl;
+            }
+        }
+
+        // Init light map
+        String lmf = Utils.loadFileAsString(path + "lm.dsw");
+        String[] lmTokens = lmf.split("\\s+");
         lightMap = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int lmi = Utils.parseInt(lmTokens[x + y * w + 2]);
+                lightMap[x][y] = lmi;
+            }
+        }
+
+        // Init pipe map
+        String pmf = Utils.loadFileAsString(path + "pm.dsw");
+        String[] pmTokens = pmf.split("\\s+");
+        pipeMap = new int[w][h];
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                int pmi = Utils.parseInt(pmTokens[x + y * w + 2]);
+                lightMap[x][y] = pmi;
+            }
+        }
+
         origLightMap = new int[w][h];
         origHighTiles = new int[w];
         origHighBackTiles = new int[w];
 
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
-                int id = Utils.parseInt(tokens[x + y * w + 2]);
-                tiles[x][y] = id;
-                pipeMap[x][y] = -1;
-                tileBreakLevel[x][y] = Tile.getStrength(id);
-                lightMap[x][h - y - 1] = 0;
                 origLightMap[x][h - y - 1] = 0;
             }
         }
 
         origHighTiles = LightManager.findHighestTiles();
+        origHighBackTiles = LightManager.findHighestBackTiles();
         lightMap = lightManager.buildAmbientLight(lightMap);
 
+        // Continue generating world
         WorldGeneration.EnvironmentGeneration(gb, entityHandler);
-        for(int yy = 0; yy < World.h; yy++) {
-            for(int xx = 0; xx < World.w; xx++) {
-                this.backTiles[xx][yy] = WorldGeneration.backTiles[xx][World.h - yy - 1];
-                backTileBreakLevel[xx][yy] =
-                        Tile.getStrength(WorldGeneration.backTiles[xx][World.h - yy - 1]);
-            }
-        }
         WorldGeneration.OreGeneration();
 
-        origHighBackTiles = LightManager.findHighestBackTiles();
-
+        // Set spawn
         entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
         entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
     }

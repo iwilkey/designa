@@ -49,6 +49,7 @@ public class BuildingHandler {
                 backBuilding = !backBuilding;
                 Assets.invClick.play(0.5f);
             }
+
             InputHandler.backBuildingToggleRequest = false;
 
             if (inRange && !onTop) {

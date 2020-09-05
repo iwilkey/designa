@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.iwilkey.designa.Game;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.inventory.Inventory;
 
 public class InputHandler {
@@ -26,6 +27,7 @@ public class InputHandler {
     public static boolean itemPickupRequest;
     public static boolean exitCrateRequest;
     public static boolean pipeRotateRequest;
+    public static boolean gameMenuRequest;
 
 
     public InputHandler() {
@@ -44,7 +46,6 @@ public class InputHandler {
     }
 
     public static void initGameStateInput() {
-
         switch(Gdx.app.getType()) {
 
             case Desktop:
@@ -63,7 +64,12 @@ public class InputHandler {
 
                         if(key == Input.Keys.X) backBuildingToggleRequest = true;
 
-                        if(key == Input.Keys.ESCAPE) exitCrateRequest = true;
+                        if(key == Input.Keys.ESCAPE) {
+                            exitCrateRequest = true;
+                            gameMenuRequest = true;
+                            Hud.gameMenu = !Hud.gameMenu;
+                            Inventory.active = false;
+                        }
 
                         if(key == Input.Keys.R) pipeRotateRequest = true;
 
@@ -82,7 +88,10 @@ public class InputHandler {
 
                         if(key == Input.Keys.X) backBuildingToggleRequest = false;
 
-                        if(key == Input.Keys.ESCAPE) exitCrateRequest = false;
+                        if(key == Input.Keys.ESCAPE) {
+                            exitCrateRequest = false;
+                            gameMenuRequest = false;
+                        }
 
                         if(key == Input.Keys.R) pipeRotateRequest = false;
 
@@ -182,23 +191,50 @@ public class InputHandler {
         }
     }
 
-    public static void initTechTreeStateInput() {
+    public static void initMainMenuStateInput() {
         switch(Gdx.app.getType()) {
             case Desktop:
                 Gdx.input.setInputProcessor(new InputAdapter() {
+                    @Override
+                    public boolean mouseMoved(int x, int y) {
+                        cursorX = x; cursorY = Game.h - y;
+                        return true;
+                    }
 
-                });
-                break;
+                    @Override
+                    public boolean touchDown(int x, int y, int pointer, int button) {
+                        justClicked(button);
+                        if(button == Input.Buttons.LEFT) {
+                            lmbd = true;
+                        }
+                        if(button == Input.Buttons.RIGHT) {
+                            rmbd = true;
+                        }
+                        return true;
+                    }
+                    @Override
+                    public boolean touchUp(int x, int y, int pointer, int button) {
+                        if(button == Input.Buttons.LEFT) {
+                            lmbd = false;
+                        }
 
-            case iOS:
-                Gdx.input.setInputProcessor(new InputAdapter() {
+                        if(button == Input.Buttons.RIGHT) {
+                            rmbd = false;
+                        }
+                        return true;
+                    }
+                    public boolean justClicked(int button) {
+                        switch(button) {
+                            case 0:
+                                return jcl;
 
-                });
-                break;
+                            case 1:
+                                return jcr;
 
-            case Android:
-                Gdx.input.setInputProcessor(new InputAdapter() {
-
+                            default:
+                                return false;
+                        }
+                    }
                 });
                 break;
         }

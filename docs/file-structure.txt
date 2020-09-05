@@ -1,0 +1,48 @@
+Designa File Structure
+
+Every game will be saved in this format:
+    - Location: /assets/worlds/worldName
+        - ft.dsw (front-tiles)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent tile ID's.
+
+        - ftbl.dsw (front-tile-break-level)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent the tile break level at that coordinate.
+
+        - bt.dsw (back-tiles)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent tile ID's.
+
+        - btbl.dsw (back-tile-break-level)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent the back tile break level at that coordinate.
+
+        - lm.dsw (light-map)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent the light intensity at the coordinate
+
+        - pm.dsw (pipe-map)
+            This file contains 2 numbers on the first line denoting the dimensions of the world
+            then, a grid of numbers that represent if there was a pipe there and its orientation
+
+        - tr.dsw (trees)
+            This file contains information about what x value the tree was on.
+
+        - inv.dsw (inventory)
+            This file will be a list of numbers that match the number of inventory slot. They will have
+            numbers in them that represent the itemID then a comma and another number representing the amount
+            that was in that slot
+
+            ex.
+            22,99 10,34 11,19
+
+        - Location: /../crates
+            (for how ever many crates there are)
+            - c1.dsw (crate-1)
+                This file will have two numbers at the top representing the tile location of the crate
+                Then, this file will be the exact same format as the inventory file,
+                just smaller to match the size of the crate
+
+            - c2.dsw (crate-2)
+            - ect...

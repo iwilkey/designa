@@ -304,3 +304,11 @@ Date || Build ||
         needs a supporting front tile underneath.
     - When you break a front tile that supports a torch, the torch will break as well
     - Back tiles now primitively reflect lighting
+
+9/5/2020 || pa_1.0.35 ||
+    - Created a main menu state
+    - Created world selector state
+    - Reorganized worlds into sub files with information about the game to be saved / loaded on players whim (See file-structure.txt)
+        TODO: Finish tree file, inventory file, and crates.
+        TODO: Make a way to save and load the world
+    - Made an in game pause menu

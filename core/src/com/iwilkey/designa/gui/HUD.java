@@ -1,5 +1,6 @@
 package com.iwilkey.designa.gui;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.utils.Null;
@@ -23,7 +24,19 @@ public class Hud {
 
     public static int SELECTED_PIPE_DIRECTION = 0;
 
+    public static boolean gameMenu = false;
+
+    Texture resumeOff, resumeOn, settingsOff, settingsOn, saveOff, saveOn;
+
     public Hud(Player player) {
+
+        resumeOff = new Texture("textures/game/resume_off.png");
+        resumeOn = new Texture("textures/game/resume_on.png");
+        settingsOff = new Texture("textures/mainmenu/buttons/settings_off.png");
+        settingsOn = new Texture("textures/mainmenu/buttons/settings_on.png");
+        saveOff = new Texture("textures/game/saveandquit_off.png");
+        saveOn = new Texture("textures/game/saveandquit_on.png");
+
         this.player = player;
     }
 
@@ -57,6 +70,10 @@ public class Hud {
                 }
             }
         } catch (NullPointerException ignored) {}
+
+        if(InputHandler.gameMenuRequest) {
+            InputHandler.gameMenuRequest = false;
+        }
     }
 
     public void render(Batch b) {
@@ -77,7 +94,7 @@ public class Hud {
             Text.draw(b, "Front", Game.w - 80, 132, 11);
         }
 
-        Text.draw(b, "designa pa1.0.34 " + Integer.toString(Game.tps) + " tps",
+        Text.draw(b, Assets.VERSION + " " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
         try {
             if (ToolSlot.currentItem.getItem() != null) {
@@ -90,6 +107,19 @@ public class Hud {
 
         if(Inventory.active) Text.draw(b, "Inventory", 350, Game.h - 160, 11);
         else Text.draw(b, "press 'F' to open inventory", 14, 14, 8);
+
+        if(gameMenu) {
+            b.draw(Assets.blueprintGUI, (Game.w / 2) - (400 / 2), (Game.h / 2) - (600 / 2), 400, 600);
+            b.draw(resumeOff, (Game.w / 2) - (resumeOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (resumeOff.getHeight() * 0.50f / 2) + 100 - 40,
+                resumeOff.getWidth() * 0.50f, resumeOff.getHeight() * 0.50f);
+            b.draw(settingsOff, (Game.w / 2) - (settingsOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (settingsOff.getHeight() * 0.50f / 2),
+                    settingsOff.getWidth() * 0.50f, settingsOff.getHeight() * 0.50f);
+            b.draw(saveOff, (Game.w / 2) - (saveOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (saveOff.getHeight() * 0.50f / 2) - 60,
+                    saveOff.getWidth() * 0.50f, saveOff.getHeight() * 0.50f);
+        }
     }
 
     private void renderHealthBar(Batch b) {
