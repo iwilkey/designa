@@ -325,4 +325,7 @@ Date || Build ||
     - Broken tiles now spawn an item in the middle so they don't get stuck
     - Changed the font for the main menu buttons
     - Added directional text for world selector state
-    
+
+9/9/2020 || pa_1.0.38 ||
+    - Made UI more object oriented
+    - TextButtons now exist and can be put in any State

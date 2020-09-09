@@ -13,7 +13,7 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class Assets {
 
-    public static String VERSION = "pa1.0.37";
+    public static String VERSION = "pa1.0.38";
 
     // Cursor TODO: Check if this causes problems on a smartphone...
     public static TextureRegion cursor;

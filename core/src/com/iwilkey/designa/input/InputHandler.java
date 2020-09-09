@@ -7,13 +7,18 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.gui.Hud;
+import com.iwilkey.designa.gui.ui.UIManager;
 import com.iwilkey.designa.inventory.Inventory;
+import com.iwilkey.designa.states.State;
 
 public class InputHandler {
 
     // Class Vars
     private static boolean[] keys, jp, cp;
     private static boolean lmbd, rmbd, jcl, ccl, jcr, ccr;
+
+    // UI Manager
+    private static UIManager uiManager;
 
     // Controls
     public static boolean moveLeft, moveRight, jumpRequest, inventoryRequest;
@@ -43,6 +48,10 @@ public class InputHandler {
         Cursor cursor = Gdx.graphics.newCursor(pix, 4, 4);
         Gdx.graphics.setCursor(cursor);
         pix.dispose();
+    }
+
+    public static void setUIManager(UIManager uiManager) {
+        InputHandler.uiManager = uiManager;
     }
 
     public static void initGameStateInput() {
@@ -198,6 +207,7 @@ public class InputHandler {
                     @Override
                     public boolean mouseMoved(int x, int y) {
                         cursorX = x; cursorY = Game.h - y;
+                        if(uiManager != null) { uiManager.onMouseMove(); }
                         return true;
                     }
 
@@ -216,6 +226,7 @@ public class InputHandler {
                     public boolean touchUp(int x, int y, int pointer, int button) {
                         if(button == Input.Buttons.LEFT) {
                             lmbd = false;
+                            if(uiManager != null) uiManager.onMouseRelease();
                         }
 
                         if(button == Input.Buttons.RIGHT) {

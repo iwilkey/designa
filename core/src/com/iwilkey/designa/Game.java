@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
-import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.states.MainMenuState;

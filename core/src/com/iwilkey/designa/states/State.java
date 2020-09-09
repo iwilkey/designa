@@ -1,6 +1,7 @@
 package com.iwilkey.designa.states;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.iwilkey.designa.Game;
 
 public abstract class State {
 
@@ -12,6 +13,11 @@ public abstract class State {
 
     public static void setState(State s) {
         currentState = s;
+    }
+
+    protected void switchState(int index){
+        Game.getStates().get(index).start();
+        State.setState(Game.getStates().get(index));
     }
 
     public abstract void start();
