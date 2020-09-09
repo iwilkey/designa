@@ -84,7 +84,7 @@ public class Player extends Creature {
     public void tick() {
 
         // Tick animations
-        for(Animation anim : animations) {
+        for (Animation anim : animations) {
             anim.tick();
         }
 
@@ -108,8 +108,8 @@ public class Player extends Creature {
         inventory.tick();
         toolSlot.tick();
 
-        if(crates.size() != 0) {
-            for(Crate crate : crates) crate.tick();
+        if (crates.size() != 0) {
+            for (Crate crate : crates) crate.tick();
         }
 
     }

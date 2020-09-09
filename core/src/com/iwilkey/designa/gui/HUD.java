@@ -3,7 +3,6 @@ package com.iwilkey.designa.gui;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.badlogic.gdx.utils.Null;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
@@ -16,6 +15,8 @@ import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 
+import java.awt.*;
+
 public class Hud {
     private final Player player;
 
@@ -25,8 +26,10 @@ public class Hud {
     public static int SELECTED_PIPE_DIRECTION = 0;
 
     public static boolean gameMenu = false;
+    public boolean resume = false, settings = false, save = false;
 
     Texture resumeOff, resumeOn, settingsOff, settingsOn, saveOff, saveOn;
+    Rectangle resumeCollider, settingsCollider, saveCollider;
 
     public Hud(Player player) {
 
@@ -36,6 +39,16 @@ public class Hud {
         settingsOn = new Texture("textures/mainmenu/buttons/settings_on.png");
         saveOff = new Texture("textures/game/saveandquit_off.png");
         saveOn = new Texture("textures/game/saveandquit_on.png");
+
+        resumeCollider = new Rectangle((int)((Game.w / 2) - (resumeOff.getWidth() * 0.50f / 2)), (int)((Game.h / 2) -
+                (resumeOff.getHeight() * 0.50f / 2) + 100 - 40),
+                (int)(resumeOff.getWidth() * 0.50f), (int)(resumeOff.getHeight() * 0.50f));
+        settingsCollider = new Rectangle((int)((Game.w / 2) - (settingsOff.getWidth() * 0.50f / 2)), (int)((Game.h / 2) -
+                (settingsOff.getHeight() * 0.50f / 2)),
+                (int)(settingsOff.getWidth() * 0.50f), (int)(settingsOff.getHeight() * 0.50f));
+        saveCollider = new Rectangle((int)((Game.w / 2) - (saveOff.getWidth() * 0.50f / 2)), (int)((Game.h / 2) -
+                (saveOff.getHeight() * 0.50f / 2) - 60),
+                (int)(saveOff.getWidth() * 0.50f), (int)(saveOff.getHeight() * 0.50f));
 
         this.player = player;
     }
@@ -55,6 +68,7 @@ public class Hud {
         if(player.getToolSlot().y != yy) player.getToolSlot().y = yy;
 
         input();
+
     }
 
     private void input() {
@@ -74,6 +88,21 @@ public class Hud {
         if(InputHandler.gameMenuRequest) {
             InputHandler.gameMenuRequest = false;
         }
+
+        if(gameMenu) {
+            Rectangle cursor = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
+            resume = cursor.intersects(resumeCollider);
+            settings = cursor.intersects(settingsCollider);
+            save = cursor.intersects(saveCollider);
+
+            if(InputHandler.leftMouseButtonDown && resume) gameMenu = false;
+            if(InputHandler.leftMouseButtonDown && save) {
+                player.getGameBuffer().getWorld().saveWorld();
+                System.exit(-1);
+            }
+
+        }
+
     }
 
     public void render(Batch b) {
@@ -110,13 +139,25 @@ public class Hud {
 
         if(gameMenu) {
             b.draw(Assets.blueprintGUI, (Game.w / 2) - (400 / 2), (Game.h / 2) - (600 / 2), 400, 600);
-            b.draw(resumeOff, (Game.w / 2) - (resumeOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+
+            if(resume) b.draw(resumeOn, (Game.w / 2) - (resumeOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (resumeOff.getHeight() * 0.50f / 2) + 100 - 40,
+                    resumeOff.getWidth() * 0.50f, resumeOff.getHeight() * 0.50f);
+            else b.draw(resumeOff, (Game.w / 2) - (resumeOff.getWidth() * 0.50f / 2), (Game.h / 2) -
                             (resumeOff.getHeight() * 0.50f / 2) + 100 - 40,
                 resumeOff.getWidth() * 0.50f, resumeOff.getHeight() * 0.50f);
-            b.draw(settingsOff, (Game.w / 2) - (settingsOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+
+            if(settings) b.draw(settingsOn, (Game.w / 2) - (settingsOff.getWidth() * 0.50f / 2), (Game.h / 2) -
                             (settingsOff.getHeight() * 0.50f / 2),
                     settingsOff.getWidth() * 0.50f, settingsOff.getHeight() * 0.50f);
-            b.draw(saveOff, (Game.w / 2) - (saveOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+            else b.draw(settingsOff, (Game.w / 2) - (settingsOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (settingsOff.getHeight() * 0.50f / 2),
+                    settingsOff.getWidth() * 0.50f, settingsOff.getHeight() * 0.50f);
+
+            if(save) b.draw(saveOn, (Game.w / 2) - (saveOff.getWidth() * 0.50f / 2), (Game.h / 2) -
+                            (saveOff.getHeight() * 0.50f / 2) - 60,
+                    saveOff.getWidth() * 0.50f, saveOff.getHeight() * 0.50f);
+            else b.draw(saveOff, (Game.w / 2) - (saveOff.getWidth() * 0.50f / 2), (Game.h / 2) -
                             (saveOff.getHeight() * 0.50f / 2) - 60,
                     saveOff.getWidth() * 0.50f, saveOff.getHeight() * 0.50f);
         }

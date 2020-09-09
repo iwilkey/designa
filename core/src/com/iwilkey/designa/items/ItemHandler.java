@@ -31,14 +31,18 @@ public class ItemHandler {
     }
 
     private void moveX(Item i) {
+        /*
         if(!i.isGrounded && !(i.name.equals("OakWood"))) {
 
             int x = i.x;
             float xx = gb.getWorld().getEntityHandler().getPlayer().getX() + 8;
-            float dif = (xx - x) * 0.30f;
+            float dif = (xx - x) * 0.000030f;
             i.setPosition((int) (i.x + dif), i.y);
 
         }
+
+         */
+
     }
 
     private void moveY(Item i) {

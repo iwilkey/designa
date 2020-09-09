@@ -268,6 +268,15 @@ public abstract class ItemRecipe {
                 }
             }
 
+            public static class LadderRecipe extends ItemRecipe {
+                public LadderRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.stickResource, 2);
+                    add(Assets.barkResource, 3);
+                }
+            }
+
         public static class TorchRecipe extends  ItemRecipe {
             public TorchRecipe(Item item) { super(item); }
             @Override

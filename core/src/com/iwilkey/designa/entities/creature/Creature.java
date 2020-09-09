@@ -112,6 +112,11 @@ public abstract class Creature extends Entity {
 
     }
 
+    // TODO: Finish this
+    private void moveUpLadder() {
+        y += 0.1;
+    }
+
     protected void checkStuck() {
         if(collisionWithTile((int) (x + 16) / Tile.TILE_SIZE, (int) y / Tile.TILE_SIZE)) {
             jump();

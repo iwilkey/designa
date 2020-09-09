@@ -12,6 +12,7 @@ import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.inventory.resource.VerticalTree;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.inventory.resource.ResourceTree;
+import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.Rectangle;
 
@@ -28,7 +29,7 @@ public class Inventory {
     public int[][] selector;
     public boolean itemUp = false;
 
-    private final int INV_SLOT_X = (60) - 19, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 250;
+    private final int INV_SLOT_X = (60) - 19, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 100;
     public final static int CRATE_X = Gdx.graphics.getWidth() - (250) - (8 * InventorySlot.SLOT_WIDTH),
             CRATE_Y = (Gdx.graphics.getHeight() / 2) - 200;
     public final static int bw = 300 + 64, bh = 300 + 200 + 150;
@@ -42,7 +43,7 @@ public class Inventory {
 
         invX = 10;
         invY = Gdx.graphics.getHeight() / 2 - (700 / 2);
-        invWidth = 700; invHeight = 500;
+        invWidth = 400; invHeight = 200;
 
         slots = new InventorySlot[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector = new int[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
@@ -196,10 +197,10 @@ public class Inventory {
                 }
 
 
-                // Step I: Extract the previous inventory items.
+                // Step I: Extract the previous inventory items
                 InventorySlot is = null;
                 Item i = null;
-                int count = 0;
+                int count = 0, tempX = 0, tempY = 0;
                 for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
                     for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
 
@@ -208,6 +209,7 @@ public class Inventory {
                                 is = slots[x][y];
                                 i = slots[x][y].getItem();
                                 count = slots[x][y].itemCount;
+                                tempX = x; tempY = y;
                                 slots[x][y].putItem(null, 0);
                                 slots[x][y].itemUp = false;
                             }
@@ -217,9 +219,9 @@ public class Inventory {
 
                 // Step II: Clear the selector and find which slot was just clicked on.
                 clearSelector();
-                Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
                 for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
                     for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                        Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
                         if (slots[x][y].getCollider().intersects(rect)) {
 
                             // Step III: If the slot has an item in it already and it's the same item...
@@ -278,6 +280,21 @@ public class Inventory {
                         }
                     }
                 }
+
+                for(int ii = 0; ii < count; ii++) {
+                    int abb = MathUtils.random(-2,2);
+
+                    int xx = (gb.getWorld().getEntityHandler().getPlayer().facingLeft()) ?
+                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() - (Tile.TILE_SIZE - 6) + abb :
+                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() + (2 * Tile.TILE_SIZE - 6) + abb;
+                    int yyAbb = MathUtils.random(6, 14);
+
+                    gb.getWorld().getItemHandler().addItem(i.createNew(
+                            xx, (int) gb.getWorld().getEntityHandler().getPlayer().getY() + (Tile.TILE_SIZE) + yyAbb));
+                }
+                is.putItem(null, 0);
+                itemUp = false;
+                selector[tempX][tempY] = 1;
 
             } else if (InputHandler.rightMouseButtonDown) {
                 Item i = null;

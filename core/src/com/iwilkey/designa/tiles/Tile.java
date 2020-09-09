@@ -108,6 +108,16 @@ public class Tile {
         public int getItemID() { return itemID; }
     }
 
+    public static class LadderTile extends Tile {
+        public int itemID = 26;
+        public LadderTile(int ID, int strength) { super(Assets.ladder, ID, strength); }
+        public int getItemID() { return itemID; }
+        @Override
+        public boolean isSolid() {
+            return false;
+        }
+    }
+
     // Construction bricks
     public static class PlywoodTile extends Tile {
         public int itemID = 2;
@@ -221,6 +231,7 @@ public class Tile {
         // Animated
         public static Tile torchTile = new TorchTile(4, 1);
     public static Tile crateTile = new CrateTile(13, 20);
+    public static Tile ladderTile = new LadderTile(17, 8);
 
     // Ores
     public static Tile copperOreTile = new CopperOreTile(5, 20);

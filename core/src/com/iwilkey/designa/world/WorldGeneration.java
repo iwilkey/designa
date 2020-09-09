@@ -52,7 +52,7 @@ public class WorldGeneration {
 
     public static String initWorld(String name, int width, int height) {
 
-        TEST_TOOLS_DELETE_ALL_WORLDS();
+        // TEST_TOOLS_DELETE_ALL_WORLDS();
 
         // Specify the path to the directory where this world will be
         String dirpath = "worlds/" + name + "/";
@@ -79,11 +79,6 @@ public class WorldGeneration {
             String btblPath = dirpath + "btbl.dsw";
             FileHandle btblf = Gdx.files.local(btblPath);
             if(!writeBTBL(btblf, width, height)) System.exit(-1);
-
-            // Init lm.dsw
-            String lmPath = dirpath + "lm.dsw";
-            FileHandle lmf = Gdx.files.local(lmPath);
-            if(!writeLM(lmf, width, height)) System.exit(-1);
 
             // Init pm.dsw
             String pmPath = dirpath + "pm.dsw";
@@ -114,7 +109,6 @@ public class WorldGeneration {
             return false;
         }
     }
-
     private static boolean writeFTBL(FileHandle ftblf, int width, int height) {
         try {
             Writer w = ftblf.writer(true);
@@ -135,7 +129,6 @@ public class WorldGeneration {
             return false;
         }
     }
-
     private static boolean writeBT(FileHandle ftf, int width, int height) {
         try {
             Writer w = ftf.writer(true);
@@ -156,7 +149,6 @@ public class WorldGeneration {
             return false;
         }
     }
-
     private static boolean writeBTBL(FileHandle ftblf, int width, int height) {
         try {
             Writer w = ftblf.writer(true);
@@ -177,28 +169,6 @@ public class WorldGeneration {
             return false;
         }
     }
-
-    private static boolean writeLM(FileHandle ftf, int width, int height) {
-        try {
-            Writer w = ftf.writer(true);
-            w.write(width + " " + height + "\n");
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int num = 0;
-                    w.write(num + " ");
-                }
-                w.write("\n");
-            }
-
-            w.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     private static boolean writePM(FileHandle ftf, int width, int height) {
         try {
             Writer w = ftf.writer(true);
@@ -219,7 +189,6 @@ public class WorldGeneration {
             return false;
         }
     }
-
 
     public static void GenerateTerrain(String name, int width, int height) {
         tiles = new int[width][height];

@@ -312,3 +312,17 @@ Date || Build ||
         TODO: Finish tree file, inventory file, and crates.
         TODO: Make a way to save and load the world
     - Made an in game pause menu
+
+9/7/2020 || pa_1.0.36 ||
+    - Made the player inventory smaller
+    - Items now spawn into the outside world when clicked outside of a slot
+    - Began adding Ladders into the game TODO: Finish logic for moving up them
+
+9/8/2020 || pa_1.0.37 ||
+    - The game can now save and load worlds
+        This includes front tiles, back tiles, all break levels, the pipe map, creation of light where
+        torches are and saving of the inventory and spawn point!
+    - Broken tiles now spawn an item in the middle so they don't get stuck
+    - Changed the font for the main menu buttons
+    - Added directional text for world selector state
+    

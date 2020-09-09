@@ -62,7 +62,7 @@ public class Game extends ApplicationAdapter {
 
 	private void tick() {
 		input.tick();
-		if(!Hud.gameMenu) if(State.getCurrentState() != null) State.getCurrentState().tick();
+		if(State.getCurrentState() != null) State.getCurrentState().tick();
 	}
 
 	long lt = System.nanoTime();
@@ -107,6 +107,7 @@ public class Game extends ApplicationAdapter {
 		gameBatch.dispose();
 		guiBatch.dispose();
 		if(State.getCurrentState() != null) State.getCurrentState().dispose();
+		if(State.getCurrentState() == gameState) gb.getWorld().saveWorld();
 	}
 
 	public static ArrayList<State> getStates() {

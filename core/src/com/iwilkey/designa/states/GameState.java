@@ -19,7 +19,11 @@ public class GameState extends State {
     public GameState(GameBuffer gb) {
         this.gb = gb;
 
-        world = new World(gb, WorldGeneration.initWorld("World" + MathUtils.random(10, 100000), 3000, 100));
+        // Creating a new world...
+        // world = new World(gb, WorldGeneration.initWorld("World" + MathUtils.random(10, 100000), 3000, 100));
+
+        // Loading an existing world
+        world = new World(gb, "worlds/World2215/");
 
         gb.setWorld(world);
         gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,

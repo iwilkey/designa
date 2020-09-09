@@ -10,14 +10,15 @@ import com.iwilkey.designa.inventory.blueprints.BlueprintSection;
 public class UtilitiesSection extends BlueprintSection {
     public UtilitiesSection(Blueprints workbench, int x, int y) {
         super("Tools", workbench, x, y);
+        items.add(new ItemBlueprint(this, Assets.torchItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.ladderItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.simpleDrillItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.crateItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.plywoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.hardwoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.reinforcedHardwoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.strongwoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.reinforcedStrongwoodTileItem, items.size() - 1));
-        items.add(new ItemBlueprint(this, Assets.torchItem, items.size() - 1));
-        items.add(new ItemBlueprint(this, Assets.simpleDrillItem, items.size() - 1));
-        items.add(new ItemBlueprint(this, Assets.crateItem, items.size() - 1));
 
         items.get(0).isSelected = true;
     }

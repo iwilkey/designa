@@ -55,22 +55,17 @@ public class Camera {
     }
 
     public static void zoom(float amount, Entity e) {
-
         isZooming = true;
 
-        if(targetZoom - amount > CAMERA_MAX_ZOOM) {
-            targetZoom = CAMERA_MAX_ZOOM;
-        } else if (targetZoom - amount < CAMERA_MIN_ZOOM) {
-            targetZoom = CAMERA_MIN_ZOOM;
-        } else {
-            targetZoom -= amount;
-        }
+        if(targetZoom - amount > CAMERA_MAX_ZOOM) targetZoom = CAMERA_MAX_ZOOM;
+        else if (targetZoom - amount < CAMERA_MIN_ZOOM) targetZoom = CAMERA_MIN_ZOOM;
+        else targetZoom -= amount;
 
         scale.x = targetZoom;
         scale.y = targetZoom;
 
-        offset.x = e.getX() * scale.x - (Game.w / 2f) + e.getWidth() / 2f;
-        offset.y = e.getY() * scale.y - (Game.h / 2f) + e.getHeight() / 2f;
+        offset.x = (int)(e.getX() * scale.x - (Game.w / 2f) + e.getWidth() / 2f);
+        offset.y = (int)(e.getY() * scale.y - (Game.h / 2f) + e.getHeight() / 2f);
 
         InputHandler.zoomRequest = 0;
 

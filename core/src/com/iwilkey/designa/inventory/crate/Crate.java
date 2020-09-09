@@ -2,18 +2,23 @@ package com.iwilkey.designa.inventory.crate;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.badlogic.gdx.math.MathUtils;
+import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.Rectangle;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 public class Crate {
 
+    private GameBuffer gb;
     private final Inventory playerInventory;
     public InventorySlot[][] storage;
     public int x, y;
@@ -24,6 +29,7 @@ public class Crate {
 
     public Crate(Inventory inv, int x, int y) {
         this.playerInventory = inv;
+        gb = this.playerInventory.getBuffer();
         this.x = x; this.y = y;
 
         selector = new int[w / InventorySlot.SLOT_WIDTH][h / InventorySlot.SLOT_HEIGHT];
@@ -128,16 +134,18 @@ public class Crate {
 
                 for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
                     for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
-                        if(playerInventory.getSlots()[x][y].mouseOver) {
-                            if(transferToInventory()) return;
-                        }
+                        try {
+                            if (playerInventory.getSlots()[x][y].mouseOver) {
+                                if (transferToInventory()) return;
+                            }
+                        } catch (ArrayIndexOutOfBoundsException ignored) {}
                     }
                 }
 
                 // Step I: Extract the previous inventory items.
                 InventorySlot is = null;
                 Item i = null;
-                int count = 0;
+                int count = 0, tempX = 0, tempY = 0;
                 for (int y = 0; y < h / InventorySlot.SLOT_HEIGHT; y++) {
                     for (int x = 0; x < w / InventorySlot.SLOT_WIDTH; x++) {
 
@@ -146,6 +154,7 @@ public class Crate {
                                 is = storage[x][y];
                                 i = storage[x][y].getItem();
                                 count = storage[x][y].itemCount;
+                                tempX = x; tempY = y;
                                 storage[x][y].putItem(null, 0);
                                 storage[x][y].itemUp = false;
                             }
@@ -162,7 +171,7 @@ public class Crate {
 
                             // Step III: If the slot has an item in it already and it's the same item...
                             if (storage[x][y].getItem() != null) {
-                                if(storage[x][y].getItem() == i) {
+                                if (storage[x][y].getItem() == i) {
 
                                     // If the new slots itemCount plus the previous item count is greater than
                                     // the max stack, we need to make the new slot 99 and the old slot count what wasn't used
@@ -202,7 +211,8 @@ public class Crate {
                                         storage[x][y].putItem(i, count);
                                         itemUp = false;
                                         selector[x][y] = 1;
-                                    } catch (NullPointerException ignored) {}
+                                    } catch (NullPointerException ignored) {
+                                    }
                                     return;
                                 }
 
@@ -216,6 +226,21 @@ public class Crate {
                         }
                     }
                 }
+
+                for(int ii = 0; ii < count; ii++) {
+                    int abb = MathUtils.random(-2,2);
+
+                    int xx = (gb.getWorld().getEntityHandler().getPlayer().facingLeft()) ?
+                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() - (Tile.TILE_SIZE - 6) + abb :
+                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() + (2 * Tile.TILE_SIZE - 6) + abb;
+                    int yyAbb = MathUtils.random(6, 14);
+
+                    gb.getWorld().getItemHandler().addItem(i.createNew(
+                            xx, (int) gb.getWorld().getEntityHandler().getPlayer().getY() + (Tile.TILE_SIZE) + yyAbb));
+                }
+                is.putItem(null, 0);
+                itemUp = false;
+                selector[tempX][tempY] = 1;
 
             } else if (InputHandler.rightMouseButtonDown) {
                 Item i = null;

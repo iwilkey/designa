@@ -13,7 +13,7 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class Assets {
 
-    public static String VERSION = "pa1.0.35";
+    public static String VERSION = "pa1.0.37";
 
     // Cursor TODO: Check if this causes problems on a smartphone...
     public static TextureRegion cursor;
@@ -37,7 +37,7 @@ public class Assets {
     public static Texture mountains;
     public static TextureRegion[] trees;
     // Tools
-    public static TextureRegion simpleDrill, wrench;
+    public static TextureRegion simpleDrill, wrench, ladder;
     // Machines
         // Mech Drills
         public static TextureRegion[] copperMechanicalDrill;
@@ -86,7 +86,7 @@ public class Assets {
         plywoodTileItem, hardwoodTileItem, reinforcedHardwoodTileItem,
         strongwoodTileItem, reinforcedStrongwoodTileItem;
     // CreatableTiles
-    public static Item torchItem, crateItem;
+    public static Item torchItem, crateItem, ladderItem;
 
     //CreatableItems
         // Tools
@@ -133,7 +133,7 @@ public class Assets {
                 // Drills
                 public static ItemRecipe SIMPLE_DRILL_RECIPE, WRENCH_RECIPE;
 
-            public static ItemRecipe TORCH_RECIPE, CRATE_RECIPE;
+            public static ItemRecipe TORCH_RECIPE, CRATE_RECIPE, LADDER_RECIPE;
 
             // Construction
             public static ItemRecipe PLYWOOD_TILE_RECIPE, HARDWOOD_TILE_RECIPE, REINFORCED_HARDWOOD_TILE_RECIPE,
@@ -234,6 +234,7 @@ public class Assets {
                 torch[3] = ss.crop(14, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
                 torchThumb = ss.crop(11, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
         crate = ss.crop(2, 18, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
+        ladder = ss.crop(5, 28, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Ores
         copperOre = ss.crop(2, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
@@ -559,6 +560,8 @@ public class Assets {
                 new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID()));
         crateItem = new Item(Assets.crate, "Crate", 21,
                 new ItemType.PlaceableBlock.CreatableTile.Storage(Tile.crateTile.getID()));
+        ladderItem = new Item(Assets.ladder, "Ladder", 26,
+                new ItemType.PlaceableBlock.CreatableTile(Tile.ladderTile.getID()));
 
         //CreatableItems
             // Tools
@@ -634,6 +637,9 @@ public class Assets {
 
                 // Wrench
                 WRENCH_RECIPE = new ItemRecipe.WrenchRecipe(Assets.wrenchItem);
+
+                // Ladder
+                LADDER_RECIPE = new ItemRecipe.LadderRecipe(Assets.ladderItem);
 
             TORCH_RECIPE = new ItemRecipe.TorchRecipe(Assets.torchItem);
             CRATE_RECIPE = new ItemRecipe.CrateRecipe(Assets.crateItem);

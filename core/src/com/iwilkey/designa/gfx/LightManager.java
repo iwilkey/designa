@@ -68,8 +68,6 @@ public class LightManager {
 
         lights.add(new Light(x, y, strength));
 
-        bakeLighting();
-
     }
 
     public void removeLight(int x, int y) {
