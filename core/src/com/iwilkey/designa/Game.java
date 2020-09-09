@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
-import com.iwilkey.designa.states.GameState;
-import com.iwilkey.designa.states.MainMenuState;
-import com.iwilkey.designa.states.State;
-import com.iwilkey.designa.states.WorldSelectorState;
+import com.iwilkey.designa.states.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +22,7 @@ public class Game extends ApplicationAdapter {
 	SpriteBatch gameBatch;
 	SpriteBatch guiBatch;
 
-	private State mainMenuState, worldSelectorState, gameState;
+	private State mainMenuState, worldSelectorState, worldCreatorState, gameState;
 	private static ArrayList<State> states;
 
 	private Camera camera;
@@ -48,14 +45,16 @@ public class Game extends ApplicationAdapter {
 
 		mainMenuState = new MainMenuState();
 		worldSelectorState = new WorldSelectorState();
+		worldCreatorState = new WorldCreatorState();
 		gameState = new GameState(gb); // TODO: Change constructor
 
 		states = new ArrayList<>();
 		states.add(mainMenuState);
 		states.add(worldSelectorState);
+		states.add(worldCreatorState);
 		states.add(gameState);
 
-		State.setState(mainMenuState);
+		State.setState(worldCreatorState);
 		State.getCurrentState().start();
 	}
 

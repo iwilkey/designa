@@ -329,3 +329,6 @@ Date || Build ||
 9/9/2020 || pa_1.0.38 ||
     - Made UI more object oriented
     - TextButtons now exist and can be put in any State
+    - InputFields now exist and can be put in any State
+    - Added the WorldCreatorState, which is a form where the player fills in information about the new world being created
+    - The player can now successfully create a world and spawn in the game state.

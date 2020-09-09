@@ -205,6 +205,11 @@ public class InputHandler {
             case Desktop:
                 Gdx.input.setInputProcessor(new InputAdapter() {
                     @Override
+                    public boolean keyDown(int keycode) {
+                        if(uiManager != null) { uiManager.onKeyDown(keycode); }
+                        return true;
+                    }
+                    @Override
                     public boolean mouseMoved(int x, int y) {
                         cursorX = x; cursorY = Game.h - y;
                         if(uiManager != null) { uiManager.onMouseMove(); }

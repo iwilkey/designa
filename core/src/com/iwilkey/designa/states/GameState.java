@@ -13,26 +13,31 @@ import com.iwilkey.designa.world.WorldGeneration;
 
 public class GameState extends State {
 
-    private final GameBuffer gb;
-    private final World world;
+    private static GameBuffer gb;
+    private static World world;
 
     public GameState(GameBuffer gb) {
-        this.gb = gb;
-
-        // Creating a new world...
-        // world = new World(gb, WorldGeneration.initWorld("World" + MathUtils.random(10, 100000), 3000, 100));
-
-        // Loading an existing world
-        world = new World(gb, "worlds/World2215/");
-
-        gb.setWorld(world);
-        gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
-                LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));
+        GameState.gb = gb;
     }
 
     @Override
     public void start() {
         InputHandler.initGameStateInput();
+    }
+
+    public static void loadWorld(String path) {
+        // Something like worlds/(worldName)/
+        world = new World(gb, path);
+        gb.setWorld(world);
+        gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
+                LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));
+    }
+
+    public static void createNewWorld(String name, int dif, String playerName) {
+        world = new World(gb, WorldGeneration.initWorld(name, 3000, 100));
+        gb.setWorld(world);
+        gb.getGame().setCamera(new Camera(gb, (World.w / 2) * Tile.TILE_SIZE,
+                LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));
     }
 
     @Override
@@ -48,7 +53,7 @@ public class GameState extends State {
 
     @Override
     public void onGUI(Batch b) {
-        gb.getWorld().getEntityHandler().getPlayer().getHUD().render(b);
+        World.getEntityHandler().getPlayer().getHUD().render(b);
     }
 
     @Override

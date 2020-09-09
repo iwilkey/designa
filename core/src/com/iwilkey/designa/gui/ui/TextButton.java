@@ -36,4 +36,10 @@ public class TextButton extends UIObject {
         Assets.createItem[MathUtils.random(0, 2)].play(0.35f);
         clicker.onClick();
     }
+
+    @Override
+    public void onKeyDown(int key) {}
+
+    public String getText() { return text; }
+    public void setText(String text) { this.text = text; }
 }

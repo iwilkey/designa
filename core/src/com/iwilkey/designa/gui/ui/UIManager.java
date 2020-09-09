@@ -15,6 +15,7 @@ public class UIManager {
     public void render(Batch b) { for(UIObject o : objects) o.render(b); }
     public void onMouseMove() { for(UIObject o : objects) o.onMouseMove(); }
     public void onMouseRelease() { for(UIObject o : objects) o.onMouseRelease(); }
+    public void onKeyDown(int key) { for(UIObject o : objects) o.onKeyDown(key); }
     public void addObject(UIObject o) { objects.add(o); }
     public void removeObject(UIObject o) { objects.remove(o); }
 

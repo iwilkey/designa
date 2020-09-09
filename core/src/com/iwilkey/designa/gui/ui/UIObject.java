@@ -22,10 +22,9 @@ public abstract class UIObject {
     public abstract void tick();
     public abstract void render(Batch b);
     public abstract void onClick();
+    public abstract void onKeyDown(int key);
 
-    public void onMouseMove() {
-        hovering = bounds.contains(InputHandler.cursorX, InputHandler.cursorY);
-    }
+    public void onMouseMove() { hovering = bounds.contains(InputHandler.cursorX, InputHandler.cursorY); }
     public void onMouseRelease() { if(hovering) onClick(); }
 
     // Getters and setters
