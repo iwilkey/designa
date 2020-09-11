@@ -3,11 +3,9 @@ package com.iwilkey.designa.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.gui.ui.ClickListener;
-import com.iwilkey.designa.gui.ui.InputField;
 import com.iwilkey.designa.gui.ui.TextButton;
 import com.iwilkey.designa.gui.ui.UIManager;
 import com.iwilkey.designa.input.InputHandler;
@@ -41,7 +39,7 @@ public class WorldSelectorState extends State {
         uiManager.addObject(new TextButton((w / 2), yButton - (100), 46, "Load World", new ClickListener() {
             @Override
             public void onClick() {
-
+                switchState(3);
             }
         }));
         uiManager.addObject(new TextButton((w / 2), yButton - (100 * 2), 46, "Back", new ClickListener() {

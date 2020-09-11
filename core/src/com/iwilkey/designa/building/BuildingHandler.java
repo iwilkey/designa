@@ -21,86 +21,152 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+
+ The BuildingHandler class gives the player the ability to interact with the world around them. It is divided
+ up into many functions, all of which are explained briefly before their definition.
+
+ @author Ian Wilkey
+ @version VERSION
+ @since 7/21/2020
+
+ */
+
 public class BuildingHandler {
 
+    /**
+     * Global vars
+     */
+
+    // Final vars
     private final GameBuffer gb;
     private final Player player;
-    private float selectorX = 0, selectorY = 0;
-    private boolean inRange = false, onTop = false;
-    public static boolean backBuilding = false;
     private final Rectangle selectorCollider;
 
+    // Geometry
+    private float selectorX = 0, selectorY = 0;
+
+    // Booleans
+    private boolean inRange = false, onTop = false;
+    public static boolean backBuilding = false;
+
+    // Longs
     private long timer = 0, actionCooldown = 15;
 
+    /**
+     * Constructor for BuildingHandler. No override.
+     * @param gb The BuildingHandler needs the GameBuffer.
+     * @param p The BuildingHandler needs the Player instance.
+     */
     public BuildingHandler(GameBuffer gb, Player p) {
         this.gb = gb;
         this.player = p;
 
+        // Create the collider for the box collider the player sees follow the mouse around. It changes color
+            // based off of if one is able to build or not.
         selectorCollider = new Rectangle((int) selectorX,
                 (int) selectorY, Tile.TILE_SIZE, Tile.TILE_SIZE);
     }
 
+    /**
+     * The BuildingHandler tick method.
+     */
     public void tick() {
+        // Make sure the selector is set in the correct place each tick.
         setSelector();
 
+        /*
+            *
+            *   BUILDING / DESTROYING LOGIC
+            *
+         */
+
+        // The purpose of these nested conditions are to verify if the player can place a tile, and if so,
+            // how to place it.
         if (!Inventory.active) {
 
+            // Handle a backBuilding toggle request. (Switch from front to back or back to front)
             if(InputHandler.backBuildingToggleRequest) {
                 backBuilding = !backBuilding;
                 Assets.invClick.play(0.5f);
+                InputHandler.backBuildingToggleRequest = false;
             }
 
-            InputHandler.backBuildingToggleRequest = false;
-
+            // If the selector is in range and not on top of the player...
             if (inRange && !onTop) {
-
+                // And they have requested to place a block...
                 if (InputHandler.placeRequest) {
-
+                    // And the current item they hold exists and isn't null...
                     if(ToolSlot.currentItem != null)
+                        // Then evoke the placeTile method with the proper information if the item they hold
+                            // is a legit placeable block.
                         if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
                             placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                     pointerOnTileX(), pointerOnTileY());
-
-                    if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CrateTile)
+                    // And the tile that is currently selected is a chest tile, then let the player see what's
+                        // in the crate.
+                    if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CrateTile)
                         toggleCrate(pointerOnTileX(), pointerOnTileY());
 
                     InputHandler.placeRequest = false;
                 }
 
+                // And they have requested to destroy a block then evoke the damage tile method with the proper information.
                 if (InputHandler.destroyRequest) {
                     damageTile(pointerOnTileX(), pointerOnTileY());
                     InputHandler.destroyRequest = false;
                 }
-
-            }  else if (onTop) {
+            }  else if (onTop) { // But the selector is actually on top of the player...
+                // And they request to place a block...
                 if (InputHandler.placeRequest) {
+                    // And they item they have selected exists and isn't null...
                     if(ToolSlot.currentItem != null)
+                        // Then jump the player and allow the block to be placed underneath the player ('cause I like it).
                         if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock) {
+                            Player player = World.getEntityHandler().getPlayer();
 
-                            Player player = gb.getWorld().getEntityHandler().getPlayer();
+                            /*
+
+                                *   The idea here is to make it so the player can't jump and place anything underneath
+                                *   if there is a block a tile above their head. The algorithm below is close but not
+                                *   quite right. TODO: Refine it.
+
                             if(!(World.getTile((int) ((player.getX()) / Tile.TILE_SIZE),
                                     (int) (player.getY() / Tile.TILE_SIZE) + 2) instanceof Tile.AirTile) ||
                                     !(World.getTile((int) ((player.getX() + 4) / Tile.TILE_SIZE),
                                             (int) (player.getY() / Tile.TILE_SIZE) + 2) instanceof Tile.AirTile)) {
                                 InputHandler.placeRequest = false;
                                 return;
+
                             }
+                             */
 
                             placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                     pointerOnTileX(), pointerOnTileY());
-                            gb.getWorld().getEntityHandler().getPlayer().jump();
+                            World.getEntityHandler().getPlayer().jump();
                         }
+
                     InputHandler.placeRequest = false;
+
                 }
             }
 
+            /*
+                 *
+                 *   COOL DOWN / PROLONGED ACTION LOGIC
+                 *
+             */
+
+            // Ignore the NullPointerException because it doesn't stop the game. TODO Fix at some point
             try {
+                // If the current tool the player has selected is the Drill...
                 if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) actionCooldown = 5;
                 else actionCooldown = 15;
             } catch (NullPointerException ignored) {}
 
-
+            // If the player is requesting a prolonged action...
             if(InputHandler.prolongedActionRequest) {
+                // Damage the tile every pass of actionCooldown.
                 timer++;
                 if(timer > actionCooldown) {
                     if(inRange) damageTile(pointerOnTileX(), pointerOnTileY());
@@ -110,10 +176,11 @@ public class BuildingHandler {
                 timer = 0;
             }
         }
-
-        setSelector();
     }
 
+    /**
+     * This method will set the tile selector appropriately based off of where the InputHandler says the cursor is.
+     */
     private void setSelector() {
         selectorX = (pointerOnTileX() * Tile.TILE_SIZE);
         selectorY = (pointerOnTileY() * Tile.TILE_SIZE);
@@ -121,117 +188,185 @@ public class BuildingHandler {
         selectorCollider.y = (int) selectorY;
     }
 
-
+    /**
+     * This method compares the players x position with the mouse x position and dictates the direction the player faces.
+     */
     private void checkFace() {
         if(pointerOnTileX() * Tile.TILE_SIZE - player.getX() > 0) player.setFace(1);
         else player.setFace(0);
     }
 
+    /**
+     * This method is invoked every time the program dictates a place request to be legit.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     */
     private void placeTile(int id, int x, int y) {
+        // Change the players facing direction if necessary.
         checkFace();
 
-        if(mechDrillHandler(id, x, y)) return;
-        if(pipePlacementHandler(id, x, y)) return;
-
+        // If the player isn't building on the back tile map...
         if(!backBuilding) {
-            if (gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
+            // And the tile currently selected is air...
+            if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
-                // Handing special tiles!
+                // Check to see if it's a special tile (i.e torch or crate) and handle it there instead of here.
                 if(!(specialTilesAdd(id, x, y))) return;
+                // Check to see if the tile was a mechanical drill and if so, the tile is handled there instead of here.
+                if(mechDrillHandler(id, x, y)) return;
+                // Check to see if the tile was a pipe and if so, the tile is handled there instead of here.
+                if(pipePlacementHandler(id, x, y)) return;
 
-                ToolSlot.currentItem.itemCount--;
-
+                // Set the ID slot in the tile map to @id.
                 World.tiles[x][(World.h - y) - 1] = id;
-                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            }
-        } else {
-            if (gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
-
+                // Reset its break level to its strength.
+                World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+                // Subtract from the item count in the inventory.
                 ToolSlot.currentItem.itemCount--;
-
+            }
+        } else { // But the player is back building...
+            // So, if the back tile currently selected is air...
+            if (gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
+                // Set the back tile ID slot in the tile map to @id.
                 World.backTiles[x][(World.h - y) - 1] = id;
-                gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+                // Reset its break level to its strength.
+                World.backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+                // Subtract from the item count in the inventory.
+                ToolSlot.currentItem.itemCount--;
             }
         }
 
-            gb.getWorld().getLightManager().bakeLighting();
+        // Bake the lighting!
+        gb.getWorld().getLightManager().bakeLighting();
 
-            // Sounds
-            if(gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.GrassTile ||
-                    gb.getWorld().getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.DirtTile)
-                Assets.dirtHit[MathUtils.random(0,2)].play(0.3f);
-            else Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
-
+        // Play the appropriate building sound.
+        buildingSound();
 
     }
 
+    /**
+     * This method will play the appropriate building sound when called.
+     */
+    private void buildingSound() {
+        if(World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.GrassTile ||
+                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.DirtTile)
+            Assets.dirtHit[MathUtils.random(0,2)].play(0.3f);
+        else Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+    }
+
+    /**
+     * This method will check if the tile ID passed in is a special tile that has more functionality than a regular tile.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     * @return Did method take care of the tile or not?
+     */
     private boolean specialTilesAdd(int id, int x, int y) {
 
+        // Is the tile a torch?
         if (id == Tile.torchTile.getID())
+            // If there is a back tile there to support the torch, then add it.
             if(World.backTiles[x][World.h - y - 1] != 0) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
                 return true;
+            // Otherwise check to see if there is a front tile below it to support it, then add it.
             } else if (World.tiles[x][World.h - y] != 0 && World.tiles[x][World.h - y] != Tile.torchTile.getID()) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
                 return true;
-            } else {
-                return false;
-            }
+            // There's nothing to support this torch.
+            } else return false;
 
+        // Is the tile a crate?
         if(id == Tile.crateTile.getID()) {
-            player.addCrate(x, y);
+            player.addCrate(x, y); // Invoke the addCrate method on the player.
             return true;
         }
 
-        return true;
+        return false;
 
     }
 
+    /**
+     * This method will check if the tile was a mechanical drill and handle it accordingly.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     * @return Did method take care of the tile or not?
+     */
     private boolean mechDrillHandler(int id, int x, int y) {
-
+        // Grab the item and dictate if it's a mechanical drill or not. If not, no reason to run this method.
         Item item = ToolSlot.currentItem.getItem();
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.MechanicalDrill)) return false;
 
-        if(gb.getWorld().getTile(x, y) instanceof Tile.CopperOreTile ||
-                gb.getWorld().getTile(x, y) instanceof Tile.SilverOreTile ||
-                gb.getWorld().getTile(x, y) instanceof Tile.IronOreTile) {
+        // If the tile currently selected is an ore, the player is allowed to place it.
+        if(World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CopperOreTile ||
+                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.SilverOreTile ||
+                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.IronOreTile) {
 
             ToolSlot.currentItem.itemCount--;
             World.tiles[x][(World.h - y) - 1] = id;
-            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-
+            World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
             Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+
             return true;
         }
 
         return false;
     }
 
+    /**
+     * This method will check if the tile was a pipe and handle it accordingly.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     * @return Did method take care of the tile or not?
+     */
     private boolean pipePlacementHandler(int id, int x, int y) {
+        // Grab the item and dictate if it's a pipe or not. If not, no reason to run this method.
         Item item = ToolSlot.currentItem.getItem();
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe)) return false;
 
-        if (gb.getWorld().getTile(x, y) instanceof Tile.AirTile) {
-            ToolSlot.currentItem.itemCount--;
+        // If the tile selected is air the player is allowed to place the pipe.
+        if (World.getTile(x, y) instanceof Tile.AirTile) {
+
             World.tiles[x][(World.h - y) - 1] = id;
-            gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+            World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+            ToolSlot.currentItem.itemCount--;
+
+            // The pipe map needs to be updated with the correct direction the player has selected.
             World.pipeMap[x][y] = Hud.SELECTED_PIPE_DIRECTION;
+
             gb.getWorld().getLightManager().bakeLighting();
+
             Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+
             return true;
         }
 
         return false;
     }
 
-
+    /**
+     * This method will turn on the crate that is at the x and y values passed in.
+     * @param x The x value of crate in question.
+     * @param y The y value of crate in question.
+     */
     private void toggleCrate(int x, int y) {
         for(Crate crate : player.crates) crate.isActive = crate.x == x && crate.y == y;
         Assets.createItem[0].play(0.3f);
     }
 
+    /**
+     * This method is invoked every time the program dictates a destroy request to be legit.
+     * @param x The x value (in tiles) requested.
+     * @param y The y value (in tiles) requested.
+     */
     private void damageTile(int x, int y) {
+        // Change the players facing direction if necessary.
         checkFace();
+
+        // TODO Finish JavaDoc
         if (!backBuilding) {
             if (!(World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile)) {
                 if (ToolSlot.currentItem != null) {
@@ -248,7 +383,7 @@ public class BuildingHandler {
                     World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
                 }
                 checkBreak(x, y);
-                playSound();
+                buildingSound();
             }
         } else {
             if (!(gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile)) {
@@ -264,17 +399,10 @@ public class BuildingHandler {
                     World.backTileBreakLevel[x][(World.h - y) - 1] -= 1;
                 }
                 checkBreak(x, y);
-                playSound();
+                buildingSound();
             }
         }
 
-    }
-
-    private void playSound() {
-        if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.GrassTile ||
-                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.DirtTile)
-            Assets.dirtHit[MathUtils.random(0, 2)].play(0.3f);
-        else Assets.stoneHit[MathUtils.random(0, 2)].play(0.5f);
     }
 
     private void checkBreak(int x, int y) {

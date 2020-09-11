@@ -46,14 +46,14 @@ public class InputField extends UIObject {
     public void render(Batch b) {
 
         if(hovering && !activeTyping) {
-            Text.draw(b, text, (int)(x + (w / 2)) - (textSize * text.length() / 2) - 22, (int)y + 10, textSize);
+            Text.draw(b, text, (int)(x + (w / 2)) - (textSize * text.length() / 2), (int)y + 10, textSize);
             b.draw(Assets.selector, x - 16, y, w + 32, 4);
         } else if(activeTyping) {
             if(cursorVis) b.draw(Assets.selector, cursor, y + 6, 1, h - 24);
             Text.draw(b, text, (int)x, (int)y + 10, textSize);
             b.draw(Assets.selector, x - 16, y, w + 32, 4);
         } else {
-            Text.draw(b, text, (int)(x + (w / 2)) - (textSize * text.length() / 2) - 22, (int)y + 10, textSize);
+            Text.draw(b, text, (int)(x + (w / 2)) - (textSize * text.length() / 2), (int)y + 10, textSize);
             b.draw(Assets.selector, x, y, w, 4);
         }
     }

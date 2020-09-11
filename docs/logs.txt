@@ -332,3 +332,11 @@ Date || Build ||
     - InputFields now exist and can be put in any State
     - Added the WorldCreatorState, which is a form where the player fills in information about the new world being created
     - The player can now successfully create a world and spawn in the game state.
+
+9/11/2020 || pa_1.0.39 ||
+    - Created the world loader option and list the existing worlds
+    - Player can now load into worlds they have previously created and saved
+    - Player can now save worlds and return to the main menu.
+        Note: At this point, the game is fully "functional". Still needs to be refined and added to.
+        TODO: Save crates!
+    - Created JavaDocs and commented for Assets class and half of BuildingManager class.

@@ -82,6 +82,9 @@ public class InputHandler {
 
                         if(key == Input.Keys.R) pipeRotateRequest = true;
 
+                        if(Hud.gameMenu) if(uiManager != null) { uiManager.onKeyDown(key); }
+
+
 
                         return true;
                     }
@@ -116,6 +119,7 @@ public class InputHandler {
                     @Override
                     public boolean mouseMoved(int x, int y) {
                         cursorX = x; cursorY = Game.h - y;
+                        if(Hud.gameMenu) if(uiManager != null) { uiManager.onMouseMove(); }
                         return true;
                     }
 
@@ -150,6 +154,7 @@ public class InputHandler {
                             if(!Inventory.active) destroyRequest = false;
                             attack = false;
                             prolongedActionRequest = false;
+                            if(Hud.gameMenu) if(uiManager != null) uiManager.onMouseRelease();
                         }
 
                         if(button == Input.Buttons.RIGHT) {

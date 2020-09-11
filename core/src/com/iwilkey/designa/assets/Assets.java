@@ -11,11 +11,26 @@ import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 
+/**
+
+ The Assets class encapsulates static instances of assets used during the runtime of Designa. This makes it easy to
+ use them anywhere as they're needed.
+
+ @author Ian Wilkey
+ @version VERSION
+ @since 7/21/2020
+
+ */
+
 public class Assets {
 
-    public static String VERSION = "pa1.0.38";
+    /**
+     * Global vars (All static for easy access)
+     */
 
-    // Cursor TODO: Check if this causes problems on a smartphone...
+    // Version
+    public static String VERSION = "pa1.0.39";
+    // Cursor
     public static TextureRegion cursor;
     // Font
     public static TextureRegion[] font;
@@ -149,12 +164,18 @@ public class Assets {
                 // Pipes
                 public static ItemRecipe STONE_PIPE_RECIPE;
 
+    /**
+     *  This method is called by the Game class upon creation of the program.
+     */
     public static void init() {
-        initTextures();
-        initSounds();
-        initObjects();
+        initTextures(); // Init all textures
+        initSounds(); // Init all sounds
+        initObjects(); // Init all objects
     }
 
+    /**
+     * This method initiates all textures.
+     */
     private static void initTextures() {
 
         SpriteSheet ss = new SpriteSheet(new Texture("textures/spritesheet.png"));
@@ -403,6 +424,9 @@ public class Assets {
 
     }
 
+    /**
+     *  This method initiates all sounds.
+     */
     private static void initSounds() {
         // Sounds
         itemPickup = new Sound[3];
@@ -448,6 +472,9 @@ public class Assets {
         createItem[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item-3.ogg"));
     }
 
+    /**
+     *  This method initiates all object instances.
+     */
     private static void initObjects() {
         // Items
 

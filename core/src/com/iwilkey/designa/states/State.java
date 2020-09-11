@@ -15,9 +15,9 @@ public abstract class State {
         currentState = s;
     }
 
-    protected void switchState(int index){
-        Game.getStates().get(index).start();
+    public static void switchState(int index){
         State.setState(Game.getStates().get(index));
+        currentState.start();
     }
 
     public abstract void start();

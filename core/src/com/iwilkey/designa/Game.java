@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.states.*;
 
@@ -17,12 +18,13 @@ public class Game extends ApplicationAdapter {
 	public static int w;
 	public static int h;
 
-	private GameBuffer gb;
+	public static GameBuffer gb;
 
 	SpriteBatch gameBatch;
 	SpriteBatch guiBatch;
 
-	private State mainMenuState, worldSelectorState, worldCreatorState, gameState;
+	private State mainMenuState, worldSelectorState,
+			worldCreatorState, worldLoaderState, gameState;
 	private static ArrayList<State> states;
 
 	private Camera camera;
@@ -46,21 +48,23 @@ public class Game extends ApplicationAdapter {
 		mainMenuState = new MainMenuState();
 		worldSelectorState = new WorldSelectorState();
 		worldCreatorState = new WorldCreatorState();
-		gameState = new GameState(gb); // TODO: Change constructor
+		worldLoaderState = new WorldLoaderState();
+		gameState = new GameState();
 
 		states = new ArrayList<>();
 		states.add(mainMenuState);
 		states.add(worldSelectorState);
 		states.add(worldCreatorState);
+		states.add(worldLoaderState);
 		states.add(gameState);
 
-		State.setState(worldCreatorState);
+		State.setState(worldLoaderState);
 		State.getCurrentState().start();
 	}
 
 	private void tick() {
 		input.tick();
-		if(State.getCurrentState() != null) State.getCurrentState().tick();
+		if(!Hud.gameMenu) if(State.getCurrentState() != null) State.getCurrentState().tick();
 	}
 
 	long lt = System.nanoTime();
@@ -82,12 +86,11 @@ public class Game extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(!Camera.isZooming) {
-			gameBatch.begin();
-			gameBatch.setTransformMatrix(Camera.mat);
-			if (State.getCurrentState() != null) State.getCurrentState().render(gameBatch);
-			gameBatch.end();
-		}
+		gameBatch.begin();
+		gameBatch.setTransformMatrix(Camera.mat);
+		if(!Camera.isZooming) State.getCurrentState().render(gameBatch);
+		gameBatch.end();
+
 
 		guiBatch.begin();
 		if(State.getCurrentState() != null) State.getCurrentState().onGUI(guiBatch);
@@ -121,4 +124,6 @@ public class Game extends ApplicationAdapter {
 		if(State.getCurrentState() == gameState) this.camera = camera;
 		else this.camera = null;
 	}
+
+	public SpriteBatch getGameBatch() { return gameBatch; }
 }

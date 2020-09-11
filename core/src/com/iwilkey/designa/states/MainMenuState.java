@@ -4,15 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
-import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.gui.ui.ClickListener;
 import com.iwilkey.designa.gui.ui.TextButton;
 import com.iwilkey.designa.gui.ui.UIManager;
 import com.iwilkey.designa.input.InputHandler;
-
-import java.awt.Rectangle;
 
 public class MainMenuState extends State {
 
@@ -22,6 +19,7 @@ public class MainMenuState extends State {
 
     @Override
     public void start() {
+        timer = 0; fM = false;
 
         InputHandler.initMainMenuStateInput();
 
@@ -60,7 +58,6 @@ public class MainMenuState extends State {
     long timer = 0, fullMenu = 200;
     @Override
     public void tick() {
-
         if(timer >= fullMenu) fM = true;
         else {
             timer++;

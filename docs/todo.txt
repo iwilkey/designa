@@ -4,11 +4,9 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create main menu / world creator / settings state
+- Create settings state
 
-- Create a save / load system that saves the world file and the inventory
-
-- Make Sound effect that plays volumes according to the distance between the entity and the player (A few things)
+- Save crates!
 
 - Keep working on the pipes and machines! These things need to at least be done before early access release
     - Each machine type needs to be linked to the position where the machine tile is at?
@@ -26,8 +24,6 @@ For later on
 
 - Create simple Turrets and / or weapons
 	- Simple AI will need to be created.
-
-- Consider making light maps render on backTile environments?
 
 - Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
 
