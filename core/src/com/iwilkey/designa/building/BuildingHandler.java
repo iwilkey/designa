@@ -369,89 +369,115 @@ public class BuildingHandler {
         // Change the players facing direction if necessary.
         checkFace();
 
-        // TODO Finish JavaDoc
+        // If the player is not back building...
         if (!backBuilding) {
+            // And the tile selected is air...
             if (!(World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile)) {
+                // Check to see if the item current held exists and isn't null...
                 if (ToolSlot.currentItem != null) {
+                    // Ignored NullPointerException because it doesn't break the game. TODO Fix later
                     try {
-                        if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
+                        // If the item currently held is a drill...
+                        if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill)
+                            // Damage the block the unit strength of drill.
                             World.tileBreakLevel[x][(World.h - y) - 1] -=
                                     ((ItemType.CreatableItem.Tool.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
-                        } else {
-                            World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
-                        }
+                        // The item isn't null, but is like a tile or something that can't break things like drills can.
+                        else World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
                     } catch (NullPointerException ignored) {}
+                // Otherwise, just damage the block by one.
+                } else World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
 
-                } else {
-                    World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
-                }
+                // Now, invoke the checkBreak method to see if the tile is damaged enough to be broken.
                 checkBreak(x, y);
+
+                // Play the appropriate building sound effect.
                 buildingSound();
+
             }
+        // Otherwise the player is building on the back tiles.
         } else {
+            // Check if the selected back tile is air...
             if (!(gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile)) {
+                // And if the current item held exists and isn't null...
                 if (ToolSlot.currentItem != null) {
-                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
+                    // If the tool is a drill...
+                    if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill)
+                        // Damage with strength of drill
                         World.backTileBreakLevel[x][(World.h - y) - 1] -=
                                 ((ItemType.CreatableItem.Tool.Drill) ToolSlot.currentItem.getItem().getItemType()).getStrength();
-                    } else {
-                        World.backTileBreakLevel[x][(World.h - y) - 1] -= 1;
-                    }
-
-                } else {
-                    World.backTileBreakLevel[x][(World.h - y) - 1] -= 1;
-                }
+                    // Otherwise one.
+                    else World.backTileBreakLevel[x][(World.h - y) - 1] -= 1;
+                } else World.backTileBreakLevel[x][(World.h - y) - 1] -= 1;
                 checkBreak(x, y);
                 buildingSound();
             }
         }
-
     }
 
+    /**
+     * This method is invoked every time a tile is damaged to check and see if it should be completely destroyed or not.
+     * @param x The x position of tile.
+     * @param y The y position of tile.
+     */
     private void checkBreak(int x, int y) {
+        // Offset var init for debugging purposes.
         int off = 4;
-        if(!backBuilding) {
-            if (World.tileBreakLevel[x][(World.h - y) - 1] <= 0) {
-                Tile tile = World.getTile(x, y);
 
+        // If the player isn't building on the back tiles...
+        if(!backBuilding) {
+            // If the tile break level at that position is less than or equal to zero, it must be destroyed.
+            if (World.tileBreakLevel[x][(World.h - y) - 1] <= 0) {
+                // Get the tile instance there
+                Tile tile = World.getTile(x, y);
+                // Run specialTilesRemove to handle things like crates or torches since they have extraneous processes that
+                    // have to happen
                 specialTilesRemove(tile, x, y);
 
-                // Torch above
+                // The following set of conditions pertain to if there is an instance of a torch one tile above the current tile.
                 if(World.tiles[x][World.h - y - 2] == Tile.torchTile.getID()) {
+                    // Invoke specialTilesRemove to get rid of the light at the specific y value passed in...
                     specialTilesRemove(Tile.torchTile, x, y + 1);
+                    // Give the torch back to the player in item form...
                     World.getItemHandler().addItem(Item.getItemByID(Tile.torchTile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
                             pointerOnTileY() * Tile.TILE_SIZE + off));
+                    // Place air where the torch was...
                     World.tiles[x][(World.h - y) - 2] = 0;
-                    gb.getWorld().tileBreakLevel[x][(World.h - y) - 2] = Tile.getStrength(0);
+                    // Reset the tileBreakLevel for air strength...
+                    World.tileBreakLevel[x][(World.h - y) - 2] = Tile.getStrength(0);
+                    // Bake the lighting.
                     gb.getWorld().getLightManager().bakeLighting();
                 }
 
-                if(!(tile instanceof Tile.StoneTile)) {
-                    World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
-                            pointerOnTileY() * Tile.TILE_SIZE + off));
-                } else {
-                    World.getItemHandler().addItem(Assets.rockResource.createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
-                            pointerOnTileY() * Tile.TILE_SIZE + off));
-                }
-
+                // Reset the tile map to air here.
                 World.tiles[x][(World.h - y) - 1] = 0;
-                gb.getWorld().tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
-                gb.getWorld().getLightManager().bakeLighting();
-            }
-        } else {
-            if (gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] <= 0) {
-                Tile tile = gb.getWorld().getBackTile(x, y);
-
+                // Reset the strength.
+                World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+                // Give the player whatever item the tile specifies in it's class.
                 World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
                         pointerOnTileY() * Tile.TILE_SIZE + off));
-
+                gb.getWorld().getLightManager().bakeLighting();
+            }
+        // Otherwise the player was back building
+        } else {
+            // Same algorithm used above but for back tiles...
+            if (World.backTileBreakLevel[x][(World.h - y) - 1] <= 0) {
+                Tile tile = gb.getWorld().getBackTile(x, y);
                 World.backTiles[x][(World.h - y) - 1] = 0;
-                gb.getWorld().backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+                World.backTileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
+                World.getItemHandler().addItem(Item.getItemByID(tile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
+                        pointerOnTileY() * Tile.TILE_SIZE + off));
                 gb.getWorld().getLightManager().bakeLighting();
             }
         }
     }
 
+    /**
+     * This method will deal with removing special tiles that have extraneous processes attached to their existence.
+     * @param tile The tile in question.
+     * @param x The x location of the tile.
+     * @param y The y location of the tile.
+     */
     private void specialTilesRemove(Tile tile, int x, int y) {
         int off = 4;
         if (tile == Tile.torchTile) gb.getWorld().getLightManager().removeLight(x, y);

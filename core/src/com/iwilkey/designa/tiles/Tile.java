@@ -42,7 +42,7 @@ public class Tile {
         public int getItemID() { return itemID; }
     }
     public static class StoneTile extends Tile {
-        private int itemID = 1;
+        private int itemID = 107;
         public StoneTile(int ID, int strength) {
             super(Assets.stone, ID, strength);
         }

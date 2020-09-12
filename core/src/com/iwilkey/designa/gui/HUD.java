@@ -92,7 +92,17 @@ public class Hud {
             }
         } catch (NullPointerException ignored) {}
 
-        if(InputHandler.gameMenuRequest) InputHandler.gameMenuRequest = false;
+        if(InputHandler.gameMenuRequest) {
+            for(Crate crate : player.crates) {
+                if(crate.isActive) {
+                    crate.isActive = false;
+                    InputHandler.gameMenuRequest = false;
+                    return;
+                }
+            }
+            gameMenu = true;
+            InputHandler.gameMenuRequest = false;
+        }
 
     }
 

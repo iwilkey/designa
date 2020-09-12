@@ -76,7 +76,10 @@ public class InputHandler {
                         if(key == Input.Keys.ESCAPE) {
                             exitCrateRequest = true;
                             gameMenuRequest = true;
-                            Hud.gameMenu = !Hud.gameMenu;
+                            if(Hud.gameMenu) {
+                                Hud.gameMenu = false;
+                                gameMenuRequest = false;
+                            }
                             Inventory.active = false;
                         }
 

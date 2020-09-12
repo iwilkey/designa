@@ -29,7 +29,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.39";
+    public static String VERSION = "pa1.0.40";
     // Cursor
     public static TextureRegion cursor;
     // Font

@@ -6,8 +6,6 @@ Important now
 
 - Create settings state
 
-- Save crates!
-
 - Keep working on the pipes and machines! These things need to at least be done before early access release
     - Each machine type needs to be linked to the position where the machine tile is at?
     - Offloaders need to offload items to pipes / crates in the right direction

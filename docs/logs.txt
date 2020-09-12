@@ -342,3 +342,8 @@ Date || Build ||
     - Trees now save and load
     - When tiles are crafted, they now make 4 each.
     - Crates save, they just don't load right.
+
+9/12/2020 || pa_1.0.40 ||
+    - Crates now save and load correctly
+    - The pause menu no longer pops up after you close a crate
+    - Did a little more documentation in BuildingManager.

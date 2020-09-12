@@ -65,7 +65,7 @@ public class World {
         loadWorld(path);
 
         giveItem(Assets.crateItem, 4);
-
+        giveItem(Assets.torchItem, 3);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -303,7 +303,6 @@ public class World {
                 }
             }
 
-            // TODO: Fix this. It didn't work.
             // Load in all crates
             String relpath = dirpath + "crates/";
             FileHandle cratesDir = Gdx.files.local(relpath);
@@ -313,14 +312,17 @@ public class World {
                     crateNum++;
                     String crt = Utils.loadFileAsString(crateFH.path());
                     String[] crtTokens = crt.split("\\s+");
-                    for(int s = 0; s < invTokens.length; s++) {
+                    for(int s = 0; s < crtTokens.length; s++) {
                         if(s > 1) {
-                            String[] further = invTokens[s].split("-");
+                            String[] further = crtTokens[s].split("-");
                             int itemID = Utils.parseInt(further[0]);
                             int count = Utils.parseInt(further[1]);
                             for(int i = 0; i < count; i++)
                                 entityHandler.getPlayer().crates.get(crateNum).addItem(Item.getItemByID(itemID));
-                        } else entityHandler.getPlayer().addCrate(Utils.parseInt(invTokens[0]), Utils.parseInt(invTokens[1]));
+                        } else if (s == 1) {
+                            entityHandler.getPlayer().addCrate(Utils.parseInt(crtTokens[0]), Utils.parseInt(crtTokens[1]));
+                            entityHandler.getPlayer().crates.get(entityHandler.getPlayer().crates.size() - 1).setActive(false);
+                        }
                     }
                 }
             }
