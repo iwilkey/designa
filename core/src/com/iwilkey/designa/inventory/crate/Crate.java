@@ -13,7 +13,6 @@ import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.Rectangle;
-import java.lang.reflect.Array;
 import java.util.HashMap;
 
 public class Crate {

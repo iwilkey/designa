@@ -13,6 +13,7 @@ import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
+import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.machines.MachineHandler;
@@ -21,6 +22,7 @@ import com.iwilkey.designa.utils.Utils;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 
 public class World {
 
@@ -29,15 +31,12 @@ public class World {
     public static String dirpath = "";
 
     // Rendering
-    public static int[][] tiles;
-    public static int[][] backTiles;
-    public static int[][] pipeMap;
-    public static int[][] tileBreakLevel;
-    public static int[][] backTileBreakLevel;
-    public static int[][] lightMap;
-    public int[][] origLightMap;
-    public static int[] origHighTiles;
-    public static int[] origHighBackTiles;
+    public static int[][] tiles, backTiles,
+            pipeMap, tileBreakLevel,
+            backTileBreakLevel, lightMap,
+            origLightMap;
+    public static int[] origHighTiles, origHighBackTiles;
+    public static ArrayList<Integer> trees;
 
     // Entities
     private static EntityHandler entityHandler = null;
@@ -64,6 +63,8 @@ public class World {
         machineHandler = new MachineHandler(gb);
 
         loadWorld(path);
+
+        giveItem(Assets.crateItem, 4);
 
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
@@ -270,12 +271,22 @@ public class World {
         // Continue generating world, if it's the first time
         String invPath = path + "inv.dsw";
         FileHandle invf = Gdx.files.local(invPath);
-        if(!invf.exists()) {
-            WorldGeneration.EnvironmentGeneration(gb, entityHandler);
+        if(!invf.exists()) { // First load
+            trees = WorldGeneration.EnvironmentCreation(gb, entityHandler);
             WorldGeneration.OreGeneration(); // If we're loading a world, we don't need to generate ores.
             entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
             entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
         } else {
+            // Load in the trees
+            String tree = Utils.loadFileAsString(path + "tr.dsw");
+            String[] treeTokens = tree.split("\\s+");
+            trees = new ArrayList<Integer>();
+            for (String treeToken : treeTokens) {
+                int x = Utils.parseInt(treeToken);
+                trees.add(x);
+            }
+            WorldGeneration.EnvironmentReformation(gb, entityHandler, trees);
+
             // Load in inventory, if it's not the first time
             String inv = Utils.loadFileAsString(path + "inv.dsw");
             String[] invTokens = inv.split("\\s+");
@@ -289,6 +300,28 @@ public class World {
                     System.out.println(invTokens[0]);
                     entityHandler.getPlayer().setX(Utils.parseInt(invTokens[0]) * Tile.TILE_SIZE);
                     entityHandler.getPlayer().setY(Utils.parseInt(invTokens[1]) * Tile.TILE_SIZE);
+                }
+            }
+
+            // TODO: Fix this. It didn't work.
+            // Load in all crates
+            String relpath = dirpath + "crates/";
+            FileHandle cratesDir = Gdx.files.local(relpath);
+            if(cratesDir.exists()) {
+                int crateNum = -1;
+                for(FileHandle crateFH : cratesDir.list()) {
+                    crateNum++;
+                    String crt = Utils.loadFileAsString(crateFH.path());
+                    String[] crtTokens = crt.split("\\s+");
+                    for(int s = 0; s < invTokens.length; s++) {
+                        if(s > 1) {
+                            String[] further = invTokens[s].split("-");
+                            int itemID = Utils.parseInt(further[0]);
+                            int count = Utils.parseInt(further[1]);
+                            for(int i = 0; i < count; i++)
+                                entityHandler.getPlayer().crates.get(crateNum).addItem(Item.getItemByID(itemID));
+                        } else entityHandler.getPlayer().addCrate(Utils.parseInt(invTokens[0]), Utils.parseInt(invTokens[1]));
+                    }
                 }
             }
         }
@@ -352,6 +385,13 @@ public class World {
         FileHandle pmf = Gdx.files.local(pmPath);
         if(!writePM(pm, w, h)) System.exit(-1);
 
+        // Save the trees XD
+        String trPath = dirpath + "tr.dsw";
+        FileHandle tr = Gdx.files.local(trPath);
+        tr.delete();
+        FileHandle trf = Gdx.files.local(trPath);
+        if(!writeTR(trf, w)) System.exit(-1);
+
         // Save inventory
         String invPath = dirpath + "inv.dsw";
         FileHandle invf = Gdx.files.local(invPath);
@@ -359,8 +399,15 @@ public class World {
             invf.delete();
             FileHandle invf2 = Gdx.files.local(invPath);
             if(!writeINV(invf2)) System.exit(-1);
-        } else {
-            if(!writeINV(invf)) System.exit(-1);
+        } else if(!writeINV(invf)) System.exit(-1);
+
+        // Save crates
+        ArrayList<Crate> crates = entityHandler.getPlayer().crates;
+        for(int i = 0; i < crates.size(); i++) {
+            String cratePath = dirpath + "crates/c" + i + ".dsw";
+            FileHandle crateF = Gdx.files.local(cratePath);
+            if(crateF.exists()) crateF.delete();
+            if(!writeCRATE(crateF, crates.get(i))) System.exit(-1);
         }
     }
 
@@ -496,6 +543,19 @@ public class World {
             return false;
         }
     }
+    private static boolean writeTR(FileHandle ftblf, int width) {
+        try {
+            Writer w = ftblf.writer(true);
+
+            for (int num : trees) w.write(num + " ");
+
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     private static boolean writeINV(FileHandle ftblf) {
         try {
             Writer w = ftblf.writer(true);
@@ -511,6 +571,36 @@ public class World {
                         if (Inventory.slots[x][y].getItem() != null) {
                             i = Inventory.slots[x][y].getItem();
                             count = Inventory.slots[x][y].itemCount;
+                            w.write(i.getItemID() + "-" + count + " ");
+                        } else {
+                            w.write("0-0 ");
+                        }
+                    } catch (ArrayIndexOutOfBoundsException ignored) {}
+                }
+                w.write("\n");
+            }
+
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static boolean writeCRATE(FileHandle ftblf, Crate crate) {
+        try {
+            Writer w = ftblf.writer(true);
+            w.write(crate.getX() + " " + crate.getY()); // Tile coords
+            w.write("\n");
+
+            for(int y = 0; y < 400 / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < 400 / InventorySlot.SLOT_WIDTH; x++) {
+                    Item i = null;
+                    int count = 0;
+                    try {
+                        if (crate.storage[x][y].getItem() != null) {
+                            i = crate.storage[x][y].getItem();
+                            count = crate.storage[x][y].itemCount;
                             w.write(i.getItemID() + "-" + count + " ");
                         } else {
                             w.write("0-0 ");

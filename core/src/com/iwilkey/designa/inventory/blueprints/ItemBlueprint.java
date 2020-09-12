@@ -122,7 +122,10 @@ public class ItemBlueprint {
             }
         }
 
-        bs.blueprints.inventory.addItem(item);
+        if(item.getItemType() instanceof ItemType.CreatableItem.PlaceableBlock)
+            for(int i = 0; i < 4; i++) bs.blueprints.inventory.addItem(item);
+        else bs.blueprints.inventory.addItem(item);
+
     }
 
     public void renderRep(Batch b) {

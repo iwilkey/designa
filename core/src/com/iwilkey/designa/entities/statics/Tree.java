@@ -77,6 +77,11 @@ public class Tree extends StaticEntity {
 
     @Override
     public void die() {
+
+        for(int t = 0; t < World.trees.size(); t++) if(World.trees.get(t) ==
+                (x + (Tile.TILE_SIZE * 2) - (Tile.TILE_SIZE / 2f))  /
+                        Tile.TILE_SIZE) World.trees.remove(t);
+
         if(health > -1) {
             Assets.treeFall[MathUtils.random(0,2)].play();
             int spawnAmount = MathUtils.random(2, 8);

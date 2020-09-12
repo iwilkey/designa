@@ -338,5 +338,7 @@ Date || Build ||
     - Player can now load into worlds they have previously created and saved
     - Player can now save worlds and return to the main menu.
         Note: At this point, the game is fully "functional". Still needs to be refined and added to.
-        TODO: Save crates!
     - Created JavaDocs and commented for Assets class and half of BuildingManager class.
+    - Trees now save and load
+    - When tiles are crafted, they now make 4 each.
+    - Crates save, they just don't load right.

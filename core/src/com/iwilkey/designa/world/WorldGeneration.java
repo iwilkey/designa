@@ -226,7 +226,7 @@ public class WorldGeneration {
         }
     }
 
-    public static void EnvironmentGeneration(GameBuffer gb, EntityHandler e) {
+    public static ArrayList<Integer> EnvironmentCreation(GameBuffer gb, EntityHandler e) {
 
         final int TREE_AMOUNT = World.w / 6;
 
@@ -246,6 +246,23 @@ public class WorldGeneration {
         }
 
         AmbientGeneration();
+
+        return trees;
+
+    }
+
+    public static ArrayList<Integer> EnvironmentReformation(GameBuffer gb, EntityHandler e, ArrayList<Integer> trees) {
+
+        for (int tree : trees) {
+            try {
+                int y = LightManager.highestTile[tree];
+                e.addEntity(new Tree(gb, tree * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+            } catch (ArrayIndexOutOfBoundsException ignored) {}
+        }
+
+        AmbientGeneration();
+
+        return trees;
 
     }
 

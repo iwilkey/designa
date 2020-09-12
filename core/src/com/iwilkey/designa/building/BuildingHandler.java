@@ -143,7 +143,7 @@ public class BuildingHandler {
 
                             placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                     pointerOnTileX(), pointerOnTileY());
-                            World.getEntityHandler().getPlayer().jump();
+                            if(player.isGrounded() && !player.isJumping()) player.jump();
                         }
 
                     InputHandler.placeRequest = false;
@@ -265,17 +265,20 @@ public class BuildingHandler {
     private boolean specialTilesAdd(int id, int x, int y) {
 
         // Is the tile a torch?
-        if (id == Tile.torchTile.getID())
+        if (id == Tile.torchTile.getID()) {
             // If there is a back tile there to support the torch, then add it.
-            if(World.backTiles[x][World.h - y - 1] != 0) {
+            if (World.backTiles[x][World.h - y - 1] != 0) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+                gb.getWorld().getLightManager().bakeLighting();
                 return true;
-            // Otherwise check to see if there is a front tile below it to support it, then add it.
+                // Otherwise check to see if there is a front tile below it to support it, then add it.
             } else if (World.tiles[x][World.h - y] != 0 && World.tiles[x][World.h - y] != Tile.torchTile.getID()) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
+                gb.getWorld().getLightManager().bakeLighting();
                 return true;
-            // There's nothing to support this torch.
+                // There's nothing to support this torch.
             } else return false;
+        }
 
         // Is the tile a crate?
         if(id == Tile.crateTile.getID()) {
@@ -283,7 +286,7 @@ public class BuildingHandler {
             return true;
         }
 
-        return false;
+        return true;
 
     }
 
