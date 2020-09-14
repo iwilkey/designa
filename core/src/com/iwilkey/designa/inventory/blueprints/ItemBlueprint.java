@@ -123,7 +123,7 @@ public class ItemBlueprint {
         }
 
         if(item.getItemType() instanceof ItemType.CreatableItem.PlaceableBlock)
-            for(int i = 0; i < 4; i++) bs.blueprints.inventory.addItem(item);
+            for(int i = 0; i < 8; i++) bs.blueprints.inventory.addItem(item);
         else bs.blueprints.inventory.addItem(item);
 
     }

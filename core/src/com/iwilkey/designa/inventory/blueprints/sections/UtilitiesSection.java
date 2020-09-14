@@ -14,6 +14,7 @@ public class UtilitiesSection extends BlueprintSection {
         items.add(new ItemBlueprint(this, Assets.ladderItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.simpleDrillItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.crateItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.wrenchItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.plywoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.hardwoodTileItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.reinforcedHardwoodTileItem, items.size() - 1));

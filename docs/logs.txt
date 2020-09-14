@@ -347,3 +347,11 @@ Date || Build ||
     - Crates now save and load correctly
     - The pause menu no longer pops up after you close a crate
     - Did a little more documentation in BuildingManager.
+
+9/14/2020 || pa_1.0.41 ||
+    - Cleaned up the functionality of the BuildingManager.
+    - Instances of mechanical drills are now stored in a list when placed complete with
+        location, the resource it's drilling, and it the resource it's made out of.
+    - Finished the documentation of the BuildingManager.
+    - Finished the documentation of the NpcBuildingManager.
+    - Finished the documentation of the Npc class.

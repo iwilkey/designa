@@ -16,7 +16,7 @@ import com.iwilkey.designa.tiles.Tile;
  The Assets class encapsulates static instances of assets used during the runtime of Designa. This makes it easy to
  use them anywhere as they're needed.
 
- @author Ian Wilkey
+ @author Ian Wilkey (iwilkey)
  @version VERSION
  @since 7/21/2020
 
@@ -29,7 +29,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.40";
+    public static String VERSION = "pa1.0.41";
     // Cursor
     public static TextureRegion cursor;
     // Font

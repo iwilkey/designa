@@ -2,36 +2,66 @@ package com.iwilkey.designa.entities.creature.passive;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import com.badlogic.gdx.math.MathUtils;
+
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.Creature;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gfx.Text;
 
+/**
+
+ This class defines a passive non-playable-character.
+
+ @author Ian Wilkey (iwilkey)
+ @version VERSION
+ @since 7/21/2020
+
+ */
+
+// Note: This class extends the Creature class.
 public class Npc extends Creature {
 
-    // Animations
-    private Animation[] animations;
+    /**
+     * Global vars
+     */
 
-    TextureRegion currentTexture;
-    long DECISION_TIME = 100;
-    long timer = 0;
+    // Final vars
+    final Animation[] animations;
+
+    // Timers
+    long timer = 0; // Master timer
+    long DECISION_TIME = 100; // Default decision time
+
+    // Booleans
     boolean walkLeft = true;
+
+    // Strings
     String name;
+
+    // Integers
     int heartSpacing = 4;
 
+    /**
+     * Npc constructor.
+     * @param gb An instance of this class needs the GameBuffer.
+     * @param x The x spawn location of this Npc.
+     * @param y The y spawn location of this Npc.
+     */
     public Npc(GameBuffer gb, float x, float y) {
+        // Invoke the Creature constructor.
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 
+        // Give the Npc a random name.
         name = Assets.maleNames[MathUtils.random(0, Assets.maleNames.length - 1)];
+        // Give the Npc a random speed between the range below.
         speed = MathUtils.random(DEFAULT_SPEED - 0.4f, DEFAULT_SPEED + 0.4f);
 
-        facingLeft = true;
-        facingRight = false;
-        currentTexture = Assets.man[0];
+        // Init facing direction.
+        facingLeft = true; facingRight = false;
 
+        // Set the collider.
         collider.width = width - 9;
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
@@ -41,81 +71,98 @@ public class Npc extends Creature {
         animations = new Animation[2];
         animations[0] = new Animation(MathUtils.random(80, 150), Assets.manWalkRight);
         animations[1] = new Animation(MathUtils.random(80, 150), Assets.manWalkLeft);
-
     }
 
     // TODO: Make an AI Behavior web that Npcs can choose actions on.
     // TODO: Then, apply perlin noise with time and see that happens.
 
-    // The brain
+    /**
+     * The tick method. I like to think of this method like the brain.
+     */
     @Override
     public void tick() {
-
+        // Tick the animations forward.
+        for(Animation anim : animations) anim.tick();
+        // Check if it is stuck.
         checkStuck();
 
-        for(Animation anim : animations) anim.tick();
-
+        // Increment the timer until next decision time.
         timer++;
         if(timer > DECISION_TIME) {
+            // Make a random decision to either turn right or stay left.
             walkLeft = MathUtils.random(0, 1) != 1;
+            // Apply it.
             facingLeft = walkLeft; facingRight = !facingLeft;
+            // Jump.
             if(!isJumping && isGrounded) jump();
+            // Set a new decision time.
             DECISION_TIME = MathUtils.random(1, 200);
+            // Reset the timer.
             timer = 0;
         }
 
+        // Move. This is defined in the Creature class.
         move();
-        xMove = (walkLeft) ? (speed / 2) : -(speed / 2);
 
+        // Move the x value of the Npc based off of the decision it made and speed it can go.
+        xMove = (walkLeft) ? (speed / 2) : -(speed / 2);
     }
 
+    /**
+     * The render method.
+     * @param b Every render method needs a passed in graphics batch.
+     */
     @Override
     public void render(Batch b) {
-
+        // Draw the sprite calculated by the current state its in.
         b.draw(currentSprite(), x, y, width, height);
-
-        for (int i = 0; i < 10; i++) {
-            if (getHealth() >= i + 1) {
-                // Down, to the left
-                b.draw(Assets.heart[0], (x + (i * heartSpacing)) - 10,
-                        y + 33, 4, 4);
-            } else {
-                b.draw(Assets.heart[1], (x + (i * heartSpacing)) - 10,
-                        y + 33, 4, 4);
-            }
-        }
-
+        // Draw the health above.
+        renderHealth(b);
+        // Draw the name above.
         Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 5) / 2), (int)y + 40, 4);
 
     }
 
-    private TextureRegion currentSprite() {
-        if(isMoving && isGrounded) {
-            if(facingLeft) {
-                return animations[1].getCurrentFrame();
-            } else if (facingRight){
-                return animations[0].getCurrentFrame();
-            }
-        } else if (isMoving) {
-            if(facingLeft) {
-                return Assets.manJump[0];
-            } else {
-                return Assets.manJump[1];
-            }
-        } else {
-            if(facingLeft) {
-                return Assets.man[0];
-            } else {
-                return Assets.man[1];
-            }
+    /**
+     * This method will render the health based off of the value.
+     * @param b Every render, or sub-render method needs a passed in graphics batch.
+     */
+    private void renderHealth(Batch b) {
+        // Simple algorithm to display the hearts properly.
+        for (int i = 0; i < 10; i++) {
+            if (getHealth() >= i + 1) b.draw(Assets.heart[0], (x + (i * heartSpacing)) - 10,
+                    y + 33, 4, 4);
+            else b.draw(Assets.heart[1], (x + (i * heartSpacing)) - 10,
+                    y + 33, 4, 4);
         }
+    }
 
+    /**
+     * This method defers the proper animation or sprite to return to the render method based on the state of itself.
+     * @return A TextureRegion denoting the sprite that needs to be rendered.
+     */
+    private TextureRegion currentSprite() {
+        // If the Npc is moving and on the ground...
+        if(isMoving && isGrounded) {
+            if(facingLeft) return animations[1].getCurrentFrame();
+            else if (facingRight) return animations[0].getCurrentFrame();
+        // Otherwise if they are off the ground...
+        } else if (isMoving) {
+            if(facingLeft) return Assets.manJump[0];
+            else return Assets.manJump[1];
+        // Otherwise, return the idle sprite.
+        } else {
+            if(facingLeft) return Assets.man[0];
+            else return Assets.man[1];
+        }
         return null;
     }
 
+    /**
+     * This method defines what happens when an Npc dies.
+     */
     @Override
     public void die() {
-
+        // Nothing for now. Carbon samples will be added later.
     }
-
 }

@@ -39,7 +39,7 @@ public class TerraBot extends Enemy {
         animations[0] = new Animation(100, Assets.groundBotRight);
         animations[1] = new Animation(100, Assets.groundBotLeft);
 
-        buildingHandler = new NpcBuildingHandler(gb, this);
+        buildingHandler = new NpcBuildingHandler(gb);
     }
 
     @Override

@@ -66,6 +66,9 @@ public class World {
 
         giveItem(Assets.crateItem, 4);
         giveItem(Assets.torchItem, 3);
+        giveItem(Assets.copperMechanicalDrillItem, 2);
+        giveItem(Assets.stonePipeItem, 12);
+        giveItem(Assets.simpleDrillItem, 1);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -623,6 +626,7 @@ public class World {
     public static void bake(int[][] lm) { lightMap = lm; }
     public GameBuffer getGameBuffer() { return gb; }
     public static ItemHandler getItemHandler() { return itemHandler; }
+    public MachineHandler getMachineHandler() { return machineHandler; }
     public static EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }

@@ -21,7 +21,6 @@ public class PipeHandler {
         int yEnd = (int) Math.min(World.h, ((((-Camera.position.y + Game.h) / Camera.scale.y) / Tile.TILE_SIZE) + 4));
         for(int yy = yStart; yy < yEnd; yy++) {
             for(int xx = xStart; xx < xEnd; xx++) {
-                /*
                 switch(World.pipeMap[xx][yy]) {
                     case -1:
                         break;
@@ -46,8 +45,6 @@ public class PipeHandler {
                         Tile.renderBreakLevel(b, x, y, bl, id);
                         break;
                 }
-
-                 */
             }
         }
     }

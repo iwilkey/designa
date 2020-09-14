@@ -14,6 +14,8 @@ import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemType;
+import com.iwilkey.designa.machines.MachineHandler;
+import com.iwilkey.designa.machines.MachineType;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
@@ -26,7 +28,7 @@ import java.util.Map;
  The BuildingHandler class gives the player the ability to interact with the world around them. It is divided
  up into many functions, all of which are explained briefly before their definition.
 
- @author Ian Wilkey
+ @author Ian Wilkey (iwilkey)
  @version VERSION
  @since 7/21/2020
 
@@ -208,13 +210,15 @@ public class BuildingHandler {
 
         // If the player isn't building on the back tile map...
         if(!backBuilding) {
+
+            // Check to see if the tile was a mechanical drill and if so, the tile is handled there instead of here.
+            if(mechDrillHandler(id, x, y)) return;
+
             // And the tile currently selected is air...
             if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
                 // Check to see if it's a special tile (i.e torch or crate) and handle it there instead of here.
                 if(!(specialTilesAdd(id, x, y))) return;
-                // Check to see if the tile was a mechanical drill and if so, the tile is handled there instead of here.
-                if(mechDrillHandler(id, x, y)) return;
                 // Check to see if the tile was a pipe and if so, the tile is handled there instead of here.
                 if(pipePlacementHandler(id, x, y)) return;
 
@@ -226,6 +230,10 @@ public class BuildingHandler {
                 ToolSlot.currentItem.itemCount--;
             }
         } else { // But the player is back building...
+
+            // Pipes are not allowed on the back tiles
+            if(ToolSlot.currentItem.getItem() == Assets.stonePipeItem) return;
+
             // So, if the back tile currently selected is air...
             if (gb.getWorld().getBackTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
                 // Set the back tile ID slot in the tile map to @id.
@@ -302,20 +310,23 @@ public class BuildingHandler {
         Item item = ToolSlot.currentItem.getItem();
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.MechanicalDrill)) return false;
 
-        // If the tile currently selected is an ore, the player is allowed to place it.
-        if(World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CopperOreTile ||
-                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.SilverOreTile ||
-                World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.IronOreTile) {
+            // If the tile currently selected is an ore, the player is allowed to place it.
+            if(World.getTile(x, y) == Tile.copperOreTile ||
+                    World.getTile(x, y) == Tile.silverOreTile ||
+                    World.getTile(x, y) == Tile.ironOreTile) {
 
-            ToolSlot.currentItem.itemCount--;
-            World.tiles[x][(World.h - y) - 1] = id;
-            World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-            Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+                ToolSlot.currentItem.itemCount--;
+                int resourceID = World.tiles[x][(World.h - y) - 1];
+                World.tiles[x][(World.h - y) - 1] = id;
+                World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+                MachineHandler.addMechanicalDrill(x, World.h - y - 1, Tile.tiles[resourceID],
+                        MachineType.MechanicalDrill.ResourceType.COPPER);
+                Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
 
-            return true;
-        }
+                return true;
+            }
 
-        return false;
+        return true;
     }
 
     /**
@@ -479,26 +490,35 @@ public class BuildingHandler {
      * @param y The y location of the tile.
      */
     private void specialTilesRemove(Tile tile, int x, int y) {
+        // Define an offset for debugging purposes.
         int off = 4;
-        if (tile == Tile.torchTile) gb.getWorld().getLightManager().removeLight(x, y);
 
+        // If the tile is a torch, remove the light there.
+        if (tile == Tile.torchTile) {
+            gb.getWorld().getLightManager().removeLight(x, y);
+            return;
+        }
+
+        // If the tile is a crate, destroy the crate and spawn into the game world all the items that were in the crate.
         if(tile == Tile.crateTile) {
             HashMap<Item, Integer> items = new HashMap<>();
-            for(Crate crate : gb.getWorld().getEntityHandler().getPlayer().crates) {
+            for(Crate crate : World.getEntityHandler().getPlayer().crates)
                 if(crate.x == x && crate.y == y) items = crate.destroy();
-            }
 
             for(Map.Entry<Item, Integer> item : items.entrySet()) {
                 try {
                     for(int i = 0; i < item.getValue(); i++)
-                        World.getItemHandler().addItem(Item.getItemByID(item.getKey().getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
+                        World.getItemHandler().addItem(Item.getItemByID(item.getKey().getItemID())
+                                .createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
                             pointerOnTileY() * Tile.TILE_SIZE + off));
                 } catch (NullPointerException ignored) {}
             }
 
-            gb.getWorld().getEntityHandler().getPlayer().removeCrate(x, y);
+            World.getEntityHandler().getPlayer().removeCrate(x, y);
+            return;
         }
 
+        // If the tile is a stone pipe, reset the pipe map there.
         if(tile == Tile.stonePipeTile) {
             World.pipeMap[x][y] = -1;
             gb.getWorld().getLightManager().bakeLighting();
@@ -506,32 +526,52 @@ public class BuildingHandler {
         }
     }
 
+    /**
+     * This method will take into account where the cursor compared to the camera and evaluate
+     * the proper x coordinate for the tile selected.
+     * @return The proper x coordinate of the tile selected in the tile map.
+     */
     private int pointerOnTileX() {
         return (int) ((((InputHandler.cursorX) - Camera.position.x) /
                 Tile.TILE_SIZE) / Camera.scale.x);
     }
 
+    /**
+     * This method will take into account where the cursor compared to the camera and evaluate
+     * the proper y coordinate for the tile selected.
+     * @return The proper y coordinate of the tile selected in the tile map.
+     */
     private int pointerOnTileY() {
         return (int) ((((InputHandler.cursorY) - Camera.position.y) /
                 Tile.TILE_SIZE) / Camera.scale.y);
     }
 
+    /**
+     * The render method for the BuildingManager.
+     * @param b Every render method needs to be passed the graphics batch.
+     */
     public void render(Batch b) {
-
+        // If the inventory isn't active...
         if(!Inventory.active) {
+            // Find the difference between the player and the cursor to evaluate if the tile selected is in range or not.
             if (Math.abs(selectorX - player.getX()) < 1.5 * Tile.TILE_SIZE &&
                     Math.abs(selectorY - (player.getY() + 8)) < 2 * Tile.TILE_SIZE) {
+                // In this case, the player is in range and not on top.
                 inRange = true;
                 onTop = false;
 
+                // If not back building...
                 if(!backBuilding) {
-                    if (!(gb.getWorld().getEntityHandler().getPlayer().getCollisionBounds(0f, 0f).intersects(selectorCollider))) {
+                    // If the selector collider doesn't intersect with the player, draw the while selector.
+                    if (!(World.getEntityHandler().getPlayer().getCollisionBounds(0f, 0f).intersects(selectorCollider))) {
                         b.draw(Assets.selector, (int) (selectorX), (int) (selectorY),
                                 Tile.TILE_SIZE, Tile.TILE_SIZE);
+                    // Otherwise, in range is false, but onTop can still be evaluated.
                     } else {
                         inRange = false;
                         onTop = (selectorX - player.getX() < Tile.TILE_SIZE &&
                                 selectorY - player.getY() < Tile.TILE_SIZE);
+                        // Draw the appropriate selector to reflect the state of the BuildingManager.
                         if (onTop)
                             b.draw(Assets.jumpSelector, (int) (selectorX), (int) (selectorY),
                                     Tile.TILE_SIZE, Tile.TILE_SIZE);
@@ -539,11 +579,10 @@ public class BuildingHandler {
                             b.draw(Assets.errorSelector, (int) (selectorX), (int) (selectorY),
                                     Tile.TILE_SIZE, Tile.TILE_SIZE);
                     }
-                } else {
-                    b.draw(Assets.selector, (int) (selectorX), (int) (selectorY),
+                // The player is back building, so as long as it's in range, the selector is white.
+                } else b.draw(Assets.selector, (int) (selectorX), (int) (selectorY),
                             Tile.TILE_SIZE, Tile.TILE_SIZE);
-                }
-
+            // Otherwise, the player is completely out of bounds. Render the transparent selector.
             } else {
                 inRange = false;
                 onTop = false;
