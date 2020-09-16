@@ -20,7 +20,7 @@ import com.iwilkey.designa.gfx.Text;
 
  */
 
-// Note: This class extends the Creature class.
+// Note: This object is a Creature.
 public class Npc extends Creature {
 
     /**

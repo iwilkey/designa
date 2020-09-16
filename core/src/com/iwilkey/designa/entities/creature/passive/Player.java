@@ -16,121 +16,160 @@ import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+/**
+
+ This class defines the player. It includes user-control, animation, over-all functionality and other game logic.
+
+ @author Ian Wilkey (iwilkey)
+ @version VERSION
+ @since 7/21/2020
+
+ */
+
+// Note: This object is a Creature.
 public class Player extends Creature {
 
-    // Animations
-    private final Animation[] animations;
+    /**
+     * Global vars
+     */
 
-    // HUD
-    private final Hud hud;
-
-    // Building
+    // Final vars
     private final BuildingHandler buildingHandler;
-
-    // Inventory
     private final Inventory inventory;
     private final ToolSlot toolSlot;
+    private final Hud hud;
+    private final Animation[] animations;
 
-    // Player owned Crates
+    // Player-owned crates
     public ArrayList<Crate> crates = new ArrayList<Crate>();
 
+    // Longs
     private long timer, actionCooldown = 20;
 
+    /**
+     * Player constructor.
+     * @param gb This class needs the GameBuffer.
+     * @param x The x spawn point of the player.
+     * @param y The y spawn point of the player.
+     */
     public Player(GameBuffer gb, float x, float y) {
+        // Call the Creature constructor.
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 
-        // Setting the collider
+        // Create an HUD (Heads up display) instance.
+        hud = new Hud(this);
+
+        // Create a BuildingHandler instance.
+        buildingHandler = new BuildingHandler(gb, this);
+
+        // Create an Inventory instance.
+        inventory = new Inventory(gb);
+
+        // Create a ToolSlot instance.
+        toolSlot = new ToolSlot(inventory);
+
+        // Set the spawn direction.
+        facingLeft = true;
+
+        // Set the collider.
         collider.width = width - 9;
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
-        // Init Animations
+        // Init animations
         animations = new Animation[4];
         animations[0] = new Animation(100, Assets.walk_right);
         animations[1] = new Animation(100, Assets.walk_left);
         animations[2] = new Animation(100, Assets.playerGunWalkRight);
         animations[3] = new Animation(100, Assets.playerGunWalkLeft);
-
-        // HUD
-        hud = new Hud(this);
-
-        // Building
-        buildingHandler = new BuildingHandler(gb, this);
-
-        // Inventory
-        inventory = new Inventory(gb);
-        toolSlot = new ToolSlot(inventory);
-
-        facingLeft = true;
     }
 
+    /**
+     * This method converts user input into player movement.
+     */
     private void control() {
-        xMove = 0;
-        yMove = 0;
+        // Set the the accelerations to zero each tick.
+        xMove = 0; yMove = 0;
 
+        // Convert control into movement.
         if(InputHandler.moveRight) xMove += speed;
         if(InputHandler.moveLeft) xMove -= speed;
-        if(InputHandler.jumpRequest && !isJumping && isGrounded) jump();
-        InputHandler.jumpRequest = false;
-
+        if(InputHandler.jumpRequest && !isJumping && isGrounded) {
+            jump();
+            InputHandler.jumpRequest = false;
+        }
     }
 
+    /**
+     * Player tick method. Called every frame.
+     */
     @Override
     public void tick() {
 
-        // Tick animations
-        for (Animation anim : animations) {
-            anim.tick();
-        }
+        // Tick all animations forward.
+        for (Animation anim : animations) anim.tick();
 
         // Tick HUD
         hud.tick();
 
-        // Move
+        // Tick movement.
         control();
         move();
 
-        // Center camera
+        // Center the camera.
         gb.getCamera().centerOnEntity(this);
 
-        // Building
+        // Tick BuildingHandler.
         buildingHandler.tick();
 
-        // Attack
+        // Check for user attack requests.
         checkAttacks();
 
-        // Inventory
+        // Tick the Inventory.
         inventory.tick();
+
+        // Tick the ToolSlot.
         toolSlot.tick();
 
-        if (crates.size() != 0) {
-            for (Crate crate : crates) crate.tick();
-        }
+        // Tick crates, if they exist in the world.
+        if (crates.size() != 0) for (Crate crate : crates) crate.tick();
 
     }
 
+    /**
+     * This method checks and handles user attack requests.
+     */
     private void checkAttacks() {
 
+        // Create a rectangle that is the current collider of the player.
         Rectangle cb = getCollisionBounds(0,0);
+        // Create a rectangle that will be the attack collider, so that anything inside of it will be damaged.
         Rectangle ar = new Rectangle();
+        // Make the width and height a tile.
         int arSize = Tile.TILE_SIZE;
-        ar.width = arSize;
-        ar.height = arSize;
+        ar.width = arSize; ar.height = arSize;
 
+        // If there is a request to attack and the player is facing left...
         if(InputHandler.attack && facingLeft) {
+            // Move the xValue over the arSize.
             ar.x = cb.x - arSize;
+            // Move the yValue to be in the middle of the player body.
             ar.y = cb.y + cb.height / 2 - arSize / 2;
+        // Same algorithm for the right side.
         } else if(InputHandler.attack && facingRight) {
             ar.x = cb.x + cb.width;
             ar.y = cb.y + cb.height / 2 - arSize / 2;
         }
 
+        // If the user requests a prolonged action...
         if(InputHandler.prolongedActionRequest) {
+            // Increment the time until the action cool down then attack.
             timer++;
             if(timer > actionCooldown) {
                 if(facingLeft) {
@@ -140,22 +179,32 @@ public class Player extends Creature {
                     ar.x = cb.x + cb.width;
                     ar.y = cb.y + cb.height / 2 - arSize / 2;
                 }
+
+                // Attack
                 attack(ar, 1);
                 timer = 0;
+                return;
             }
-        } else {
-            timer = 0;
-        }
+        } else timer = 0;
 
+        // Reset request
         InputHandler.attack = false;
 
+        // Attack
         attack(ar, 1);
 
     }
 
+    /**
+     * This method actually attacks the correct entity when called.
+     * @param ar The rectangle representing the attack area.
+     * @param amt The amount of damage needed to be done to the entity.
+     */
     private void attack(Rectangle ar, int amt) {
-        for (Entity e : gb.getWorld().getEntityHandler().getEntities()) {
-            if(e.equals(this)) continue;
+        // Loop through all entities...
+        for (Entity e : World.getEntityHandler().getEntities()) {
+            if(e.equals(this)) continue; // Skip player...
+            // Hurt the entity if it is colliding with the attack collider.
             if(e.getCollisionBounds(0, 0).intersects(ar)) {
                 e.hurt(amt);
                 return;
@@ -163,123 +212,164 @@ public class Player extends Creature {
         }
     }
 
-    public void addCrate(int x, int y) {
-        crates.add(new Crate(inventory, x, y));
-    }
+    /**
+     * This method will record a new crate into the player-owned crates list.
+     * @param x The x location of the crate (in tiles).
+     * @param y The y location of the crate (in tiles).
+     */
+    public void addCrate(int x, int y) { crates.add(new Crate(inventory, x, y)); }
+
+    /**
+     * This method will remove a crate from the player-owned crates list if it exists.
+     * @param x The x location of the crate (in tiles).
+     * @param y The y location of the crate (in tiles).
+     */
     public void removeCrate(int x, int y) { crates.removeIf(crate -> crate.x == x && crate.y == y); }
 
+    /**
+     * Player render method.
+     * @param b Every render method needs the graphics batch.
+     */
     @Override
     public void render(Batch b) {
-        if(isFlashing && flashInterval >= flashIntervalTime) {
-            renderBody(b);
-        } else if (!isFlashing) {
-            renderBody(b);
-        }
-
-        // renderCollider(b);
+        // Render the body if not flashing.
+        if(isFlashing && flashInterval >= flashIntervalTime) renderBody(b);
+        else if (!isFlashing) renderBody(b);
     }
 
+    /**
+     * Player sub-render method. It specifically draws the current sprite in the animation and the tools held by the player.
+     * @param b Every render, or sub-render method needs the graphics batch.
+     */
     private void renderBody(Batch b) {
+        // Draw the correct sprite.
         b.draw(currentSprite(), x, y, width, height);
+
+        // Below handles drawing the item held.
         if(ToolSlot.currentItem != null) {
             try {
+                // If facing right, draw items correctly based on logic below.
                 if (facingRight)  {
-                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill)
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x, y + 5, 12, 12);
-                    } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
+                    else if (ToolSlot.currentItem.getItem().getName().equals("Torch"))
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 4, y + 2,
                                 6, 6, 8, 8, 1, 1, -90);
-                    } else if (ToolSlot.currentItem.getItem().getName().equals("Wrench")) {
+                    else if (ToolSlot.currentItem.getItem().getName().equals("Wrench"))
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x - 2.5f, y,
                                 6, 6, 8, 8, 1, 1, 180);
-                    } else {
-                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
-                    }
-                }
-
-                else {
-                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill) {
+                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 2, y + 5, 6, 6);
+                // Otherwise, they were facing left so draw items the way defined below.
+                } else {
+                    if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem.Tool.Drill)
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 10, y + 4,
                                 6, 6, 12, 12, 1, 1, 180);
-                    } else if (ToolSlot.currentItem.getItem().getName().equals("Torch")) {
+                    else if (ToolSlot.currentItem.getItem().getName().equals("Torch"))
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 6, y + 6,
                                 6, 6, 8, 8, 1, 1, 90);
-                    } else if (ToolSlot.currentItem.getItem().getName().equals("Wrench")) {
+                    else if (ToolSlot.currentItem.getItem().getName().equals("Wrench"))
                         b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 8.5f, y,
                                 6, 6, 8, 8, 1, 1, 180);
-                    } else {
-                        b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
-                    }
+                    else b.draw(ToolSlot.currentItem.getItem().getTexture(), x + 14, y + 5, 6, 6);
                 }
             } catch (NullPointerException ignored) {}
         }
     }
 
+    /**
+     * This method defines what happens when the player dies.
+     */
     @Override
     public void die() {
-
+        // Go to a game over screen and delete the world.
     }
 
+    /**
+     * This method defers the proper animation or sprite to return to the render method based on the state of itself.
+     * @return A TextureRegion denoting the sprite that needs to be rendered.
+     */
     private TextureRegion currentSprite() {
+        // If the player is not holding a gun...
         if(!gunWielding) {
+            // If the player is moving and grounded...
             if (isMoving && isGrounded) {
-                if (facingLeft) {
-                    return animations[1].getCurrentFrame();
-                } else if (facingRight) {
-                    return animations[0].getCurrentFrame();
-                }
+                // Return the proper sprite.
+                if (facingLeft) return animations[1].getCurrentFrame();
+                else if (facingRight) return animations[0].getCurrentFrame();
+            // If the player isn't grounded but still moving...
             } else if (isMoving) {
-                if (facingLeft) {
-                    return Assets.player_jump[0];
-                } else {
-                    return Assets.player_jump[1];
-                }
+                // Return the proper sprite.
+                if (facingLeft) return Assets.player_jump[0];
+                else return Assets.player_jump[1];
+            // Otherwise, the player is idle.
             } else {
-                if (facingLeft) {
-                    return Assets.player[0];
-                } else {
-                    return Assets.player[1];
-                }
+                // So, return that.
+                if (facingLeft) return Assets.player[0];
+                else return Assets.player[1];
             }
+        // Otherwise, the player does have a gun.
         } else {
+            // Same algorithm as above, just replaced with the gun-wielding animations.
             if (isMoving && isGrounded) {
-                if (facingLeft) {
-                    return animations[3].getCurrentFrame();
-                } else if (facingRight) {
-                    return animations[2].getCurrentFrame();
-                }
+                if (facingLeft) return animations[3].getCurrentFrame();
+                else if (facingRight) return animations[2].getCurrentFrame();
             } else if (isMoving) {
-                if (facingLeft) {
-                    return Assets.playerGun[0];
-                } else {
-                    return Assets.playerGun[1];
-                }
+                if (facingLeft) return Assets.playerGun[0];
+                else return Assets.playerGun[1];
             } else {
-                if (facingLeft) {
-                    return Assets.playerGun[0];
-                } else {
-                    return Assets.playerGun[1];
-                }
+                if (facingLeft) return Assets.playerGun[0];
+                else return Assets.playerGun[1];
             }
         }
 
         return null;
     }
 
+    /**
+     * This method will take in an integer value to defer what direction the player should face.
+     * @param face The direction the player should face.
+     */
     public void setFace(int face) {
+        // 0 for left, anything else for right.
         if(face == 0) {
-            facingLeft = true;
-            facingRight = false;
+            facingLeft = true; facingRight = false;
         } else {
-            facingLeft = false;
-            facingRight = true;
+            facingLeft = false; facingRight = true;
         }
     }
 
+    /*
+     * GETTERS AND SETTERS
+     */
+
+    /**
+     * GameBuffer getter.
+     * @return The GameBuffer.
+     */
     public GameBuffer getGameBuffer() { return gb; }
-    public Hud getHUD() { return hud; }
+
+    /**
+     * BuildingHandler getter.
+     * @return The BuildingHandler.
+     */
     public BuildingHandler getBuildingHandler() { return buildingHandler; }
+
+    /**
+     * Inventory getter.
+     * @return The instance of the player inventory.
+     */
     public Inventory getInventory() { return inventory; }
+
+    /**
+     * ToolSlot getter.
+     * @return The instance of the ToolSlot.
+     */
     public ToolSlot getToolSlot() { return toolSlot; }
+
+    /**
+     * HUD getter.
+     * @return The instance of the HUD.
+     */
+    public Hud getHUD() { return hud; }
 
 }

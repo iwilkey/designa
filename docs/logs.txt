@@ -355,3 +355,16 @@ Date || Build ||
     - Finished the documentation of the BuildingManager.
     - Finished the documentation of the NpcBuildingManager.
     - Finished the documentation of the Npc class.
+    - Began documentation on the Player class.
+
+9/16/2020 || pa_1.0.42 ||
+    - Finished the documentation of the Player class.
+    - Finished the documentation of the TerraBot class.
+    - Finished the documentation of the Creature class.
+    - Finished the documentation of the Enemy class.
+    - Finished the documentation of the StaticEntity class.
+    - Finished the documentation of the Tree class.
+    - Finished the documentation of the Entity class.
+    - Finished the documentation of the EntityHandler class.
+        NOTE: That concludes the current entities package.
+    - Finished the documentation of the Animation class.

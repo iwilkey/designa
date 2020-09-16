@@ -4,6 +4,8 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
+- Document every class for open-sourcing.
+
 - Create settings state
 
 - Keep working on the pipes and machines! These things need to at least be done before early access release
