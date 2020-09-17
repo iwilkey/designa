@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Animation;
-import com.iwilkey.designa.machines.MachineType;
-import com.iwilkey.designa.machines.PipeHandler;
 import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
@@ -175,11 +173,11 @@ public class Tile {
             }
         }
 
-        // Offloader
-        public static class Offloader extends Tile {
+        // Node
+        public static class Node extends Tile {
             private int itemID = 24;
-            public Offloader(int ID, int strength) {
-                super(Assets.offloader[0], ID, strength);
+            public Node(int ID, int strength) {
+                super(Assets.node[0], ID, strength);
             }
             @Override
             public int getItemID() {
@@ -187,7 +185,7 @@ public class Tile {
             }
             @Override
             public void render(Batch b, int x, int y, int bl, int id) {
-                MachineType.Offloader.render(b, x, y, bl, id);
+                renderBreakLevel(b, x, y, bl, id);
             }
         }
 
@@ -211,7 +209,7 @@ public class Tile {
                 }
                 @Override
                 public void render(Batch b, int x, int y, int bl, int id) {
-                    PipeHandler.render(b, x, y, bl, id);
+                    renderBreakLevel(b, x, y, bl, id);
                 }
                 public int getItemID() { return itemID; }
             }
@@ -250,7 +248,7 @@ public class Tile {
         public static Tile copperMechanicalDrillTile = new CopperMechanicalDrill(14, 40);
 
         // Offloader
-        public static Tile offloaderTile = new Offloader(16, 30);
+        public static Tile nodeTile = new Node(16, 30);
 
         // Pipes
         public static Tile stonePipeTile = new Pipe.StonePipe(15, 12);

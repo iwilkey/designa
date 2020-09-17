@@ -357,7 +357,7 @@ Date || Build ||
     - Finished the documentation of the Npc class.
     - Began documentation on the Player class.
 
-9/16/2020 || pa_1.0.42 ||
+9/16/2020 || pa_1.0.41 (cont) ||
     - Finished the documentation of the Player class.
     - Finished the documentation of the TerraBot class.
     - Finished the documentation of the Creature class.
@@ -368,3 +368,12 @@ Date || Build ||
     - Finished the documentation of the EntityHandler class.
         NOTE: That concludes the current entities package.
     - Finished the documentation of the Animation class.
+
+9/17/2020 || pa_1.0.42 ||
+    - Removed offloaders and replaced them with Nodes
+        Nodes are pipes that change the direction of the pipe system to the complementary angle.
+    - Removed the pipe map algorithm and replaced it with individual pipe instances.
+    - Pipes now check what the next tile is in their sequence (based off of their orientation)
+    - Pipes can now carry items offloaded by a copper drill in any direction.
+    - Pipes can now offload items they transport to other pipes of the same direction.
+    - Pipes can now offload items they transport into a chest if it is their destination.

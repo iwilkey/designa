@@ -53,8 +53,8 @@ public class ItemType {
                 public MechanicalDrill(int ID) { super(ID); }
             }
 
-            public static class Offloader extends CreatableTile {
-                public Offloader(int ID) { super(ID); }
+            public static class Node extends CreatableTile {
+                public Node(int ID) { super(ID); }
             }
 
             public static class Pipe extends CreatableTile {

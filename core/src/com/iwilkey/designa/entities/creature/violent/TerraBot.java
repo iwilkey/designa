@@ -8,7 +8,7 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.NpcBuildingHandler;
 import com.iwilkey.designa.entities.Entity;
-import com.iwilkey.designa.entities.creature.Enemy;
+import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.tiles.Tile;

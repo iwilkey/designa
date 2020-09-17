@@ -258,14 +258,17 @@ public class VerticalTree {
         for (Map.Entry<Item, String> entry : ((ItemType.Resource)node.item.getItemType()).getItemRecipe().getRecipe().entrySet()) {
             yLoop: for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
                 for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
-                    if (slots[x][y] != null) {
-                        try {
-                            if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
-                                slots[x][y].itemCount -= Math.min(slots[x][y].itemCount, Utils.parseInt(entry.getValue()));
-                                break yLoop;
+                    try {
+                        if (slots[x][y] != null) {
+                            try {
+                                if (slots[x][y].getItem().getItemID() == entry.getKey().getItemID()) {
+                                    slots[x][y].itemCount -= Math.min(slots[x][y].itemCount, Utils.parseInt(entry.getValue()));
+                                    break yLoop;
+                                }
+                            } catch (NullPointerException ignored) {
                             }
-                        } catch (NullPointerException ignored) {}
-                    }
+                        }
+                    } catch (ArrayIndexOutOfBoundsException ignored) {}
                 }
             }
         }

@@ -12,7 +12,7 @@ public class MachineSection extends BlueprintSection {
     public MachineSection(Blueprints workbench, int x, int y) {
         super("Machines", workbench, x, y);
         items.add(new ItemBlueprint(this, Assets.stonePipeItem, items.size() - 1));
-        items.add(new ItemBlueprint(this, Assets.offloaderItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.nodeItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.copperMechanicalDrillItem, items.size() - 1));
     }
 

@@ -32,7 +32,7 @@ public class World {
 
     // Rendering
     public static int[][] tiles, backTiles,
-            pipeMap, tileBreakLevel,
+            tileBreakLevel,
             backTileBreakLevel, lightMap,
             origLightMap;
     public static int[] origHighTiles, origHighBackTiles;
@@ -69,6 +69,7 @@ public class World {
         giveItem(Assets.copperMechanicalDrillItem, 2);
         giveItem(Assets.stonePipeItem, 12);
         giveItem(Assets.simpleDrillItem, 1);
+        giveItem(Assets.nodeItem, 12);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -122,6 +123,8 @@ public class World {
 
         entityHandler.staticRender(b);
 
+        machineHandler.render(b);
+
         for(int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {
                 int xx = x * Tile.TILE_SIZE;
@@ -143,7 +146,6 @@ public class World {
 
         itemHandler.render(b);
         entityHandler.getPlayer().getBuildingHandler().render(b);
-        machineHandler.render(b);
 
     }
 
@@ -254,17 +256,6 @@ public class World {
             for (int x = 0; x < w; x++) {
                 lightMap[x][y] = 0;
                 origLightMap[x][y] = 0;
-            }
-        }
-
-        // Init pipe map
-        String pmf = Utils.loadFileAsString(path + "pm.dsw");
-        String[] pmTokens = pmf.split("\\s+");
-        pipeMap = new int[w][h];
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                int pmi = Utils.parseInt(pmTokens[x + y * w + 2]);
-                pipeMap[x][y] = pmi;
             }
         }
 
@@ -382,13 +373,6 @@ public class World {
         } else {
             if(!writeBHT(bhtf, w)) System.exit(-1);
         }
-
-        // Save pipe map
-        String pmPath = dirpath + "pm.dsw";
-        FileHandle pm = Gdx.files.local(pmPath);
-        pm.delete();
-        FileHandle pmf = Gdx.files.local(pmPath);
-        if(!writePM(pm, w, h)) System.exit(-1);
 
         // Save the trees XD
         String trPath = dirpath + "tr.dsw";
@@ -519,26 +503,6 @@ public class World {
             for (int x = 0; x < width; x++) {
                 int num = origHighBackTiles[x];
                 w.write(num + " ");
-            }
-
-            w.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    private static boolean writePM(FileHandle ftblf, int width, int height) {
-        try {
-            Writer w = ftblf.writer(true);
-            w.write(width + " " + height + "\n");
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int num = pipeMap[x][y];
-                    w.write(num + " ");
-                }
-                w.write("\n");
             }
 
             w.close();

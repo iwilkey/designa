@@ -9,10 +9,7 @@ Important now
 - Create settings state
 
 - Keep working on the pipes and machines! These things need to at least be done before early access release
-    - Each machine type needs to be linked to the position where the machine tile is at?
     - Offloaders need to offload items to pipes / crates in the right direction
-    - Pipes need to be able to transport items from one side to the next
-    - Mechanical drills need to be able to offload whatever resource they are mining at a certain speed
     - There needs to be a machine that can change the direction of a pipe. Offloaders?
 
 - Add the resource tiles to the blueprints and add a next page if it spills over

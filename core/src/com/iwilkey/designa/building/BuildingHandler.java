@@ -213,14 +213,16 @@ public class BuildingHandler {
 
             // Check to see if the tile was a mechanical drill and if so, the tile is handled there instead of here.
             if(mechDrillHandler(id, x, y)) return;
+            // Check to see if the tile was a node and if so, the tile is handled there instead of here.
+            if(nodeHandler(id, x, y)) return;
+            // Check to see if the tile was a pipe and if so, the tile is handled there instead of here.
+            if(pipePlacementHandler(id, x, y)) return;
 
             // And the tile currently selected is air...
             if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.AirTile) {
 
                 // Check to see if it's a special tile (i.e torch or crate) and handle it there instead of here.
                 if(!(specialTilesAdd(id, x, y))) return;
-                // Check to see if the tile was a pipe and if so, the tile is handled there instead of here.
-                if(pipePlacementHandler(id, x, y)) return;
 
                 // Set the ID slot in the tile map to @id.
                 World.tiles[x][(World.h - y) - 1] = id;
@@ -330,6 +332,29 @@ public class BuildingHandler {
     }
 
     /**
+     * This method will check if the tile was a node and handle it accordingly.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     * @return Did method take care of the tile or not?
+     */
+    private boolean nodeHandler(int id, int x, int y) {
+        // Grab the item and dictate if it's a node or not. If not, no reason to run this method.
+        Item item = ToolSlot.currentItem.getItem();
+        if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Node)) return false;
+
+        ToolSlot.currentItem.itemCount--;
+        int resourceID = World.tiles[x][(World.h - y) - 1];
+        World.tiles[x][(World.h - y) - 1] = id;
+        World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+        MachineHandler.addNode(x, World.h - y - 1);
+        Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+
+        return true;
+
+    }
+
+    /**
      * This method will check if the tile was a pipe and handle it accordingly.
      * @param id The tile ID.
      * @param x The x position (in TILES) where the new tile will be placed in the tile map.
@@ -347,12 +372,8 @@ public class BuildingHandler {
             World.tiles[x][(World.h - y) - 1] = id;
             World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
             ToolSlot.currentItem.itemCount--;
-
-            // The pipe map needs to be updated with the correct direction the player has selected.
-            World.pipeMap[x][y] = Hud.SELECTED_PIPE_DIRECTION;
-
+            MachineHandler.addPipe(x, y);
             gb.getWorld().getLightManager().bakeLighting();
-
             Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
 
             return true;
@@ -516,13 +537,6 @@ public class BuildingHandler {
 
             World.getEntityHandler().getPlayer().removeCrate(x, y);
             return;
-        }
-
-        // If the tile is a stone pipe, reset the pipe map there.
-        if(tile == Tile.stonePipeTile) {
-            World.pipeMap[x][y] = -1;
-            gb.getWorld().getLightManager().bakeLighting();
-            Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
         }
     }
 

@@ -57,7 +57,7 @@ public class Assets {
         // Mech Drills
         public static TextureRegion[] copperMechanicalDrill;
         // Offloader
-        public static TextureRegion[] offloader;
+        public static TextureRegion[] node;
         // Pipes
         public static TextureRegion[] stonePipeRight, stonePipeDown, stonePipeLeft, stonePipeUp;
     // Player
@@ -113,8 +113,8 @@ public class Assets {
             // Mechanical Drills
             public static Item copperMechanicalDrillItem;
 
-            // Offloader
-            public static Item offloaderItem;
+            // Node
+            public static Item nodeItem;
 
             // Pipes
             public static Item stonePipeItem;
@@ -159,7 +159,7 @@ public class Assets {
                 public static ItemRecipe COPPER_MECHANICAL_DRILL_RECIPE;
 
                 // Offloader
-                public static ItemRecipe OFFLOADER_RECIPE;
+                public static ItemRecipe NODE_RECIPE;
 
                 // Pipes
                 public static ItemRecipe STONE_PIPE_RECIPE;
@@ -351,11 +351,11 @@ public class Assets {
                 copperMechanicalDrill[3] = ss.crop(11, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
             // Offloader
-            offloader = new TextureRegion[4];
-                offloader[0] = ss.crop(12, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-                offloader[1] = ss.crop(13, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-                offloader[2] = ss.crop(14, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
-                offloader[3] = ss.crop(15, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            node = new TextureRegion[4];
+                node[0] = ss.crop(12, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                node[1] = ss.crop(13, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                node[2] = ss.crop(14, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
+                node[3] = ss.crop(15, 18, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
             //Pipes
             stonePipeRight = new TextureRegion[3];
@@ -604,8 +604,8 @@ public class Assets {
                     new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(Tile.copperMechanicalDrillTile.getID()));
 
                 // Offloader
-                offloaderItem = new Item(Assets.offloader[0], "Offloader", 24,
-                    new ItemType.PlaceableBlock.CreatableTile.Offloader(Tile.offloaderTile.getID()));
+                nodeItem = new Item(Assets.node[0], "Node", 24,
+                    new ItemType.PlaceableBlock.CreatableTile.Node(Tile.nodeTile.getID()));
 
                 // Pipes
                 stonePipeItem = new Item(Assets.stonePipeUp[0], "Stone Pipe", 23,
@@ -683,7 +683,7 @@ public class Assets {
             COPPER_MECHANICAL_DRILL_RECIPE = new ItemRecipe.CopperMechanicalDrillRecipe(Assets.copperMechanicalDrillItem);
 
             // Offloader
-            OFFLOADER_RECIPE = new ItemRecipe.OffloaderRecipe(Assets.offloaderItem);
+            NODE_RECIPE = new ItemRecipe.NodeRecipe(Assets.nodeItem);
 
             // Pipes
             STONE_PIPE_RECIPE = new ItemRecipe.StonePipeRecipe(Assets.stonePipeItem);

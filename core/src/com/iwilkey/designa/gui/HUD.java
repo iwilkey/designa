@@ -82,7 +82,7 @@ public class Hud {
         try {
             if (ToolSlot.currentItem.getItem() != null) {
                 if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe ||
-                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Offloader) {
+                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Node) {
                     if(InputHandler.pipeRotateRequest) {
                         SELECTED_PIPE_DIRECTION++;
                         if(SELECTED_PIPE_DIRECTION + 1 == 5) SELECTED_PIPE_DIRECTION = 0;
@@ -129,7 +129,7 @@ public class Hud {
         try {
             if (ToolSlot.currentItem.getItem() != null) {
                 if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe ||
-                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Offloader) {
+                        ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Node) {
                     b.draw(Assets.arrow[SELECTED_PIPE_DIRECTION], Game.w - 80 + 14, 160, 32, 32);
                 }
             }

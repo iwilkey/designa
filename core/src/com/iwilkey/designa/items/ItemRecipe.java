@@ -343,8 +343,8 @@ public abstract class ItemRecipe {
             }
 
             // Offloader
-            public static class OffloaderRecipe extends ItemRecipe {
-                public OffloaderRecipe(Item item) { super(item); }
+            public static class NodeRecipe extends ItemRecipe {
+                public NodeRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
                     add(Assets.recycledCopperResource, 2);
