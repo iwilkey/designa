@@ -70,6 +70,8 @@ public class World {
         giveItem(Assets.stonePipeItem, 12);
         giveItem(Assets.simpleDrillItem, 1);
         giveItem(Assets.nodeItem, 12);
+        giveItem(Assets.dirtItem, 99 * 2);
+        giveItem(Assets.hardwoodTileItem, 99 * 4);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));

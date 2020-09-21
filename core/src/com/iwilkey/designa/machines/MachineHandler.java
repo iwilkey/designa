@@ -30,15 +30,16 @@ public class MachineHandler {
     }
 
     public static void addNode(int x, int y) {
-        nodes.add(new MachineType.Node(x, y, Hud.SELECTED_PIPE_DIRECTION));
+        nodes.add(new MachineType.Node(x, y));
     }
 
     public void tick() {
+        for(MachineType.Node node : nodes) node.tick();
         for(MachineType.Pipe pipe : pipes) pipe.tick();
     }
 
     public void render(Batch b) {
-        for(MachineType.Node node : nodes) node.render(b, node.x, World.h - node.y - 1, node.direction);
+        for(MachineType.Node node : nodes) node.render(b, node.x, World.h - node.y - 1);
         for(int i = 0; i < pipes.size(); i++) {
             int ii = pipes.size() - i - 1;
             pipes.get(ii).render(b, pipes.get(ii).x, pipes.get(ii).y, pipes.get(ii).direction);

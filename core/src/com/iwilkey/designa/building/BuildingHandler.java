@@ -538,6 +538,12 @@ public class BuildingHandler {
             World.getEntityHandler().getPlayer().removeCrate(x, y);
             return;
         }
+
+        // Remove machines from MachineHandler record.
+        if(tile == Tile.stonePipeTile) MachineHandler.pipes.removeIf(pipe -> pipe.x == x && pipe.y == y);
+        if(tile == Tile.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
+        if(tile == Tile.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
+
     }
 
     /**

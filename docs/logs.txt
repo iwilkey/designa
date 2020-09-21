@@ -377,3 +377,11 @@ Date || Build ||
     - Pipes can now carry items offloaded by a copper drill in any direction.
     - Pipes can now offload items they transport to other pipes of the same direction.
     - Pipes can now offload items they transport into a chest if it is their destination.
+
+9/20/2020 || pa_1.0.43 ||
+    - Changed the node texture
+    - Worked on node functionality.
+        Complete redesign.
+    - Nodes now distribute to pipes correctly by calculating
+        inputs and outputs appropriately.
+        TODO There seems to be an issue with node resource splitting. Check that.

@@ -11,6 +11,7 @@ import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
 import java.util.HashMap;
@@ -229,13 +230,13 @@ public class Crate {
                 for(int ii = 0; ii < count; ii++) {
                     int abb = MathUtils.random(-2,2);
 
-                    int xx = (gb.getWorld().getEntityHandler().getPlayer().facingLeft()) ?
-                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() - (Tile.TILE_SIZE - 6) + abb :
-                            (int) gb.getWorld().getEntityHandler().getPlayer().getX() + (2 * Tile.TILE_SIZE - 6) + abb;
+                    int xx = (World.getEntityHandler().getPlayer().facingLeft()) ?
+                            (int) World.getEntityHandler().getPlayer().getX() - (Tile.TILE_SIZE - 6) + abb :
+                            (int) World.getEntityHandler().getPlayer().getX() + (2 * Tile.TILE_SIZE - 6) + abb;
                     int yyAbb = MathUtils.random(6, 14);
 
-                    gb.getWorld().getItemHandler().addItem(i.createNew(
-                            xx, (int) gb.getWorld().getEntityHandler().getPlayer().getY() + (Tile.TILE_SIZE) + yyAbb));
+                    World.getItemHandler().addItem(i.createNew(
+                            xx, (int) World.getEntityHandler().getPlayer().getY() + (Tile.TILE_SIZE) + yyAbb));
                 }
                 is.putItem(null, 0);
                 itemUp = false;
