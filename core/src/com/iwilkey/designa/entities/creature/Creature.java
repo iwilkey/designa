@@ -102,9 +102,6 @@ public abstract class Creature extends Entity {
 
         // If the Creature is not grounded, keep track of how long they've been in the air. This is used for the physics engine.
         if(!isGrounded) timeInAir += 0.1;
-
-        // If the Creature is flashing, check if it needs to become visible or invisible yet.
-        if(isFlashing) checkFlash();
     }
 
     /**
@@ -187,6 +184,10 @@ public abstract class Creature extends Entity {
             y = ty * Tile.TILE_SIZE + Tile.TILE_SIZE;
         }
 
+    }
+
+    protected void flashCheck() {
+        if(isFlashing) checkFlash();
     }
 
     /**

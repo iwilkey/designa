@@ -212,6 +212,10 @@ public class Tile {
                     renderBreakLevel(b, x, y, bl, id);
                 }
                 public int getItemID() { return itemID; }
+                @Override
+                public boolean isSolid() {
+                    return false;
+                }
             }
         }
 

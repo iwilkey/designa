@@ -80,11 +80,6 @@ public class WorldGeneration {
             FileHandle btblf = Gdx.files.local(btblPath);
             if(!writeBTBL(btblf, width, height)) System.exit(-1);
 
-            // Init pm.dsw
-            String pmPath = dirpath + "pm.dsw";
-            FileHandle pmf = Gdx.files.local(pmPath);
-            if(!writePM(pmf, width, height)) System.exit(-1);
-
         return dirpath;
 
     }
@@ -157,26 +152,6 @@ public class WorldGeneration {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     int num = Tile.getStrength(backTiles[x][height - y - 1]);
-                    w.write(num + " ");
-                }
-                w.write("\n");
-            }
-
-            w.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    private static boolean writePM(FileHandle ftf, int width, int height) {
-        try {
-            Writer w = ftf.writer(true);
-            w.write(width + " " + height + "\n");
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    int num = -1;
                     w.write(num + " ");
                 }
                 w.write("\n");

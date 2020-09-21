@@ -22,14 +22,23 @@ public class MachineHandler {
     }
 
     public static void addPipe(int x, int y) {
+        for(MachineType.Pipe pipe : pipes) if(pipe.x == x && pipe.y == y) return;
         pipes.add(new MachineType.Pipe(x, y, Hud.SELECTED_PIPE_DIRECTION));
     }
 
+    public static void addPipe(int x, int y, int dir) {
+        for(MachineType.Pipe pipe : pipes) if(pipe.x == x && pipe.y == y) return;
+        pipes.add(new MachineType.Pipe(x, y, dir));
+    }
+
+
     public static void addMechanicalDrill(int x, int y, Tile miningResource, MachineType.MechanicalDrill.ResourceType resourceType) {
+        for(MachineType.MechanicalDrill drill : drills) if(drill.x == x && drill.y == y) return;
         drills.add(new MachineType.MechanicalDrill(x, y, miningResource, resourceType));
     }
 
     public static void addNode(int x, int y) {
+        for(MachineType.Node node : nodes) if(node.x == x && node.y == y) return;
         nodes.add(new MachineType.Node(x, y));
     }
 

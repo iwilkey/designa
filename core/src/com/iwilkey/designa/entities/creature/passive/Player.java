@@ -1,5 +1,7 @@
 package com.iwilkey.designa.entities.creature.passive;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -50,6 +52,9 @@ public class Player extends Creature {
 
     // Longs
     private long timer, actionCooldown = 20;
+
+    // Booleans
+    private boolean onLadder = false, ladderMode = false;
 
     /**
      * Player constructor.
@@ -106,6 +111,19 @@ public class Player extends Creature {
         }
     }
 
+    private void ladderMovement() {
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) y += 0.75f;
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) y -= 0.75f;
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+            x += 0.50f;
+            setFace(1);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
+            x -= 0.50f;
+            setFace(0);
+        }
+    }
+
     /**
      * Player tick method. Called every frame.
      */
@@ -119,8 +137,12 @@ public class Player extends Creature {
         hud.tick();
 
         // Tick movement.
+        checkLadder();
         control();
-        move();
+        if(!ladderMode || !onLadder) move();
+        else ladderMovement();
+
+        flashCheck();
 
         // Center the camera.
         gb.getCamera().centerOnEntity(this);
@@ -140,6 +162,13 @@ public class Player extends Creature {
         // Tick crates, if they exist in the world.
         if (crates.size() != 0) for (Crate crate : crates) crate.tick();
 
+    }
+
+    private void checkLadder() {
+        int x = (int) (this.x + 12) / Tile.TILE_SIZE; int y = (int) this.y / Tile.TILE_SIZE;
+        Tile tile = World.getTile(x, y);
+        onLadder = (tile == Tile.ladderTile);
+        ladderMode = onLadder;
     }
 
     /**
@@ -217,7 +246,10 @@ public class Player extends Creature {
      * @param x The x location of the crate (in tiles).
      * @param y The y location of the crate (in tiles).
      */
-    public void addCrate(int x, int y) { crates.add(new Crate(inventory, x, y)); }
+    public void addCrate(int x, int y) {
+        for(Crate crate : crates) if(crate.x == x && crate.y == y) return;
+        crates.add(new Crate(inventory, x, y));
+    }
 
     /**
      * This method will remove a crate from the player-owned crates list if it exists.

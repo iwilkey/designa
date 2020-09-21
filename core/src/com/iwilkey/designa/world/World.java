@@ -17,6 +17,7 @@ import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.machines.MachineHandler;
+import com.iwilkey.designa.machines.MachineType;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
@@ -72,6 +73,7 @@ public class World {
         giveItem(Assets.nodeItem, 12);
         giveItem(Assets.dirtItem, 99 * 2);
         giveItem(Assets.hardwoodTileItem, 99 * 4);
+        giveItem(Assets.ladderItem, 32);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -299,6 +301,79 @@ public class World {
                 }
             }
 
+            // Load in all machines
+                // Drills
+                String drillPath = path + "machines/drl.dsw";
+                FileHandle drillF = Gdx.files.local(drillPath);
+                if(drillF.exists()) {
+                    String drills = Utils.loadFileAsString(drillPath);
+                    String[] drillTokens = drills.split("\\s+");
+                    int x, y, rt, mr;
+                    for (int s = 0; s < drillTokens.length; s += 4) {
+                        x = Utils.parseInt(drillTokens[s]);
+                        y = Utils.parseInt(drillTokens[s + 1]);
+                        rt = Utils.parseInt(drillTokens[s + 2]);
+                        mr = Utils.parseInt(drillTokens[s + 3]);
+
+                        Tile miningResource;
+                        MachineType.MechanicalDrill.ResourceType resourceType;
+
+                        switch (rt) {
+                            case 0:
+                            default:
+                                resourceType = MachineType.MechanicalDrill.ResourceType.COPPER;
+                                break;
+                            case 1:
+                                resourceType = MachineType.MechanicalDrill.ResourceType.SILVER;
+                                break;
+                            case 2:
+                                resourceType = MachineType.MechanicalDrill.ResourceType.IRON;
+                                break;
+                            case 3:
+                                resourceType = MachineType.MechanicalDrill.ResourceType.DIAMOND;
+                                break;
+                        }
+
+                        if(mr == 0) miningResource = Tile.copperOreTile;
+                        else if (mr == 1) miningResource = Tile.silverOreTile;
+                        else miningResource = Tile.ironOreTile;
+
+                        MachineHandler.addMechanicalDrill(x, y, miningResource, resourceType);
+
+                    }
+                }
+
+                // Pipes
+                String pipePath = path + "machines/pip.dsw";
+                FileHandle pipeF = Gdx.files.local(pipePath);
+                if(pipeF.exists()) {
+                    String pipes = Utils.loadFileAsString(pipePath);
+                    String[] pipeTokens = pipes.split("\\s+");
+
+                    int x = 0; int y = 0; int dir = 0;
+                    for (int s = 0; s < pipeTokens.length; s += 3) {
+                        x = Utils.parseInt(pipeTokens[s]);
+                        y = Utils.parseInt(pipeTokens[s + 1]);
+                        dir = Utils.parseInt(pipeTokens[s + 2]);
+                        MachineHandler.addPipe(x, y, dir);
+                    }
+                }
+
+                // Nodes
+                String nodePath = path + "machines/nde.dsw";
+                FileHandle nodeF = Gdx.files.local(nodePath);
+                if(nodeF.exists()) {
+                    String nodes = Utils.loadFileAsString(nodePath);
+                    String[] nodeTokens = nodes.split("\\s+");
+
+                    int x = 0, y = 0;
+                    for (int s = 0; s < nodeTokens.length; s += 2) {
+                        x = Utils.parseInt(nodeTokens[s]);
+                        y = Utils.parseInt(nodeTokens[s + 1]);
+                        MachineHandler.addNode(x, y);
+                    }
+                }
+
             // Load in all crates
             String relpath = dirpath + "crates/";
             FileHandle cratesDir = Gdx.files.local(relpath);
@@ -400,9 +475,37 @@ public class World {
             if(crateF.exists()) crateF.delete();
             if(!writeCRATE(crateF, crates.get(i))) System.exit(-1);
         }
+
+        // Save machines
+            // Save drills
+            ArrayList<MachineType.MechanicalDrill> drills = MachineHandler.drills;
+            String drillPath = dirpath + "machines/drl.dsw";
+            FileHandle drillF = Gdx.files.local(drillPath);
+            drillF.delete();
+            FileHandle drillFF = Gdx.files.local(drillPath);
+            if(!writeDRILL(drillFF, drills)) System.exit(-1);
+
+            // Save pipes
+            ArrayList<MachineType.Pipe> pipes = MachineHandler.pipes;
+            String pipePath = dirpath + "machines/pip.dsw";
+            FileHandle pipeF = Gdx.files.local(pipePath);
+            pipeF.delete();
+            FileHandle pipeFF = Gdx.files.local(pipePath);
+            if(!writePIPE(pipeFF, pipes)) System.exit(-1);
+
+            // Save nodes
+            ArrayList<MachineType.Node> nodes = MachineHandler.nodes;
+            if(nodes.size() != 0) {
+                String nodePath = dirpath + "machines/nde.dsw";
+                FileHandle nodeF = Gdx.files.local(nodePath);
+                nodeF.delete();
+                FileHandle nodeFF = Gdx.files.local(nodePath);
+                if (!writeNODE(nodeFF, nodes)) System.exit(-1);
+            }
+
     }
 
-    private boolean writeFT(FileHandle fh, int width, int height) {
+    private static boolean writeFT(FileHandle fh, int width, int height) {
         try {
             Writer w = fh.writer(true);
             w.write(width + " " + height + "\n");
@@ -581,6 +684,68 @@ public class World {
                 w.write("\n");
             }
 
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static boolean writeDRILL(FileHandle ftblf, ArrayList<MachineType.MechanicalDrill> drills) {
+        try {
+            Writer w = ftblf.writer(true);
+            for(MachineType.MechanicalDrill drill : drills) {
+                int rt; int mr;
+
+                switch(drill.resourceType) {
+                    case COPPER:
+                    default: rt = 0; break;
+                    case SILVER: rt = 1; break;
+                    case IRON: rt = 2; break;
+                    case DIAMOND: rt = 3; break;
+                }
+
+                if(drill.miningResource == Tile.copperOreTile) mr = 0;
+                else if(drill.miningResource == Tile.silverOreTile) mr = 1;
+                else mr = 2;
+
+                w.write(drill.x + " " + drill.y + " " + rt + " " + mr + "\n");
+            }
+
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static boolean writePIPE(FileHandle ftblf, ArrayList<MachineType.Pipe> pipes) {
+        try {
+
+            Writer w = ftblf.writer(true);
+            for(MachineType.Pipe pipe : pipes) {
+                int orientation;
+                switch(pipe.direction) {
+                    case RIGHT:
+                    default: orientation = 0; break;
+                    case DOWN: orientation = 1; break;
+                    case LEFT: orientation = 2; break;
+                    case UP: orientation = 3; break;
+                }
+                w.write(pipe.x + " " + pipe.y + " " + orientation + "\n");
+            }
+
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static boolean writeNODE(FileHandle ftblf, ArrayList<MachineType.Node> nodes) {
+        try {
+            Writer w = ftblf.writer(true);
+            for(MachineType.Node node : nodes) w.write(node.x + " " + node.y + "\n");
             w.close();
             return true;
         } catch (IOException e) {

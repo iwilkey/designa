@@ -103,9 +103,7 @@ public class Crate {
                     for (int x = 0; x < w / InventorySlot.SLOT_WIDTH; x++) {
                         if (storage[x][y].getCollider().intersects(rect)) {
                             selector[x][y] = 1;
-
                             Assets.invClick.play(0.3f);
-
                             break;
                         }
                     }
@@ -238,7 +236,8 @@ public class Crate {
                     World.getItemHandler().addItem(i.createNew(
                             xx, (int) World.getEntityHandler().getPlayer().getY() + (Tile.TILE_SIZE) + yyAbb));
                 }
-                is.putItem(null, 0);
+
+                if(is != null) is.putItem(null, 0);
                 itemUp = false;
                 selector[tempX][tempY] = 1;
 
@@ -319,8 +318,8 @@ public class Crate {
 
         playerInventory.clearSelector();
         Rectangle rect = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
-        for (int y = 0; y < 500 / InventorySlot.SLOT_HEIGHT; y++) {
-            for (int x = 0; x < 700 / InventorySlot.SLOT_WIDTH; x++) {
+        for (int y = 0; y < 200 / InventorySlot.SLOT_HEIGHT; y++) {
+            for (int x = 0; x < 400 / InventorySlot.SLOT_WIDTH; x++) {
                 if (playerInventory.getSlots()[x][y].getCollider().intersects(rect)) {
 
                     // Step III: If the slot has an item in it already and it's the same item...

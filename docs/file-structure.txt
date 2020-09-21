@@ -18,14 +18,6 @@ Every game will be saved in this format:
             This file contains 2 numbers on the first line denoting the dimensions of the world
             then, a grid of numbers that represent the back tile break level at that coordinate.
 
-        - lm.dsw (light-map)
-            This file contains 2 numbers on the first line denoting the dimensions of the world
-            then, a grid of numbers that represent the light intensity at the coordinate
-
-        - pm.dsw (pipe-map)
-            This file contains 2 numbers on the first line denoting the dimensions of the world
-            then, a grid of numbers that represent if there was a pipe there and its orientation
-
         - tr.dsw (trees)
             This file contains information about what x value the tree was on.
 
@@ -46,3 +38,34 @@ Every game will be saved in this format:
 
             - c2.dsw (crate-2)
             - ect...
+
+        - Location: /../machines
+            (for how ever many drills there are)
+            - drl.dsw (drills)
+                This file will have the location, the resource type, and the mining resource of the drill. Then, after
+                a new line, the next drill will be defined.
+
+                ex.
+                1302 67 0-3 (Copper to Diamond) 0-2 (Copper, Silver, Iron)
+                1304 67 0-3 0-2
+                ...
+
+            - pip.dsw (pipes)
+                This file will contain the location and orientation of the pipe. Then, a new line where the next pipe will
+                be defined
+
+                ex.
+                1034 49 0-3 (Right, Down, Left, Up)
+                1035 49 0-3
+                ...
+
+            - nde.dsw (nodes)
+                This fill will contain the location of the node and a new line to define the next one
+
+                ex.
+                1034 59
+                1094 49
+                2952 59
+                ...
+
+

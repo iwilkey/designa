@@ -34,7 +34,6 @@ public class InputHandler {
     public static boolean pipeRotateRequest;
     public static boolean gameMenuRequest;
 
-
     public InputHandler() {
         keys = new boolean[256];
         jp = new boolean[256];

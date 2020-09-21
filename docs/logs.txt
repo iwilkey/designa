@@ -385,3 +385,18 @@ Date || Build ||
     - Nodes now distribute to pipes correctly by calculating
         inputs and outputs appropriately.
         TODO There seems to be an issue with node resource splitting. Check that.
+            Note: Resolved.
+
+9/21/2020 || pa_1.0.44 ||
+    - Nodes now properly distribute items.
+        TODO Create a cap for items that can be stored in there
+            NOTE: Resolved.
+    - Drills now dictate what item the pipe gets and what speed it is mined.
+    - All machines now save and load (pipe, drill, and node)
+    - Pipes are now not solid to make it easier to walk through.
+    - TODO Major bug: NullPointerException when moving drilled items in crates to inventory.
+        NOTE: Resolved.
+    - Crates can now give output when pipes are placed by them in the correct orientation.
+    - Nodes can now offload to crates if they are placed next to them.
+    - Ladders are now useful XD (You can go up and down)
+        Note: damn, I did a lot today.

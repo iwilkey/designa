@@ -3,6 +3,7 @@ package com.iwilkey.designa.machines;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
@@ -28,7 +29,7 @@ public class MachineType {
         public ArrayList<Item> currentItems = new ArrayList<>(); // What items are this pipe transporting?
         public ArrayList<Float> percentItemTraveled = new ArrayList<>(); // Where is each item in the pipe?
         public final int ITEM_CAP = 2; // How many items can be in a pipe at a time?
-        public final float CONVEY_SPEED = 0.5f; // How fast do the items move?
+        public float CONVEY_SPEED = 0.5f; // How fast do the items move?
 
         public Pipe(int x, int y, int direction) {
             this.x = x; this.y = y;
@@ -76,9 +77,32 @@ public class MachineType {
                 if (source == Tile.copperMechanicalDrillTile) {
                     if (currentItems.size() + 1 < ITEM_CAP) {
                         // TODO: Make the item added the item the drill is drilling.
-                        addItemForTransport(Assets.copperScrapResource);
+                        int xx = 0; int yy = 0;
+                        switch(direction) {
+                            case RIGHT:
+                                xx = x - 1; yy = World.h - y - 1; break;
+                            case LEFT:
+                                xx = x + 1; yy = World.h - y - 1; break;
+                            case UP:
+                                yy = World.h - (y - 1) - 1; xx = x; break;
+                            case DOWN:
+                                yy = World.h - (y + 1) - 1; xx = x; break;
+                        }
+
+                        Item drilledItem = null;
+                        for(MachineType.MechanicalDrill drill : MachineHandler.drills) {
+                            if(drill.x == xx && drill.y == yy) {
+                                drilledItem = Item.getItemByID(drill.miningResource.getItemID());
+                                if(newItem != drill.getMiningSpeed()) newItem = drill.getMiningSpeed();
+                                if(CONVEY_SPEED != drill.getConveySpeed()) CONVEY_SPEED = drill.getConveySpeed();
+                            }
+                        }
+                        addItemForTransport(drilledItem);
                     }
                 }
+
+                if(source == Tile.crateTile) unloadFromCrate();
+
                 timer = 0;
             }
 
@@ -111,13 +135,13 @@ public class MachineType {
 
             if(returnCompletedItem(xx, yy) != null) {
                 if (currentItems.size() + 1 < ITEM_CAP) {
+                    addItemForTransport(returnCompletedItem(xx, yy));
                     for(MachineType.Pipe pipe : MachineHandler.pipes) {
                         if (pipe.x == xx && pipe.y == yy)
                             for(int i = 0; i < pipe.currentItems.size(); i++) {
                                 pipe.removeItemFromTransport(i);
                             }
                     }
-                    addItemForTransport(Assets.copperScrapResource);
                 }
             }
         }
@@ -145,6 +169,41 @@ public class MachineType {
             }
         }
 
+        private void unloadFromCrate() {
+            Crate crate = null; int xx = 0; int yy = 0;
+            switch(direction) {
+                case RIGHT:
+                    xx = x - 1; yy = y; break;
+                case LEFT:
+                    xx = x + 1; yy = y; break;
+                case UP:
+                    xx = x; yy = y - 1; break;
+                case DOWN:
+                    xx = x; yy = y + 1; break;
+            }
+
+            for(Crate crt : World.getEntityHandler().getPlayer().crates)
+                if(crt.x == xx && crt.y == yy) crate = crt;
+
+            for (int y = 0; y < 400 / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < 400 / InventorySlot.SLOT_WIDTH; x++) {
+                    if (crate.storage[x][y].getItem() != null) {
+                        if (crate.storage[x][y].itemCount - 1 >= 1) {
+                            Item item = crate.storage[x][y].getItem();
+                            if (currentItems.size() + 1 <= ITEM_CAP) addItemForTransport(item);
+                            else return;
+                            crate.storage[x][y].itemCount--;
+                        } else {
+                            Item item = crate.storage[x][y].getItem();
+                            if (currentItems.size() + 1 <= ITEM_CAP) addItemForTransport(item);
+                            else return;
+                            crate.storage[x][y].putItem(null, 0);
+                        }
+                    }
+                }
+            }
+        }
+
         private void offloadToNode() {
             Item item; int xx = 0; int yy = 0;
             for(int i = 0; i < percentItemTraveled.size(); i++) {
@@ -163,7 +222,8 @@ public class MachineType {
 
                     for(MachineType.Node node : MachineHandler.nodes)
                         if(node.x == xx && node.y == World.h - yy - 1) {
-                            node.addToStorage(item);
+                            if(node.storedItems.size() + 1 <= node.STORAGE_CAP) node.addToStorage(item);
+                            else return;
                         }
                     removeItemFromTransport(i);
                     return;
@@ -273,15 +333,43 @@ public class MachineType {
             this.x = x; this.y = y;
         }
         public void tick() {}
+        public int getMiningSpeed() {
+            switch(resourceType) {
+                case COPPER:
+                default:
+                    return 100;
+                case SILVER:
+                    return 50;
+                case IRON:
+                    return 25;
+                case DIAMOND:
+                    return 10;
+            }
+        }
+        public float getConveySpeed() {
+            switch(resourceType) {
+                case COPPER:
+                default:
+                    return 0.5f;
+                case SILVER:
+                    return 1.0f;
+                case IRON:
+                    return 2.0f;
+                case DIAMOND:
+                    return 4.0f;
+            }
+        }
     }
 
     // Node
     public static class Node {
 
         public int x, y;
-        public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither
+        public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither, 2 for crate
+        public ArrayList<Direction> outputs = new ArrayList<>();
         public HashMap<Item, Integer> storedItems = new HashMap<>();
         public long timer = 0, offloadMax = 20;
+        public final int STORAGE_CAP = 3;
         public Direction offloadDirection = null;
 
         public Node(int x, int y) {
@@ -315,8 +403,9 @@ public class MachineType {
                         break;
                     }
                 }
+            } else if (checkUp() == Tile.crateTile) {
+                io.put(Direction.UP, 2);
             }
-
 
             // Down
             if(checkDown() == Tile.stonePipeTile) {
@@ -328,6 +417,8 @@ public class MachineType {
                         break;
                     }
                 }
+            } else if (checkDown() == Tile.crateTile) {
+                io.put(Direction.DOWN, 2);
             }
 
             // Right
@@ -340,6 +431,8 @@ public class MachineType {
                         break;
                     }
                 }
+            } else if (checkRight() == Tile.crateTile) {
+                io.put(Direction.RIGHT, 2);
             }
 
 
@@ -353,22 +446,40 @@ public class MachineType {
                         break;
                     }
                 }
+            } else if (checkLeft() == Tile.crateTile) {
+                io.put(Direction.LEFT, 2);
+            }
+
+            updateOutputList();
+        }
+
+        private void updateOutputList() {
+            outputs.clear();
+            for(Map.Entry<Direction, Integer> node : io.entrySet()) {
+                if(node.getValue() == 1) {
+                    outputs.add(node.getKey());
+                }
             }
         }
+
 
         public void addToStorage(Item item) {
             if(storedItems.containsKey(item)) storedItems.put(item, storedItems.get(item) + 1);
             else storedItems.put(item, 1);
         }
 
+        private ArrayList<Direction> usedOutputs = new ArrayList<>();
         private void deferOffloadDirection() {
+            if(usedOutputs.containsAll(outputs)) usedOutputs.clear();
             for(Map.Entry<Direction, Integer> node : io.entrySet()) {
-                if(node.getValue() == 1) {
-                    if(offloadDirection != node.getKey()) {
-                        offloadDirection = node.getKey();
-                        offload(offloadDirection);
-                        return;
-                    }
+                if(node.getValue() == 1 && !usedOutputs.contains(node.getKey())) {
+                    usedOutputs.add(node.getKey());
+                    offload(node.getKey());
+                    break;
+                } else if (node.getValue() == 2 && !usedOutputs.contains(node.getKey())) {
+                    usedOutputs.add(node.getKey());
+                    offloadToCrate(node.getKey());
+                    break;
                 }
             }
         }
@@ -399,6 +510,37 @@ public class MachineType {
                             return;
                         }
                     }
+                }
+            }
+        }
+
+        private void offloadToCrate(Direction dir) {
+            if(storedItems.size() <= 0) return;
+            int xx = 0; int yy = 0;
+            switch(dir) {
+                case RIGHT:
+                    xx = x + 1; yy = World.h - y - 1; break;
+                case LEFT:
+                    xx = x - 1; yy = World.h - y - 1; break;
+                case UP:
+                    yy = World.h - (y - 1) - 1; xx = x; break;
+                case DOWN:
+                    yy = World.h - (y + 1) - 1; xx = x; break;
+            }
+
+            Crate crate = null;
+            for(Crate crt : World.getEntityHandler().getPlayer().crates)
+                if(crt.x == xx && crt.y == yy) crate = crt;
+
+            for(Map.Entry<Item, Integer> item : storedItems.entrySet()) {
+                if(item.getValue() - 1 < 0) {
+                    crate.addItem(item.getKey());
+                    item.setValue(item.getValue() - 1);
+                    return;
+                } else {
+                    crate.addItem(item.getKey());
+                    storedItems.remove(item.getKey());
+                    return;
                 }
             }
         }
