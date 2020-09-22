@@ -30,45 +30,34 @@ public class MachineType {
         public ArrayList<Float> percentItemTraveled = new ArrayList<>(); // Where is each item in the pipe?
         public final int ITEM_CAP = 2; // How many items can be in a pipe at a time?
         public float CONVEY_SPEED = 0.5f; // How fast do the items move?
+        long timer = 0, newItem = 100; // Timers
 
         public Pipe(int x, int y, int direction) {
             this.x = x; this.y = y;
             switch(direction) {
-                case 0:
-                    this.direction = Direction.RIGHT; break;
-                case 1:
-                    this.direction = Direction.DOWN; break;
-                case 2:
-                    this.direction = Direction.LEFT; break;
-                case 3:
-                    this.direction = Direction.UP; break;
+                case 0: this.direction = Direction.RIGHT; break;
+                case 1: this.direction = Direction.DOWN; break;
+                case 2: this.direction = Direction.LEFT; break;
+                case 3: this.direction = Direction.UP; break;
             }
         }
-
-        // TODO: Change this so it has to do with the drill itself not this
-        long timer = 0, newItem = 100;
 
         public void tick() {
 
             if(currentItems.size() != 0) {
                 for(int i = 0; i < percentItemTraveled.size(); i++) {
                     if(percentItemTraveled.get(i) >= 100) {
-                        percentItemTraveled.set(i, 100.0f);
-                        break;
+                        percentItemTraveled.set(i, 100.0f); break;
                     }
                     percentItemTraveled.set(i, percentItemTraveled.get(i) + CONVEY_SPEED);
                 }
             }
 
             switch(direction) {
-                case RIGHT:
-                    source = checkLeft(); destination = checkRight(); break;
-                case LEFT:
-                    source = checkRight(); destination = checkLeft(); break;
-                case UP:
-                    source = checkDown(); destination = checkUp(); break;
-                case DOWN:
-                    source = checkUp(); destination = checkDown(); break;
+                case RIGHT: source = checkLeft(); destination = checkRight(); break;
+                case LEFT: source = checkRight(); destination = checkLeft(); break;
+                case UP: source = checkDown(); destination = checkUp(); break;
+                case DOWN: source = checkUp(); destination = checkDown(); break;
             }
 
             timer++;
@@ -79,14 +68,10 @@ public class MachineType {
                         // TODO: Make the item added the item the drill is drilling.
                         int xx = 0; int yy = 0;
                         switch(direction) {
-                            case RIGHT:
-                                xx = x - 1; yy = World.h - y - 1; break;
-                            case LEFT:
-                                xx = x + 1; yy = World.h - y - 1; break;
-                            case UP:
-                                yy = World.h - (y - 1) - 1; xx = x; break;
-                            case DOWN:
-                                yy = World.h - (y + 1) - 1; xx = x; break;
+                            case RIGHT: xx = x - 1; yy = World.h - y - 1; break;
+                            case LEFT: xx = x + 1; yy = World.h - y - 1; break;
+                            case UP: yy = World.h - (y - 1) - 1; xx = x; break;
+                            case DOWN: yy = World.h - (y + 1) - 1; xx = x; break;
                         }
 
                         Item drilledItem = null;
@@ -100,9 +85,7 @@ public class MachineType {
                         addItemForTransport(drilledItem);
                     }
                 }
-
                 if(source == Tile.crateTile) unloadFromCrate();
-
                 timer = 0;
             }
 
@@ -123,14 +106,10 @@ public class MachineType {
         private void offloadToPipe() {
             int xx = 0; int yy = 0;
             switch(direction) {
-                case RIGHT:
-                    xx = x - 1; yy = y; break;
-                case LEFT:
-                    xx = x + 1; yy = y; break;
-                case UP:
-                    xx = x; yy = y - 1; break;
-                case DOWN:
-                    xx = x; yy = y + 1; break;
+                case RIGHT: xx = x - 1; yy = y; break;
+                case LEFT: xx = x + 1; yy = y; break;
+                case UP: xx = x; yy = y - 1; break;
+                case DOWN: xx = x; yy = y + 1; break;
             }
 
             if(returnCompletedItem(xx, yy) != null) {
@@ -138,9 +117,8 @@ public class MachineType {
                     addItemForTransport(returnCompletedItem(xx, yy));
                     for(MachineType.Pipe pipe : MachineHandler.pipes) {
                         if (pipe.x == xx && pipe.y == yy)
-                            for(int i = 0; i < pipe.currentItems.size(); i++) {
+                            for(int i = 0; i < pipe.currentItems.size(); i++)
                                 pipe.removeItemFromTransport(i);
-                            }
                     }
                 }
             }
@@ -152,14 +130,10 @@ public class MachineType {
                 if(percentItemTraveled.get(i) >= 100.0f) {
                     item = currentItems.get(i);
                     switch(direction) {
-                        case RIGHT:
-                            xx = x + 1; yy = y; break;
-                        case LEFT:
-                            xx = x - 1; yy = y; break;
-                        case UP:
-                            yy = y + 1; xx = x; break;
-                        case DOWN:
-                            yy = y - 1; xx = x; break;
+                        case RIGHT: xx = x + 1; yy = y; break;
+                        case LEFT: xx = x - 1; yy = y; break;
+                        case UP: yy = y + 1; xx = x; break;
+                        case DOWN: yy = y - 1; xx = x; break;
                     }
                     for(Crate crate : World.getEntityHandler().getPlayer().crates)
                         if(crate.x == xx && crate.y == yy) crate.addItem(item);
@@ -172,14 +146,10 @@ public class MachineType {
         private void unloadFromCrate() {
             Crate crate = null; int xx = 0; int yy = 0;
             switch(direction) {
-                case RIGHT:
-                    xx = x - 1; yy = y; break;
-                case LEFT:
-                    xx = x + 1; yy = y; break;
-                case UP:
-                    xx = x; yy = y - 1; break;
-                case DOWN:
-                    xx = x; yy = y + 1; break;
+                case RIGHT: xx = x - 1; yy = y; break;
+                case LEFT: xx = x + 1; yy = y; break;
+                case UP: xx = x; yy = y - 1; break;
+                case DOWN: xx = x; yy = y + 1; break;
             }
 
             for(Crate crt : World.getEntityHandler().getPlayer().crates)
@@ -187,6 +157,7 @@ public class MachineType {
 
             for (int y = 0; y < 400 / InventorySlot.SLOT_HEIGHT; y++) {
                 for (int x = 0; x < 400 / InventorySlot.SLOT_WIDTH; x++) {
+                    assert crate != null;
                     if (crate.storage[x][y].getItem() != null) {
                         if (crate.storage[x][y].itemCount - 1 >= 1) {
                             Item item = crate.storage[x][y].getItem();
@@ -210,14 +181,10 @@ public class MachineType {
                 if (percentItemTraveled.get(i) >= 100.0f) {
                     item = currentItems.get(i);
                     switch (direction) {
-                        case RIGHT:
-                            xx = x + 1; yy = y; break;
-                        case LEFT:
-                            xx = x - 1; yy = y; break;
-                        case UP:
-                            yy = y + 1; xx = x; break;
-                        case DOWN:
-                            yy = y - 1; xx = x; break;
+                        case RIGHT: xx = x + 1; yy = y; break;
+                        case LEFT: xx = x - 1; yy = y; break;
+                        case UP: yy = y + 1; xx = x; break;
+                        case DOWN: yy = y - 1; xx = x; break;
                     }
 
                     for(MachineType.Node node : MachineHandler.nodes)
@@ -299,20 +266,16 @@ public class MachineType {
             } catch (NullPointerException ignored) {}
 
             switch(direction) {
-                case RIGHT:
-                    b.draw(Tile.Pipe.StonePipe.animations[0].getCurrentFrame(),
+                case RIGHT: b.draw(Tile.Pipe.StonePipe.animations[0].getCurrentFrame(),
                             x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
                     break;
-                case LEFT:
-                    b.draw(Tile.Pipe.StonePipe.animations[2].getCurrentFrame(),
+                case LEFT: b.draw(Tile.Pipe.StonePipe.animations[2].getCurrentFrame(),
                             x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
                     break;
-                case DOWN:
-                    b.draw(Tile.Pipe.StonePipe.animations[1].getCurrentFrame(),
+                case DOWN: b.draw(Tile.Pipe.StonePipe.animations[1].getCurrentFrame(),
                             x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
                     break;
-                case UP:
-                    b.draw(Tile.Pipe.StonePipe.animations[3].getCurrentFrame(),
+                case UP: b.draw(Tile.Pipe.StonePipe.animations[3].getCurrentFrame(),
                             x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
                     break;
             }
@@ -336,27 +299,19 @@ public class MachineType {
         public int getMiningSpeed() {
             switch(resourceType) {
                 case COPPER:
-                default:
-                    return 100;
-                case SILVER:
-                    return 50;
-                case IRON:
-                    return 25;
-                case DIAMOND:
-                    return 10;
+                default: return 100;
+                case SILVER: return 50;
+                case IRON: return 25;
+                case DIAMOND: return 10;
             }
         }
         public float getConveySpeed() {
             switch(resourceType) {
                 case COPPER:
-                default:
-                    return 0.5f;
-                case SILVER:
-                    return 1.0f;
-                case IRON:
-                    return 2.0f;
-                case DIAMOND:
-                    return 4.0f;
+                default: return 0.5f;
+                case SILVER: return 1.0f;
+                case IRON: return 2.0f;
+                case DIAMOND: return 4.0f;
             }
         }
     }
@@ -370,7 +325,6 @@ public class MachineType {
         public HashMap<Item, Integer> storedItems = new HashMap<>();
         public long timer = 0, offloadMax = 20;
         public final int STORAGE_CAP = 3;
-        public Direction offloadDirection = null;
 
         public Node(int x, int y) {
             this.x = x; this.y = y;
@@ -487,14 +441,10 @@ public class MachineType {
         private void offload(Direction dir) {
             int xx = 0; int yy = 0;
             switch(dir) {
-                case RIGHT:
-                    xx = x + 1; yy = World.h - y - 1; break;
-                case LEFT:
-                    xx = x - 1; yy = World.h - y - 1; break;
-                case UP:
-                    yy = World.h - (y - 1) - 1; xx = x; break;
-                case DOWN:
-                    yy = World.h - (y + 1) - 1; xx = x; break;
+                case RIGHT: xx = x + 1; yy = World.h - y - 1; break;
+                case LEFT: xx = x - 1; yy = World.h - y - 1; break;
+                case UP: yy = World.h - (y - 1) - 1; xx = x; break;
+                case DOWN: yy = World.h - (y + 1) - 1; xx = x; break;
             }
 
             for(MachineType.Pipe pipe : MachineHandler.pipes) {
@@ -518,14 +468,10 @@ public class MachineType {
             if(storedItems.size() <= 0) return;
             int xx = 0; int yy = 0;
             switch(dir) {
-                case RIGHT:
-                    xx = x + 1; yy = World.h - y - 1; break;
-                case LEFT:
-                    xx = x - 1; yy = World.h - y - 1; break;
-                case UP:
-                    yy = World.h - (y - 1) - 1; xx = x; break;
-                case DOWN:
-                    yy = World.h - (y + 1) - 1; xx = x; break;
+                case RIGHT: xx = x + 1; yy = World.h - y - 1; break;
+                case LEFT: xx = x - 1; yy = World.h - y - 1; break;
+                case UP: yy = World.h - (y - 1) - 1; xx = x; break;
+                case DOWN: yy = World.h - (y + 1) - 1; xx = x; break;
             }
 
             Crate crate = null;
@@ -534,10 +480,12 @@ public class MachineType {
 
             for(Map.Entry<Item, Integer> item : storedItems.entrySet()) {
                 if(item.getValue() - 1 < 0) {
+                    assert crate != null;
                     crate.addItem(item.getKey());
                     item.setValue(item.getValue() - 1);
                     return;
                 } else {
+                    assert crate != null;
                     crate.addItem(item.getKey());
                     storedItems.remove(item.getKey());
                     return;
