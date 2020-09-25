@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.gui.Hud;
+import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
@@ -14,6 +15,7 @@ public class MachineHandler {
     public static ArrayList<MachineType.Pipe> pipes = new ArrayList<>();
     public static ArrayList<MachineType.MechanicalDrill> drills = new ArrayList<>();
     public static ArrayList<MachineType.Node> nodes = new ArrayList<>();
+    public static ArrayList<MachineType.Assembler> assemblers = new ArrayList<>();
 
     private GameBuffer gb;
 
@@ -42,13 +44,26 @@ public class MachineHandler {
         nodes.add(new MachineType.Node(x, y));
     }
 
+    public static void addAssembler(int x, int y) {
+        for(MachineType.Assembler assembler : assemblers) if(assembler.x == x && assembler.y == y) return;
+        assemblers.add(new MachineType.Assembler(x, y));
+    }
+
+    public static void addAssembler(int x, int y, Item item) {
+        for(MachineType.Assembler assembler : assemblers) if(assembler.x == x && assembler.y == y) return;
+        assemblers.add(new MachineType.Assembler(x, y, item));
+    }
+
+
     public void tick() {
         for(MachineType.Node node : nodes) node.tick();
         for(MachineType.Pipe pipe : pipes) pipe.tick();
+        for(MachineType.Assembler assembler : assemblers) assembler.tick();
     }
 
     public void render(Batch b) {
         for(MachineType.Node node : nodes) node.render(b, node.x, World.h - node.y - 1);
+        for(MachineType.Assembler assembler : assemblers) assembler.render(b, assembler.x, World.h - assembler.y - 1);
         for(int i = 0; i < pipes.size(); i++) {
             int ii = pipes.size() - i - 1;
             pipes.get(ii).render(b, pipes.get(ii).x, pipes.get(ii).y, pipes.get(ii).direction);

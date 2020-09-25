@@ -6,8 +6,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.passive.Player;
+import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.Camera;
-import com.iwilkey.designa.gui.Hud;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
@@ -215,6 +216,8 @@ public class BuildingHandler {
             if(mechDrillHandler(id, x, y)) return;
             // Check to see if the tile was a node and if so, the tile is handled there instead of here.
             if(nodeHandler(id, x, y)) return;
+            // Check to see if the tile was an assembler and if so, the tile is handled there instead of here.
+            if(assemblerHandler(id, x, y)) return;
             // Check to see if the tile was a pipe and if so, the tile is handled there instead of here.
             if(pipePlacementHandler(id, x, y)) return;
 
@@ -313,10 +316,7 @@ public class BuildingHandler {
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.MechanicalDrill)) return false;
 
             // If the tile currently selected is an ore, the player is allowed to place it.
-            if(World.getTile(x, y) == Tile.copperOreTile ||
-                    World.getTile(x, y) == Tile.silverOreTile ||
-                    World.getTile(x, y) == Tile.ironOreTile) {
-
+            if(World.getTile(x, y) != Tile.airTile) {
                 ToolSlot.currentItem.itemCount--;
                 int resourceID = World.tiles[x][(World.h - y) - 1];
                 World.tiles[x][(World.h - y) - 1] = id;
@@ -326,6 +326,18 @@ public class BuildingHandler {
                 Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
 
                 return true;
+            }
+
+            for(int tree : World.trees) {
+                if(pointerOnTileX() == tree && (pointerOnTileY() > LightManager.highestTile[tree] &&
+                        pointerOnTileY() < LightManager.highestTile[tree] + (Tile.TILE_SIZE * 3))) {
+                    ToolSlot.currentItem.itemCount--;
+                    World.tiles[x][(World.h - y) - 1] = id;
+                    World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+                    MachineHandler.addMechanicalDrill(x, World.h - y - 1, Tile.treeTile,
+                            MachineType.MechanicalDrill.ResourceType.COPPER);
+                    Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+                }
             }
 
         return true;
@@ -344,7 +356,6 @@ public class BuildingHandler {
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Node)) return false;
 
         ToolSlot.currentItem.itemCount--;
-        int resourceID = World.tiles[x][(World.h - y) - 1];
         World.tiles[x][(World.h - y) - 1] = id;
         World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
         MachineHandler.addNode(x, World.h - y - 1);
@@ -380,6 +391,28 @@ public class BuildingHandler {
         }
 
         return false;
+    }
+
+    /**
+     * This method will check if the tile was a assembler and handle it accordingly.
+     * @param id The tile ID.
+     * @param x The x position (in TILES) where the new tile will be placed in the tile map.
+     * @param y The y position (in TILES) where the new tile will be placed in the tile map.
+     * @return Did method take care of the tile or not?
+     */
+    private boolean assemblerHandler(int id, int x, int y) {
+        // Grab the item and dictate if it's a node or not. If not, no reason to run this method.
+        Item item = ToolSlot.currentItem.getItem();
+        if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Assembler)) return false;
+
+        ToolSlot.currentItem.itemCount--;
+        World.tiles[x][(World.h - y) - 1] = id;
+        World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
+        MachineHandler.addAssembler(x, World.h - y - 1);
+        Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
+
+        return true;
+
     }
 
     /**
@@ -543,6 +576,7 @@ public class BuildingHandler {
         if(tile == Tile.stonePipeTile) MachineHandler.pipes.removeIf(pipe -> pipe.x == x && pipe.y == y);
         if(tile == Tile.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
         if(tile == Tile.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
+        if(tile == Tile.assemblerTile) MachineHandler.assemblers.removeIf(assembler -> assembler.x == x && assembler.y == World.h - y - 1);
 
     }
 

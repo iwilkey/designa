@@ -399,4 +399,22 @@ Date || Build ||
     - Crates can now give output when pipes are placed by them in the correct orientation.
     - Nodes can now offload to crates if they are placed next to them.
     - Ladders are now useful XD (You can go up and down)
-        Note: damn, I did a lot today.
+
+        damn, I did a lot today.
+
+9/24/2020 || pa_1.0.45 ||
+    - Fixed node distributing where they can't put infinite objects into a pipe.
+    - Nodes can now only have one item stored inside.
+    - Nodes can now offload to one another. This makes for much more complex / efficient routes to be made.
+    - Added the Assembler Tile.
+        TODO Work in the MachineType class to allow it to have function
+            NOTE: Resolved.
+    - The assembler can now save and load
+    - The assembler can now hold a specific item recipe when right clicked
+    - The assembler can now output a completed item if it holds all the resources to make an item.
+    - The assembler can now throw out unused resources
+        TODO Make it so the assembler can offload to itself, crates, and nodes.
+    - Drills now can mine any tile they are placed on
+    - Drills now can mine trees for tree bark
+    - Trees now don't spawn on top of drills when loading the world back in
+        TODO Make it so drills can't mine any more bark after the tree is cut down

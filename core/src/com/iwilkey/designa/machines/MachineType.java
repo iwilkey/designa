@@ -2,11 +2,18 @@ package com.iwilkey.designa.machines;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.badlogic.gdx.utils.Null;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.InventorySlot;
+import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.items.ItemRecipe;
+import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.utils.Utils;
 import com.iwilkey.designa.world.World;
 
 import java.util.ArrayList;
@@ -92,6 +99,7 @@ public class MachineType {
             if(source == Tile.stonePipeTile) offloadToPipe();
             if(destination == Tile.crateTile) offloadToCrate();
             if(destination == Tile.nodeTile) offloadToNode();
+            if(destination == Tile.assemblerTile) offloadToAssembler();
 
         }
 
@@ -120,6 +128,28 @@ public class MachineType {
                             for(int i = 0; i < pipe.currentItems.size(); i++)
                                 pipe.removeItemFromTransport(i);
                     }
+                }
+            }
+        }
+
+        private void offloadToAssembler() {
+            Item item; int xx = 0; int yy = 0;
+            for(int i = 0; i < percentItemTraveled.size(); i++) {
+                if (percentItemTraveled.get(i) >= 100.0f) {
+                    item = currentItems.get(i);
+                    switch (direction) {
+                        case RIGHT: xx = x + 1; yy = y; break;
+                        case LEFT: xx = x - 1; yy = y; break;
+                        case UP: yy = y + 1; xx = x; break;
+                        case DOWN: yy = y - 1; xx = x; break;
+                    }
+
+                    for(MachineType.Assembler assembler : MachineHandler.assemblers)
+                        if(assembler.x == xx && assembler.y == World.h - yy - 1) {
+                            assembler.addToStorage(item);
+                        }
+                    removeItemFromTransport(i);
+                    return;
                 }
             }
         }
@@ -320,11 +350,11 @@ public class MachineType {
     public static class Node {
 
         public int x, y;
-        public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither, 2 for crate
+        public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither, 2 for crate, 3 is other node.
         public ArrayList<Direction> outputs = new ArrayList<>();
         public HashMap<Item, Integer> storedItems = new HashMap<>();
         public long timer = 0, offloadMax = 20;
-        public final int STORAGE_CAP = 3;
+        public final int STORAGE_CAP = 1;
 
         public Node(int x, int y) {
             this.x = x; this.y = y;
@@ -359,6 +389,8 @@ public class MachineType {
                 }
             } else if (checkUp() == Tile.crateTile) {
                 io.put(Direction.UP, 2);
+            } else if (checkUp() == Tile.nodeTile) {
+                io.put(Direction.UP, 3);
             }
 
             // Down
@@ -373,6 +405,8 @@ public class MachineType {
                 }
             } else if (checkDown() == Tile.crateTile) {
                 io.put(Direction.DOWN, 2);
+            } else if (checkDown() == Tile.nodeTile) {
+                io.put(Direction.DOWN, 3);
             }
 
             // Right
@@ -387,6 +421,8 @@ public class MachineType {
                 }
             } else if (checkRight() == Tile.crateTile) {
                 io.put(Direction.RIGHT, 2);
+            } else if (checkRight() == Tile.nodeTile) {
+                io.put(Direction.RIGHT, 3);
             }
 
 
@@ -402,6 +438,8 @@ public class MachineType {
                 }
             } else if (checkLeft() == Tile.crateTile) {
                 io.put(Direction.LEFT, 2);
+            } else if (checkLeft() == Tile.nodeTile) {
+                io.put(Direction.LEFT, 3);
             }
 
             updateOutputList();
@@ -411,6 +449,10 @@ public class MachineType {
             outputs.clear();
             for(Map.Entry<Direction, Integer> node : io.entrySet()) {
                 if(node.getValue() == 1) {
+                    outputs.add(node.getKey());
+                } else if (node.getValue() == 2) {
+                    outputs.add(node.getKey());
+                } else if (node.getValue() == 3) {
                     outputs.add(node.getKey());
                 }
             }
@@ -434,6 +476,10 @@ public class MachineType {
                     usedOutputs.add(node.getKey());
                     offloadToCrate(node.getKey());
                     break;
+                } else if (node.getValue() == 3 && !usedOutputs.contains(node.getKey())) {
+                    usedOutputs.add(node.getKey());
+                    offloadToNode(node.getKey());
+                    break;
                 }
             }
         }
@@ -451,12 +497,16 @@ public class MachineType {
                 if(pipe.x == xx && pipe.y == yy) {
                     for(Map.Entry<Item, Integer> item : storedItems.entrySet()) {
                         if(item.getValue() - 1 < 0) {
-                            pipe.addItemForTransport(item.getKey());
-                            item.setValue(item.getValue() - 1);
+                            if (pipe.currentItems.size() + 1 < pipe.ITEM_CAP) {
+                                pipe.addItemForTransport(item.getKey());
+                                item.setValue(item.getValue() - 1);
+                            }
                             return;
                         } else {
-                            pipe.addItemForTransport(item.getKey());
-                            storedItems.remove(item.getKey());
+                            if (pipe.currentItems.size() + 1 < pipe.ITEM_CAP) {
+                                pipe.addItemForTransport(item.getKey());
+                                storedItems.remove(item.getKey());
+                            }
                             return;
                         }
                     }
@@ -474,23 +524,56 @@ public class MachineType {
                 case DOWN: yy = World.h - (y + 1) - 1; xx = x; break;
             }
 
-            Crate crate = null;
-            for(Crate crt : World.getEntityHandler().getPlayer().crates)
-                if(crt.x == xx && crt.y == yy) crate = crt;
+            try {
+                Crate crate = null;
+                for (Crate crt : World.getEntityHandler().getPlayer().crates)
+                    if (crt.x == xx && crt.y == yy) crate = crt;
 
-            for(Map.Entry<Item, Integer> item : storedItems.entrySet()) {
-                if(item.getValue() - 1 < 0) {
-                    assert crate != null;
-                    crate.addItem(item.getKey());
-                    item.setValue(item.getValue() - 1);
-                    return;
-                } else {
-                    assert crate != null;
-                    crate.addItem(item.getKey());
-                    storedItems.remove(item.getKey());
+                for (Map.Entry<Item, Integer> item : storedItems.entrySet()) {
+                    if (item.getValue() - 1 < 0) {
+                        assert crate != null;
+                        crate.addItem(item.getKey());
+                        item.setValue(item.getValue() - 1);
+                        return;
+                    } else {
+                        assert crate != null;
+                        crate.addItem(item.getKey());
+                        storedItems.remove(item.getKey());
+                        return;
+                    }
+                }
+            } catch (NullPointerException ignored) {}
+        }
+
+        private void offloadToNode(Direction dir) {
+            int xx = 0; int yy = 0;
+            switch(dir) {
+                case RIGHT: xx = x + 1; yy = y; break;
+                case LEFT: xx = x - 1; yy = y; break;
+                case UP: yy = y - 1; xx = x; break;
+                case DOWN: yy = y + 1; xx = x; break;
+            }
+
+            try {
+                Node nde = null;
+                for (MachineType.Node node : MachineHandler.nodes)
+                    if (node.x == xx && node.y == yy) nde = node;
+
+                for (Map.Entry<Item, Integer> item : storedItems.entrySet()) {
+                    if (item.getValue() - 1 < 0) {
+                        if (nde.storedItems.size() + 1 <= nde.STORAGE_CAP) {
+                            nde.addToStorage(item.getKey());
+                            item.setValue(item.getValue() - 1);
+                        }
+                    } else {
+                        if (nde.storedItems.size() + 1 <= nde.STORAGE_CAP) {
+                            nde.addToStorage(item.getKey());
+                            storedItems.remove(item.getKey());
+                        }
+                    }
                     return;
                 }
-            }
+            } catch (NullPointerException ignored) {}
         }
 
 
@@ -523,6 +606,272 @@ public class MachineType {
         public void render(Batch b, int x, int y) {
             // b.draw(Assets.errorSelector, (x + 1) * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
             b.draw(Assets.node[0], x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        }
+    }
+
+    // Assembler
+    public static class Assembler {
+
+        public int x, y;
+        public ItemRecipe targetRecipe = null;
+        public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither, 2 for crate, 3 is other node.
+        public ArrayList<Direction> outputs = new ArrayList<>();
+        public HashMap<Item, Integer> storedItems = new HashMap<>();
+        public int readyItems = 0;
+        public long timer = 0, offloadMax = 20;
+        public final int STORAGE_CAP = 1;
+
+        public Assembler(int x, int y) {
+            this.x = x; this.y = y;
+            targetRecipe = null;
+            io.put(Direction.RIGHT, -1);
+            io.put(Direction.DOWN, -1);
+            io.put(Direction.LEFT, -1);
+            io.put(Direction.UP, -1);
+        }
+
+        public Assembler(int x, int y, Item item) {
+            this.x = x; this.y = y;
+            if (item.getItemType() instanceof ItemType.CreatableItem) {
+                targetRecipe = ((ItemType.CreatableItem)
+                        (item.getItemType())).getRecipe();
+            } else if(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile) {
+                targetRecipe = ((ItemType.PlaceableBlock.CreatableTile)
+                        (item.getItemType())).getRecipe();
+            }
+            io.put(Direction.RIGHT, -1);
+            io.put(Direction.DOWN, -1);
+            io.put(Direction.LEFT, -1);
+            io.put(Direction.UP, -1);
+        }
+
+        short tir = 0, tickBuffer = 50;
+
+        public void tick() {
+
+            if(tir < tickBuffer) {
+                tir++; return;
+            }
+
+            deferIO();
+
+            if(pointerOnTileX() == x && pointerOnTileY() == World.h - y - 1) {
+                if(InputHandler.rightMouseButtonDown) {
+                    try {
+                        if (ToolSlot.currentItem.getItem() != null) {
+                            if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.CreatableItem) {
+                                targetRecipe = ((ItemType.CreatableItem)
+                                        (ToolSlot.currentItem.getItem().getItemType())).getRecipe();
+                                readyItems = 0;
+                            } else if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile) {
+                                targetRecipe = ((ItemType.PlaceableBlock.CreatableTile)
+                                        (ToolSlot.currentItem.getItem().getItemType())).getRecipe();
+                                readyItems = 0;
+                            }
+                        }
+                    } catch (NullPointerException ignored) {}
+                }
+            }
+
+            if(storedItems.size() > 0) {
+                timer++;
+                if (timer > offloadMax) {
+                    assemble();
+                    if(readyItems - 1 >= 0) deferOffloadDirection(targetRecipe.item);
+                    timer = 0;
+                }
+            }
+        }
+
+        public void addToStorage(Item item) {
+            if(!checkInRecipe(item)) {
+                World.getItemHandler().addItem(item.createNew(x * Tile.TILE_SIZE + 4,
+                        ((World.h - y - 1) * Tile.TILE_SIZE) - 2));
+            } else {
+                if(storedItems.containsKey(item)) storedItems.put(item, storedItems.get(item) + 1);
+                else storedItems.put(item, 1);
+            }
+        }
+
+        private boolean checkInRecipe(Item item) {
+            for(Map.Entry<Item, String> recipe : targetRecipe.getRecipe().entrySet())
+                if(recipe.getKey() == item) return true;
+            return false;
+        }
+
+        private void assemble() {
+
+            int entry = 0;
+            for(Map.Entry<Item, String> recipe : targetRecipe.getRecipe().entrySet()) {
+                for(Map.Entry<Item, Integer> storedItems : storedItems.entrySet()) {
+                    if(storedItems.getKey() == recipe.getKey()) {
+                        if(storedItems.getValue() >= Utils.parseInt(recipe.getValue())) {
+                            storedItems.setValue(storedItems.getValue() - Utils.parseInt(recipe.getValue()));
+                            entry++;
+                        }
+                    }
+                }
+            }
+
+            if(entry == targetRecipe.getRecipe().entrySet().size()) readyItems++;
+
+        }
+
+        // This is only called when an item is completed
+        private ArrayList<Direction> usedOutputs = new ArrayList<>();
+        private void deferOffloadDirection(Item item) {
+            if(usedOutputs.containsAll(outputs)) usedOutputs.clear();
+            for(Map.Entry<Direction, Integer> node : io.entrySet()) {
+                // If the output is a pipe
+                if(node.getValue() == 1 && !usedOutputs.contains(node.getKey())) {
+                    usedOutputs.add(node.getKey());
+                    offload(node.getKey(), item);
+                    break;
+                }
+            }
+        }
+
+        // This is only called when an item is completed
+        private void offload(Direction dir, Item item) {
+            int xx = 0; int yy = 0;
+            switch(dir) {
+                case RIGHT: xx = x + 1; yy = World.h - y - 1; break;
+                case LEFT: xx = x - 1; yy = World.h - y - 1; break;
+                case UP: yy = World.h - (y - 1) - 1; xx = x; break;
+                case DOWN: yy = World.h - (y + 1) - 1; xx = x; break;
+            }
+
+            for(MachineType.Pipe pipe : MachineHandler.pipes) {
+                if(pipe.x == xx && pipe.y == yy) {
+                    if (pipe.currentItems.size() + 1 < pipe.ITEM_CAP) {
+                        pipe.addItemForTransport(item);
+                        readyItems--;
+                        return;
+                    }
+                }
+            }
+        }
+
+        // Helper methods
+        private Tile checkUp() {
+            if(World.getTile(x, World.h - (y - 1) - 1) != Tile.airTile) {
+                return World.getTile(x, World.h - (y - 1) - 1);
+            }
+            return Tile.airTile;
+        }
+        private Tile checkDown() {
+            if(World.getTile(x, World.h - (y + 1) - 1) != Tile.airTile) {
+                return World.getTile(x, World.h - (y + 1) - 1);
+            }
+            return Tile.airTile;
+        }
+        private Tile checkRight() {
+            if(World.getTile(x + 1, World.h - y - 1) != Tile.airTile) {
+                // System.out.println("Returning: " + Item.getItemByID(World.getTile(x + 1, World.h - y - 1).getItemID()).getName());
+                return World.getTile(x + 1, World.h - y - 1);
+            }
+            return Tile.airTile;
+        }
+        private Tile checkLeft() {
+            if(World.getTile(x - 1, World.h - y - 1) != Tile.airTile) {
+                return World.getTile(x - 1, World.h - y - 1);
+            }
+            return Tile.airTile;
+        }
+        private int pointerOnTileX() {
+            return (int) ((((InputHandler.cursorX) - Camera.position.x) /
+                    Tile.TILE_SIZE) / Camera.scale.x);
+        }
+        private int pointerOnTileY() {
+            return (int) ((((InputHandler.cursorY) - Camera.position.y) /
+                    Tile.TILE_SIZE) / Camera.scale.y);
+        }
+        private void updateOutputList() {
+            outputs.clear();
+            for(Map.Entry<Direction, Integer> node : io.entrySet()) {
+                if(node.getValue() == 1) {
+                    outputs.add(node.getKey());
+                } else if (node.getValue() == 2) {
+                    outputs.add(node.getKey());
+                } else if (node.getValue() == 3) {
+                    outputs.add(node.getKey());
+                }
+            }
+        }
+        private void deferIO() {
+            // Up
+            if(checkUp() == Tile.stonePipeTile) {
+                for(MachineType.Pipe pipe : MachineHandler.pipes) {
+                    if(pipe.x == x && pipe.y == World.h - (y - 1) - 1) {
+                        if(pipe.direction == Direction.UP) io.put(Direction.UP, 1);
+                        else if(pipe.direction == Direction.DOWN) io.put(Direction.UP, 0);
+                        else io.put(Direction.UP, -1);
+                        break;
+                    }
+                }
+            } else if (checkUp() == Tile.crateTile) {
+                io.put(Direction.UP, 2);
+            } else if (checkUp() == Tile.nodeTile) {
+                io.put(Direction.UP, 3);
+            }
+
+            // Down
+            if(checkDown() == Tile.stonePipeTile) {
+                for(MachineType.Pipe pipe : MachineHandler.pipes) {
+                    if(pipe.x == x && pipe.y == World.h - (y + 1) - 1) {
+                        if(pipe.direction == Direction.DOWN) io.put(Direction.DOWN, 1);
+                        else if(pipe.direction == Direction.UP) io.put(Direction.DOWN, 0);
+                        else io.put(Direction.DOWN, -1);
+                        break;
+                    }
+                }
+            } else if (checkDown() == Tile.crateTile) {
+                io.put(Direction.DOWN, 2);
+            } else if (checkDown() == Tile.nodeTile) {
+                io.put(Direction.DOWN, 3);
+            }
+
+            // Right
+            if(checkRight() == Tile.stonePipeTile) {
+                for(MachineType.Pipe pipe : MachineHandler.pipes) {
+                    if(pipe.x == x + 1 && pipe.y == World.h - y - 1) {
+                        if(pipe.direction == Direction.RIGHT) io.put(Direction.RIGHT, 1);
+                        else if(pipe.direction == Direction.LEFT) io.put(Direction.RIGHT, 0);
+                        else io.put(Direction.RIGHT, -1);
+                        break;
+                    }
+                }
+            } else if (checkRight() == Tile.crateTile) {
+                io.put(Direction.RIGHT, 2);
+            } else if (checkRight() == Tile.nodeTile) {
+                io.put(Direction.RIGHT, 3);
+            }
+
+
+            // Left
+            if(checkLeft() == Tile.stonePipeTile) {
+                for(MachineType.Pipe pipe : MachineHandler.pipes) {
+                    if(pipe.x == x - 1 && pipe.y == World.h - y - 1) {
+                        if(pipe.direction == Direction.LEFT) io.put(Direction.LEFT, 1);
+                        else if(pipe.direction == Direction.RIGHT) io.put(Direction.LEFT, 0);
+                        else io.put(Direction.LEFT, -1);
+                        break;
+                    }
+                }
+            } else if (checkLeft() == Tile.crateTile) {
+                io.put(Direction.LEFT, 2);
+            } else if (checkLeft() == Tile.nodeTile) {
+                io.put(Direction.LEFT, 3);
+            }
+
+            updateOutputList();
+        }
+
+        public void render(Batch b, int x, int y) {
+            b.draw(Assets.assembler, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, Tile.TILE_SIZE, Tile.TILE_SIZE);
+            if(targetRecipe != null) {
+                b.draw(targetRecipe.item.getTexture(), x * Tile.TILE_SIZE + 4, y * Tile.TILE_SIZE + 4, 8, 8);
+            }
         }
     }
 }

@@ -360,6 +360,18 @@ public abstract class ItemRecipe {
                     add(Assets.rockResource, 2);
                 }
             }
+
+            // Assembler
+            public static class AssemblerRecipe extends ItemRecipe {
+                public AssemblerRecipe(Item item) { super(item); }
+                @Override
+                public void create() {
+                    add(Assets.sterlingSilverResource, 4);
+                    add(Assets.castIronResource, 2);
+                }
+            }
+
+
     // Class
     public Item item;
     protected HashMap<Item, String> recipe = new HashMap<Item, String>();

@@ -37,7 +37,7 @@ public class World {
             backTileBreakLevel, lightMap,
             origLightMap;
     public static int[] origHighTiles, origHighBackTiles;
-    public static ArrayList<Integer> trees;
+    public static ArrayList<Integer> trees, treesY;
 
     // Entities
     private static EntityHandler entityHandler = null;
@@ -74,6 +74,8 @@ public class World {
         giveItem(Assets.dirtItem, 99 * 2);
         giveItem(Assets.hardwoodTileItem, 99 * 4);
         giveItem(Assets.ladderItem, 32);
+        giveItem(Assets.assemblerItem, 12);
+        giveItem(Assets.stickResource, 12);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -220,6 +222,7 @@ public class World {
         // If it exits, init front high tiles
         FileHandle fhtf = Gdx.files.local(path + "fht.dsw");
         origHighTiles = new int[w];
+        LightManager.highestTile = new int[w];
         if(fhtf.exists()) {
             // Init from file
             String fht = Utils.loadFileAsString(path + "fht.dsw");
@@ -227,7 +230,6 @@ public class World {
             for(int x = 0; x < World.w; x++) {
                 int t = Utils.parseInt(fhtTokens[x]);
                 origHighTiles[x] = t;
-                LightManager.highestTile = new int[World.w];
                 LightManager.highestTile[x] = t;
             }
         } else {
@@ -279,11 +281,14 @@ public class World {
             String tree = Utils.loadFileAsString(path + "tr.dsw");
             String[] treeTokens = tree.split("\\s+");
             trees = new ArrayList<Integer>();
+            treesY = new ArrayList<Integer>();
             for (String treeToken : treeTokens) {
-                int x = Utils.parseInt(treeToken);
-                trees.add(x);
+                String[] subTokens = treeToken.split("-");
+                int x = Utils.parseInt(subTokens[0]);
+                int y = Utils.parseInt(subTokens[1]);
+                trees.add(x); treesY.add(y);
             }
-            WorldGeneration.EnvironmentReformation(gb, entityHandler, trees);
+            WorldGeneration.EnvironmentReformation(gb, entityHandler, trees, treesY);
 
             // Load in inventory, if it's not the first time
             String inv = Utils.loadFileAsString(path + "inv.dsw");
@@ -334,9 +339,7 @@ public class World {
                                 break;
                         }
 
-                        if(mr == 0) miningResource = Tile.copperOreTile;
-                        else if (mr == 1) miningResource = Tile.silverOreTile;
-                        else miningResource = Tile.ironOreTile;
+                        miningResource = Tile.tiles[mr];
 
                         MachineHandler.addMechanicalDrill(x, y, miningResource, resourceType);
 
@@ -371,6 +374,27 @@ public class World {
                         x = Utils.parseInt(nodeTokens[s]);
                         y = Utils.parseInt(nodeTokens[s + 1]);
                         MachineHandler.addNode(x, y);
+                    }
+                }
+
+                // Assemblers
+                String assemblerPath = path + "machines/asblr.dsw";
+                FileHandle assemblerF = Gdx.files.local(assemblerPath);
+                if(assemblerF.exists()) {
+                    String assemblers = Utils.loadFileAsString(assemblerPath);
+                    String[] assemblerTokens = assemblers.split("\\s+");
+
+                    int x = 0, y = 0, itemID = 0;
+                    for(int s = 0; s < assemblerTokens.length; s += 3) {
+                        x = Utils.parseInt(assemblerTokens[s]);
+                        y = Utils.parseInt(assemblerTokens[s + 1]);
+                        itemID = Utils.parseInt(assemblerTokens[s + 2]);
+
+                        if(itemID == -1) MachineHandler.addAssembler(x, y);
+                        else {
+                            Item item = Item.getItemByID(itemID);
+                            MachineHandler.addAssembler(x, y, item);
+                        }
                     }
                 }
 
@@ -479,19 +503,23 @@ public class World {
         // Save machines
             // Save drills
             ArrayList<MachineType.MechanicalDrill> drills = MachineHandler.drills;
-            String drillPath = dirpath + "machines/drl.dsw";
-            FileHandle drillF = Gdx.files.local(drillPath);
-            drillF.delete();
-            FileHandle drillFF = Gdx.files.local(drillPath);
-            if(!writeDRILL(drillFF, drills)) System.exit(-1);
+            if(drills.size() != 0) {
+                String drillPath = dirpath + "machines/drl.dsw";
+                FileHandle drillF = Gdx.files.local(drillPath);
+                drillF.delete();
+                FileHandle drillFF = Gdx.files.local(drillPath);
+                if (!writeDRILL(drillFF, drills)) System.exit(-1);
+            }
 
             // Save pipes
             ArrayList<MachineType.Pipe> pipes = MachineHandler.pipes;
-            String pipePath = dirpath + "machines/pip.dsw";
-            FileHandle pipeF = Gdx.files.local(pipePath);
-            pipeF.delete();
-            FileHandle pipeFF = Gdx.files.local(pipePath);
-            if(!writePIPE(pipeFF, pipes)) System.exit(-1);
+            if(pipes.size() != 0) {
+                String pipePath = dirpath + "machines/pip.dsw";
+                FileHandle pipeF = Gdx.files.local(pipePath);
+                pipeF.delete();
+                FileHandle pipeFF = Gdx.files.local(pipePath);
+                if (!writePIPE(pipeFF, pipes)) System.exit(-1);
+            }
 
             // Save nodes
             ArrayList<MachineType.Node> nodes = MachineHandler.nodes;
@@ -501,6 +529,16 @@ public class World {
                 nodeF.delete();
                 FileHandle nodeFF = Gdx.files.local(nodePath);
                 if (!writeNODE(nodeFF, nodes)) System.exit(-1);
+            }
+
+            // Save assemblers
+            ArrayList<MachineType.Assembler> assemblers = MachineHandler.assemblers;
+            if(assemblers.size() != 0) {
+                String assemblerPath = dirpath + "machines/asblr.dsw";
+                FileHandle assemblerF = Gdx.files.local(assemblerPath);
+                assemblerF.delete();
+                FileHandle assemblerFF = Gdx.files.local(assemblerPath);
+                if (!writeASSEMBLER(assemblerFF, assemblers)) System.exit(-1);
             }
 
     }
@@ -621,7 +659,7 @@ public class World {
         try {
             Writer w = ftblf.writer(true);
 
-            for (int num : trees) w.write(num + " ");
+            for (int num : trees) w.write(num + "-" + origHighTiles[num] + " ");
 
             w.close();
             return true;
@@ -705,9 +743,7 @@ public class World {
                     case DIAMOND: rt = 3; break;
                 }
 
-                if(drill.miningResource == Tile.copperOreTile) mr = 0;
-                else if(drill.miningResource == Tile.silverOreTile) mr = 1;
-                else mr = 2;
+                mr = drill.miningResource.getID();
 
                 w.write(drill.x + " " + drill.y + " " + rt + " " + mr + "\n");
             }
@@ -746,6 +782,24 @@ public class World {
         try {
             Writer w = ftblf.writer(true);
             for(MachineType.Node node : nodes) w.write(node.x + " " + node.y + "\n");
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static boolean writeASSEMBLER(FileHandle ftblf, ArrayList<MachineType.Assembler> assemblers) {
+        try {
+            Writer w = ftblf.writer(true);
+            for(MachineType.Assembler assembler : assemblers) {
+                Item item = null;
+                if(assembler.targetRecipe != null) item = assembler.targetRecipe.item;
+                if(item != null) {
+                    w.write(assembler.x + " " + assembler.y + " " + item.getItemID() + "\n");
+                } else w.write(assembler.x + " " + assembler.y + " " + -1 + "\n");
+            }
             w.close();
             return true;
         } catch (IOException e) {

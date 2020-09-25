@@ -14,6 +14,7 @@ public class MachineSection extends BlueprintSection {
         items.add(new ItemBlueprint(this, Assets.stonePipeItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.nodeItem, items.size() - 1));
         items.add(new ItemBlueprint(this, Assets.copperMechanicalDrillItem, items.size() - 1));
+        items.add(new ItemBlueprint(this, Assets.assemblerItem, items.size() - 1));
     }
 
     @Override

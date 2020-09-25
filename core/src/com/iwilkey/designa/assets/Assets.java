@@ -29,7 +29,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.44";
+    public static String VERSION = "pa1.0.45";
     // Cursor
     public static TextureRegion cursor;
     // Font
@@ -56,10 +56,12 @@ public class Assets {
     // Machines
         // Mech Drills
         public static TextureRegion[] copperMechanicalDrill;
-        // Offloader
+        // Node
         public static TextureRegion[] node;
         // Pipes
         public static TextureRegion[] stonePipeRight, stonePipeDown, stonePipeLeft, stonePipeUp;
+        // Assembler
+        public static TextureRegion assembler;
     // Player
     public static TextureRegion[] player, player_jump, playerGun;
         // Animations
@@ -119,6 +121,9 @@ public class Assets {
             // Pipes
             public static Item stonePipeItem;
 
+            // Assembler
+            public static Item assemblerItem;
+
     // Item Recipe
         // Wood
         public static ItemRecipe STICK_RESOURCE_RECIPE, PLYWOOD_RESOURCE_RECIPE, HARDWOOD_RESOURCE_RECIPE, REINFORCED_HARDWOOD_RECIPE,
@@ -163,6 +168,9 @@ public class Assets {
 
                 // Pipes
                 public static ItemRecipe STONE_PIPE_RECIPE;
+
+                // Assembler
+                public static ItemRecipe ASSEMBLER_RECIPE;
 
     /**
      *  This method is called by the Game class upon creation of the program.
@@ -374,6 +382,9 @@ public class Assets {
                 stonePipeDown[0] = ss.crop(8, 21, ss.SLOT_SIZE, ss.SLOT_SIZE);
                 stonePipeDown[1] = ss.crop(8, 22, ss.SLOT_SIZE, ss.SLOT_SIZE);
                 stonePipeDown[2] = ss.crop(8, 23, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+            // Assembler
+            assembler = ss.crop(108 / 8,144 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];
@@ -603,13 +614,17 @@ public class Assets {
                 copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", 22,
                     new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(Tile.copperMechanicalDrillTile.getID()));
 
-                // Offloader
+                // Node
                 nodeItem = new Item(Assets.node[0], "Node", 24,
                     new ItemType.PlaceableBlock.CreatableTile.Node(Tile.nodeTile.getID()));
 
                 // Pipes
                 stonePipeItem = new Item(Assets.stonePipeUp[0], "Stone Pipe", 23,
                     new ItemType.PlaceableBlock.CreatableTile.Pipe(Tile.stonePipeTile.getID()));
+
+                // Assembler
+                assemblerItem = new Item(Assets.assembler, "Assembler", 27,
+                    new ItemType.PlaceableBlock.CreatableTile.Assembler(Tile.assemblerTile.getID()));
 
         // Item Recipes
 
@@ -682,11 +697,14 @@ public class Assets {
             // Mech Drills
             COPPER_MECHANICAL_DRILL_RECIPE = new ItemRecipe.CopperMechanicalDrillRecipe(Assets.copperMechanicalDrillItem);
 
-            // Offloader
+            // Node
             NODE_RECIPE = new ItemRecipe.NodeRecipe(Assets.nodeItem);
 
             // Pipes
             STONE_PIPE_RECIPE = new ItemRecipe.StonePipeRecipe(Assets.stonePipeItem);
+
+            // Assembler
+            ASSEMBLER_RECIPE = new ItemRecipe.AssemblerRecipe(Assets.assemblerItem);
 
         maleNames = new String[] { "Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd",
                 "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch",

@@ -226,19 +226,16 @@ public class WorldGeneration {
 
     }
 
-    public static ArrayList<Integer> EnvironmentReformation(GameBuffer gb, EntityHandler e, ArrayList<Integer> trees) {
+    public static ArrayList<Integer> EnvironmentReformation(GameBuffer gb, EntityHandler e, ArrayList<Integer> trees, ArrayList<Integer> treesY) {
 
-        for (int tree : trees) {
+        for (int i = 0; i < trees.size(); i++) {
             try {
-                int y = LightManager.highestTile[tree];
-                e.addEntity(new Tree(gb, tree * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+                int y = treesY.get(i);
+                e.addEntity(new Tree(gb, trees.get(i) * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
             } catch (ArrayIndexOutOfBoundsException ignored) {}
         }
-
         AmbientGeneration();
-
         return trees;
-
     }
 
     private static void AmbientGeneration() {

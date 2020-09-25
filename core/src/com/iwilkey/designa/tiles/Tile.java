@@ -47,6 +47,12 @@ public class Tile {
         @Override
         public int getItemID() { return itemID; }
     }
+    public static class TreeTile extends Tile {
+        private int itemID = 100;
+        public TreeTile(int ID) { super(Assets.trees[0], ID, 0); }
+        @Override
+        public int getItemID() { return itemID; }
+    }
 
     // Ores
     public static class CopperOreTile extends Tile {
@@ -219,6 +225,22 @@ public class Tile {
             }
         }
 
+        // Assembler
+        public static class Assembler extends Tile {
+            private int itemID = 27;
+            public Assembler(int ID, int strength) {
+                super(Assets.assembler, ID, strength);
+            }
+            @Override
+            public int getItemID() {
+                return itemID;
+            }
+            @Override
+            public void render(Batch b, int x, int y, int bl, int id) {
+                renderBreakLevel(b, x, y, bl, id);
+            }
+        }
+
     public static Tile[] tiles = new Tile[256];
     public static final int TILE_SIZE = 16;
 
@@ -228,6 +250,7 @@ public class Tile {
     public static Tile grassTile = new GrassTile(1, 4);
     public static Tile dirtTile = new DirtTile(2, 3);
     public static Tile stoneTile = new StoneTile(3, 16);
+    public static Tile treeTile = new TreeTile(255);
 
     // Non-construction
         // Animated
@@ -256,6 +279,9 @@ public class Tile {
 
         // Pipes
         public static Tile stonePipeTile = new Pipe.StonePipe(15, 12);
+
+        // Assembler
+        public static Tile assemblerTile = new Assembler(18, 45);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();
