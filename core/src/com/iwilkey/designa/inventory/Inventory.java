@@ -1,17 +1,18 @@
 package com.iwilkey.designa.inventory;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
-import com.iwilkey.designa.inventory.blueprints.Blueprints;
+import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.crate.Crate;
-import com.iwilkey.designa.inventory.resource.VerticalTree;
+import com.iwilkey.designa.inventory.technology.TechnologyRegion;
 import com.iwilkey.designa.items.Item;
-import com.iwilkey.designa.inventory.resource.ResourceTree;
 import com.iwilkey.designa.tiles.Tile;
 
 import java.awt.Rectangle;
@@ -21,22 +22,20 @@ public class Inventory {
     public final int MAX_STACK = 99;
 
     private GameBuffer gb;
-    private final Blueprints blueprints;
-    private final ResourceTree resourceTree;
     public static boolean active = false;
     public static InventorySlot[][] slots;
     public final int invX, invY, invWidth, invHeight;
     public int[][] selector;
     public boolean itemUp = false;
 
-    private final int INV_SLOT_X = (60) - 19, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 100;
-    public final static int CRATE_X = Gdx.graphics.getWidth() - (250) - (8 * InventorySlot.SLOT_WIDTH),
-            CRATE_Y = (Gdx.graphics.getHeight() / 2) - 200;
-    public final static int bw = 300 + 64, bh = 300 + 200 + 150;
-    public final static int BLUEPRINT_X = ((Gdx.graphics.getWidth()) - bw + 50) - 19,
-            BLUEPRINT_Y = (Gdx.graphics.getHeight() / 2) + 200;
-    public static final Rectangle BLUEPRINT_SIZE = new Rectangle(BLUEPRINT_X - 52 - 32, BLUEPRINT_Y - 370 - 140,
-            bw, bh);
+    public TechnologyRegion technologyRegion;
+
+    private Texture bg = new Texture("textures/game/invbackground.png");
+
+    int relY = 286;
+    private final int INV_SLOT_X = (Gdx.graphics.getWidth() / 2) - 200, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 100 - relY;
+    public final static int CRATE_X = (Gdx.graphics.getWidth() / 2) - (400 / 2),
+            CRATE_Y = (Gdx.graphics.getHeight() / 2) - 90;
 
     public Inventory(GameBuffer gb) {
         this.gb = gb;
@@ -49,8 +48,7 @@ public class Inventory {
         selector = new int[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector[0][invHeight / InventorySlot.SLOT_HEIGHT - 1] = 1;
 
-        blueprints = new Blueprints(gb, this, BLUEPRINT_X, BLUEPRINT_Y);
-        resourceTree = new ResourceTree(this);
+        technologyRegion = new TechnologyRegion(Gdx.graphics.getWidth() / 2, (Gdx.graphics.getHeight() / 2) + 150, 800, 500);
 
         int slot = 0;
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -77,14 +75,6 @@ public class Inventory {
 
             if(!active) Assets.openInv[MathUtils.random(0,2)].play(0.3f);
             else Assets.closeInv[MathUtils.random(0,2)].play(0.3f);
-
-            // If active is about to turn true
-            if(!active) {
-                for(VerticalTree tree : ResourceTree.trees) {
-                    tree.tick();
-                    for(VerticalTree.Node node : tree.nodes) tree.checkResources(node);
-                }
-            }
 
             active = !active;
         }
@@ -119,8 +109,7 @@ public class Inventory {
             }
         }
 
-        blueprints.tick();
-        resourceTree.tick();
+        technologyRegion.tick();
 
         // Input handling
         input();
@@ -451,6 +440,9 @@ public class Inventory {
     public void render(Batch b) {
         if(!active) return;
 
+        b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, ((Gdx.graphics.getHeight() / 2) - 112) - relY, 480, 275);
+        Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 326) - relY, 11);
+
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
             for(int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 slots[x][Math.abs((invHeight / InventorySlot.SLOT_HEIGHT) - y) - 1].render(b, (x * InventorySlot.SLOT_WIDTH) +
@@ -458,8 +450,7 @@ public class Inventory {
             }
         }
 
-        blueprints.render(b);
-        resourceTree.render(b);
+        technologyRegion.render(b);
     }
 
     public void renderPlayerInventory(Batch b, int offX) {

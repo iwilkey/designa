@@ -1,8 +1,11 @@
 package com.iwilkey.designa.inventory.crate;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
@@ -17,6 +20,8 @@ import java.awt.Rectangle;
 import java.util.HashMap;
 
 public class Crate {
+
+    Texture bg = new Texture("textures/game/invbackground.png");
 
     private GameBuffer gb;
     private final Inventory playerInventory;
@@ -435,6 +440,7 @@ public class Crate {
 
     public void render(Batch b) {
         if (isActive) {
+            b.draw(bg, Inventory.CRATE_X - 30, Inventory.CRATE_Y - 20, w + 90, h + 82);
             Text.draw(b, "Crate", Inventory.CRATE_X + (4 * InventorySlot.SLOT_WIDTH) - 18,
                     Inventory.CRATE_Y + (8 * InventorySlot.SLOT_HEIGHT) + 24, 11);
             for (int y = 0; y < h / InventorySlot.SLOT_HEIGHT; y++) {
@@ -444,7 +450,9 @@ public class Crate {
                 }
             }
 
-            playerInventory.renderPlayerInventory(b, 150);
+            b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, ((Gdx.graphics.getHeight() / 2) - 112) - 286, 480, 275);
+            Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 326) - 286, 11);
+            playerInventory.renderPlayerInventory(b, 0);
         }
     }
 

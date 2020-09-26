@@ -11,6 +11,8 @@ import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 
+import java.util.ArrayList;
+
 /**
 
  The Assets class encapsulates static instances of assets used during the runtime of Designa. This makes it easy to
@@ -29,13 +31,15 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.45";
+    public static String VERSION = "pa1.0.46";
     // Cursor
     public static TextureRegion cursor;
     // Font
     public static TextureRegion[] font;
     // Colors
     public static TextureRegion[] sky_colors, light_colors;
+    // Geometry
+    public static TextureRegion line, square;
     // GUI
     public static TextureRegion[] heart, breakLevel, craftingTabs, backBuilding, arrow;
     public static TextureRegion selector, errorSelector, transSelector, jumpSelector, inventorySelector, inventorySlot,
@@ -172,6 +176,10 @@ public class Assets {
                 // Assembler
                 public static ItemRecipe ASSEMBLER_RECIPE;
 
+        // Item Representation Lists
+        public static ArrayList<Item> resourceRepList, toolRepList, utilitiesRepList,
+                tilesRepList, defenseRepList, machinesRepList, miscRepList;
+
     /**
      *  This method is called by the Game class upon creation of the program.
      */
@@ -213,6 +221,10 @@ public class Assets {
         for(int i = 0; i < 7; i++) {
             light_colors[i] = ss.crop(i, 12, ss.SLOT_SIZE, ss.SLOT_SIZE);
         }
+
+        // Init geom
+        line = ss.crop(1, 216 / 8, 1, ss.SLOT_SIZE);
+        square = ss.crop(16 / 8, 216 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init GUI
         heart = new TextureRegion[2];
@@ -489,7 +501,7 @@ public class Assets {
     private static void initObjects() {
         // Items
 
-        barkResource = new Item(Assets.wood[0], "Bark", 100,
+        barkResource = new Item(Assets.wood[0], "Bark",100,
                 new ItemType.Resource("Wood", "Bark"));
         stickResource = new Item(Assets.wood[1], "Sticks", 101,
                 new ItemType.Resource("Wood", "Sticks"));
@@ -594,9 +606,9 @@ public class Assets {
                 new ItemType.PlaceableBlock.CreatableTile(Tile.reinforcedStrongwoodTile.getID()));
 
         // Non-construction creatable tiles
-        torchItem = new Item(Assets.torchThumb, "Torch", 20,
+        torchItem = new Item(Assets.torchThumb, "Torch", "Use this item to illuminate tiles\nwithin an 8 unit radius", 20,
                 new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID()));
-        crateItem = new Item(Assets.crate, "Crate", 21,
+        crateItem = new Item(Assets.crate, "Crate", "Place this item to store items from your\ninventory, pipes, nodes, or assemblers.", 21,
                 new ItemType.PlaceableBlock.CreatableTile.Storage(Tile.crateTile.getID()));
         ladderItem = new Item(Assets.ladder, "Ladder", 26,
                 new ItemType.PlaceableBlock.CreatableTile(Tile.ladderTile.getID()));
@@ -705,6 +717,68 @@ public class Assets {
 
             // Assembler
             ASSEMBLER_RECIPE = new ItemRecipe.AssemblerRecipe(Assets.assemblerItem);
+
+        // Item Representation Lists
+        resourceRepList = new ArrayList<>();
+        resourceRepList.add(stickResource);
+        resourceRepList.add(plywoodResource);
+        resourceRepList.add(hardwoodResource);
+        resourceRepList.add(reinforcedHardwoodResource);
+        resourceRepList.add(strongwoodResource);
+        resourceRepList.add(reinforcedStrongwoodResource);
+        resourceRepList.add(gravelResource);
+        resourceRepList.add(concreteResource);
+        resourceRepList.add(reinforcedConcreteResource);
+        resourceRepList.add(condensedSlabResource);
+        resourceRepList.add(strongstoneResource);
+        resourceRepList.add(reinforcedStrongstoneResource);
+        resourceRepList.add(recycledCopperResource);
+        resourceRepList.add(bluestoneResource);
+        resourceRepList.add(reinforcedBluestoneResource);
+        resourceRepList.add(romanVitriolResource);
+        resourceRepList.add(recycledSilverResource);
+        resourceRepList.add(coinSilverResource);
+        resourceRepList.add(sterlingSilverResource);
+        resourceRepList.add(reinforcedSterlingSilverResource);
+        resourceRepList.add(fineSilverResource);
+        resourceRepList.add(reinforcedFineSilverResource);
+        resourceRepList.add(recycledIronResource);
+        resourceRepList.add(castIronResource);
+        resourceRepList.add(reinforcedCastIronResource);
+        resourceRepList.add(steelResource);
+        resourceRepList.add(reinforcedSteelResource);
+        resourceRepList.add(graphiteResource);
+        resourceRepList.add(compressedGraphite);
+        resourceRepList.add(weakDiamondResource);
+        resourceRepList.add(diamondResource);
+        resourceRepList.add(reinforcedDiamondResource);
+        // resourceRepList.add(reinforcedDiamondResource);
+
+        toolRepList = new ArrayList<>();
+        toolRepList.add(simpleDrillItem);
+        toolRepList.add(wrenchItem);
+
+        utilitiesRepList = new ArrayList<>();
+        utilitiesRepList.add(torchItem);
+        utilitiesRepList.add(crateItem);
+
+        tilesRepList = new ArrayList<>();
+        tilesRepList.add(ladderItem);
+        tilesRepList.add(plywoodTileItem);
+        tilesRepList.add(hardwoodTileItem);
+        tilesRepList.add(reinforcedHardwoodTileItem);
+        tilesRepList.add(strongwoodTileItem);
+        tilesRepList.add(reinforcedStrongwoodTileItem);
+
+        defenseRepList = new ArrayList<>();
+
+        machinesRepList = new ArrayList<>();
+        machinesRepList.add(stonePipeItem);
+        machinesRepList.add(nodeItem);
+        machinesRepList.add(copperMechanicalDrillItem);
+        machinesRepList.add(assemblerItem);
+
+        miscRepList = new ArrayList<>();
 
         maleNames = new String[] { "Anderson", "Ashwoon", "Aikin", "Bateman", "Bongard", "Bowers", "Boyd",
                 "Cannon", "Cast", "Deitz", "Dewalt", "Ebner", "Frick", "Hancock", "Haworth", "Hesch",

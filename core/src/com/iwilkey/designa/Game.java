@@ -58,7 +58,7 @@ public class Game extends ApplicationAdapter {
 		states.add(worldLoaderState);
 		states.add(gameState);
 
-		State.setState(mainMenuState);
+		State.setState(worldLoaderState);
 		State.getCurrentState().start();
 	}
 

@@ -18,6 +18,4 @@ For later on (after release)
 
 - Document every class for open-sourcing.
 
-- Add the resource tiles to the blueprints and add a next page if it spills over
-
 - Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.

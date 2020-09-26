@@ -1,6 +1,7 @@
 package com.iwilkey.designa.gui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.math.Matrix4;
@@ -24,6 +25,8 @@ import com.iwilkey.designa.tiles.Tile;
 
 public class Hud {
 
+    Texture bg = new Texture("textures/game/invbackground.png");
+
     private final Player player;
     private UIManager uiManager;
     private int healthX, healthY;
@@ -37,7 +40,7 @@ public class Hud {
         InputHandler.setUIManager(uiManager);
 
         uiManager.addObject(new TextButton(Gdx.graphics.getWidth() / 2,
-                (Gdx.graphics.getHeight() / 2) + 30, 20, "Resume", new ClickListener() {
+                (Gdx.graphics.getHeight() / 2) + 30, 16, "Resume", new ClickListener() {
             @Override
             public void onClick() {
                 gameMenu = false;
@@ -45,7 +48,7 @@ public class Hud {
         }));
 
         uiManager.addObject(new TextButton(Gdx.graphics.getWidth() / 2,
-                (Gdx.graphics.getHeight() / 2) - 30, 20, "Save and Quit", new ClickListener() {
+                (Gdx.graphics.getHeight() / 2) - 30, 16, "Save and Quit", new ClickListener() {
             @Override
             public void onClick() {
                 gameMenu = false;
@@ -135,11 +138,10 @@ public class Hud {
             }
         } catch (NullPointerException ignored) {}
 
-        if(Inventory.active) Text.draw(b, "Inventory", 350, Game.h - 160, 11);
-        else Text.draw(b, "press 'F' to open inventory", 14, 14, 8);
+        if(!Inventory.active) Text.draw(b, "press 'F' to open inventory", 14, 14, 8);
 
         if(gameMenu) {
-            b.draw(Assets.blueprintGUI, (Game.w / 2) - (400 / 2), (Game.h / 2) - (600 / 2), 400, 600);
+            b.draw(bg, (Game.w / 2) - (400 / 2) + 4, (Game.h / 2) - (300 / 2), 400, 300);
             uiManager.render(b);
         }
     }

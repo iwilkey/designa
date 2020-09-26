@@ -667,6 +667,10 @@ public class MachineType {
                                 targetRecipe = ((ItemType.PlaceableBlock.CreatableTile)
                                         (ToolSlot.currentItem.getItem().getItemType())).getRecipe();
                                 readyItems = 0;
+                            } else if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.Resource) {
+                                targetRecipe = ((ItemType.Resource)
+                                        (ToolSlot.currentItem.getItem().getItemType())).getItemRecipe();
+                                readyItems = 0;
                             }
                         }
                     } catch (NullPointerException ignored) {}

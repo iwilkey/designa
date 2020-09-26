@@ -128,7 +128,7 @@ public class World {
         }
 
         entityHandler.staticRender(b);
-
+        itemHandler.render(b);
         machineHandler.render(b);
 
         for(int y = yStart; y < yEnd; y++) {
@@ -150,7 +150,6 @@ public class World {
             }
         }
 
-        itemHandler.render(b);
         entityHandler.getPlayer().getBuildingHandler().render(b);
 
     }

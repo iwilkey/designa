@@ -103,9 +103,11 @@ public class BuildingHandler {
                     if(ToolSlot.currentItem != null)
                         // Then evoke the placeTile method with the proper information if the item they hold
                             // is a legit placeable block.
-                        if(ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
-                            placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
-                                    pointerOnTileX(), pointerOnTileY());
+                        try {
+                            if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
+                                placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
+                                        pointerOnTileX(), pointerOnTileY());
+                        } catch (NullPointerException ignored) {}
                     // And the tile that is currently selected is a chest tile, then let the player see what's
                         // in the crate.
                     if (World.getTile(pointerOnTileX(), pointerOnTileY()) instanceof Tile.CrateTile)

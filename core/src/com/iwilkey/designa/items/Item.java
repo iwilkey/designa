@@ -17,7 +17,7 @@ public class Item {
 
     protected GameBuffer gb;
     protected TextureRegion texture;
-    protected String name;
+    protected String name, description;
     protected final int itemID;
     protected ItemType type;
     protected Rectangle bounds;
@@ -32,6 +32,18 @@ public class Item {
     public Item(TextureRegion tex, String name, int ID, ItemType t) {
         this.texture = tex;
         this.name = name;
+        this.description = "This item has not been assigned a\ndescription yet!";
+        this.itemID = ID;
+        this.type = t;
+        count = 1;
+        bounds = new Rectangle(x, y, ITEM_WIDTH, ITEM_HEIGHT);
+        items[ID] = this;
+    }
+
+    public Item(TextureRegion tex, String name, String description, int ID, ItemType t) {
+        this.texture = tex;
+        this.name = name;
+        this.description = description;
         this.itemID = ID;
         this.type = t;
         count = 1;
@@ -88,6 +100,7 @@ public class Item {
     public void setTexture(TextureRegion tex) { texture = tex; }
 
     public String getName() { return name; }
+    public String getDescription() { return description; }
 
     public int getX() { return x; }
     public int getY() { return y; }

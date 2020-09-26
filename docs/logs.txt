@@ -418,3 +418,25 @@ Date || Build ||
     - Drills now can mine trees for tree bark
     - Trees now don't spawn on top of drills when loading the world back in
         TODO Make it so drills can't mine any more bark after the tree is cut down
+	    TODO Drills can be placed on crates and that's not good.
+	    TODO The assembler needs to save the amount of items in it when the game is quit and saved
+
+9/25/2020 || pa_1.0.46 || GUI Overhaul
+    - Inventory now renders in the bottom middle of the screen
+    - Inventory now has background
+    - The TechnologyRegion will be a one stop shop for all things tech. It now renders the background
+    - The TechnologyRegion SubRegions will house the implementation of the menu
+    - The TechTypeSelector is now placed
+    - All the TechTypes are listed and can be selected
+
+9/26/2020 || pa_1.0.46 || GUI Overhaul (cont)
+    - Crate GUI now renders correctly
+    - Pause menu now renders correctly
+    - There is now an ItemRepresentationGrid that lists the items in that itemType
+    - There is now a scroll wheel in the ItemRepresentationGrid
+    - You can now select individual item cells to look at.
+    - Each ItemType now has a corresponding itemRep list.
+    - All itemRep lists now render and tick only when they selected.
+    - Items now require a description.
+    - Item cells, when selected, will now show the name and the item description in the space below the grid.
+    - Assemblers can now make resources
