@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
@@ -241,53 +242,24 @@ public class Tile {
             }
         }
 
+    // Weapons
+    public static class BlasterBase extends Tile {
+        private int itemID = 28;
+        public BlasterBase(int ID, int strength) { super(Assets.blasterBase, ID, strength); }
+        @Override
+        public int getItemID() {
+            return itemID;
+        }
+    }
+
+    // Class
     public static Tile[] tiles = new Tile[256];
     public static final int TILE_SIZE = 16;
-
-    // Instances (May need to be moved to Assets)
-    // Natural
-    public static Tile airTile = new AirTile(0, 0);
-    public static Tile grassTile = new GrassTile(1, 4);
-    public static Tile dirtTile = new DirtTile(2, 3);
-    public static Tile stoneTile = new StoneTile(3, 16);
-    public static Tile treeTile = new TreeTile(255);
-
-    // Non-construction
-        // Animated
-        public static Tile torchTile = new TorchTile(4, 1);
-    public static Tile crateTile = new CrateTile(13, 20);
-    public static Tile ladderTile = new LadderTile(17, 8);
-
-    // Ores
-    public static Tile copperOreTile = new CopperOreTile(5, 20);
-    public static Tile silverOreTile = new SilverOreTile(6, 20);
-    public static Tile ironOreTile = new IronOreTile(7, 20);
-
-    // Construction
-    public static Tile plywoodTile = new PlywoodTile(8, 5);
-    public static Tile hardwoodTile = new HardwoodTile(9, 10);
-    public static Tile reinforcedHardwoodTile = new ReinforcedHardwoodTile(10, 15);
-    public static Tile strongwoodTile = new StrongwoodTile(11, 20);
-    public static Tile reinforcedStrongwoodTile = new ReinforcedStrongwoodTile(12, 25);
-
-    // Machines
-        // Mech Drills
-        public static Tile copperMechanicalDrillTile = new CopperMechanicalDrill(14, 40);
-
-        // Offloader
-        public static Tile nodeTile = new Node(16, 30);
-
-        // Pipes
-        public static Tile stonePipeTile = new Pipe.StonePipe(15, 12);
-
-        // Assembler
-        public static Tile assemblerTile = new Assembler(18, 45);
 
     public static int getStrength(int id) {
         return tiles[id].getStrength();
     }
 
-    // Class
     public TextureRegion texture;
     protected final int ID;
     protected int strength;
@@ -301,9 +273,11 @@ public class Tile {
 
     public void tick() {
         // Tick animated tiles
-        torchTile.tick();
-        copperMechanicalDrillTile.tick();
-        stonePipeTile.tick();
+        if(!Hud.gameMenu) {
+            Assets.torchTile.tick();
+            Assets.copperMechanicalDrillTile.tick();
+            Assets.stonePipeTile.tick();
+        }
     }
 
     public void render(Batch b, int x, int y, int bl, int id) { // This will render a tile at the x and y of it the world has set
@@ -318,25 +292,12 @@ public class Tile {
             TextureRegion shade;
             switch (World.lightMap[x / Tile.TILE_SIZE][y / Tile.TILE_SIZE]) {
                 case 6:
-                    shade = Assets.light_colors[6];
-                    break;
-                case 5:
-                    shade = Assets.light_colors[5];
-                    break;
-                case 4:
-                    shade = Assets.light_colors[4];
-                    break;
-                case 3:
-                    shade = Assets.light_colors[3];
-                    break;
-                case 2:
-                    shade = Assets.light_colors[2];
-                    break;
-                case 1:
-                    shade = Assets.light_colors[1];
-                    break;
-                default:
-                    shade = Assets.light_colors[0];
+                case 5: shade = Assets.light_colors[5]; break;
+                case 4: shade = Assets.light_colors[4]; break;
+                case 3: shade = Assets.light_colors[3]; break;
+                case 2: shade = Assets.light_colors[2]; break;
+                case 1: shade = Assets.light_colors[1]; break;
+                default: shade = Assets.light_colors[0];
             }
 
             if(World.lightMap[x / Tile.TILE_SIZE][y / Tile.TILE_SIZE] > 6) shade = Assets.light_colors[6];

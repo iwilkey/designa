@@ -9,6 +9,7 @@ import com.iwilkey.designa.gfx.SpriteSheet;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
+import com.iwilkey.designa.particle.Particle;
 import com.iwilkey.designa.tiles.Tile;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.46";
+    public static String VERSION = "pa1.0.47";
     // Cursor
     public static TextureRegion cursor;
     // Font
@@ -66,6 +67,8 @@ public class Assets {
         public static TextureRegion[] stonePipeRight, stonePipeDown, stonePipeLeft, stonePipeUp;
         // Assembler
         public static TextureRegion assembler;
+    // Weapons
+        public static TextureRegion blasterBase;
     // Player
     public static TextureRegion[] player, player_jump, playerGun;
         // Animations
@@ -128,6 +131,9 @@ public class Assets {
             // Assembler
             public static Item assemblerItem;
 
+        // Weapons
+            public static Item blasterBaseItem;
+
     // Item Recipe
         // Wood
         public static ItemRecipe STICK_RESOURCE_RECIPE, PLYWOOD_RESOURCE_RECIPE, HARDWOOD_RESOURCE_RECIPE, REINFORCED_HARDWOOD_RECIPE,
@@ -176,9 +182,45 @@ public class Assets {
                 // Assembler
                 public static ItemRecipe ASSEMBLER_RECIPE;
 
+            // Weapons
+                public static ItemRecipe BLASTER_BASE_RECIPE;
+
+        // Tiles
+        public static Tile airTile, grassTile, dirtTile, stoneTile, treeTile;
+
+        // Non-construction
+        // Animated
+        public static Tile torchTile, crateTile, ladderTile;
+
+        // Ores
+        public static Tile copperOreTile, silverOreTile, ironOreTile;
+
+        // Construction
+        public static Tile plywoodTile, hardwoodTile,
+                reinforcedHardwoodTile, strongwoodTile, reinforcedStrongwoodTile;
+
+        // Machines
+        // Mech Drills
+        public static Tile copperMechanicalDrillTile;
+
+        // Offloader
+        public static Tile nodeTile;
+
+        // Pipes
+        public static Tile stonePipeTile;
+
+        // Assembler
+        public static Tile assemblerTile;
+
+        // Weapons
+        public static Tile blasterBaseTile;
+
         // Item Representation Lists
         public static ArrayList<Item> resourceRepList, toolRepList, utilitiesRepList,
                 tilesRepList, defenseRepList, machinesRepList, miscRepList;
+
+        // Particles
+        public static ArrayList<Particle> particles;
 
     /**
      *  This method is called by the Game class upon creation of the program.
@@ -398,6 +440,9 @@ public class Assets {
             // Assembler
             assembler = ss.crop(108 / 8,144 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
+        // Weapons
+            blasterBase = ss.crop(32 / 8, 80 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
         // Init player
         player = new TextureRegion[2];
         player[0] = ss.crop(3, 1, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
@@ -499,6 +544,47 @@ public class Assets {
      *  This method initiates all object instances.
      */
     private static void initObjects() {
+        // Tiles
+        airTile = new Tile.AirTile(0, 0);
+        grassTile = new Tile.GrassTile(1, 4);
+        dirtTile = new Tile.DirtTile(2, 3);
+        stoneTile = new Tile.StoneTile(3, 16);
+        treeTile = new Tile.TreeTile(255);
+
+        // Non-construction
+        // Animated
+        torchTile = new Tile.TorchTile(4, 1);
+        crateTile = new Tile.CrateTile(13, 20);
+        ladderTile = new Tile.LadderTile(17, 8);
+
+        // Ores
+        copperOreTile = new Tile.CopperOreTile(5, 20);
+        silverOreTile = new Tile.SilverOreTile(6, 20);
+        ironOreTile = new Tile.IronOreTile(7, 20);
+
+        // Construction
+        plywoodTile = new Tile.PlywoodTile(8, 5);
+        hardwoodTile = new Tile.HardwoodTile(9, 10);
+        reinforcedHardwoodTile = new Tile.ReinforcedHardwoodTile(10, 15);
+        strongwoodTile = new Tile.StrongwoodTile(11, 20);
+        reinforcedStrongwoodTile = new Tile.ReinforcedStrongwoodTile(12, 25);
+
+        // Machines
+        // Mech Drills
+        copperMechanicalDrillTile = new Tile.CopperMechanicalDrill(14, 40);
+
+        // Offloader
+        nodeTile = new Tile.Node(16, 30);
+
+        // Pipes
+        stonePipeTile = new Tile.Pipe.StonePipe(15, 12);
+
+        // Assembler
+        assemblerTile = new Tile.Assembler(18, 45);
+
+        // Weapons
+        blasterBaseTile = new Tile.BlasterBase(19, 35);
+
         // Items
 
         barkResource = new Item(Assets.wood[0], "Bark",100,
@@ -590,28 +676,28 @@ public class Assets {
 
         // PlaceableBlocks
         dirtItem = new Item(Assets.dirt, "Dirt", 0,
-                new ItemType.PlaceableBlock(Tile.dirtTile.getID()));
+                new ItemType.PlaceableBlock(dirtTile.getID()));
         stoneItem = new Item(Assets.stone, "Stone", 1,
-                new ItemType.PlaceableBlock(Tile.stoneTile.getID()));
+                new ItemType.PlaceableBlock(stoneTile.getID()));
             // Construction
             plywoodTileItem = new Item(Assets.plywood, "Plywood Tile", 2,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.plywoodTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(plywoodTile.getID()));
             hardwoodTileItem = new Item(Assets.hardwood, "Hardwood Tile", 3,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.hardwoodTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(hardwoodTile.getID()));
             reinforcedHardwoodTileItem = new Item(Assets.reinforcedHardwood, "Reinforced Hardwood Tile", 4,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.reinforcedHardwoodTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(reinforcedHardwoodTile.getID()));
             strongwoodTileItem = new Item(Assets.strongwood, "Strongwood Tile", 5,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.strongwoodTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(strongwoodTile.getID()));
             reinforcedStrongwoodTileItem = new Item(Assets.reinforcedStrongwood, "Reinforced Strongwood Tile", 6,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.reinforcedStrongwoodTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(reinforcedStrongwoodTile.getID()));
 
         // Non-construction creatable tiles
         torchItem = new Item(Assets.torchThumb, "Torch", "Use this item to illuminate tiles\nwithin an 8 unit radius", 20,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.torchTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(torchTile.getID()));
         crateItem = new Item(Assets.crate, "Crate", "Place this item to store items from your\ninventory, pipes, nodes, or assemblers.", 21,
-                new ItemType.PlaceableBlock.CreatableTile.Storage(Tile.crateTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile.Storage(crateTile.getID()));
         ladderItem = new Item(Assets.ladder, "Ladder", 26,
-                new ItemType.PlaceableBlock.CreatableTile(Tile.ladderTile.getID()));
+                new ItemType.PlaceableBlock.CreatableTile(ladderTile.getID()));
 
         //CreatableItems
             // Tools
@@ -624,19 +710,23 @@ public class Assets {
 
                 // Mechanical Drill
                 copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", 22,
-                    new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(Tile.copperMechanicalDrillTile.getID()));
+                    new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(copperMechanicalDrillTile.getID()));
 
                 // Node
                 nodeItem = new Item(Assets.node[0], "Node", 24,
-                    new ItemType.PlaceableBlock.CreatableTile.Node(Tile.nodeTile.getID()));
+                    new ItemType.PlaceableBlock.CreatableTile.Node(nodeTile.getID()));
 
                 // Pipes
                 stonePipeItem = new Item(Assets.stonePipeUp[0], "Stone Pipe", 23,
-                    new ItemType.PlaceableBlock.CreatableTile.Pipe(Tile.stonePipeTile.getID()));
+                    new ItemType.PlaceableBlock.CreatableTile.Pipe(stonePipeTile.getID()));
 
                 // Assembler
                 assemblerItem = new Item(Assets.assembler, "Assembler", 27,
-                    new ItemType.PlaceableBlock.CreatableTile.Assembler(Tile.assemblerTile.getID()));
+                    new ItemType.PlaceableBlock.CreatableTile.Assembler(assemblerTile.getID()));
+
+            // Weapons
+                blasterBaseItem = new Item(Assets.blasterBase, "Blaster Base", 28,
+                    new ItemType.PlaceableBlock.CreatableTile.BlasterBase(blasterBaseTile.getID()));
 
         // Item Recipes
 
@@ -718,6 +808,9 @@ public class Assets {
             // Assembler
             ASSEMBLER_RECIPE = new ItemRecipe.AssemblerRecipe(Assets.assemblerItem);
 
+        // Weapons
+            BLASTER_BASE_RECIPE = new ItemRecipe.BlasterBaseRecipe(Assets.blasterBaseItem);
+
         // Item Representation Lists
         resourceRepList = new ArrayList<>();
         resourceRepList.add(stickResource);
@@ -771,6 +864,7 @@ public class Assets {
         tilesRepList.add(reinforcedStrongwoodTileItem);
 
         defenseRepList = new ArrayList<>();
+        defenseRepList.add(blasterBaseItem);
 
         machinesRepList = new ArrayList<>();
         machinesRepList.add(stonePipeItem);
@@ -799,6 +893,14 @@ public class Assets {
                 "Norquist", "Nuttle", "Olson", "Ostrander", "Reamer", "Reardon", "Reyes", "Rice",
                 "Ripka", "Roberts", "Rogers", "Root", "Sandstrom", "Sawyer", "Schlicht", "Schmitt",
                 "Schwager", "Schutz", "Schuster", "Tapia", "Thompson", "Tiernan", "Tisler" };
+    }
+
+    public static ArrayList<Particle> initParticles() {
+        particles = new ArrayList<>();
+
+        particles.add(new Particle("fire.pcl", "fire"));
+
+        return particles;
     }
 
 }

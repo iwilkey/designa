@@ -440,3 +440,22 @@ Date || Build ||
     - Items now require a description.
     - Item cells, when selected, will now show the name and the item description in the space below the grid.
     - Assemblers can now make resources
+
+9/28/2020 || pa_1.0.46 ||
+    - Added shading to resource item sprites
+    - Updated the wood tier defense tiles
+
+9/29/2020 || pa_1.0.46 ||
+    - Fixed the top-of-ladder colliding into blocks issue
+    - Fixed the timeInAir on ladder issue
+    - Implemented a particle manager to give the game the power to render particles.
+
+10/2/2020 || pa_1.0.47 ||
+    - The inventory now is located at the top, the technology at the bottom
+        Same with crates, they now render on the bottom
+    - You can now use the scroll wheel to select an item from the inventory whether in or out.
+    - You can no longer break blocks when using a crate.
+
+10/5/2020 || pa_1.0.47 ||
+    - Added the BlasterBase item to the game.
+    - Move all Tile instances from the Tile class to the Assets class.

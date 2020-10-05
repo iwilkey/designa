@@ -32,10 +32,10 @@ public class Inventory {
 
     private Texture bg = new Texture("textures/game/invbackground.png");
 
-    int relY = 286;
-    private final int INV_SLOT_X = (Gdx.graphics.getWidth() / 2) - 200, INV_SLOT_Y = (Gdx.graphics.getHeight() / 2) - 100 - relY;
+    int relY = Game.h - 300;
+    private final int INV_SLOT_X = (Gdx.graphics.getWidth() / 2) - 200, INV_SLOT_Y = relY;
     public final static int CRATE_X = (Gdx.graphics.getWidth() / 2) - (400 / 2),
-            CRATE_Y = (Gdx.graphics.getHeight() / 2) - 90;
+            CRATE_Y = Game.h - 300 - 500;
 
     public Inventory(GameBuffer gb) {
         this.gb = gb;
@@ -48,7 +48,7 @@ public class Inventory {
         selector = new int[invWidth / InventorySlot.SLOT_WIDTH][invHeight / InventorySlot.SLOT_HEIGHT];
         selector[0][invHeight / InventorySlot.SLOT_HEIGHT - 1] = 1;
 
-        technologyRegion = new TechnologyRegion(Gdx.graphics.getWidth() / 2, (Gdx.graphics.getHeight() / 2) + 150, 800, 500);
+        technologyRegion = new TechnologyRegion(Gdx.graphics.getWidth() / 2, (Gdx.graphics.getHeight() / 2) - 150, 800, 500);
 
         int slot = 0;
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -66,6 +66,32 @@ public class Inventory {
     }
 
     public void tick() {
+
+        if(InputHandler.scrollRequestValue != 0.0f) {
+            for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
+                for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
+                    if(selector[x][y] == 1) {
+                        clearSelector();
+                        int nextSlotX, nextSlotY;
+                        if(InputHandler.scrollRequestValue < 0.0f) {
+                            nextSlotX = (x - 1 < 0) ? (invWidth / InventorySlot.SLOT_WIDTH) - 1 : x - 1;
+                            if(x - 1 < 0) nextSlotY = (y - 1 >= 0) ? y - 1 : (invHeight / InventorySlot.SLOT_HEIGHT) - 1;
+                            else nextSlotY = y;
+                        } else {
+                            nextSlotX = (x + 1 >= invWidth / InventorySlot.SLOT_WIDTH) ? 0 : x + 1;
+                            if(x + 1 >= invWidth / InventorySlot.SLOT_WIDTH)
+                                nextSlotY = (y + 1 < invHeight / InventorySlot.SLOT_HEIGHT) ? y + 1 : 0;
+                            else nextSlotY = y;
+                        }
+                        selector[nextSlotX][nextSlotY] = 1;
+                        slots[x][y].isSelected = false;
+                        slots[nextSlotX][nextSlotY].isSelected = selector[nextSlotX][nextSlotY] == 1;
+                        break;
+                    }
+                }
+            }
+            InputHandler.scrollRequestValue = 0.0f;
+        }
 
         if(InputHandler.inventoryRequest) {
 
@@ -85,7 +111,6 @@ public class Inventory {
             active = false;
             return;
         }
-
 
         // Check crate
         for(Crate crate : gb.getWorld().getEntityHandler().getPlayer().crates) {
@@ -124,7 +149,10 @@ public class Inventory {
     }
 
     private void input() {
+
+
         if(!itemUp) {
+
             mouseNotOver();
             Rectangle r = new Rectangle(InputHandler.cursorX, InputHandler.cursorY, 1, 1);
             for (int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
@@ -144,9 +172,7 @@ public class Inventory {
                     for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                         if (slots[x][y].getCollider().intersects(rect)) {
                             selector[x][y] = 1;
-
                             Assets.invClick.play(0.3f);
-
                             break;
                         }
                     }
@@ -440,8 +466,8 @@ public class Inventory {
     public void render(Batch b) {
         if(!active) return;
 
-        b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, ((Gdx.graphics.getHeight() / 2) - 112) - relY, 480, 275);
-        Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 326) - relY, 11);
+        b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, relY - 20, 480, 275);
+        Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, relY + 220, 11);
 
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
             for(int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {

@@ -112,7 +112,15 @@ public class Player extends Creature {
     }
 
     private void ladderMovement() {
-        if(Gdx.input.isKeyPressed(Input.Keys.W)) y += 0.75f;
+        timeInAir = 0;
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
+            int ty = (int) (y + 0.75f + collider.y + collider.height) / Tile.TILE_SIZE;
+            // If there is nothing to stop the Creature...
+            if(!collisionWithTile((int) (x + collider.x) / Tile.TILE_SIZE, ty) &&
+                    !collisionWithTile((int) (x + collider.x + collider.width) / Tile.TILE_SIZE, ty)) {
+                y += 0.75f;
+            }
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.S)) y -= 0.75f;
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += 0.50f;
@@ -165,9 +173,9 @@ public class Player extends Creature {
     }
 
     private void checkLadder() {
-        int x = (int) (this.x + 12) / Tile.TILE_SIZE; int y = (int) this.y / Tile.TILE_SIZE;
+        int x = (int) (this.x + 12) / Tile.TILE_SIZE; int y = (int) (this.y) / Tile.TILE_SIZE;
         Tile tile = World.getTile(x, y);
-        onLadder = (tile == Tile.ladderTile);
+        onLadder = (tile == Assets.ladderTile);
         ladderMode = onLadder;
     }
 

@@ -450,8 +450,8 @@ public class Crate {
                 }
             }
 
-            b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, ((Gdx.graphics.getHeight() / 2) - 112) - 286, 480, 275);
-            Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 326) - 286, 11);
+            b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, Game.h - 300 - 20, 480, 275);
+            Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 300) + 220, 11);
             playerInventory.renderPlayerInventory(b, 0);
         }
     }

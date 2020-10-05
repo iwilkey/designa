@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.creature.passive.Player;
-import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.input.InputHandler;
@@ -86,6 +85,11 @@ public class BuildingHandler {
 
         // The purpose of these nested conditions are to verify if the player can place a tile, and if so,
             // how to place it.
+
+        for(Crate crate : player.crates) {
+            if(crate.isActive) return;
+        }
+
         if (!Inventory.active) {
 
             // Handle a backBuilding toggle request. (Switch from front to back or back to front)
@@ -235,6 +239,7 @@ public class BuildingHandler {
                 World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
                 // Subtract from the item count in the inventory.
                 ToolSlot.currentItem.itemCount--;
+
             }
         } else { // But the player is back building...
 
@@ -278,16 +283,15 @@ public class BuildingHandler {
      * @return Did method take care of the tile or not?
      */
     private boolean specialTilesAdd(int id, int x, int y) {
-
         // Is the tile a torch?
-        if (id == Tile.torchTile.getID()) {
+        if (id == Assets.torchTile.getID()) {
             // If there is a back tile there to support the torch, then add it.
             if (World.backTiles[x][World.h - y - 1] != 0) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
                 gb.getWorld().getLightManager().bakeLighting();
                 return true;
                 // Otherwise check to see if there is a front tile below it to support it, then add it.
-            } else if (World.tiles[x][World.h - y] != 0 && World.tiles[x][World.h - y] != Tile.torchTile.getID()) {
+            } else if (World.tiles[x][World.h - y] != 0 && World.tiles[x][World.h - y] != Assets.torchTile.getID()) {
                 gb.getWorld().getLightManager().addLight(pointerOnTileX(), pointerOnTileY(), 8);
                 gb.getWorld().getLightManager().bakeLighting();
                 return true;
@@ -296,7 +300,7 @@ public class BuildingHandler {
         }
 
         // Is the tile a crate?
-        if(id == Tile.crateTile.getID()) {
+        if(id == Assets.crateTile.getID()) {
             player.addCrate(x, y); // Invoke the addCrate method on the player.
             return true;
         }
@@ -318,7 +322,7 @@ public class BuildingHandler {
         if(!(item.getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.MechanicalDrill)) return false;
 
             // If the tile currently selected is an ore, the player is allowed to place it.
-            if(World.getTile(x, y) != Tile.airTile) {
+            if(World.getTile(x, y) != Assets.airTile) {
                 ToolSlot.currentItem.itemCount--;
                 int resourceID = World.tiles[x][(World.h - y) - 1];
                 World.tiles[x][(World.h - y) - 1] = id;
@@ -336,7 +340,7 @@ public class BuildingHandler {
                     ToolSlot.currentItem.itemCount--;
                     World.tiles[x][(World.h - y) - 1] = id;
                     World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(id);
-                    MachineHandler.addMechanicalDrill(x, World.h - y - 1, Tile.treeTile,
+                    MachineHandler.addMechanicalDrill(x, World.h - y - 1, Assets.treeTile,
                             MachineType.MechanicalDrill.ResourceType.COPPER);
                     Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
                 }
@@ -502,11 +506,11 @@ public class BuildingHandler {
                 specialTilesRemove(tile, x, y);
 
                 // The following set of conditions pertain to if there is an instance of a torch one tile above the current tile.
-                if(World.tiles[x][World.h - y - 2] == Tile.torchTile.getID()) {
+                if(World.tiles[x][World.h - y - 2] == Assets.torchTile.getID()) {
                     // Invoke specialTilesRemove to get rid of the light at the specific y value passed in...
-                    specialTilesRemove(Tile.torchTile, x, y + 1);
+                    specialTilesRemove(Assets.torchTile, x, y + 1);
                     // Give the torch back to the player in item form...
-                    World.getItemHandler().addItem(Item.getItemByID(Tile.torchTile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
+                    World.getItemHandler().addItem(Item.getItemByID(Assets.torchTile.getItemID()).createNew(pointerOnTileX() * Tile.TILE_SIZE + off,
                             pointerOnTileY() * Tile.TILE_SIZE + off));
                     // Place air where the torch was...
                     World.tiles[x][(World.h - y) - 2] = 0;
@@ -550,13 +554,13 @@ public class BuildingHandler {
         int off = 4;
 
         // If the tile is a torch, remove the light there.
-        if (tile == Tile.torchTile) {
+        if (tile == Assets.torchTile) {
             gb.getWorld().getLightManager().removeLight(x, y);
             return;
         }
 
         // If the tile is a crate, destroy the crate and spawn into the game world all the items that were in the crate.
-        if(tile == Tile.crateTile) {
+        if(tile == Assets.crateTile) {
             HashMap<Item, Integer> items = new HashMap<>();
             for(Crate crate : World.getEntityHandler().getPlayer().crates)
                 if(crate.x == x && crate.y == y) items = crate.destroy();
@@ -575,10 +579,10 @@ public class BuildingHandler {
         }
 
         // Remove machines from MachineHandler record.
-        if(tile == Tile.stonePipeTile) MachineHandler.pipes.removeIf(pipe -> pipe.x == x && pipe.y == y);
-        if(tile == Tile.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
-        if(tile == Tile.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
-        if(tile == Tile.assemblerTile) MachineHandler.assemblers.removeIf(assembler -> assembler.x == x && assembler.y == World.h - y - 1);
+        if(tile == Assets.stonePipeTile) MachineHandler.pipes.removeIf(pipe -> pipe.x == x && pipe.y == y);
+        if(tile == Assets.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
+        if(tile == Assets.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
+        if(tile == Assets.assemblerTile) MachineHandler.assemblers.removeIf(assembler -> assembler.x == x && assembler.y == World.h - y - 1);
 
     }
 

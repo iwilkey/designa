@@ -65,6 +65,10 @@ public class ItemType {
                 public Assembler(int ID) { super(ID); }
             }
 
+            public static class BlasterBase extends CreatableTile {
+                public BlasterBase(int ID) { super(ID); }
+            }
+
         }
     }
 

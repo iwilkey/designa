@@ -33,6 +33,7 @@ public class InputHandler {
     public static boolean exitCrateRequest;
     public static boolean pipeRotateRequest;
     public static boolean gameMenuRequest;
+    public static float scrollRequestValue = 0.0f;
 
     public InputHandler() {
         keys = new boolean[256];
@@ -114,7 +115,7 @@ public class InputHandler {
 
                     @Override
                     public boolean scrolled(int amount) {
-                        invCursor = amount;
+                        scrollRequestValue = amount;
                         return true;
                     }
 

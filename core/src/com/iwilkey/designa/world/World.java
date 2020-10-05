@@ -11,6 +11,7 @@ import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
 import com.iwilkey.designa.inventory.crate.Crate;
@@ -18,6 +19,7 @@ import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.machines.MachineHandler;
 import com.iwilkey.designa.machines.MachineType;
+import com.iwilkey.designa.particle.ParticleHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
@@ -38,6 +40,7 @@ public class World {
             origLightMap;
     public static int[] origHighTiles, origHighBackTiles;
     public static ArrayList<Integer> trees, treesY;
+    public static ParticleHandler particleHandler;
 
     // Entities
     private static EntityHandler entityHandler = null;
@@ -62,6 +65,7 @@ public class World {
                 0));
         itemHandler = new ItemHandler(gb);
         machineHandler = new MachineHandler(gb);
+        particleHandler = new ParticleHandler();
 
         loadWorld(path);
 
@@ -76,22 +80,21 @@ public class World {
         giveItem(Assets.ladderItem, 32);
         giveItem(Assets.assemblerItem, 12);
         giveItem(Assets.stickResource, 12);
+        giveItem(Assets.blasterBaseItem, 4);
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
     }
 
     public void tick() {
-        ambientCycle.tick();
-        itemHandler.tick();
-        entityHandler.tick();
-        machineHandler.tick();
-        for(WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.tick();
-    }
-
-    private void giveItem(Item item) {
-        Inventory inv = entityHandler.getPlayer().getInventory();
-        inv.addItem(item);
+        if(!Hud.gameMenu) {
+            ambientCycle.tick();
+            itemHandler.tick();
+            entityHandler.tick();
+            machineHandler.tick();
+            particleHandler.tick();
+            for (WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.tick();
+        }
     }
 
     private void giveItem(Item item, int amount) {
@@ -152,19 +155,21 @@ public class World {
 
         entityHandler.getPlayer().getBuildingHandler().render(b);
 
+        particleHandler.render(b);
+
     }
 
     public static Tile getTile(int x, int y) {
-        if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
+        if(x < 0 || y < 0 || x >= w || y >= h) return Assets.airTile;
         Tile t = Tile.tiles[tiles[x][Math.abs(h - y) - 1]];
-        if(t == null) return Tile.airTile;
+        if(t == null) return Assets.airTile;
         return t;
     }
 
     public Tile getBackTile(int x, int y) {
-        if(x < 0 || y < 0 || x >= w || y >= h) return Tile.airTile;
+        if(x < 0 || y < 0 || x >= w || y >= h) return Assets.airTile;
         Tile t = Tile.tiles[backTiles[x][Math.abs(h - y) - 1]];
-        if(t == null) return Tile.airTile;
+        if(t == null) return Assets.airTile;
         return t;
     }
 
@@ -181,7 +186,7 @@ public class World {
             for (int x = 0; x < w; x++) {
                 int id = Utils.parseInt(ftTokens[x + y * w + 2]);
                 tiles[x][y] = id;
-                if(id == Tile.torchTile.getID()) lightManager.addLight(x, h - y - 1, 8);
+                if(id == Assets.torchTile.getID()) lightManager.addLight(x, h - y - 1, 8);
             }
         }
 

@@ -371,6 +371,15 @@ public abstract class ItemRecipe {
                 }
             }
 
+    // Weapons
+    public static class BlasterBaseRecipe extends ItemRecipe {
+        public BlasterBaseRecipe(Item item) { super(item); }
+        @Override
+        public void create() {
+            add(Assets.steelResource, 8);
+        }
+    }
+
 
     // Class
     public Item item;

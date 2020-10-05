@@ -14,7 +14,7 @@ public class TechTypeSelector extends SubRegion {
     public TechTypeSelector(int x, int y, int w, int h) {
         super("tech-type-selector", x, y, w, h);
         int space = 55;
-        int startingY = h + 300;
+        int startingY = h;
         buttons.add(new SelectableTextButton("Resources", x - 114,  startingY, "Resources".length() * 14, 14));
         buttons.add(new SelectableTextButton("Tools", x - 114,  startingY - (space), "Tools".length() * 14, 14));
         buttons.add(new SelectableTextButton("Utilities", x - 114,  startingY - (space * 2), "Utilities".length() * 14, 14));

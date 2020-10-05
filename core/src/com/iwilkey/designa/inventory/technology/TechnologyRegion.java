@@ -18,22 +18,22 @@ public class TechnologyRegion {
 
     public TechnologyRegion(int x, int y, int w, int h) {
         this.x = x; this.y = y; this.w = w; this.h = h;
-        subregions.add(new TechTypeSelector(x - (w/2) + 170, h - (h / 2) + 122, 30, h - 40));
+        subregions.add(new TechTypeSelector(x - (w/2) + 170, y - 232, 30, h - 40));
 
         subregions.add(new ItemRepresentationGrid("Resources", Assets.resourceRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Tools", Assets.toolRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Utilities", Assets.utilitiesRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Tiles", Assets.tilesRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Defense", Assets.defenseRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Machines", Assets.machinesRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
         subregions.add(new ItemRepresentationGrid("Misc.", Assets.miscRepList,
-                x - (w/2) + 170 + 30, h - (h / 2) + 122 + 160, 560, 300));
+                x - (w/2) + 170 + 30, y - 76, 560, 300));
     }
 
     public static void setItemTypeLookat(String itemTypeLookat) {

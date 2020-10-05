@@ -70,7 +70,7 @@ public class MachineType {
             timer++;
             if(timer > newItem) {
                 // If the source is a drill...
-                if (source == Tile.copperMechanicalDrillTile) {
+                if (source == Assets.copperMechanicalDrillTile) {
                     if (currentItems.size() + 1 < ITEM_CAP) {
                         // TODO: Make the item added the item the drill is drilling.
                         int xx = 0; int yy = 0;
@@ -92,14 +92,14 @@ public class MachineType {
                         addItemForTransport(drilledItem);
                     }
                 }
-                if(source == Tile.crateTile) unloadFromCrate();
+                if(source == Assets.crateTile) unloadFromCrate();
                 timer = 0;
             }
 
-            if(source == Tile.stonePipeTile) offloadToPipe();
-            if(destination == Tile.crateTile) offloadToCrate();
-            if(destination == Tile.nodeTile) offloadToNode();
-            if(destination == Tile.assemblerTile) offloadToAssembler();
+            if(source == Assets.stonePipeTile) offloadToPipe();
+            if(destination == Assets.crateTile) offloadToCrate();
+            if(destination == Assets.nodeTile) offloadToNode();
+            if(destination == Assets.assemblerTile) offloadToAssembler();
 
         }
 
@@ -229,20 +229,20 @@ public class MachineType {
         }
 
         private Tile checkUp() {
-            if(World.getTile(x, y + 1) != Tile.airTile) return World.getTile(x, y + 1);
-            return Tile.airTile;
+            if(World.getTile(x, y + 1) != Assets.airTile) return World.getTile(x, y + 1);
+            return Assets.airTile;
         }
         private Tile checkDown() {
-            if(World.getTile(x, y - 1) != Tile.airTile) return World.getTile(x, y - 1);
-            return Tile.airTile;
+            if(World.getTile(x, y - 1) != Assets.airTile) return World.getTile(x, y - 1);
+            return Assets.airTile;
         }
         private Tile checkRight() {
-            if(World.getTile(x + 1, y) != Tile.airTile) return World.getTile(x + 1, y);
-            return Tile.airTile;
+            if(World.getTile(x + 1, y) != Assets.airTile) return World.getTile(x + 1, y);
+            return Assets.airTile;
         }
         private Tile checkLeft() {
-            if(World.getTile(x - 1, y) != Tile.airTile) return World.getTile(x - 1, y);
-            return Tile.airTile;
+            if(World.getTile(x - 1, y) != Assets.airTile) return World.getTile(x - 1, y);
+            return Assets.airTile;
         }
 
         private Item returnCompletedItem(int x, int y) {
@@ -378,7 +378,7 @@ public class MachineType {
 
         private void deferIO() {
             // Up
-            if(checkUp() == Tile.stonePipeTile) {
+            if(checkUp() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x && pipe.y == World.h - (y - 1) - 1) {
                         if(pipe.direction == Direction.UP) io.put(Direction.UP, 1);
@@ -387,14 +387,14 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkUp() == Tile.crateTile) {
+            } else if (checkUp() == Assets.crateTile) {
                 io.put(Direction.UP, 2);
-            } else if (checkUp() == Tile.nodeTile) {
+            } else if (checkUp() == Assets.nodeTile) {
                 io.put(Direction.UP, 3);
             }
 
             // Down
-            if(checkDown() == Tile.stonePipeTile) {
+            if(checkDown() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x && pipe.y == World.h - (y + 1) - 1) {
                         if(pipe.direction == Direction.DOWN) io.put(Direction.DOWN, 1);
@@ -403,14 +403,14 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkDown() == Tile.crateTile) {
+            } else if (checkDown() == Assets.crateTile) {
                 io.put(Direction.DOWN, 2);
-            } else if (checkDown() == Tile.nodeTile) {
+            } else if (checkDown() == Assets.nodeTile) {
                 io.put(Direction.DOWN, 3);
             }
 
             // Right
-            if(checkRight() == Tile.stonePipeTile) {
+            if(checkRight() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x + 1 && pipe.y == World.h - y - 1) {
                         if(pipe.direction == Direction.RIGHT) io.put(Direction.RIGHT, 1);
@@ -419,15 +419,15 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkRight() == Tile.crateTile) {
+            } else if (checkRight() == Assets.crateTile) {
                 io.put(Direction.RIGHT, 2);
-            } else if (checkRight() == Tile.nodeTile) {
+            } else if (checkRight() == Assets.nodeTile) {
                 io.put(Direction.RIGHT, 3);
             }
 
 
             // Left
-            if(checkLeft() == Tile.stonePipeTile) {
+            if(checkLeft() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x - 1 && pipe.y == World.h - y - 1) {
                         if(pipe.direction == Direction.LEFT) io.put(Direction.LEFT, 1);
@@ -436,9 +436,9 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkLeft() == Tile.crateTile) {
+            } else if (checkLeft() == Assets.crateTile) {
                 io.put(Direction.LEFT, 2);
-            } else if (checkLeft() == Tile.nodeTile) {
+            } else if (checkLeft() == Assets.nodeTile) {
                 io.put(Direction.LEFT, 3);
             }
 
@@ -578,29 +578,29 @@ public class MachineType {
 
 
         private Tile checkUp() {
-            if(World.getTile(x, World.h - (y - 1) - 1) != Tile.airTile) {
+            if(World.getTile(x, World.h - (y - 1) - 1) != Assets.airTile) {
                 return World.getTile(x, World.h - (y - 1) - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkDown() {
-            if(World.getTile(x, World.h - (y + 1) - 1) != Tile.airTile) {
+            if(World.getTile(x, World.h - (y + 1) - 1) != Assets.airTile) {
                 return World.getTile(x, World.h - (y + 1) - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkRight() {
-            if(World.getTile(x + 1, World.h - y - 1) != Tile.airTile) {
+            if(World.getTile(x + 1, World.h - y - 1) != Assets.airTile) {
                 // System.out.println("Returning: " + Item.getItemByID(World.getTile(x + 1, World.h - y - 1).getItemID()).getName());
                 return World.getTile(x + 1, World.h - y - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkLeft() {
-            if(World.getTile(x - 1, World.h - y - 1) != Tile.airTile) {
+            if(World.getTile(x - 1, World.h - y - 1) != Assets.airTile) {
                 return World.getTile(x - 1, World.h - y - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
 
         public void render(Batch b, int x, int y) {
@@ -698,8 +698,10 @@ public class MachineType {
         }
 
         private boolean checkInRecipe(Item item) {
-            for(Map.Entry<Item, String> recipe : targetRecipe.getRecipe().entrySet())
-                if(recipe.getKey() == item) return true;
+            try {
+                for (Map.Entry<Item, String> recipe : targetRecipe.getRecipe().entrySet())
+                    if (recipe.getKey() == item) return true;
+            } catch (NullPointerException ignored) {}
             return false;
         }
 
@@ -758,29 +760,29 @@ public class MachineType {
 
         // Helper methods
         private Tile checkUp() {
-            if(World.getTile(x, World.h - (y - 1) - 1) != Tile.airTile) {
+            if(World.getTile(x, World.h - (y - 1) - 1) != Assets.airTile) {
                 return World.getTile(x, World.h - (y - 1) - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkDown() {
-            if(World.getTile(x, World.h - (y + 1) - 1) != Tile.airTile) {
+            if(World.getTile(x, World.h - (y + 1) - 1) != Assets.airTile) {
                 return World.getTile(x, World.h - (y + 1) - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkRight() {
-            if(World.getTile(x + 1, World.h - y - 1) != Tile.airTile) {
+            if(World.getTile(x + 1, World.h - y - 1) != Assets.airTile) {
                 // System.out.println("Returning: " + Item.getItemByID(World.getTile(x + 1, World.h - y - 1).getItemID()).getName());
                 return World.getTile(x + 1, World.h - y - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private Tile checkLeft() {
-            if(World.getTile(x - 1, World.h - y - 1) != Tile.airTile) {
+            if(World.getTile(x - 1, World.h - y - 1) != Assets.airTile) {
                 return World.getTile(x - 1, World.h - y - 1);
             }
-            return Tile.airTile;
+            return Assets.airTile;
         }
         private int pointerOnTileX() {
             return (int) ((((InputHandler.cursorX) - Camera.position.x) /
@@ -804,7 +806,7 @@ public class MachineType {
         }
         private void deferIO() {
             // Up
-            if(checkUp() == Tile.stonePipeTile) {
+            if(checkUp() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x && pipe.y == World.h - (y - 1) - 1) {
                         if(pipe.direction == Direction.UP) io.put(Direction.UP, 1);
@@ -813,14 +815,14 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkUp() == Tile.crateTile) {
+            } else if (checkUp() == Assets.crateTile) {
                 io.put(Direction.UP, 2);
-            } else if (checkUp() == Tile.nodeTile) {
+            } else if (checkUp() == Assets.nodeTile) {
                 io.put(Direction.UP, 3);
             }
 
             // Down
-            if(checkDown() == Tile.stonePipeTile) {
+            if(checkDown() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x && pipe.y == World.h - (y + 1) - 1) {
                         if(pipe.direction == Direction.DOWN) io.put(Direction.DOWN, 1);
@@ -829,14 +831,14 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkDown() == Tile.crateTile) {
+            } else if (checkDown() == Assets.crateTile) {
                 io.put(Direction.DOWN, 2);
-            } else if (checkDown() == Tile.nodeTile) {
+            } else if (checkDown() == Assets.nodeTile) {
                 io.put(Direction.DOWN, 3);
             }
 
             // Right
-            if(checkRight() == Tile.stonePipeTile) {
+            if(checkRight() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x + 1 && pipe.y == World.h - y - 1) {
                         if(pipe.direction == Direction.RIGHT) io.put(Direction.RIGHT, 1);
@@ -845,15 +847,15 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkRight() == Tile.crateTile) {
+            } else if (checkRight() == Assets.crateTile) {
                 io.put(Direction.RIGHT, 2);
-            } else if (checkRight() == Tile.nodeTile) {
+            } else if (checkRight() == Assets.nodeTile) {
                 io.put(Direction.RIGHT, 3);
             }
 
 
             // Left
-            if(checkLeft() == Tile.stonePipeTile) {
+            if(checkLeft() == Assets.stonePipeTile) {
                 for(MachineType.Pipe pipe : MachineHandler.pipes) {
                     if(pipe.x == x - 1 && pipe.y == World.h - y - 1) {
                         if(pipe.direction == Direction.LEFT) io.put(Direction.LEFT, 1);
@@ -862,9 +864,9 @@ public class MachineType {
                         break;
                     }
                 }
-            } else if (checkLeft() == Tile.crateTile) {
+            } else if (checkLeft() == Assets.crateTile) {
                 io.put(Direction.LEFT, 2);
-            } else if (checkLeft() == Tile.nodeTile) {
+            } else if (checkLeft() == Assets.nodeTile) {
                 io.put(Direction.LEFT, 3);
             }
 

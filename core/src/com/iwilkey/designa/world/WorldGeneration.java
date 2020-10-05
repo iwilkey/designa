@@ -173,20 +173,20 @@ public class WorldGeneration {
             int columnHeight = perlinNoise.getNoise(x, height, sampleDistance);
             for (int y = 0; y < columnHeight; y++) {
                 int id;
-                if (y == columnHeight - 1) id = Tile.grassTile.getID();
+                if (y == columnHeight - 1) id = Assets.grassTile.getID();
                 else if (y < columnHeight - 1 && y
-                        >= columnHeight - MathUtils.random(4, 10)) id = Tile.dirtTile.getID();
-                else id = Tile.stoneTile.getID();
+                        >= columnHeight - MathUtils.random(4, 10)) id = Assets.dirtTile.getID();
+                else id = Assets.stoneTile.getID();
                 tiles[x][y] = id;
             }
 
             int backTileColumnHeight = backTilePerlin.getNoise(x, height, sampleDistance);
             for (int yy = 0; yy < backTileColumnHeight; yy++) {
                 int id;
-                if (yy == backTileColumnHeight - 1) id = Tile.grassTile.getID();
+                if (yy == backTileColumnHeight - 1) id = Assets.grassTile.getID();
                 else if (yy < backTileColumnHeight - 1 && yy
-                        >= backTileColumnHeight - MathUtils.random(4, 10)) id = Tile.dirtTile.getID();
-                else id = Tile.stoneTile.getID();
+                        >= backTileColumnHeight - MathUtils.random(4, 10)) id = Assets.dirtTile.getID();
+                else id = Assets.stoneTile.getID();
                 backTiles[x][yy] = id;
             }
         }
@@ -259,13 +259,13 @@ public class WorldGeneration {
         for(int x = 0; x < World.w; x++) {
             for(int yy = 0; yy < World.h; yy++) {
                 if(yy > World.h - LightManager.highestTile[x] - 1) {
-                    if(World.tiles[x][yy] == Tile.stoneTile.getID()) {
-                        int id = Tile.stoneTile.getID();
-                        if(percentChance(10)) id = Tile.copperOreTile.getID();
+                    if(World.tiles[x][yy] == Assets.stoneTile.getID()) {
+                        int id = Assets.stoneTile.getID();
+                        if(percentChance(10)) id = Assets.copperOreTile.getID();
                         if(yy > World.h - LightManager.highestTile[x] + 10) {
-                            if (percentChance(5)) id = Tile.silverOreTile.getID();
+                            if (percentChance(5)) id = Assets.silverOreTile.getID();
                             if(yy > World.h - LightManager.highestTile[x] + 16) {
-                                if (percentChance(2)) id = Tile.ironOreTile.getID();
+                                if (percentChance(2)) id = Assets.ironOreTile.getID();
                             }
                         }
                         World.tiles[x][yy] = id;

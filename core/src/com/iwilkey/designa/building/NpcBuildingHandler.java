@@ -60,7 +60,7 @@ public class NpcBuildingHandler {
         // If the location isn't an air tile...
         if (!(World.getTile(x, y) instanceof Tile.AirTile)) {
             // If it's a torch, remove the light.
-            if(World.getTile(x, y).getID() == Tile.torchTile.getID()) gb.getWorld().getLightManager().removeLight(x, y);
+            if(World.getTile(x, y).getID() == Assets.torchTile.getID()) gb.getWorld().getLightManager().removeLight(x, y);
             // Alter the tile break level by one.
             World.tileBreakLevel[x][(World.h - y) - 1] -= 1;
         // If it was an air tile, return -1 (false).

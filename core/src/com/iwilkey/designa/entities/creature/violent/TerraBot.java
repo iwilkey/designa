@@ -157,7 +157,7 @@ public class TerraBot extends Enemy {
                 // Jump.
                 if(!isJumping && isGrounded) jump();
                 // Place a block underneath to build up to the player.
-                buildingHandler.placeBlock(Tile.dirtTile.getID(), (int) ((x + 16) / Tile.TILE_SIZE), (int) y / Tile.TILE_SIZE);
+                buildingHandler.placeBlock(Assets.dirtTile.getID(), (int) ((x + 16) / Tile.TILE_SIZE), (int) y / Tile.TILE_SIZE);
             }
         // Otherwise, the player is under the bot.
         } else if ((y - e.getY()) > 0) {
