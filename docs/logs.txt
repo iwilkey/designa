@@ -459,3 +459,14 @@ Date || Build ||
 10/5/2020 || pa_1.0.47 ||
     - Added the BlasterBase item to the game.
     - Move all Tile instances from the Tile class to the Assets class.
+    - The Simple Blaster has been added to the game.
+
+10/6/2020 || pa_1.0.48 ||
+    - Blasters now emit a sights laser at muzzle to show their trajectory.
+    - Blasters can now be moved to be at angle angle and flipped
+        to the left or right when it has the mouse over it.
+    - Copper pellets have been added to the game
+    - Blasters can now be clicked on with ammo to be loaded with the ammo.
+    - Blasters now show their ammo amount
+    - Geometry now isn't draw when the pause menu or inventory is active.
+    - Any class can now make a geometry render request in the tick or render methods to be drawn on screen.

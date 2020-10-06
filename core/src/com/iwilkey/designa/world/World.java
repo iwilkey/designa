@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.defense.WeaponHandler;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
@@ -57,6 +58,9 @@ public class World {
     // Machines
     private final MachineHandler machineHandler;
 
+    // Weapons
+    private final WeaponHandler weaponHandler;
+
     public World(GameBuffer gb, String path) {
         this.gb = gb;
         lightManager = new LightManager(gb, this);
@@ -65,22 +69,16 @@ public class World {
                 0));
         itemHandler = new ItemHandler(gb);
         machineHandler = new MachineHandler(gb);
+        weaponHandler = new WeaponHandler();
         particleHandler = new ParticleHandler();
 
         loadWorld(path);
 
-        giveItem(Assets.crateItem, 4);
-        giveItem(Assets.torchItem, 3);
-        giveItem(Assets.copperMechanicalDrillItem, 2);
-        giveItem(Assets.stonePipeItem, 12);
-        giveItem(Assets.simpleDrillItem, 1);
-        giveItem(Assets.nodeItem, 12);
-        giveItem(Assets.dirtItem, 99 * 2);
-        giveItem(Assets.hardwoodTileItem, 99 * 4);
-        giveItem(Assets.ladderItem, 32);
-        giveItem(Assets.assemblerItem, 12);
-        giveItem(Assets.stickResource, 12);
-        giveItem(Assets.blasterBaseItem, 4);
+        giveItem(Assets.blasterBaseItem, 12);
+        giveItem(Assets.simpleBlasterItem, 12);
+        giveItem(Assets.copperPelletItem, 64);
+        giveItem(Assets.copperPelletItem, 64);
+
         // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
         // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
@@ -92,6 +90,7 @@ public class World {
             itemHandler.tick();
             entityHandler.tick();
             machineHandler.tick();
+            weaponHandler.tick();
             particleHandler.tick();
             for (WorldGeneration.Cloud cloud : WorldGeneration.clouds) cloud.tick();
         }
@@ -146,6 +145,7 @@ public class World {
 
         entityHandler.npcRender(b);
         entityHandler.playerRender(b);
+        weaponHandler.render(b);
 
         for(int y = yStart; y < yEnd; y++) {
             for (int x = xStart; x < xEnd; x++) {

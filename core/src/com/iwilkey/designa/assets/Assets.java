@@ -32,7 +32,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.47";
+    public static String VERSION = "pa1.0.48";
     // Cursor
     public static TextureRegion cursor;
     // Font
@@ -68,7 +68,9 @@ public class Assets {
         // Assembler
         public static TextureRegion assembler;
     // Weapons
-        public static TextureRegion blasterBase;
+        public static TextureRegion blasterBase, simpleBlasterBodyRight, simpleBlasterBodyLeft;
+        // Ammo
+        public static TextureRegion copperPellet;
     // Player
     public static TextureRegion[] player, player_jump, playerGun;
         // Animations
@@ -132,7 +134,9 @@ public class Assets {
             public static Item assemblerItem;
 
         // Weapons
-            public static Item blasterBaseItem;
+            public static Item blasterBaseItem, simpleBlasterItem;
+            // Ammo
+            public static Item copperPelletItem;
 
     // Item Recipe
         // Wood
@@ -183,7 +187,9 @@ public class Assets {
                 public static ItemRecipe ASSEMBLER_RECIPE;
 
             // Weapons
-                public static ItemRecipe BLASTER_BASE_RECIPE;
+                public static ItemRecipe BLASTER_BASE_RECIPE, SIMPLE_BLASTER_RECIPE;
+                // Ammo
+                public static ItemRecipe COPPER_PELLET_RECIPE;
 
         // Tiles
         public static Tile airTile, grassTile, dirtTile, stoneTile, treeTile;
@@ -441,7 +447,11 @@ public class Assets {
             assembler = ss.crop(108 / 8,144 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Weapons
-            blasterBase = ss.crop(32 / 8, 80 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            blasterBase = ss.crop((32 / 8), 80 / 8, ss.SLOT_SIZE - 1, ss.SLOT_SIZE);
+            simpleBlasterBodyRight = ss.crop((48 / 8), 72 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            simpleBlasterBodyLeft = ss.crop((64 / 8), 72 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE * 2);
+            // Ammo
+            copperPellet = ss.crop(64 / 8, 56 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Init player
         player = new TextureRegion[2];
@@ -727,6 +737,11 @@ public class Assets {
             // Weapons
                 blasterBaseItem = new Item(Assets.blasterBase, "Blaster Base", 28,
                     new ItemType.PlaceableBlock.CreatableTile.BlasterBase(blasterBaseTile.getID()));
+                simpleBlasterItem = new Item(Assets.simpleBlasterBodyRight, "Simple Blaster", 29,
+                    new ItemType.CreatableItem.Weapon.Blaster("simple-blaster", 1));
+                // Ammo
+                copperPelletItem = new Item(Assets.copperPellet, "Copper Pellet", 29,
+                    new ItemType.CreatableItem.Weapon.Pellet("copper-pellet"));
 
         // Item Recipes
 
@@ -810,6 +825,9 @@ public class Assets {
 
         // Weapons
             BLASTER_BASE_RECIPE = new ItemRecipe.BlasterBaseRecipe(Assets.blasterBaseItem);
+            SIMPLE_BLASTER_RECIPE = new ItemRecipe.SimpleBlasterRecipe(Assets.simpleBlasterItem);
+            // Ammo
+            COPPER_PELLET_RECIPE = new ItemRecipe.CopperPelletRecipe(Assets.copperPelletItem);
 
         // Item Representation Lists
         resourceRepList = new ArrayList<>();
@@ -865,6 +883,8 @@ public class Assets {
 
         defenseRepList = new ArrayList<>();
         defenseRepList.add(blasterBaseItem);
+        defenseRepList.add(simpleBlasterItem);
+        defenseRepList.add(copperPelletItem);
 
         machinesRepList = new ArrayList<>();
         machinesRepList.add(stonePipeItem);

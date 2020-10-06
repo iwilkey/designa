@@ -118,17 +118,16 @@ public class ItemType {
             }
             public String getName() { return name; }
 
+            // Pellet
+            public static class Pellet extends Weapon {
+                public Pellet(String name) { super(name); }
+            }
+
             // Gun
-            public static abstract class Gun extends Weapon {
-                protected int ammo;
-                protected int strength;
-                public Gun(String name, int strength) {
+            public static class Blaster extends Weapon {
+                public Blaster(String name, int strength) {
                     super(name);
-                    reload();
                 }
-                public abstract void fire();
-                public abstract void reload();
-                public int getAmmo() { return ammo; }
             }
         }
     }

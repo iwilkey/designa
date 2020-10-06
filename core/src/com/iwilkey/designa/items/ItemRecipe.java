@@ -380,6 +380,21 @@ public abstract class ItemRecipe {
         }
     }
 
+    public static class SimpleBlasterRecipe extends ItemRecipe {
+        public SimpleBlasterRecipe(Item item) { super(item); }
+        @Override
+        public void create() {
+            add(Assets.castIronResource, 8);
+        }
+    }
+
+        // Ammo
+        public static class CopperPelletRecipe extends ItemRecipe {
+            public CopperPelletRecipe(Item item) { super(item); }
+            @Override
+            public void create() { add(Assets.recycledCopperResource, 2); }
+        }
+
 
     // Class
     public Item item;

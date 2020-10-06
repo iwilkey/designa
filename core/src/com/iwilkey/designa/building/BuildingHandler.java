@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.defense.WeaponHandler;
+import com.iwilkey.designa.defense.WeaponType;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
@@ -111,6 +113,7 @@ public class BuildingHandler {
                             if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock)
                                 placeTile(((ItemType.PlaceableBlock) ToolSlot.currentItem.getItem().getItemType()).getTileID(),
                                         pointerOnTileX(), pointerOnTileY());
+                            else if(blasterHandler(pointerOnTileX(), pointerOnTileY())) return;
                         } catch (NullPointerException ignored) {}
                     // And the tile that is currently selected is a chest tile, then let the player see what's
                         // in the crate.
@@ -345,6 +348,21 @@ public class BuildingHandler {
                     Assets.stoneHit[MathUtils.random(0,2)].play(0.5f);
                 }
             }
+
+        return true;
+    }
+
+    private boolean blasterHandler(int x, int y) {
+        Item item = ToolSlot.currentItem.getItem();
+        if(!(item.getItemType() instanceof ItemType.CreatableItem.Weapon.Blaster)) return false;
+
+        if(World.getTile(x, y) == Assets.blasterBaseTile) {
+            if(WeaponHandler.checkLocationForBlaster(x, y) != null) return false;
+            ToolSlot.currentItem.itemCount--;
+            WeaponType.SimpleBlaster blaster = new WeaponType.SimpleBlaster((short) x, (short) y,
+                    (short) (20 * Tile.TILE_SIZE), (short) 100, (short) 1);
+            WeaponHandler.addBlaster(blaster);
+        }
 
         return true;
     }

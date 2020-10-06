@@ -34,6 +34,7 @@ public class InputHandler {
     public static boolean pipeRotateRequest;
     public static boolean gameMenuRequest;
     public static float scrollRequestValue = 0.0f;
+    public static boolean angleUp, angleDown, flipLeft, flipRight;
 
     public InputHandler() {
         keys = new boolean[256];
@@ -87,6 +88,11 @@ public class InputHandler {
 
                         if(Hud.gameMenu) if(uiManager != null) { uiManager.onKeyDown(key); }
 
+                        if(key == Input.Keys.UP) angleUp = true;
+                        if(key == Input.Keys.DOWN) angleDown = true;
+                        if(key == Input.Keys.LEFT) flipLeft = true;
+                        if(key == Input.Keys.RIGHT) flipRight = true;
+
 
 
                         return true;
@@ -109,6 +115,11 @@ public class InputHandler {
                         }
 
                         if(key == Input.Keys.R) pipeRotateRequest = false;
+
+                        if(key == Input.Keys.UP) angleUp = false;
+                        if(key == Input.Keys.DOWN) angleDown = false;
+                        if(key == Input.Keys.LEFT) flipLeft = false;
+                        if(key == Input.Keys.RIGHT) flipRight = false;
 
                         return true;
                     }
