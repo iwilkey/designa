@@ -2,6 +2,7 @@ package com.iwilkey.designa.defense;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.badlogic.gdx.math.Vector2;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Camera;
@@ -13,12 +14,54 @@ import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 public class WeaponType {
 
     public enum AmmoType {
         COPPER, SILVER, IRON, DIAMOND;
+    }
+
+    public static class Pellet {
+        AmmoType type;
+        short damagePotential;
+        Rectangle collider;
+
+        int x, y; // Need in pixels!
+        float velX, velY;
+        final float GRAVITY = -3.5f;
+        float timeInAir = 0;
+
+        boolean active;
+
+        public Pellet(AmmoType type, int x, int y, float impulseForceX, float impulseForceY) {
+            this.x = x; this.y = y;
+            velX = impulseForceX; velY = impulseForceY;
+            active = true;
+            collider = new Rectangle(x, y, 8, 8);
+            this.type = type;
+            switch(this.type) {
+                case COPPER: damagePotential = 2; break;
+                case SILVER: damagePotential = 4; break;
+                case IRON: damagePotential = 5; break;
+                case DIAMOND: damagePotential = 10; break;
+            }
+        }
+
+        public void tick() {
+            if(active) {
+                timeInAir += 0.5f;
+                int newX = x + Math.round(velX * 25);
+                velY -= 0.5f;
+                float newY = y + velY;
+                x = newX; y = Math.round(newY);
+            }
+        }
+
+        public void render(Batch b) {
+            b.draw(Assets.copperPellet, x, y - 4, 8, 8);
+        }
     }
 
     public static class SimpleBlaster {
@@ -28,12 +71,14 @@ public class WeaponType {
         public boolean isLoaded, facingRight;
         public final short AMMO_CAP = 99;
         public ArrayList<AmmoType> ammo;
+        public ArrayList<Pellet> shotPellets;
 
         public SimpleBlaster(short x, short y, short range, short rate, short aimSpeed) {
             this.x = x; this.y = y;
             bullet = null;
             angle = 0;
             ammo = new ArrayList<>();
+            shotPellets = new ArrayList<>();
             this.range = range;
             this.rate = rate;
             this.aimSpeed = aimSpeed;
@@ -47,12 +92,14 @@ public class WeaponType {
                 aim();
                 if(InputHandler.rightMouseButtonDown) loadFromPlayer();
             }
-            // Clock
-            timer++;
-            if(timer > rate) {
-                if (bullet != null)
+
+            for(Pellet p : shotPellets) p.tick();
+
+            if(InputHandler.fireRequest) {
+                if(ammo.size() > 0) {
                     fire();
-                timer = 0;
+                    InputHandler.fireRequest = false;
+                }
             }
         }
 
@@ -91,13 +138,23 @@ public class WeaponType {
             if(ammo.size() <= 0) return;
             AmmoType aT = ammo.get(ammo.size() - 1);
             ammo.remove(ammo.size() - 1);
+            Pellet pellet; int velX = 0, velY = 0;
+            if(facingRight) {
+                radius = (xx + Tile.TILE_SIZE + 4) - (xx + 10);
+                int xxx = (int)Math.round(((xx + 10) + (Math.cos(Math.toRadians(angle)) * radius)));
+                int yyy = (int)Math.round(((yy + 12) + (Math.sin(Math.toRadians(angle)) * radius)));
+                float imX = (float)Math.cos(Math.toRadians(angle));
+                float imY = (float)Math.sin(Math.toRadians(angle));
+                pellet = new Pellet(AmmoType.COPPER, xxx, yyy, imX, imY * 30);
+                shotPellets.add(pellet);
+            }
 
             // Create the proper projectile! (ALSO PARTICLE EFFECT AT MUZZLE)
             switch(aT) {
                 case COPPER:
                 case SILVER:
                 case IRON:
-                case DIAMOND: break;
+                case DIAMOND:  break;
             }
         }
 
@@ -133,6 +190,7 @@ public class WeaponType {
             renderSights();
             Text.draw(b, Utils.toString(ammo.size()), xx + 10 -
                     (Utils.toString(ammo.size()).length() * 6 / 2), yy + 18, 6);
+            for(Pellet p : shotPellets) p.render(b);
         }
 
         float radius; double xxx1, yyy1, xxx2, yyy2;

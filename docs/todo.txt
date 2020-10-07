@@ -8,9 +8,6 @@ Important now
 
 - Create a wave system (Brought on by nightfall)
 
-- Create simple Turrets and / or weapons
-	- Simple AI will need to be created for it
-
 - Release for alpha on Itch and Steam, and make the github repo public. Keep the game open source.
 
 For later on (after release)

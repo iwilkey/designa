@@ -470,3 +470,6 @@ Date || Build ||
     - Blasters now show their ammo amount
     - Geometry now isn't draw when the pause menu or inventory is active.
     - Any class can now make a geometry render request in the tick or render methods to be drawn on screen.
+    - Made the pellets spawn in the correct place and made their impluse velocities correct.
+    - pellets now render and tick
+    - You can now shoot blasters!!
