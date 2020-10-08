@@ -473,3 +473,11 @@ Date || Build ||
     - Made the pellets spawn in the correct place and made their impluse velocities correct.
     - pellets now render and tick
     - You can now shoot blasters!!
+
+10/7/2020 || pa_1.0.48 ||
+    - Blasters can now be shot while facing left
+    - Blasters now all have a shot speed clock
+    - Blasters now invoke a particle explosion effect when shot
+    - Pellets invoke an explosion effect when they land on the ground
+    - Blaster pellets are now bigger
+    - Blaster pellets can now damage and break tiles

@@ -21,6 +21,8 @@ public class Particle {
         particleEffect.getEmitters().first().setPosition(x, y);
     }
 
+    public boolean isDone() { return particleEffect.isComplete(); }
+
     public void setScale(float scaleFactor) {
         particleEffect.scaleEffect(scaleFactor);
     }

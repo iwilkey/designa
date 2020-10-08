@@ -919,6 +919,8 @@ public class Assets {
         particles = new ArrayList<>();
 
         particles.add(new Particle("fire.pcl", "fire"));
+        particles.add(new Particle("explosion.pcl", "explosion"));
+        particles.add(new Particle("smoke.pcl", "smoke"));
 
         return particles;
     }

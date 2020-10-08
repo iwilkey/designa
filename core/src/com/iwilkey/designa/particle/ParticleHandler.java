@@ -8,9 +8,11 @@ import java.util.ArrayList;
 public class ParticleHandler {
 
     public ArrayList<Particle> particles;
+    public ArrayList<Particle> runningParticles;
 
     public ParticleHandler(){
-        particles = Assets.initParticles();;
+        particles = Assets.initParticles();
+        runningParticles = new ArrayList<>();
     }
 
     public void startParticle(String name, int x, int y) {
@@ -18,26 +20,23 @@ public class ParticleHandler {
             if(part.name.equals(name)) {
                 part.setPosition(x, y);
                 part.start();
-                return;
-            }
-    }
-
-    public void startParticle(String name, int x, int y, float scale) {
-        for(Particle part : particles)
-            if(part.name.equals(name)) {
-                part.setPosition(x, y);
-                part.setScale(scale);
-                part.start();
+                runningParticles.add(part);
                 return;
             }
     }
 
     public void tick() {
-        for(Particle part : particles) part.update();
+        for(Particle part : runningParticles) {
+            part.update();
+            if(part.isDone()) {
+                runningParticles.remove(part);
+                break;
+            }
+        }
     }
 
     public void render(Batch b) {
-        for(Particle part : particles) part.render(b);
+        for(Particle part : runningParticles) part.render(b);
     }
 
 }

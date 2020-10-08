@@ -360,7 +360,7 @@ public class BuildingHandler {
             if(WeaponHandler.checkLocationForBlaster(x, y) != null) return false;
             ToolSlot.currentItem.itemCount--;
             WeaponType.SimpleBlaster blaster = new WeaponType.SimpleBlaster((short) x, (short) y,
-                    (short) (20 * Tile.TILE_SIZE), (short) 100, (short) 1);
+                    (short) (20 * Tile.TILE_SIZE), (short) 10, (short) 1);
             WeaponHandler.addBlaster(blaster);
         }
 
