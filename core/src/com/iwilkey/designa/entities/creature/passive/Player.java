@@ -10,7 +10,10 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.entities.creature.Creature;
+import com.iwilkey.designa.entities.creature.violent.TerraBot;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.gfx.Camera;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.Inventory;
@@ -150,6 +153,10 @@ public class Player extends Creature {
         if(!ladderMode || !onLadder) move();
         else ladderMovement();
 
+        if(InputHandler.backBuildingToggleRequest) {
+            addEnemy(pointerOnTileX(), pointerOnTileY());
+        }
+
         flashCheck();
 
         // Center the camera.
@@ -177,6 +184,31 @@ public class Player extends Creature {
         Tile tile = World.getTile(x, y);
         onLadder = (tile == Assets.ladderTile);
         ladderMode = onLadder;
+    }
+
+    private void addEnemy(int x, int y) {
+        World.getEntityHandler().addEntity(new TerraBot(gb, x * Tile.TILE_SIZE,
+                LightManager.highestTile[x] * Tile.TILE_SIZE));
+    }
+
+    /**
+     * This method will take into account where the cursor compared to the camera and evaluate
+     * the proper x coordinate for the tile selected.
+     * @return The proper x coordinate of the tile selected in the tile map.
+     */
+    private int pointerOnTileX() {
+        return (int) ((((InputHandler.cursorX) - Camera.position.x) /
+                Tile.TILE_SIZE) / Camera.scale.x);
+    }
+
+    /**
+     * This method will take into account where the cursor compared to the camera and evaluate
+     * the proper y coordinate for the tile selected.
+     * @return The proper y coordinate of the tile selected in the tile map.
+     */
+    private int pointerOnTileY() {
+        return (int) ((((InputHandler.cursorY) - Camera.position.y) /
+                Tile.TILE_SIZE) / Camera.scale.y);
     }
 
     /**

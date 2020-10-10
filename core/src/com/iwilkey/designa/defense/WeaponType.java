@@ -2,8 +2,12 @@ package com.iwilkey.designa.defense;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.entities.Entity;
+import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.Geometry;
 import com.iwilkey.designa.gfx.Text;
@@ -36,7 +40,7 @@ public class WeaponType {
             this.x = x; this.y = y;
             velX = impulseForceX; velY = impulseForceY;
             active = true;
-            collider = new Rectangle(x, y, 8, 8);
+            collider = new Rectangle(x, y, 16, 16);
             this.type = type;
             switch(this.type) {
                 case COPPER: damagePotential = 2; break;
@@ -49,6 +53,9 @@ public class WeaponType {
         public void tick() {
 
             if(active) {
+
+                checkCollision();
+
                 int newX = x + Math.round(velX * 25);
                 velY -= 0.5f;
                 float newY = y + velY;
@@ -65,10 +72,23 @@ public class WeaponType {
                             [World.h - ((int)Math.floor(newY) / Tile.TILE_SIZE) - 1]--;
 
                     World.particleHandler.startParticle("smoke", x, y);
+                    Assets.dirtHit[MathUtils.random(0,2)].play(0.05f);
                     return;
                 }
-
                 x = newX; y = Math.round(newY);
+                collider.x = x; collider.y = y;
+
+                checkCollision();
+
+            }
+        }
+
+        private void checkCollision() {
+            for(Entity e : World.getEntityHandler().getEntities()) {
+                if(e instanceof Enemy) if (collider.intersects(((Enemy)e).hitBox)) {
+                    e.hurt(2);
+                    active = false;
+                }
             }
         }
 
@@ -97,9 +117,20 @@ public class WeaponType {
             facingRight = true;
         }
 
+        public SimpleBlaster(short x, short y, ArrayList<AmmoType> ammo, int angle, int face, short range, short rate, short aimSpeed) {
+            this.x = x; this.y = y;
+            bullet = null;
+            this.angle = (short)angle;
+            this.ammo = ammo;
+            shotPellets = new ArrayList<>();
+            this.range = range; this.rate = rate; this.aimSpeed = aimSpeed;
+            isLoaded = false;
+            facingRight = face == 0;
+        }
+
         float timer = 0.0f;
         public void tick() {
-            if(pointerOnTileX() == x && pointerOnTileY() == y) {
+            if(playerNear()) {
                 aim();
                 if(InputHandler.rightMouseButtonDown) loadFromPlayer();
             }
@@ -115,7 +146,15 @@ public class WeaponType {
                         timer = 0;
                     }
                 }
-            }
+            } else timer = rate;
+        }
+
+        private boolean playerNear() {
+            boolean near = false;
+            int playerTileX = (int)World.getEntityHandler().getPlayer().getX() / Tile.TILE_SIZE;
+            int playerTileY = (int)World.getEntityHandler().getPlayer().getY() / Tile.TILE_SIZE;
+            if(Math.abs((float)playerTileX - x) <= 1 && Math.abs(playerTileY - (int)y) <= 1) near = true;
+            return near;
         }
 
         public void aim() {
@@ -137,7 +176,7 @@ public class WeaponType {
                 if (ToolSlot.currentItem.getItem() == Assets.copperPelletItem) {
                     ToolSlot.currentItem.itemCount--;
                     ammo.add(AmmoType.COPPER);
-                    // TODO: Loading sound.
+                    Assets.invClick.play(0.35f);
                 }
             } catch (NullPointerException ignored) {}
         }
@@ -164,6 +203,7 @@ public class WeaponType {
             pellet = new Pellet(AmmoType.COPPER, xxx, yyy, imX, imY * 30);
             shotPellets.add(pellet);
             World.particleHandler.startParticle("explosion", xxx, yyy);
+            Assets.blasterFire[MathUtils.random(0,2)].play(0.20f);
 
             switch(aT) {
                 case COPPER:

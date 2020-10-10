@@ -19,12 +19,12 @@ import java.awt.Rectangle;
 
 public class Inventory {
 
-    public final int MAX_STACK = 99;
+    public static final int MAX_STACK = 99;
 
     private GameBuffer gb;
     public static boolean active = false;
     public static InventorySlot[][] slots;
-    public final int invX, invY, invWidth, invHeight;
+    public static int invX, invY, invWidth, invHeight;
     public int[][] selector;
     public boolean itemUp = false;
 
@@ -498,7 +498,7 @@ public class Inventory {
         }
     }
 
-    public int addItem(Item i) {
+    public static int addItem(Item i) {
         for(int y = 0; y < invHeight / InventorySlot.SLOT_HEIGHT; y++) {
             for (int x = 0; x < invWidth / InventorySlot.SLOT_WIDTH; x++) {
                 if (slots[x][y].getItem() == i) {

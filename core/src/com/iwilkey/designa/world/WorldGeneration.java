@@ -61,22 +61,22 @@ public class WorldGeneration {
         GenerateTerrain(name, width, height);
 
             // Init ft.dsw
-            String ftPath = dirpath + "ft.dsw";
+            String ftPath = dirpath + "metadata/ft.dsw";
             FileHandle ftf = Gdx.files.local(ftPath);
             if(!writeFT(ftf, width, height)) System.exit(-1);
 
             // Init ftbl.dsw
-            String ftblPath = dirpath + "ftbl.dsw";
+            String ftblPath = dirpath + "metadata/ftbl.dsw";
             FileHandle ftblf = Gdx.files.local(ftblPath);
             if(!writeFTBL(ftblf, width, height)) System.exit(-1);
 
             // Init bt.dsw
-            String btPath = dirpath + "bt.dsw";
+            String btPath = dirpath + "metadata/bt.dsw";
             FileHandle btf = Gdx.files.local(btPath);
             if(!writeBT(btf, width, height)) System.exit(-1);
 
             // Init btbl.dsw
-            String btblPath = dirpath + "btbl.dsw";
+            String btblPath = dirpath + "metadata/btbl.dsw";
             FileHandle btblf = Gdx.files.local(btblPath);
             if(!writeBTBL(btblf, width, height)) System.exit(-1);
 

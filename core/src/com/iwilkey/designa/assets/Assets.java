@@ -32,7 +32,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.48";
+    public static String VERSION = "pa1.0.49";
     // Cursor
     public static TextureRegion cursor;
     // Font
@@ -81,7 +81,7 @@ public class Assets {
     public static TextureRegion[] groundBotRight, groundBotLeft;
     // Sounds
     public static Sound[] itemPickup, treeHit, treeFall, jumpLand, zoom, dirtHit, stoneHit,
-        closeInv, openInv, createItem;
+        closeInv, openInv, createItem, blasterFire;
     public static Sound invClick;
     // Names
     public static String[] maleNames;
@@ -548,6 +548,10 @@ public class Assets {
         createItem[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item.ogg"));
         createItem[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item-2.ogg"));
         createItem[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/create-item-3.ogg"));
+        blasterFire = new Sound[3];
+        blasterFire[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-1.ogg"));
+        blasterFire[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-2.ogg"));
+        blasterFire[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-3.ogg"));
     }
 
     /**

@@ -4,8 +4,13 @@ import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.inventory.crate.Crate;
+import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 
@@ -98,6 +103,43 @@ public class NpcBuildingHandler {
             World.tiles[x][(World.h - y) - 1] = 0;
             World.tileBreakLevel[x][(World.h - y) - 1] = Tile.getStrength(0);
             gb.getWorld().getLightManager().bakeLighting();
+            specialTilesRemove(World.getTile(x, y), x, y);
+        }
+    }
+
+    /**
+     * This method will deal with removing special tiles that have extraneous processes attached to their existence.
+     * @param tile The tile in question.
+     * @param x The x location of the tile.
+     * @param y The y location of the tile.
+     */
+    private void specialTilesRemove(Tile tile, int x, int y) {
+        // Define an offset for debugging purposes.
+        int off = 4;
+
+        // If the tile is a torch, remove the light there.
+        if (tile == Assets.torchTile) {
+            gb.getWorld().getLightManager().removeLight(x, y);
+            return;
+        }
+
+        // If the tile is a crate, destroy the crate and spawn into the game world all the items that were in the crate.
+        if (tile == Assets.crateTile) {
+            HashMap<Item, Integer> items = new HashMap<>();
+            for (Crate crate : World.getEntityHandler().getPlayer().crates)
+                if (crate.x == x && crate.y == y) items = crate.destroy();
+
+            for (Map.Entry<Item, Integer> item : items.entrySet()) {
+                try {
+                    for (int i = 0; i < item.getValue(); i++)
+                        World.getItemHandler().addItem(Item.getItemByID(item.getKey().getItemID())
+                                .createNew(x * Tile.TILE_SIZE + off,
+                                        y * Tile.TILE_SIZE + off));
+                } catch (NullPointerException ignored) {
+                }
+            }
+
+            World.getEntityHandler().getPlayer().removeCrate(x, y);
         }
     }
 }

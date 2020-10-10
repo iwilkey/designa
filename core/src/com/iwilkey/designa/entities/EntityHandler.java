@@ -9,6 +9,7 @@ import com.iwilkey.designa.entities.statics.StaticEntity;
 import com.iwilkey.designa.entities.statics.Tree;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 /**
@@ -71,12 +72,14 @@ public class EntityHandler {
         // Init the iterator and assign it to the now iterative entity array.
         Iterator<Entity> it = entities.iterator();
         // Loop through it...
-        while(it.hasNext()) {
-            Entity e = it.next(); // Capture an Entity object
-            e.tick(); // Tick it...
-            if(!(e instanceof Tree)) if(!e.isActive()) it.remove(); // Unless it's a tree, remove it.
-            else if (e.y < 0) it.remove(); // But, once the tree is under y = 0, remove it too.
-        }
+        try {
+            while (it.hasNext()) {
+                Entity e = it.next(); // Capture an Entity object
+                e.tick(); // Tick it...
+                if (!(e instanceof Tree)) if (!e.isActive()) it.remove(); // Unless it's a tree, remove it.
+                else if (e.y < 0) it.remove(); // But, once the tree is under y = 0, remove it too.
+            }
+        } catch (ConcurrentModificationException ignored) {}
     }
 
     /**

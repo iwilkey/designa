@@ -481,3 +481,18 @@ Date || Build ||
     - Pellets invoke an explosion effect when they land on the ground
     - Blaster pellets are now bigger
     - Blaster pellets can now damage and break tiles
+
+10/8/2020 || pa_1.0.48 ||
+    - Explosion particle effect happens faster
+    - Blasters now sound when they shoot
+    - Pellets now sound when they hit the ground
+    - When selected in the item representation grid,
+        it's recipe now shows in the item inspector.
+    - Item cells can now check if they can be created and show the user the result
+    - You can now create items with a selected cell.
+
+10/10/2020 || pa)1.0.49 ||
+    - Blasters can now be saved and loaded with correct position, ammo, and angle.
+    - Enemies can now be killed by blasters
+        TODO: Terrabots can remove things like machines and guns and they will still be there. Mend this.
+        TODO: Add sounds and particle effects to the death!

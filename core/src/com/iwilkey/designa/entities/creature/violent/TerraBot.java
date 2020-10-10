@@ -14,6 +14,8 @@ import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
+import java.awt.*;
+
 /**
 
  This class defines the TerraBot. They are ruthless cyborgs that will terraform the land at any cost to get to you.
@@ -68,6 +70,8 @@ public class TerraBot extends Enemy {
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
+        hitBox = new Rectangle(collider.x, collider.y, collider.width, collider.height);
+
         // Initialize animations.
         animations = new Animation[2];
         animations[0] = new Animation(100, Assets.groundBotRight);
@@ -113,6 +117,8 @@ public class TerraBot extends Enemy {
             if (checkObstacle(e)) actAI(e); // Allow it to act.
             timer = 0;
         }
+
+        hitBox.x = (int)x; hitBox.y = (int)y;
     }
 
     /**
@@ -211,6 +217,8 @@ public class TerraBot extends Enemy {
 
         // Draw the name.
         Text.draw(b, "TerraBot", (int)(x + (width / 2)) - (("TerraBot".length() * 5) / 2), (int)y + 40, 4);
+
+        b.draw(Assets.errorSelector, hitBox.x, hitBox.y, collider.width, collider.height);
     }
 
     /**

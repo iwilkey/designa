@@ -80,7 +80,10 @@ public class ItemRepresentationGrid extends SubRegion {
     public void tick() {
         if(!TechnologyRegion.itemTypeLookat.equals(itemType)) return;
         scrollBar.tick();
-        if(InputHandler.leftMouseButtonDown) for(SelectableItemCell si : itemCells) si.isSelected = false;
+        if(InputHandler.leftMouseButtonDown) {
+            if(InputHandler.cursorX > SelectableItemCell.iIX - 218 && InputHandler.cursorY < SelectableItemCell.iIH - 72) return;
+            for(SelectableItemCell si : itemCells) si.isSelected = false;
+        }
         for(SelectableItemCell si : itemCells) si.tick(itemCells, y, h);
     }
 
@@ -94,6 +97,7 @@ public class ItemRepresentationGrid extends SubRegion {
         for(SelectableItemCell si : itemCells) if(si.isSelected) {
             count++; break;
         }
+
         if(count == 0) {
             Text.draw(b, "No Item Selected!", ((x + w) - (w / 2) -
                     (("No Item Selected!".length() * 12) / 2)), y - 22, 12);
@@ -101,10 +105,7 @@ public class ItemRepresentationGrid extends SubRegion {
                     (("Click an item to observe it".length() * 8) / 2)) - 6, y - 44, 8);
         }
 
-        for(SelectableItemCell si : itemCells) {
-            si.render(b, x, y, h, w);
-        }
-
+        for(SelectableItemCell si : itemCells) si.render(b, x, y, h, w);
     }
 
     @Override

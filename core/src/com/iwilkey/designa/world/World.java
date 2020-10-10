@@ -8,7 +8,9 @@ import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.defense.WeaponHandler;
+import com.iwilkey.designa.defense.WeaponType;
 import com.iwilkey.designa.entities.EntityHandler;
+import com.iwilkey.designa.entities.creature.passive.Npc;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
@@ -63,6 +65,7 @@ public class World {
 
     public World(GameBuffer gb, String path) {
         this.gb = gb;
+
         lightManager = new LightManager(gb, this);
         ambientCycle = new AmbientCycle(this, gb);
         entityHandler = new EntityHandler(new Player(gb, 0,
@@ -71,17 +74,16 @@ public class World {
         machineHandler = new MachineHandler(gb);
         weaponHandler = new WeaponHandler();
         particleHandler = new ParticleHandler();
-
         loadWorld(path);
 
-        giveItem(Assets.blasterBaseItem, 12);
-        giveItem(Assets.simpleBlasterItem, 12);
-        giveItem(Assets.copperPelletItem, 64);
-        giveItem(Assets.copperPelletItem, 64);
+        giveItem(Assets.stonePipeItem, 99);
+        giveItem(Assets.crateItem, 3);
+        giveItem(Assets.copperPelletItem, 99 *2);
+        giveItem(Assets.simpleBlasterItem, 100);
+        giveItem(Assets.blasterBaseItem, 72);
+        giveItem(Assets.dirtItem, 999);
 
-        // entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
-        // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) + 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 2)]) * Tile.TILE_SIZE));
-        // entityHandler.addEntity(new TerraBot(gb, ((w / 2f) - 2) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) - 2)]) * Tile.TILE_SIZE));
+        entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
     }
 
     public void tick() {
@@ -177,7 +179,7 @@ public class World {
         dirpath = path;
 
         // Init front tiles
-        String ft = Utils.loadFileAsString(path + "ft.dsw");
+        String ft = Utils.loadFileAsString(path + "metadata/ft.dsw");
         String[] ftTokens = ft.split("\\s+");
         w = Utils.parseInt(ftTokens[0]);
         h = Utils.parseInt(ftTokens[1]);
@@ -191,7 +193,7 @@ public class World {
         }
 
         // Init front back tiles
-        String ftblf = Utils.loadFileAsString(path + "ftbl.dsw");
+        String ftblf = Utils.loadFileAsString(path + "metadata/ftbl.dsw");
         String[] ftblTokens = ftblf.split("\\s+");
         tileBreakLevel = new int[w][h];
         for (int y = 0; y < h; y++) {
@@ -202,7 +204,7 @@ public class World {
         }
 
         // Init back tiles
-        String btf = Utils.loadFileAsString(path + "bt.dsw");
+        String btf = Utils.loadFileAsString(path + "metadata/bt.dsw");
         String[] btTokens = btf.split("\\s+");
         backTiles = new int[w][h];
         for (int y = 0; y < h; y++) {
@@ -213,7 +215,7 @@ public class World {
         }
 
         // Init back tile break level
-        String btblf = Utils.loadFileAsString(path + "btbl.dsw");
+        String btblf = Utils.loadFileAsString(path + "metadata/btbl.dsw");
         String[] btblTokens = btblf.split("\\s+");
         backTileBreakLevel = new int[w][h];
         for (int y = 0; y < h; y++) {
@@ -224,12 +226,12 @@ public class World {
         }
 
         // If it exits, init front high tiles
-        FileHandle fhtf = Gdx.files.local(path + "fht.dsw");
+        FileHandle fhtf = Gdx.files.local(path + "metadata/fht.dsw");
         origHighTiles = new int[w];
         LightManager.highestTile = new int[w];
         if(fhtf.exists()) {
             // Init from file
-            String fht = Utils.loadFileAsString(path + "fht.dsw");
+            String fht = Utils.loadFileAsString(path + "metadata/fht.dsw");
             String[] fhtTokens = fht.split("\\s+");
             for(int x = 0; x < World.w; x++) {
                 int t = Utils.parseInt(fhtTokens[x]);
@@ -242,11 +244,11 @@ public class World {
         }
 
         // Same with back
-        FileHandle bhtf = Gdx.files.local(path + "bht.dsw");
+        FileHandle bhtf = Gdx.files.local(path + "metadata/bht.dsw");
         origHighBackTiles = new int[w];
         if(bhtf.exists()) {
             // Init from file
-            String bht = Utils.loadFileAsString(path + "bht.dsw");
+            String bht = Utils.loadFileAsString(path + "metadata/bht.dsw");
             String[] bhtTokens = bht.split("\\s+");
             for(int x = 0; x < World.w; x++) {
                 int t = Utils.parseInt(bhtTokens[x]);
@@ -273,7 +275,7 @@ public class World {
         lightManager.bakeLighting();
 
         // Continue generating world, if it's the first time
-        String invPath = path + "inv.dsw";
+        String invPath = path + "metadata/inv.dsw";
         FileHandle invf = Gdx.files.local(invPath);
         if(!invf.exists()) { // First load
             trees = WorldGeneration.EnvironmentCreation(gb, entityHandler);
@@ -282,7 +284,7 @@ public class World {
             entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
         } else {
             // Load in the trees
-            String tree = Utils.loadFileAsString(path + "tr.dsw");
+            String tree = Utils.loadFileAsString(path + "metadata/tr.dsw");
             String[] treeTokens = tree.split("\\s+");
             trees = new ArrayList<Integer>();
             treesY = new ArrayList<Integer>();
@@ -295,7 +297,7 @@ public class World {
             WorldGeneration.EnvironmentReformation(gb, entityHandler, trees, treesY);
 
             // Load in inventory, if it's not the first time
-            String inv = Utils.loadFileAsString(path + "inv.dsw");
+            String inv = Utils.loadFileAsString(path + "metadata/inv.dsw");
             String[] invTokens = inv.split("\\s+");
             for(int s = 0; s < invTokens.length; s++) {
                 if(s > 1) {
@@ -402,6 +404,42 @@ public class World {
                     }
                 }
 
+            // Load in all weapons
+                // Blasters
+                String blasterPath = path + "weapons/bstr.dsw";
+                FileHandle blasterF = Gdx.files.local(blasterPath);
+                if(blasterF.exists()) {
+                    String blasters = Utils.loadFileAsString(blasterPath);
+                    String[] blasterTokens = blasters.split("\\s+");
+                    for(String blaster : blasterTokens) {
+                        int x = 0, y = 0, angle = 0, face = 0; // 0 is right
+                        ArrayList<WeaponType.AmmoType> ammo = new ArrayList<>();
+                        String[] locationAmmoSplit = blaster.split(";");
+                        for(int i = 0; i < locationAmmoSplit.length; i++) {
+                            if(i == 0) {
+                                String[] location = locationAmmoSplit[i].split("-");
+                                x = Utils.parseInt(location[0]);
+                                y = Utils.parseInt(location[1]);
+                                if(location[2].charAt(0) != 'r') face = 1;
+                                if(location[2].charAt(1) == 'n') angle = -(Utils.parseInt(location[2].substring(2)));
+                                else angle = Utils.parseInt(location[2].substring(2));
+                            } else {
+                                String[] ammoSplit = locationAmmoSplit[i].split("-");
+                                for(String a : ammoSplit) {
+                                    switch(Utils.parseInt(a)) {
+                                        case 1: ammo.add(WeaponType.AmmoType.COPPER);
+                                        case 2: ammo.add(WeaponType.AmmoType.SILVER);
+                                        case 3: ammo.add(WeaponType.AmmoType.IRON);
+                                        case 4: ammo.add(WeaponType.AmmoType.DIAMOND);
+                                    }
+                                }
+                            }
+                        }
+                        WeaponHandler.addBlaster(new WeaponType.SimpleBlaster((short)x, (short)y, ammo, angle, face,
+                                (short) (20 * Tile.TILE_SIZE), (short) 10, (short) 1));
+                    }
+                }
+
             // Load in all crates
             String relpath = dirpath + "crates/";
             FileHandle cratesDir = Gdx.files.local(relpath);
@@ -430,35 +468,35 @@ public class World {
 
     public void saveWorld() {
         // Save front tiles
-        String ftPath = dirpath + "ft.dsw";
+        String ftPath = dirpath + "metadata/ft.dsw";
         FileHandle fh = Gdx.files.local(ftPath);
         fh.delete();
         FileHandle ftf = Gdx.files.local(ftPath);
         if(!writeFT(ftf, w, h)) System.exit(-1);
 
         // Save front tile break level
-        String ftblPath = dirpath + "ftbl.dsw";
+        String ftblPath = dirpath + "metadata/ftbl.dsw";
         FileHandle fhbl = Gdx.files.local(ftblPath);
         fhbl.delete();
         FileHandle ftblf = Gdx.files.local(ftblPath);
         if(!writeFTBL(ftblf, w, h)) System.exit(-1);
 
         // Save back tiles
-        String btPath = dirpath + "bt.dsw";
+        String btPath = dirpath + "metadata/bt.dsw";
         FileHandle bt = Gdx.files.local(btPath);
         bt.delete();
         FileHandle btf = Gdx.files.local(btPath);
         if(!writeBT(btf, w, h)) System.exit(-1);
 
         // Save back tiles break level
-        String btblPath = dirpath + "btbl.dsw";
+        String btblPath = dirpath + "metadata/btbl.dsw";
         FileHandle btbl = Gdx.files.local(btblPath);
         btbl.delete();
         FileHandle btblf = Gdx.files.local(btblPath);
         if(!writeBTBL(btblf, w, h)) System.exit(-1);
 
         // Save front high tiles
-        String fhtPath = dirpath + "fht.dsw";
+        String fhtPath = dirpath + "metadata/fht.dsw";
         FileHandle fhtf = Gdx.files.local(fhtPath);
         if(fhtf.exists()) {
             fhtf.delete();
@@ -469,7 +507,7 @@ public class World {
         }
 
         // Save back high tiles
-        String bhtPath = dirpath + "bht.dsw";
+        String bhtPath = dirpath + "metadata/bht.dsw";
         FileHandle bhtf = Gdx.files.local(bhtPath);
         if(bhtf.exists()) {
             bhtf.delete();
@@ -480,14 +518,14 @@ public class World {
         }
 
         // Save the trees XD
-        String trPath = dirpath + "tr.dsw";
+        String trPath = dirpath + "metadata/tr.dsw";
         FileHandle tr = Gdx.files.local(trPath);
         tr.delete();
         FileHandle trf = Gdx.files.local(trPath);
         if(!writeTR(trf, w)) System.exit(-1);
 
         // Save inventory
-        String invPath = dirpath + "inv.dsw";
+        String invPath = dirpath + "metadata/inv.dsw";
         FileHandle invf = Gdx.files.local(invPath);
         if(invf.exists()) {
             invf.delete();
@@ -543,6 +581,17 @@ public class World {
                 assemblerF.delete();
                 FileHandle assemblerFF = Gdx.files.local(assemblerPath);
                 if (!writeASSEMBLER(assemblerFF, assemblers)) System.exit(-1);
+            }
+
+        // Save weapons
+            // Save blasters
+            ArrayList<WeaponType.SimpleBlaster> blasters = WeaponHandler.blasters;
+            if(blasters.size() != 0) {
+                String blasterPath = dirpath + "weapons/bstr.dsw";
+                FileHandle blasterF = Gdx.files.local(blasterPath);
+                blasterF.delete();
+                FileHandle blasterFF = Gdx.files.local(blasterPath);
+                if (!writeBLASTER(blasterFF, blasters)) System.exit(-1);
             }
 
     }
@@ -793,7 +842,6 @@ public class World {
             return false;
         }
     }
-
     private static boolean writeASSEMBLER(FileHandle ftblf, ArrayList<MachineType.Assembler> assemblers) {
         try {
             Writer w = ftblf.writer(true);
@@ -804,6 +852,39 @@ public class World {
                     w.write(assembler.x + " " + assembler.y + " " + item.getItemID() + "\n");
                 } else w.write(assembler.x + " " + assembler.y + " " + -1 + "\n");
             }
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private static boolean writeBLASTER(FileHandle ftblf, ArrayList<WeaponType.SimpleBlaster> blasters) {
+        try {
+            Writer w = ftblf.writer(true);
+
+            for(WeaponType.SimpleBlaster b : blasters) {
+                String face = "";
+                if(!b.facingRight) face = "l";
+                else face = "r";
+                String ang = "";
+                if(b.angle < 0) ang = "n" + Math.abs(b.angle);
+                else ang = "p" + Math.abs(b.angle);
+                w.write(b.x + "-" + b.y + "-" + face + ang + ";");
+                for(int a = 0; a < b.ammo.size(); a++) {
+                    int at = 1;
+                    switch(b.ammo.get(a)) {
+                        case COPPER: at = 1;
+                        case SILVER: at = 2;
+                        case IRON: at = 3;
+                        case DIAMOND: at = 4;
+                    }
+                    if(a != b.ammo.size() - 1) w.write(at + "-");
+                    else w.write(at);
+                }
+                w.write("\n");
+            }
+
             w.close();
             return true;
         } catch (IOException e) {

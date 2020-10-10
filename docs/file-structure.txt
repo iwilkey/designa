@@ -68,4 +68,10 @@ Every game will be saved in this format:
                 2952 59
                 ...
 
+        - Location: /../weapons
+            -bstr.dsw (blasters)
+                This will have a x, y location in tiles, then angle, then numbers signifying the ammo list.
 
+                ex.
+                12-20-45;1-2-3-2-3-4-3-2-1-2-3-2-3-2-3-2-3-4-3-2-3-2-1-2-3-2
+                49-20-102;1-2-3-3-3-3-1-1-1-1-1-1-1-1-1-1-1-1-1-2-3-2-3-4-3-2-2-3-4-3

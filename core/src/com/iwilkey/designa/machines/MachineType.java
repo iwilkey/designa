@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.utils.Null;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.defense.WeaponHandler;
+import com.iwilkey.designa.defense.WeaponType;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.inventory.InventorySlot;
@@ -100,6 +102,7 @@ public class MachineType {
             if(destination == Assets.crateTile) offloadToCrate();
             if(destination == Assets.nodeTile) offloadToNode();
             if(destination == Assets.assemblerTile) offloadToAssembler();
+            if(destination == Assets.blasterBaseTile) offloadToBlaster();
 
         }
 
@@ -111,13 +114,34 @@ public class MachineType {
             currentItems.remove(index); percentItemTraveled.remove(index);
         }
 
+        private void offloadToBlaster() {
+            for(int i = 0; i < percentItemTraveled.size(); i++) {
+                if (percentItemTraveled.get(i) >= 100.0f) {
+                    int xx = 0; int yy = 0;
+                    switch (direction) {
+                        case RIGHT: xx = x + 1; yy = y; break;
+                        case LEFT: xx = x - 1; yy = y; break;
+                        case UP: yy = y + 1; xx = x; break;
+                        case DOWN: yy = y - 1; xx = x; break;
+                    }
+                    if (WeaponHandler.checkLocationForBlaster(xx, yy) != null) {
+                        WeaponType.SimpleBlaster blaster = WeaponHandler.checkLocationForBlaster(xx, yy);
+                        removeItemFromTransport(i);
+                        // TODO: Make this specific for what was actually in the pipe.
+                        blaster.ammo.add(WeaponType.AmmoType.COPPER);
+                        return;
+                    }
+                }
+            }
+        }
+
         private void offloadToPipe() {
             int xx = 0; int yy = 0;
-            switch(direction) {
-                case RIGHT: xx = x - 1; yy = y; break;
-                case LEFT: xx = x + 1; yy = y; break;
-                case UP: xx = x; yy = y - 1; break;
-                case DOWN: xx = x; yy = y + 1; break;
+            switch (direction) {
+                case RIGHT: xx = x + 1; yy = y; break;
+                case LEFT: xx = x - 1; yy = y; break;
+                case UP: yy = y + 1; xx = x; break;
+                case DOWN: yy = y - 1; xx = x; break;
             }
 
             if(returnCompletedItem(xx, yy) != null) {

@@ -4,15 +4,25 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
-- Create settings state
+- Create a wave system (Brought on by nightfall) (TIMER 20 mins with, x min (decided by amount of bots) nightfall),
+    and keep track of the nights the player survived.
+    - Spawn (wave * 10) Terrabots 100 blocks from the player on either side.
+    - Increase nights player survived when all Terrabots are dead.
 
-- Create a wave system (Brought on by nightfall)
-
+- Save & Load:
+    - Time of day
+    - Entities active (and health)
+    - Player health
+    - Player "score" (nights survived)
 - Release for alpha on Itch and Steam, and make the github repo public. Keep the game open source.
 
 For later on (after release)
 ------------
 
+- Create settings state
+    - Full screen mode
+    - SFX vs Music volume
+    - Other shit
 - Document every class for open-sourcing.
-
 - Look into building a terrain tile rendering system that renders different graphics based on what tiles are around them.
+- Sandbox mode! (No resources needed to spawn things, infinite health, and maybe flying)
