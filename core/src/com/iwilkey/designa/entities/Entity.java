@@ -89,15 +89,13 @@ public abstract class Entity {
      * @param amt The amount of damage dealt.
      */
     public void hurt(int amt) {
+        // Decrement health by amount.
+        health -= amt;
         // Check if the entity should be dead...
         if(health <= 0) {
             active = false;
             die();
-            return;
         }
-
-        // Decrement health by amount.
-        health -= amt;
     }
 
     /**

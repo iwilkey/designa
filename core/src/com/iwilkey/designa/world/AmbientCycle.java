@@ -9,6 +9,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.utils.Utils;
+import com.iwilkey.designa.wave.Wave;
 
 import java.util.Arrays;
 
@@ -17,16 +18,19 @@ public class AmbientCycle {
     private final World world;
     private final GameBuffer gb;
 
-    private int time = 1, secondsPerDay = 1200;
+    public int time = 1, secondsPerDay = 1200;
     private float maxTickTime = secondsToTicks(secondsPerDay);
     public static float percentOfDay = 100;
     private boolean posTime = true;
 
     public int speedUpTimeFactor = 1;
 
+    public static Wave wave;
+
     public AmbientCycle(World world, GameBuffer gb) {
         this.world = world;
         this.gb = gb;
+        wave = new Wave(gb);
     }
 
     public void tick() {
@@ -35,7 +39,10 @@ public class AmbientCycle {
         else speedUpTimeFactor = 1;
 
         if(maxTickTime != secondsToTicks(secondsPerDay)) maxTickTime = secondsToTicks(secondsPerDay);
-        if(time + 1 > maxTickTime) posTime = !posTime;
+        if(time + 1 > maxTickTime) {
+            posTime = !posTime;
+            Wave.startWave();
+        }
         else if (time - 1 < 0) posTime = !posTime;
         if(posTime) time += 1 * speedUpTimeFactor;
         else time += -1 * speedUpTimeFactor;
@@ -44,6 +51,8 @@ public class AmbientCycle {
 
         percentOfDay = Math.abs(((float)(secondsPerDay) -
                 ticksToSeconds(time)) / (float)secondsPerDay) * 100;
+
+        wave.tick();
     }
 
     private TextureRegion lastSky;

@@ -10,6 +10,7 @@ import com.iwilkey.designa.building.NpcBuildingHandler;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
@@ -60,6 +61,8 @@ public class TerraBot extends Enemy {
 
         // Set the face.
         facingLeft = true;
+
+        damagePotential = 2;
 
         // Set the speed between the values below.
         speed = MathUtils.random(DEFAULT_SPEED - 0.9f, DEFAULT_SPEED - 0.8f);
@@ -249,8 +252,10 @@ public class TerraBot extends Enemy {
      */
     @Override
     public void die() {
-        // Drop carbon samples
-        // Play particle effect
+        int times = MathUtils.random(1, 14);
+        for(int i = 0; i < times; i++)
+            World.getItemHandler().addItem(Assets.carbonSampleResource.createNew(hitBox.x + 10 + MathUtils.random(-4, 4),
+                    (LightManager.highestTile[hitBox.x / Tile.TILE_SIZE] * Tile.TILE_SIZE) + 12 + MathUtils.random(-4, 4)));
         World.particleHandler.startParticle("large-explosion", hitBox.x, hitBox.y);
         Assets.explosion[MathUtils.random(0,2)].play(0.75f);
     }

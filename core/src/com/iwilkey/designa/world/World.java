@@ -14,7 +14,6 @@ import com.iwilkey.designa.entities.creature.passive.Npc;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
-import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;
@@ -56,7 +55,7 @@ public class World {
     private final LightManager lightManager;
 
     // Environment
-    private final AmbientCycle ambientCycle;
+    private static AmbientCycle ambientCycle;
 
     // Machines
     private final MachineHandler machineHandler;
@@ -64,25 +63,21 @@ public class World {
     // Weapons
     private final WeaponHandler weaponHandler;
 
+    public static int ws = 0;
+
     public World(GameBuffer gb, String path) {
+
         this.gb = gb;
 
         lightManager = new LightManager(gb, this);
-        ambientCycle = new AmbientCycle(this, gb);
         entityHandler = new EntityHandler(new Player(gb, 0,
                 0));
         itemHandler = new ItemHandler(gb);
         machineHandler = new MachineHandler(gb);
         weaponHandler = new WeaponHandler();
         particleHandler = new ParticleHandler();
+        ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
-
-        giveItem(Assets.stonePipeItem, 99);
-        giveItem(Assets.crateItem, 3);
-        giveItem(Assets.copperPelletItem, 99 *2);
-        giveItem(Assets.simpleBlasterItem, 100);
-        giveItem(Assets.blasterBaseItem, 72);
-        giveItem(Assets.dirtItem, 999);
 
         entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
     }
@@ -284,6 +279,16 @@ public class World {
             entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
             entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
         } else {
+            // Load Game
+            /*
+            String gamePath = path + "metadata/game.dsw";
+            String game = Utils.loadFileAsString(gamePath);
+            String[] gameTokens = game.split("-");
+            ambientCycle.time = Utils.parseInt(gameTokens[0]);
+            entityHandler.getPlayer().hurt(10 - Utils.parseInt(gameTokens[1]));
+            ws = Utils.parseInt(gameTokens[2]);
+             */
+
             // Load in the trees
             String tree = Utils.loadFileAsString(path + "metadata/tr.dsw");
             String[] treeTokens = tree.split("\\s+");
@@ -595,6 +600,18 @@ public class World {
                 if (!writeBLASTER(blasterFF, blasters)) System.exit(-1);
             }
 
+        // Save Game
+        /*
+            int time = ambientCycle.time, playerHealth = entityHandler.getPlayer().getHealth(),
+                    wavesSurvived = ambientCycle.wave.WAVES_SURVIVED;
+            String gamePath = dirpath + "metadata/game.dsw";
+            FileHandle gameF = Gdx.files.local(gamePath);
+            gameF.delete();
+            FileHandle gameFF = Gdx.files.local(gamePath);
+            if (!writeGAME(gameFF, time, playerHealth, wavesSurvived)) System.exit(-1);
+
+         */
+
     }
 
     private static boolean writeFT(FileHandle fh, int width, int height) {
@@ -893,6 +910,18 @@ public class World {
             return false;
         }
     }
+    private static boolean writeGAME(FileHandle ftblf, int time, int health, int waves) {
+        try {
+            Writer w = ftblf.writer(true);
+            System.out.println("FUCK THIS: " + waves);
+            w.write(time + "-" + health + "-" + waves);
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static void bake(int[][] lm) { lightMap = lm; }
     public GameBuffer getGameBuffer() { return gb; }
@@ -901,6 +930,6 @@ public class World {
     public static EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }
-    public AmbientCycle getAmbientCycle() { return ambientCycle; }
+    public static AmbientCycle getAmbientCycle() { return ambientCycle; }
 
 }

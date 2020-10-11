@@ -29,6 +29,24 @@ Every game will be saved in this format:
             ex.
             22,99 10,34 11,19
 
+        - game.dsw
+            This will hold stats. Format: [timeOfDay]-[playerHealth]-[wavesSurvived]
+
+            ex.
+            684-5-12
+
+        - ents.dsw
+            This will hold all entities active. Format: [EntityType]-[Name]-[LocationX:LocationY (IN TILES)]-[Health]
+
+            EntityType codes:
+            0 - Npc
+            1 - TerraBot
+
+            ex.
+            0-Mike-12:32-10
+            1-TerraBot-34:32-10
+            1-TerraBot-32:12-6
+
         - Location: /../crates
             (for how ever many crates there are)
             - c1.dsw (crate-1)

@@ -6,9 +6,16 @@ import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.entities.creature.Creature;
+import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.gfx.Animation;
+import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.World;
+
+import java.awt.*;
 
 /**
 
@@ -43,6 +50,8 @@ public class Npc extends Creature {
     // Integers
     int heartSpacing = 4;
 
+    public Rectangle hitBox;
+
     /**
      * Npc constructor.
      * @param gb An instance of this class needs the GameBuffer.
@@ -67,6 +76,8 @@ public class Npc extends Creature {
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
+        hitBox = new Rectangle(collider.x, collider.y, collider.width, collider.height);
+
         // Init Animations
         animations = new Animation[2];
         animations[0] = new Animation(MathUtils.random(80, 150), Assets.manWalkRight);
@@ -81,10 +92,15 @@ public class Npc extends Creature {
      */
     @Override
     public void tick() {
+
+        checkEnemyCollision();
+
         // Tick the animations forward.
         for(Animation anim : animations) anim.tick();
         // Check if it is stuck.
         checkStuck();
+
+        flashCheck();
 
         // Increment the timer until next decision time.
         timer++;
@@ -104,8 +120,24 @@ public class Npc extends Creature {
         // Move. This is defined in the Creature class.
         move();
 
+        hitBox.x = (int)x; hitBox.y = (int)y;
+
         // Move the x value of the Npc based off of the decision it made and speed it can go.
         xMove = (walkLeft) ? (speed / 2) : -(speed / 2);
+    }
+
+    private void checkEnemyCollision() {
+        for(Entity e : World.getEntityHandler().getEntities()) {
+            if(e instanceof Enemy) {
+                if(((Enemy) e).hitBox.intersects(hitBox)) {
+                    hurt((((Enemy) e).damagePotential));
+                    World.particleHandler.startParticle("large-explosion", hitBox.x, hitBox.y);
+                    Assets.explosion[MathUtils.random(0,2)].play(1f);
+                    World.getEntityHandler().getEntities().remove(e);
+                    flashDurationTimer = 0; flashInterval = 0; isFlashing = true;
+                }
+            }
+        }
     }
 
     /**
@@ -115,11 +147,20 @@ public class Npc extends Creature {
     @Override
     public void render(Batch b) {
         // Draw the sprite calculated by the current state its in.
-        b.draw(currentSprite(), x, y, width, height);
-        // Draw the health above.
-        renderHealth(b);
-        // Draw the name above.
-        Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 5) / 2), (int)y + 40, 4);
+        if(isFlashing && flashInterval >= flashIntervalTime) {
+            b.draw(currentSprite(), x, y, width, height);
+            // Draw the health above.
+            renderHealth(b);
+            // Draw the name above.
+            Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 5) / 2), (int)y + 40, 4);
+        }
+        else if (!isFlashing) {
+            b.draw(currentSprite(), x, y, width, height);
+            // Draw the health above.
+            renderHealth(b);
+            // Draw the name above.
+            Text.draw(b, name, (int)(x + (width / 2)) - ((name.length() * 5) / 2), (int)y + 40, 4);
+        }
 
     }
 
@@ -163,6 +204,10 @@ public class Npc extends Creature {
      */
     @Override
     public void die() {
-        // Nothing for now. Carbon samples will be added later.
+        int times = MathUtils.random(1, 14);
+        for(int i = 0; i < times; i++)
+            World.getItemHandler().addItem(Assets.carbonSampleResource.createNew(hitBox.x + 10 + MathUtils.random(-4, 4),
+                    (LightManager.highestTile[hitBox.x / Tile.TILE_SIZE] * Tile.TILE_SIZE) + 12 + MathUtils.random(-4, 4)));
+        World.getEntityHandler().getPlayer().hurt(1);
     }
 }

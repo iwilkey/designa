@@ -28,7 +28,6 @@ public class Utils {
         try {
             return Integer.parseInt(number);
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             return 0;
         }
     }

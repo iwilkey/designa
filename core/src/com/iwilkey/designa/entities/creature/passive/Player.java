@@ -5,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.building.BuildingHandler;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.entities.creature.Creature;
+import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.entities.creature.violent.TerraBot;
 import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gfx.Camera;
@@ -59,6 +61,8 @@ public class Player extends Creature {
     // Booleans
     private boolean onLadder = false, ladderMode = false;
 
+    private Rectangle hitBox;
+
     /**
      * Player constructor.
      * @param gb This class needs the GameBuffer.
@@ -85,10 +89,12 @@ public class Player extends Creature {
         facingLeft = true;
 
         // Set the collider.
-        collider.width = width - 9;
+        collider.width = (width - 3);
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
+
+        hitBox = new Rectangle(collider.x, collider.y, collider.width, collider.height);
 
         // Init animations
         animations = new Animation[4];
@@ -141,6 +147,8 @@ public class Player extends Creature {
     @Override
     public void tick() {
 
+        checkEnemyCollision();
+
         // Tick all animations forward.
         for (Animation anim : animations) anim.tick();
 
@@ -153,9 +161,24 @@ public class Player extends Creature {
         if(!ladderMode || !onLadder) move();
         else ladderMovement();
 
+        hitBox.x = (int)x; hitBox.y = (int)y;
+
         if(InputHandler.backBuildingToggleRequest) {
             addEnemy(pointerOnTileX(), pointerOnTileY());
         }
+
+        try {
+            if (InputHandler.rightMouseButtonDown && ToolSlot.currentItem.getItem() == Assets.carbonSampleResource) {
+                if (BuildingHandler.inRange) {
+                    if (ToolSlot.currentItem.itemCount - 1 >= 0) {
+                        World.getEntityHandler().addEntity(new Npc(gb, pointerOnTileX() * Tile.TILE_SIZE,
+                                LightManager.highestTile[pointerOnTileX()] * Tile.TILE_SIZE));
+                        ToolSlot.currentItem.itemCount--;
+                        Assets.invClick.play(1f);
+                    }
+                }
+            }
+        } catch (NullPointerException ignored) {}
 
         flashCheck();
 
@@ -186,10 +209,26 @@ public class Player extends Creature {
         ladderMode = onLadder;
     }
 
+    private void checkEnemyCollision() {
+        for(Entity e : World.getEntityHandler().getEntities()) {
+            if(e instanceof Enemy) {
+                if(((Enemy) e).hitBox.intersects(hitBox)) {
+                    hurt((((Enemy) e).damagePotential));
+                    World.particleHandler.startParticle("large-explosion", hitBox.x, hitBox.y);
+                    Assets.explosion[MathUtils.random(0,2)].play(1f);
+                    World.getEntityHandler().getEntities().remove(e);
+                    flashDurationTimer = 0; flashInterval = 0; isFlashing = true;
+                }
+            }
+        }
+    }
+
     private void addEnemy(int x, int y) {
         World.getEntityHandler().addEntity(new TerraBot(gb, x * Tile.TILE_SIZE,
                 LightManager.highestTile[x] * Tile.TILE_SIZE));
     }
+
+
 
     /**
      * This method will take into account where the cursor compared to the camera and evaluate
@@ -307,6 +346,7 @@ public class Player extends Creature {
         // Render the body if not flashing.
         if(isFlashing && flashInterval >= flashIntervalTime) renderBody(b);
         else if (!isFlashing) renderBody(b);
+        // b.draw(Assets.errorSelector, hitBox.x, hitBox.y, collider.width, collider.height);
     }
 
     /**

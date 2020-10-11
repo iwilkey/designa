@@ -37,8 +37,9 @@ public class MachineType {
         public Tile destination = null; // Where is this pipe going to?
         public ArrayList<Item> currentItems = new ArrayList<>(); // What items are this pipe transporting?
         public ArrayList<Float> percentItemTraveled = new ArrayList<>(); // Where is each item in the pipe?
-        public final int ITEM_CAP = 2; // How many items can be in a pipe at a time?
-        public float CONVEY_SPEED = 0.5f; // How fast do the items move?
+        public final int ITEM_CAP = 99; // How many items can be in a pipe at a time?
+        public float CONVEY_SPEED = 0.78f; // How fast do the items move?
+        public int TIME_MULTIPLIER;
         long timer = 0, newItem = 100; // Timers
 
         public Pipe(int x, int y, int direction) {
@@ -53,12 +54,19 @@ public class MachineType {
 
         public void tick() {
 
+            if(InputHandler.speedUpTimeRequest) {
+                TIME_MULTIPLIER = 15;
+            } else TIME_MULTIPLIER = 1;
+
+            // CONVEY_SPEED = 0.78f * TIME_MULTIPLIER;
+
+
             if(currentItems.size() != 0) {
                 for(int i = 0; i < percentItemTraveled.size(); i++) {
                     if(percentItemTraveled.get(i) >= 100) {
                         percentItemTraveled.set(i, 100.0f); break;
                     }
-                    percentItemTraveled.set(i, percentItemTraveled.get(i) + CONVEY_SPEED);
+                    percentItemTraveled.set(i, percentItemTraveled.get(i) + (CONVEY_SPEED * TIME_MULTIPLIER));
                 }
             }
 
@@ -69,7 +77,7 @@ public class MachineType {
                 case DOWN: source = checkUp(); destination = checkDown(); break;
             }
 
-            timer++;
+            timer += 1 * TIME_MULTIPLIER;
             if(timer > newItem) {
                 // If the source is a drill...
                 if (source == Assets.copperMechanicalDrillTile) {
@@ -137,11 +145,11 @@ public class MachineType {
 
         private void offloadToPipe() {
             int xx = 0; int yy = 0;
-            switch (direction) {
-                case RIGHT: xx = x + 1; yy = y; break;
-                case LEFT: xx = x - 1; yy = y; break;
-                case UP: yy = y + 1; xx = x; break;
-                case DOWN: yy = y - 1; xx = x; break;
+            switch(direction) {
+                case RIGHT: xx = x - 1; yy = y; break;
+                case LEFT: xx = x + 1; yy = y; break;
+                case UP: xx = x; yy = y - 1; break;
+                case DOWN: xx = x; yy = y + 1; break;
             }
 
             if(returnCompletedItem(xx, yy) != null) {
@@ -299,19 +307,19 @@ public class MachineType {
                         switch(direction) {
                             case RIGHT:
                                 yy = y * Tile.TILE_SIZE + 4;
-                                xx = (int)(((x * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)));
+                                xx = (int)(((x * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)) - (i + 1));
                                 break;
                             case LEFT:
                                 yy = y * Tile.TILE_SIZE + 4;
-                                xx = (int) ((((x * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)));
+                                xx = (int) ((((x * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)) + (i + 1));
                                 break;
                             case UP:
                                 xx = x * Tile.TILE_SIZE + 4;
-                                yy = (int)(((y * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)));
+                                yy = (int)(((y * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)) - (i + 1));
                                 break;
                             case DOWN:
                                 xx = x * Tile.TILE_SIZE + 4;
-                                yy = (int) ((((y * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)));
+                                yy = (int) ((((y * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)) + (i + 1));
                                 break;
                         }
                         b.draw(item.getTexture(), xx, yy, 8, 8);

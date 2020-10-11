@@ -22,7 +22,9 @@ import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.states.State;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.wave.Wave;
 import com.iwilkey.designa.world.AmbientCycle;
+import com.iwilkey.designa.world.World;
 
 public class Hud {
 
@@ -149,6 +151,14 @@ public class Hud {
 
         Text.draw(b, AmbientCycle.timerDisplay,
                 (int)(Game.w / 2f) - (int)((AmbientCycle.timerDisplay.length() * 17) / 2f) - 10, Game.h - 14-12, 17);
+
+        if(Wave.active) {
+            Text.draw(b, "Enemies left: " + Wave.ENEMIES_ALIVE,
+                    (int)(Game.w / 2f) - (int)((("Enemies left: " + Wave.ENEMIES_ALIVE).length() * 17) / 2f) - 10, Game.h - 48, 17);
+        }
+
+        Text.draw(b, "Waves survived: " + AmbientCycle.wave.WAVES_SURVIVED,
+                (int)(Game.w / 2f) - (int)((("Waves survived: " + AmbientCycle.wave.WAVES_SURVIVED).length() * 17) / 2f) - 10, 24, 17);
     }
 
     private void renderHealthBar(Batch b) {

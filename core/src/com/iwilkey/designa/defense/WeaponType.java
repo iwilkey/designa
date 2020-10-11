@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
+import com.iwilkey.designa.entities.creature.passive.Npc;
 import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.Geometry;
@@ -86,6 +87,12 @@ public class WeaponType {
         private void checkCollision() {
             for(Entity e : World.getEntityHandler().getEntities()) {
                 if(e instanceof Enemy) if (collider.intersects(((Enemy)e).hitBox)) {
+                    e.hurt(damagePotential);
+                    World.particleHandler.startParticle("explosion", x, y);
+                    Assets.stoneHit[MathUtils.random(0,2)].play(0.60f);
+                    active = false;
+                }
+                if(e instanceof Npc) if (collider.intersects(((Npc)e).hitBox)) {
                     e.hurt(damagePotential);
                     World.particleHandler.startParticle("explosion", x, y);
                     Assets.stoneHit[MathUtils.random(0,2)].play(0.60f);

@@ -51,7 +51,7 @@ public class BuildingHandler {
     private float selectorX = 0, selectorY = 0;
 
     // Booleans
-    private boolean inRange = false, onTop = false;
+    public static boolean inRange = false, onTop = false;
     public static boolean backBuilding = false;
 
     // Longs

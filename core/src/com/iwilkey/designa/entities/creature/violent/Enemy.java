@@ -18,6 +18,7 @@ import java.awt.*;
 // Note: This object is a Creature.
 public abstract class Enemy extends Creature {
     public Rectangle hitBox;
+    public int damagePotential;
     /**
      * The Enemy constructor.
      * @param gb An enemy needs the GameBuffer.
