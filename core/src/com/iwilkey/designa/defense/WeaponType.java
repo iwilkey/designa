@@ -72,7 +72,7 @@ public class WeaponType {
                             [World.h - ((int)Math.floor(newY) / Tile.TILE_SIZE) - 1]--;
 
                     World.particleHandler.startParticle("smoke", x, y);
-                    Assets.dirtHit[MathUtils.random(0,2)].play(0.05f);
+                    Assets.dirtHit[MathUtils.random(0,2)].play(0.10f);
                     return;
                 }
                 x = newX; y = Math.round(newY);
@@ -86,7 +86,9 @@ public class WeaponType {
         private void checkCollision() {
             for(Entity e : World.getEntityHandler().getEntities()) {
                 if(e instanceof Enemy) if (collider.intersects(((Enemy)e).hitBox)) {
-                    e.hurt(2);
+                    e.hurt(damagePotential);
+                    World.particleHandler.startParticle("explosion", x, y);
+                    Assets.stoneHit[MathUtils.random(0,2)].play(0.60f);
                     active = false;
                 }
             }

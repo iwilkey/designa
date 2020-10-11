@@ -496,3 +496,8 @@ Date || Build ||
     - Enemies can now be killed by blasters
         TODO: Terrabots can remove things like machines and guns and they will still be there. Mend this.
         TODO: Add sounds and particle effects to the death!
+            NOTE: Resolved.
+    - There is now a timer to tell when the wave will start.
+    - Blasters can now be loaded by pipes.
+    - Took out the settings button on the main menu.
+

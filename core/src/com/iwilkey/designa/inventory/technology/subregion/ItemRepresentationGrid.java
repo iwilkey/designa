@@ -30,8 +30,6 @@ public class ItemRepresentationGrid extends SubRegion {
         height = (remain == 0) ? height : height + 1;
         int width = 8;
 
-        System.out.println("Height: " + height + " remain: " + remain);
-
         try {
             for (int yy = 0; yy < height; yy++) {
                 int yyy = ((y + h) - ((yy + 1) * 68));
@@ -39,7 +37,6 @@ public class ItemRepresentationGrid extends SubRegion {
                     for (int xx = 1; xx <= width; xx++) {
                         int index = ((xx - 1) + (yy * width));
                         int xxx = x + (xx * 56);
-                        System.out.println(index);
                         itemCells.add(new SelectableItemCell(itemRepList.get(index), xxx, yyy, 48, 48));
                     }
                 } else {
@@ -47,14 +44,12 @@ public class ItemRepresentationGrid extends SubRegion {
                         for (int xx = 1; xx <= width; xx++) {
                             int index = ((xx - 1) + (yy * width));
                             int xxx = x + (xx * 56);
-                            System.out.println(index);
                             itemCells.add(new SelectableItemCell(itemRepList.get(index), xxx, yyy, 48, 48));
                         }
                     } else {
                         for (int xx = 1; xx <= remain; xx++) {
                             int index = ((xx - 1) + (yy * width));
                             int xxx = x + (xx * 56);
-                            System.out.println(index);
                             itemCells.add(new SelectableItemCell(itemRepList.get(index), xxx, yyy, 48, 48));
                         }
                     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.entities.creature.violent.Enemy;
 import com.iwilkey.designa.entities.statics.StaticEntity;
 import com.iwilkey.designa.world.World;
 
@@ -107,6 +108,7 @@ public abstract class Entity {
      * @return If the entity is about to collide with another entity.
      */
     public boolean checkEntityCollisions(float xOffset, float yOffset) {
+        if(this instanceof Enemy) return false;
         // Loop through all active entities...
         for (Entity e : World.getEntityHandler().getEntities()) {
             if(e.equals(this)) continue; // Skip over this entity in the list...

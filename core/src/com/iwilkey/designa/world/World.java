@@ -14,6 +14,7 @@ import com.iwilkey.designa.entities.creature.passive.Npc;
 import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.InventorySlot;

@@ -35,6 +35,7 @@ public class InputHandler {
     public static boolean gameMenuRequest;
     public static float scrollRequestValue = 0.0f;
     public static boolean angleUp, angleDown, flipLeft, flipRight, fireRequest;
+    public static boolean speedUpTimeRequest;
 
     public InputHandler() {
         keys = new boolean[256];
@@ -94,7 +95,7 @@ public class InputHandler {
                         if(key == Input.Keys.RIGHT) flipRight = true;
                         if(key == Input.Keys.C) fireRequest = true;
 
-
+                        if(key == Input.Keys.Z) speedUpTimeRequest = true;
 
                         return true;
                     }
@@ -122,6 +123,8 @@ public class InputHandler {
                         if(key == Input.Keys.LEFT) flipLeft = false;
                         if(key == Input.Keys.RIGHT) flipRight = false;
                         if(key == Input.Keys.C) fireRequest = false;
+
+                        if(key == Input.Keys.Z) speedUpTimeRequest = false;
 
                         return true;
                     }

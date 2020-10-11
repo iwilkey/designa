@@ -81,7 +81,7 @@ public class Assets {
     public static TextureRegion[] groundBotRight, groundBotLeft;
     // Sounds
     public static Sound[] itemPickup, treeHit, treeFall, jumpLand, zoom, dirtHit, stoneHit,
-        closeInv, openInv, createItem, blasterFire;
+        closeInv, openInv, createItem, blasterFire, explosion;
     public static Sound invClick;
     // Names
     public static String[] maleNames;
@@ -249,14 +249,14 @@ public class Assets {
 
         // Init font
         // Numbers and symbols start on x = 11 and y = 1
-        font = new TextureRegion[27 + 16];
+        font = new TextureRegion[27 + 19];
         // Init letters (26 plus space)
         for (int i = 0; i < 27; i++) {
             font[i] = ss.crop(i, 0, ss.SLOT_SIZE, ss.SLOT_SIZE);
         }
 
         // Init numbers and symbols (13)
-        for(int i = 0; i < 16; i++) {
+        for(int i = 0; i < 19; i++) {
             font[i + 27] = ss.crop(i + 11, 1, ss.SLOT_SIZE, ss.SLOT_SIZE);
         }
 
@@ -552,6 +552,10 @@ public class Assets {
         blasterFire[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-1.ogg"));
         blasterFire[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-2.ogg"));
         blasterFire[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/fire-3.ogg"));
+        explosion = new Sound[3];
+        explosion[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/explosion-1.ogg"));
+        explosion[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/explosion-2.ogg"));
+        explosion[2] = Gdx.audio.newSound(Gdx.files.internal("sounds/ambient/explosion-3.ogg"));
     }
 
     /**
@@ -925,6 +929,7 @@ public class Assets {
         particles.add(new Particle("fire.pcl", "fire"));
         particles.add(new Particle("explosion.pcl", "explosion"));
         particles.add(new Particle("smoke.pcl", "smoke"));
+        particles.add(new Particle("large-explosion.pcl", "large-explosion"));
 
         return particles;
     }

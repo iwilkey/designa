@@ -38,13 +38,18 @@ public class MainMenuState extends State {
                 switchState(1);
             }
         }));
+
+        // Lmao I don't have a settings state yet.
+        /*
         uiManager.addObject(new TextButton((w / 2), yButton - (100), 46, "Settings", new ClickListener() {
             @Override
             public void onClick() {
 
             }
         }));
-        uiManager.addObject(new TextButton((w / 2), yButton - (100 * 2), 46, "Quit", new ClickListener() {
+
+         */
+        uiManager.addObject(new TextButton((w / 2), yButton - (100 * 1), 46, "Quit", new ClickListener() {
             @Override
             public void onClick() {
                 System.exit(-1);

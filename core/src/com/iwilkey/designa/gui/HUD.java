@@ -22,6 +22,7 @@ import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.states.State;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.AmbientCycle;
 
 public class Hud {
 
@@ -78,6 +79,7 @@ public class Hud {
         input();
 
         if(gameMenu) uiManager.tick();
+
 
     }
 
@@ -144,6 +146,9 @@ public class Hud {
             b.draw(bg, (Game.w / 2) - (400 / 2) + 4, (Game.h / 2) - (300 / 2), 400, 300);
             uiManager.render(b);
         }
+
+        Text.draw(b, AmbientCycle.timerDisplay,
+                (int)(Game.w / 2f) - (int)((AmbientCycle.timerDisplay.length() * 17) / 2f) - 10, Game.h - 14-12, 17);
     }
 
     private void renderHealthBar(Batch b) {

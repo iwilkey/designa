@@ -3,18 +3,26 @@ package com.iwilkey.designa.world;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.utils.Utils;
+
+import java.util.Arrays;
 
 public class AmbientCycle {
 
     private final World world;
     private final GameBuffer gb;
 
-    private int time = 1, secondsPerDay = 100;
+    private int time = 1, secondsPerDay = 1200;
     private float maxTickTime = secondsToTicks(secondsPerDay);
     public static float percentOfDay = 100;
     private boolean posTime = true;
+
+    public int speedUpTimeFactor = 1;
 
     public AmbientCycle(World world, GameBuffer gb) {
         this.world = world;
@@ -22,22 +30,24 @@ public class AmbientCycle {
     }
 
     public void tick() {
-        if(maxTickTime != secondsToTicks(secondsPerDay)) maxTickTime = secondsToTicks(secondsPerDay);
-        if(time + 1 > maxTickTime) {
-            posTime = !posTime;
-        } else if (time - 1 < 0) {
-            posTime = !posTime;
-        }
 
-        if(posTime) time++;
-        else time--;
+        if(InputHandler.speedUpTimeRequest) speedUpTimeFactor = 50;
+        else speedUpTimeFactor = 1;
+
+        if(maxTickTime != secondsToTicks(secondsPerDay)) maxTickTime = secondsToTicks(secondsPerDay);
+        if(time + 1 > maxTickTime) posTime = !posTime;
+        else if (time - 1 < 0) posTime = !posTime;
+        if(posTime) time += 1 * speedUpTimeFactor;
+        else time += -1 * speedUpTimeFactor;
+
+        if(time % 60 == 0) Assets.invClick.play(0.10f);
 
         percentOfDay = Math.abs(((float)(secondsPerDay) -
                 ticksToSeconds(time)) / (float)secondsPerDay) * 100;
     }
 
     private TextureRegion lastSky;
-
+    public static String timerDisplay = "";
     public void render(Batch b, int xx, int yy) {
 
         /*
@@ -64,6 +74,24 @@ public class AmbientCycle {
         if(shadeOfSky != lastSky) gb.getWorld().getLightManager().bakeLighting();
         lastSky = shadeOfSky;
 
+        if(posTime) timerDisplay = "Midnight in -" + secondsToStandardTimerTime((secondsPerDay) - (int)ticksToSeconds(time))[0] + ":" +
+                secondsToStandardTimerTime((secondsPerDay) - (int)ticksToSeconds(time))[1];
+        else timerDisplay = "High noon in +" + secondsToStandardTimerTime((int)ticksToSeconds(time))[0] + ":" +
+            secondsToStandardTimerTime((int)ticksToSeconds(time))[1];
+
+    }
+
+    private String[] secondsToStandardTimerTime(int seconds) {
+        String[] timer = new String[2];
+
+        int min = (int)Math.floor((double)seconds / 60);
+        if(min < 10) timer[0] = "0" + min;
+        else timer[0] = Utils.toString(min);
+        int sec = seconds % 60;
+        if(sec < 10) timer[1] = "0" + sec;
+        else timer[1] = Utils.toString(sec);
+
+        return timer;
     }
 
     private float ticksToSeconds(int ticks) {

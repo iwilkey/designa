@@ -217,8 +217,6 @@ public class TerraBot extends Enemy {
 
         // Draw the name.
         Text.draw(b, "TerraBot", (int)(x + (width / 2)) - (("TerraBot".length() * 5) / 2), (int)y + 40, 4);
-
-        b.draw(Assets.errorSelector, hitBox.x, hitBox.y, collider.width, collider.height);
     }
 
     /**
@@ -253,5 +251,7 @@ public class TerraBot extends Enemy {
     public void die() {
         // Drop carbon samples
         // Play particle effect
+        World.particleHandler.startParticle("large-explosion", hitBox.x, hitBox.y);
+        Assets.explosion[MathUtils.random(0,2)].play(0.75f);
     }
 }

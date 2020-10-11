@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Text {
 
-    private final static String sym = "abcdefghijklmnopqrstuvwxyz 0123456789.!?,'";
+    private final static String sym = "abcdefghijklmnopqrstuvwxyz 0123456789.!?,'+-:";
     private final static char[] chars = sym.toCharArray();
 
     public static List<String> runtimeMessages = new ArrayList<String>();

@@ -11,6 +11,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.EntityHandler;
 import com.iwilkey.designa.entities.statics.Tree;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.physics.Vector2;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.PerlinNoise;
@@ -32,7 +33,7 @@ public class WorldGeneration {
 
         public void tick() {
             position.x %= World.w * Tile.TILE_SIZE;
-            position.x += 0.04f;
+            position.x += (InputHandler.speedUpTimeRequest) ? 0.04 * 50 : 0.04f;
         }
 
         public void render(Batch b) {
