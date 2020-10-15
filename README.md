@@ -44,4 +44,8 @@ After building, the output .JAR file should be in `/desktop/build/libs/Designa.j
 
 Post feature requests and feedback [here](https://discord.gg/ZKfy8P7).
 
+*Designa Dave says thanks.*
+
 ![dave](web/dave.png)
+
+*("Thanks!")*
