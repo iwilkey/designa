@@ -4,6 +4,8 @@
 
 An open-source sandbox tower defense game focused on creating effective systems to acquire and utilize resources.
 
+---
+
 ### Building
 
 Bleeding-edge builds will be generated for every commit. They will be [here](https://github.com/iwilkey/Designa/releases).
