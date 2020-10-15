@@ -34,8 +34,6 @@ To debug the application on a connected phone, run `gradlew android:installDebug
 
 If the terminal returns `Permission denied` or `Command not found` on Mac/Linux, run `chmod +x ./gradlew` before running `./gradlew`. *This is a one-time procedure.*
 
----
-
 Gradle may take up to several minutes to download files. <br>
 After building, the output .JAR file should be in `/desktop/build/libs/Designa.jar` for desktop builds.
 
@@ -43,6 +41,8 @@ After building, the output .JAR file should be in `/desktop/build/libs/Designa.j
 ### Feature/Future Requests
 
 Post feature requests and feedback [here](https://discord.gg/ZKfy8P7).
+
+---
 
 *Designa Dave says thanks.*
 
