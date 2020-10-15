@@ -1,5 +1,7 @@
 ![logo](web/logo.png)
 
+[![Discord](https://img.shields.io/discord/766121641247375371.svg)](https://discord.gg/ZKfy8P7)
+
 An open-source sandbox tower defense game focused on creating effective systems to acquire and utilize resources.
 
 ### Building
