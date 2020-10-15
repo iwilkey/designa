@@ -46,8 +46,8 @@ Post feature requests and feedback [here](https://discord.gg/ZKfy8P7).
 
 ---
 
-*Designa Dave says thanks.*
+*Oh yeah, Designa Dave says hi I guess :/*
 
 ![dave](web/dave.png)
 
-*("Thanks!")*
+*("Hi!")*
