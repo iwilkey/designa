@@ -4,7 +4,7 @@ An open-source sandbox tower defense game focused on creating effective systems 
 
 ### Building
 
-Bleeding-edge builds will be generated for every commit. They will be [here](https://github.com/iwilkey/Designa).
+Bleeding-edge builds will be generated for every commit. They will be [here](https://github.com/iwilkey/Designa/releases).
 
 If you want to complie the game on your own, follow the instructions below.
 First, make sure you have [JDK 8](https://adoptopenjdk.net/) installed. 
