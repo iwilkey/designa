@@ -4,8 +4,11 @@ import com.badlogic.gdx.math.MathUtils;
 
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
+import com.iwilkey.designa.defense.WeaponHandler;
+import com.iwilkey.designa.defense.WeaponType;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.Item;
+import com.iwilkey.designa.machines.MachineHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 
@@ -140,6 +143,19 @@ public class NpcBuildingHandler {
             }
 
             World.getEntityHandler().getPlayer().removeCrate(x, y);
+        }
+
+        // Remove machines from MachineHandler record.
+        if(tile == Assets.stonePipeTile) MachineHandler.pipes.removeIf(pipe -> pipe.x == x && pipe.y == y);
+        if(tile == Assets.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
+        if(tile == Assets.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
+        if(tile == Assets.assemblerTile) MachineHandler.assemblers.removeIf(assembler -> assembler.x == x && assembler.y == World.h - y - 1);
+        if(tile == Assets.blasterBaseTile && WeaponHandler.checkLocationForBlaster(x, y) != null) {
+            World.getItemHandler().addItem(Assets.simpleBlasterItem.createNew(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+            WeaponType.SimpleBlaster blaster = WeaponHandler.checkLocationForBlaster(x, y);
+            for(int i = 0; i < blaster.ammo.size(); i++)
+                World.getItemHandler().addItem(Assets.copperPelletItem.createNew(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
+            WeaponHandler.removeBlasterAt(x, y);
         }
     }
 }

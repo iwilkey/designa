@@ -25,6 +25,10 @@ public class WeaponHandler {
         return null;
     }
 
+    public static void removeBlasterAt(int x, int y) {
+        blasters.removeIf(b -> (int) b.x == x && (int) b.y == y);
+    }
+
     public void tick() {
         for(SimpleBlaster blaster : blasters) blaster.tick();
     }

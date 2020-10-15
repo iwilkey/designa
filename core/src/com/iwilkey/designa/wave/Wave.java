@@ -13,15 +13,14 @@ public class Wave {
     public static GameBuffer gb;
 
     public static boolean active = false;
-    public static int WAVE_NUM = 0, ENEMIES_ALIVE = 0;
-    public int WAVES_SURVIVED;
-    public int newEntityCount = 0;
+    public int WAVE_NUM, WAVES_SURVIVED,
+            ENEMIES_ALIVE = 0, newEntityCount = 0;
 
     public Wave(GameBuffer gb){
         Wave.gb = gb;
     }
 
-    public static void startWave() {
+    public void startWave() {
         active = true;
         WAVE_NUM++;
 

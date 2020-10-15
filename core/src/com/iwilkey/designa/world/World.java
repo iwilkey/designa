@@ -55,7 +55,7 @@ public class World {
     private final LightManager lightManager;
 
     // Environment
-    private static AmbientCycle ambientCycle;
+    private AmbientCycle ambientCycle;
 
     // Machines
     private final MachineHandler machineHandler;
@@ -63,21 +63,21 @@ public class World {
     // Weapons
     private final WeaponHandler weaponHandler;
 
-    public static int ws = 0;
-
     public World(GameBuffer gb, String path) {
 
         this.gb = gb;
-
+        ambientCycle = new AmbientCycle(this, gb);
         lightManager = new LightManager(gb, this);
         entityHandler = new EntityHandler(new Player(gb, 0,
-                0));
+                0, ambientCycle));
         itemHandler = new ItemHandler(gb);
         machineHandler = new MachineHandler(gb);
         weaponHandler = new WeaponHandler();
         particleHandler = new ParticleHandler();
-        ambientCycle = new AmbientCycle(this, gb);
         loadWorld(path);
+
+        giveItem(Assets.simpleBlasterItem, 99);
+        giveItem(Assets.blasterBaseItem, 100);
 
         entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
     }
@@ -280,14 +280,14 @@ public class World {
             entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
         } else {
             // Load Game
-            /*
             String gamePath = path + "metadata/game.dsw";
             String game = Utils.loadFileAsString(gamePath);
             String[] gameTokens = game.split("-");
-            ambientCycle.time = Utils.parseInt(gameTokens[0]);
+            ambientCycle.posTime = gameTokens[0].charAt(0) == 'p';
+            ambientCycle.time = Utils.parseInt(gameTokens[0].substring(1));
             entityHandler.getPlayer().hurt(10 - Utils.parseInt(gameTokens[1]));
-            ws = Utils.parseInt(gameTokens[2]);
-             */
+            System.out.println("IS THIS CALLED? " + Utils.parseInt(gameTokens[2]));
+            ambientCycle.daysSurvived = Utils.parseInt(gameTokens[2]);
 
             // Load in the trees
             String tree = Utils.loadFileAsString(path + "metadata/tr.dsw");
@@ -601,16 +601,13 @@ public class World {
             }
 
         // Save Game
-        /*
             int time = ambientCycle.time, playerHealth = entityHandler.getPlayer().getHealth(),
-                    wavesSurvived = ambientCycle.wave.WAVES_SURVIVED;
+                    daysSurvived = ambientCycle.daysSurvived;
             String gamePath = dirpath + "metadata/game.dsw";
             FileHandle gameF = Gdx.files.local(gamePath);
             gameF.delete();
             FileHandle gameFF = Gdx.files.local(gamePath);
-            if (!writeGAME(gameFF, time, playerHealth, wavesSurvived)) System.exit(-1);
-
-         */
+            if (!writeGAME(gameFF, time, playerHealth, daysSurvived)) System.exit(-1);
 
     }
 
@@ -730,7 +727,9 @@ public class World {
         try {
             Writer w = ftblf.writer(true);
 
-            for (int num : trees) w.write(num + "-" + origHighTiles[num] + " ");
+            try {
+                for (int num : trees) w.write(num + "-" + origHighTiles[num] + " ");
+            } catch (ArrayIndexOutOfBoundsException ignored) {}
 
             w.close();
             return true;
@@ -897,8 +896,7 @@ public class World {
                         case IRON: at = 3;
                         case DIAMOND: at = 4;
                     }
-                    if(a != b.ammo.size() - 1) w.write(at + "-");
-                    else w.write(at);
+                    w.write(at + "-");
                 }
                 w.write("\n");
             }
@@ -910,11 +908,14 @@ public class World {
             return false;
         }
     }
-    private static boolean writeGAME(FileHandle ftblf, int time, int health, int waves) {
+    private boolean writeGAME(FileHandle ftblf, int time, int health, int days) {
         try {
             Writer w = ftblf.writer(true);
-            System.out.println("FUCK THIS: " + waves);
-            w.write(time + "-" + health + "-" + waves);
+            String timeDir = "";
+            if(ambientCycle.posTime) timeDir = "p";
+            else timeDir = "n";
+            System.out.println(days);
+            w.write(timeDir + time + "-" + health + "-" + days + "-");
             w.close();
             return true;
         } catch (IOException e) {
@@ -930,6 +931,6 @@ public class World {
     public static EntityHandler getEntityHandler() { return entityHandler; }
     public int[][] getOrigLightMap() { return this.origLightMap; }
     public LightManager getLightManager() { return lightManager; }
-    public static AmbientCycle getAmbientCycle() { return ambientCycle; }
+    public AmbientCycle getAmbientCycle() { return ambientCycle; }
 
 }

@@ -31,14 +31,16 @@ public class Hud {
     Texture bg = new Texture("textures/game/invbackground.png");
 
     private final Player player;
+    private AmbientCycle ac;
     private UIManager uiManager;
     private int healthX, healthY;
     private final int heartSpacing = 16;
     public static int SELECTED_PIPE_DIRECTION = 0;
     public static boolean gameMenu = false;
 
-    public Hud(Player player) {
+    public Hud(Player player, AmbientCycle ac) {
         this.player = player;
+        this.ac = ac;
         uiManager = new UIManager();
         InputHandler.setUIManager(uiManager);
 
@@ -153,12 +155,12 @@ public class Hud {
                 (int)(Game.w / 2f) - (int)((AmbientCycle.timerDisplay.length() * 17) / 2f) - 10, Game.h - 14-12, 17);
 
         if(Wave.active) {
-            Text.draw(b, "Enemies left: " + Wave.ENEMIES_ALIVE,
-                    (int)(Game.w / 2f) - (int)((("Enemies left: " + Wave.ENEMIES_ALIVE).length() * 17) / 2f) - 10, Game.h - 48, 17);
+            Text.draw(b, "Enemies left: " + ac.wave.ENEMIES_ALIVE,
+                    (int)(Game.w / 2f) - (int)((("Enemies left: " + ac.wave.ENEMIES_ALIVE).length() * 17) / 2f) - 10, Game.h - 48, 17);
         }
 
-        Text.draw(b, "Waves survived: " + AmbientCycle.wave.WAVES_SURVIVED,
-                (int)(Game.w / 2f) - (int)((("Waves survived: " + AmbientCycle.wave.WAVES_SURVIVED).length() * 17) / 2f) - 10, 24, 17);
+        Text.draw(b, "Days survived: " + ac.daysSurvived,
+                (int)(Game.w / 2f) - (int)((("Waves survived: " + ac.daysSurvived).length() * 17) / 2f) - 10, 24, 17);
     }
 
     private void renderHealthBar(Batch b) {

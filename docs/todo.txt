@@ -4,11 +4,12 @@ These things need to be done, but don't need to be done in order (unless marked 
 Important now
 -------------
 
+- Check the waves. See if the right bots spawn based on days survived.
+
+- Increase bots speed based on days survived.
+
 - Save & Load:
-    - Time of day
     - Entities active (and health)
-    - Player health
-    - Player "score" (nights survived)
     - Items in pipes
 
 - Game Over screen when dead that shows waves survived.

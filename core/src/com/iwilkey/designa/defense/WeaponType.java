@@ -162,7 +162,7 @@ public class WeaponType {
             boolean near = false;
             int playerTileX = (int)World.getEntityHandler().getPlayer().getX() / Tile.TILE_SIZE;
             int playerTileY = (int)World.getEntityHandler().getPlayer().getY() / Tile.TILE_SIZE;
-            if(Math.abs((float)playerTileX - x) <= 1 && Math.abs(playerTileY - (int)y) <= 1) near = true;
+            if(Math.abs((float)playerTileX - x) <= 2 && Math.abs(playerTileY - (int)y) <= 1) near = true;
             return near;
         }
 

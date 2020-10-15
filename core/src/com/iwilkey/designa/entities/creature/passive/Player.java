@@ -23,6 +23,7 @@ import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
@@ -69,12 +70,12 @@ public class Player extends Creature {
      * @param x The x spawn point of the player.
      * @param y The y spawn point of the player.
      */
-    public Player(GameBuffer gb, float x, float y) {
+    public Player(GameBuffer gb, float x, float y, AmbientCycle ac) {
         // Call the Creature constructor.
         super(gb, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
 
         // Create an HUD (Heads up display) instance.
-        hud = new Hud(this);
+        hud = new Hud(this, ac);
 
         // Create a BuildingHandler instance.
         buildingHandler = new BuildingHandler(gb, this);

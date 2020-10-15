@@ -21,11 +21,12 @@ public class AmbientCycle {
     public int time = 1, secondsPerDay = 1200;
     private float maxTickTime = secondsToTicks(secondsPerDay);
     public static float percentOfDay = 100;
-    private boolean posTime = true;
+    public boolean posTime = true;
+    public int daysSurvived;
 
     public int speedUpTimeFactor = 1;
 
-    public static Wave wave;
+    public Wave wave;
 
     public AmbientCycle(World world, GameBuffer gb) {
         this.world = world;
@@ -41,9 +42,12 @@ public class AmbientCycle {
         if(maxTickTime != secondsToTicks(secondsPerDay)) maxTickTime = secondsToTicks(secondsPerDay);
         if(time + 1 > maxTickTime) {
             posTime = !posTime;
-            Wave.startWave();
+            wave.startWave();
         }
-        else if (time - 1 < 0) posTime = !posTime;
+        else if (time - 1 < 0) {
+            posTime = !posTime;
+            daysSurvived++;
+        }
         if(posTime) time += 1 * speedUpTimeFactor;
         else time += -1 * speedUpTimeFactor;
 
