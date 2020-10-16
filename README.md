@@ -6,7 +6,7 @@ An open-source sandbox tower defense game focused on creating effective systems 
 
 ---
 
-_[Trello Board](https://trello.com/b/KGBrnVi1/designa-trello)_
+What is currently being worked on: _[Trello Board](https://trello.com/b/KGBrnVi1/designa-trello)_
 
 ### Building
 
