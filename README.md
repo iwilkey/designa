@@ -1,4 +1,4 @@
-![logo](web/logo.png)
+![logo](web/new-logo.png)
 
 [![Discord](https://img.shields.io/discord/766121641247375371.svg)](https://discord.gg/ZKfy8P7)
 
