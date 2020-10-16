@@ -6,6 +6,8 @@ An open-source sandbox tower defense game focused on creating effective systems 
 
 ---
 
+_[Trello Board](https://trello.com/b/KGBrnVi1/designa-trello)_
+
 ### Building
 
 Bleeding-edge builds will be generated for every commit. They will be [here](https://github.com/iwilkey/Designa/releases).
