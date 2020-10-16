@@ -28,6 +28,8 @@ public class AmbientCycle {
 
     public Wave wave;
 
+    public static boolean timeSpeed = false;
+
     public AmbientCycle(World world, GameBuffer gb) {
         this.world = world;
         this.gb = gb;
@@ -36,8 +38,14 @@ public class AmbientCycle {
 
     public void tick() {
 
-        if(InputHandler.speedUpTimeRequest) speedUpTimeFactor = 50;
-        else speedUpTimeFactor = 1;
+        if(InputHandler.speedUpTimeRequest && ticksToSeconds(time) > 20) {
+            speedUpTimeFactor = 50;
+            timeSpeed = true;
+        }
+        else {
+            speedUpTimeFactor = 1;
+            timeSpeed = false;
+        }
 
         if(maxTickTime != secondsToTicks(secondsPerDay)) maxTickTime = secondsToTicks(secondsPerDay);
         if(time + 1 > maxTickTime) {

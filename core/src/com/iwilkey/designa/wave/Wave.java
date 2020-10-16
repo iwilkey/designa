@@ -13,7 +13,7 @@ public class Wave {
     public static GameBuffer gb;
 
     public static boolean active = false;
-    public int WAVE_NUM, WAVES_SURVIVED,
+    public int WAVE_NUM,
             ENEMIES_ALIVE = 0, newEntityCount = 0;
 
     public Wave(GameBuffer gb){
@@ -22,24 +22,26 @@ public class Wave {
 
     public void startWave() {
         active = true;
-        WAVE_NUM++;
+        WAVE_NUM = gb.getWorld().getAmbientCycle().daysSurvived + 1;
 
         int playerTileX = (int)World.getEntityHandler().getPlayer().getX() / Tile.TILE_SIZE;
 
         // Rule is wave num squared
-        for(int i = 0; i < WAVE_NUM * WAVE_NUM; i++) {
+        for(int i = 0; i < WAVE_NUM * 2; i++) {
             // Half spawn to left, half spawn to right
-            if(i < (WAVE_NUM * WAVE_NUM) / 2) {
+            if(i < (WAVE_NUM * 4) / 2) {
                 // Left (at least 50 tiles)
                 int lx = (playerTileX - MathUtils.random(50, 100)) * Tile.TILE_SIZE;
-                World.getEntityHandler().addEntity(new TerraBot(gb, lx,
+                Entity ee = World.getEntityHandler().addEntity(new TerraBot(gb, lx,
                         LightManager.highestTile[lx / Tile.TILE_SIZE] * Tile.TILE_SIZE));
+                ((TerraBot)ee).speed *= (WAVE_NUM / 4f);
                 ENEMIES_ALIVE++;
             } else {
                 // Right (at least 50 tiles)
                 int rx = (playerTileX + MathUtils.random(50, 100)) * Tile.TILE_SIZE;
-                World.getEntityHandler().addEntity(new TerraBot(gb, rx,
+                Entity ee = World.getEntityHandler().addEntity(new TerraBot(gb, rx,
                         LightManager.highestTile[rx / Tile.TILE_SIZE] * Tile.TILE_SIZE));
+                ((TerraBot)ee).speed *= (WAVE_NUM / 4f);
                 ENEMIES_ALIVE++;
             }
         }
@@ -53,7 +55,6 @@ public class Wave {
             if (ENEMIES_ALIVE < newEntityCount) ENEMIES_ALIVE = newEntityCount;
             if (newEntityCount == 0) {
                 ENEMIES_ALIVE = 0;
-                WAVES_SURVIVED++;
                 active = false;
             }
         }

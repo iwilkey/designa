@@ -13,6 +13,7 @@ import com.iwilkey.designa.gfx.Animation;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.awt.*;
@@ -101,20 +102,21 @@ public class TerraBot extends Enemy {
      * @param e The entity targeted.
      */
     private void targetEntity(Entity e) {
+
         // If the player is to the left of then, move left.
         if((x - e.getX()) > 0) {
             face("l");
-            xMove = -speed;
+            xMove = -speed * speedMULTI;
         // Otherwise, move right.
         } else if (x - e.getX() < 0) {
             face("r");
-            xMove = speed;
+            xMove = speed * speedMULTI;
         // But if the bot is on top of the player, don't move at all.
         } else xMove = 0;
 
         // Increment the timer and once it hits the check limit, allow the bot to alter the world.
         // This just keeps it from happening too fast and making it unrealistic.
-        timer++;
+        timer += 1 * speedMULTI;
         if(timer > checkLimit) {
             // If the bot is stuck...
             if (checkObstacle(e)) actAI(e); // Allow it to act.

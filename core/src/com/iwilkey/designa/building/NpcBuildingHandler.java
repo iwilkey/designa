@@ -150,12 +150,5 @@ public class NpcBuildingHandler {
         if(tile == Assets.nodeTile) MachineHandler.nodes.removeIf(node -> node.x == x && node.y == World.h - y - 1);
         if(tile == Assets.copperMechanicalDrillTile) MachineHandler.drills.removeIf(drill -> drill.x == x && drill.y == y);
         if(tile == Assets.assemblerTile) MachineHandler.assemblers.removeIf(assembler -> assembler.x == x && assembler.y == World.h - y - 1);
-        if(tile == Assets.blasterBaseTile && WeaponHandler.checkLocationForBlaster(x, y) != null) {
-            World.getItemHandler().addItem(Assets.simpleBlasterItem.createNew(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
-            WeaponType.SimpleBlaster blaster = WeaponHandler.checkLocationForBlaster(x, y);
-            for(int i = 0; i < blaster.ammo.size(); i++)
-                World.getItemHandler().addItem(Assets.copperPelletItem.createNew(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
-            WeaponHandler.removeBlasterAt(x, y);
-        }
     }
 }

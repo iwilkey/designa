@@ -33,7 +33,7 @@ public class WorldGeneration {
 
         public void tick() {
             position.x %= World.w * Tile.TILE_SIZE;
-            position.x += (InputHandler.speedUpTimeRequest) ? 0.04 * 50 : 0.04f;
+            position.x += (AmbientCycle.timeSpeed) ? 0.04 * 50 : 0.04f;
         }
 
         public void render(Batch b) {

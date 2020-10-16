@@ -135,6 +135,8 @@ public class Hud {
 
         Text.draw(b, Assets.VERSION + " " + Integer.toString(Game.tps) + " tps",
                 14, Game.h - 14 - 8, 11);
+        Text.draw(b, "Use 'e' to zoom in, 'q' to zoom out.",
+                14, Game.h - 14 - 8 - 14, 8);
         try {
             if (ToolSlot.currentItem.getItem() != null) {
                 if (ToolSlot.currentItem.getItem().getItemType() instanceof ItemType.PlaceableBlock.CreatableTile.Pipe ||
@@ -153,6 +155,8 @@ public class Hud {
 
         Text.draw(b, AmbientCycle.timerDisplay,
                 (int)(Game.w / 2f) - (int)((AmbientCycle.timerDisplay.length() * 17) / 2f) - 10, Game.h - 14-12, 17);
+        Text.draw(b, "Hold 'z' to speed up time.",
+                (int)(Game.w / 2f) - (int)((("Hold 'z' to speed up time.").length() * 8) / 2f) - 8, Game.h - 14-12-12, 8);
 
         if(Wave.active) {
             Text.draw(b, "Enemies left: " + ac.wave.ENEMIES_ALIVE,
@@ -160,7 +164,7 @@ public class Hud {
         }
 
         Text.draw(b, "Days survived: " + ac.daysSurvived,
-                (int)(Game.w / 2f) - (int)((("Waves survived: " + ac.daysSurvived).length() * 17) / 2f) - 10, 24, 17);
+                (int)(Game.w / 2f) - (int)((("Days survived: " + ac.daysSurvived).length() * 17) / 2f) - 10, 24, 17);
     }
 
     private void renderHealthBar(Batch b) {

@@ -22,6 +22,7 @@ import com.iwilkey.designa.inventory.Inventory;
 import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.items.ItemType;
+import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
@@ -394,7 +395,7 @@ public class Player extends Creature {
      */
     @Override
     public void die() {
-        // Go to a game over screen and delete the world.
+        GameState.hasLost = true;
     }
 
     /**

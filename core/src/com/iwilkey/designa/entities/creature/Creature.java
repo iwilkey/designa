@@ -7,6 +7,7 @@ import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.tiles.Tile;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 /**
@@ -36,7 +37,7 @@ public abstract class Creature extends Entity {
     protected boolean isMoving, gunWielding = false;
 
     // Mock physics
-    protected float speed;
+    public float speed, speedMULTI;
     protected float xMove, yMove;
     protected float gravity = -3.5f;
     protected boolean isGrounded;
@@ -75,8 +76,12 @@ public abstract class Creature extends Entity {
      * This method defines how a Creature will or can move.
      */
     public void move() {
+
+        if(AmbientCycle.timeSpeed) speedMULTI = 3;
+        else speedMULTI = 1;
+
         // If there is nothing there to stop it, move the creature along the xAxis (per user request)
-        if(!checkEntityCollisions(xMove, 0f)) moveX();
+        if(!checkEntityCollisions(xMove * speedMULTI, 0f)) moveX();
         // Otherwise, the Creature is not moving.
         else isMoving = false;
 
@@ -89,7 +94,7 @@ public abstract class Creature extends Entity {
             // Reset the jumpTimer.
             jumpTimer = 0;
             // Enforce gravity if there is nothing under the Creature.
-            if(!checkEntityCollisions(0f, yMove)) moveY();
+            if(!checkEntityCollisions(0f, yMove * speedMULTI)) moveY();
             // Otherwise, the Creature is not moving.
             else isMoving = false;
         }
@@ -111,12 +116,12 @@ public abstract class Creature extends Entity {
         // If the Creature requests to move right...
         if (xMove > 0) {
             // Create a temporary x-value to see where the player will be if another tick passes...
-            int tx = (int) (x + xMove + collider.x + collider.width) / Tile.TILE_SIZE;
+            int tx = (int) (x + (xMove * speedMULTI) + collider.x + collider.width) / Tile.TILE_SIZE;
             // If there isn't a collision between the player and a tile using the temporary x-value...
             if(!collisionWithTile(tx, (int)(y + collider.y) / Tile.TILE_SIZE) &&
                     !collisionWithTile(tx, (int)(y + collider.y + collider.height) / Tile.TILE_SIZE)) {
                 // Increment the Creatures x-value by the value of xMove.
-                x += xMove;
+                x += xMove * speedMULTI;
                 // Change the direction in which the Creature faces.
                 facingRight = true; facingLeft = false;
                 // Set isMoving to true to reflect how the Creature is moving.
@@ -126,10 +131,10 @@ public abstract class Creature extends Entity {
         // Otherwise, the Creature requests to move left...
         } else if (xMove < 0) {
             // Same algorithm as what was done above.
-            int tx = (int) (x + xMove + collider.x) / Tile.TILE_SIZE;
+            int tx = (int) (x + (xMove * speedMULTI) + collider.x) / Tile.TILE_SIZE;
             if(!collisionWithTile(tx, (int)(y + collider.y) / Tile.TILE_SIZE) &&
                     !collisionWithTile(tx, (int)(y + collider.y + collider.height) / Tile.TILE_SIZE)) {
-                x += xMove;
+                x += xMove * speedMULTI;
                 facingLeft = true; facingRight = false;
                 isMoving = true;
             } else isMoving = false;
@@ -143,14 +148,14 @@ public abstract class Creature extends Entity {
      */
     private void moveY() {
         // Create a temporary y-value to see where the player will be if another tick passes...
-        int ty = (int) (y - gravity - collider.y - collider.height + 24) / Tile.TILE_SIZE;
+        int ty = (int) (y - (gravity) - collider.y - collider.height + 24) / Tile.TILE_SIZE;
         // If there is nothing to stop the Creature...
         if(!collisionWithTile((int) (x + collider.x) / Tile.TILE_SIZE, ty) &&
                 !collisionWithTile((int) (x + collider.x + collider.width) / Tile.TILE_SIZE, ty)){
             // The Creature must not be on the ground.
             isGrounded = false;
             // Accelerate the Creature downward using the gravitational constant and the increasing timeInAir.
-            y += gravity * timeInAir;
+            y += gravity * timeInAir * speedMULTI;
         // Otherwise, there is something to stop the player from falling.
         } else {
             // The Creature must be on the ground.

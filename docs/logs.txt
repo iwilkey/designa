@@ -491,7 +491,7 @@ Date || Build ||
     - Item cells can now check if they can be created and show the user the result
     - You can now create items with a selected cell.
 
-10/10/2020 || pa)1.0.49 ||
+10/10/2020 || pa_1.0.49 ||
     - Blasters can now be saved and loaded with correct position, ammo, and angle.
     - Enemies can now be killed by blasters
         TODO: Terrabots can remove things like machines and guns and they will still be there. Mend this.
@@ -510,3 +510,17 @@ Date || Build ||
     - If you right click the ground with a carbon sample, you can spawn in a new Npc
     - Npcs can now be harmed by bullets
         TODO: Make sure everything is saved correctly, and the game is ready for pa1.0.50 release.
+
+10/15/2020 || pa_1.0.50 ||
+    - Entities now are saved and loaded
+    - Fixed tiny bugs involving time speed
+    - There is now a game over screen
+    - Time speed up now affects player speed and Terrabots acting time
+    - Bots can now remove guns by breaking them
+    - Items in pipes can now be saved and loaded
+    - Items now render in correct stacks while in a backed up pipe
+    - Added item descriptions
+    - When starting a new world, the player is now granted 99 copper pellets,
+        a blaster base and simple blaster.
+
+-- READY FOR a1.0.0 RELEASE! --

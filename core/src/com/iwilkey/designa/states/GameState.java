@@ -1,12 +1,15 @@
 package com.iwilkey.designa.states;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
+import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
@@ -14,6 +17,7 @@ import com.iwilkey.designa.world.WorldGeneration;
 
 public class GameState extends State {
 
+    public static boolean hasLost = false;
     private static World world;
 
     @Override
@@ -37,6 +41,17 @@ public class GameState extends State {
     public void tick() {
         Game.gb.getCamera().tick();
         world.tick();
+
+        if(hasLost) {
+            if(InputHandler.escapeRequest) {
+                InputHandler.escapeRequest = false;
+                InputHandler.gameMenuRequest = false;
+                World.getEntityHandler().getPlayer().getGameBuffer().getGame().setCamera(null);
+                Camera.mat.setToTranslationAndScaling(new Vector3(0,0,0), new Vector3(1,1,1));
+                World.getEntityHandler().getPlayer().getGameBuffer().getWorld().saveWorld();
+                State.switchState(0);
+            }
+        }
     }
 
     @Override
@@ -47,6 +62,12 @@ public class GameState extends State {
     @Override
     public void onGUI(Batch b) {
         World.getEntityHandler().getPlayer().getHUD().render(b);
+        if(hasLost) {
+            Text.draw(b, "You died.", (Gdx.graphics.getWidth() / 2) -
+                    (("You died.".length() * 32) / 2), (Gdx.graphics.getHeight() / 2) + 18, 32);
+            Text.draw(b, "Press 'ESC'", (Gdx.graphics.getWidth() / 2) -
+                    (("Press 'ESC'".length() * 32) / 2), (Gdx.graphics.getHeight() / 2) - 18, 32);
+        }
     }
 
     @Override

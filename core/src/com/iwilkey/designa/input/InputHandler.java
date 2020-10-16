@@ -36,6 +36,7 @@ public class InputHandler {
     public static float scrollRequestValue = 0.0f;
     public static boolean angleUp, angleDown, flipLeft, flipRight, fireRequest;
     public static boolean speedUpTimeRequest;
+    public static boolean escapeRequest;
 
     public InputHandler() {
         keys = new boolean[256];
@@ -97,6 +98,8 @@ public class InputHandler {
 
                         if(key == Input.Keys.Z) speedUpTimeRequest = true;
 
+                        if(key == Input.Keys.ESCAPE) escapeRequest = true;
+
                         return true;
                     }
 
@@ -125,6 +128,8 @@ public class InputHandler {
                         if(key == Input.Keys.C) fireRequest = false;
 
                         if(key == Input.Keys.Z) speedUpTimeRequest = false;
+
+                        if(key == Input.Keys.ESCAPE) escapeRequest = false;
 
                         return true;
                     }

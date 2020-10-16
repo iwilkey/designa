@@ -33,6 +33,11 @@ public class MachineHandler {
         pipes.add(new MachineType.Pipe(x, y, dir));
     }
 
+    public static void addPipe(int x, int y, int dir, ArrayList<Item> items, ArrayList<Float> percentDone) {
+        for(MachineType.Pipe pipe : pipes) if(pipe.x == x && pipe.y == y) return;
+        pipes.add(new MachineType.Pipe(x, y, dir, items, percentDone));
+    }
+
 
     public static void addMechanicalDrill(int x, int y, Tile miningResource, MachineType.MechanicalDrill.ResourceType resourceType) {
         for(MachineType.MechanicalDrill drill : drills) if(drill.x == x && drill.y == y) return;
@@ -52,6 +57,50 @@ public class MachineHandler {
     public static void addAssembler(int x, int y, Item item) {
         for(MachineType.Assembler assembler : assemblers) if(assembler.x == x && assembler.y == y) return;
         assemblers.add(new MachineType.Assembler(x, y, item));
+    }
+
+    public static MachineType.Pipe returnPipeAt(int x, int y) {
+        for(MachineType.Pipe p : pipes) {
+            if(p.x == x && p.y == y) return p;
+        }
+        return null;
+    }
+
+    public static void removePipeAt(int x, int y) {
+        pipes.removeIf(p -> p.x == x && p.y == y);
+    }
+
+    public static MachineType.MechanicalDrill returnDrillAt(int x, int y) {
+        for(MachineType.MechanicalDrill d : drills) {
+            if(d.x == x && d.y == y) return d;
+        }
+        return null;
+    }
+
+    public static void removeDrillAt(int x, int y) {
+        drills.removeIf(p -> p.x == x && p.y == y);
+    }
+
+    public static MachineType.Node returnNodeAt(int x, int y) {
+        for(MachineType.Node n : nodes) {
+            if(n.x == x && n.y == y) return n;
+        }
+        return null;
+    }
+
+    public static void removeNodeAt(int x, int y) {
+        nodes.removeIf(d -> d.x == x && d.y == y);
+    }
+
+    public static MachineType.Assembler returnAssemblerAt(int x, int y) {
+        for(MachineType.Assembler a : assemblers) {
+            if(a.x == x && a.y == y) return a;
+        }
+        return null;
+    }
+
+    public static void removeAssemblerAt(int x, int y) {
+        assemblers.removeIf(a -> a.x == x && a.y == y);
     }
 
 

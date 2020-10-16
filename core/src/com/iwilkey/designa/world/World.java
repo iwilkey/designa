@@ -9,9 +9,13 @@ import com.iwilkey.designa.GameBuffer;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.defense.WeaponHandler;
 import com.iwilkey.designa.defense.WeaponType;
+import com.iwilkey.designa.entities.Entity;
 import com.iwilkey.designa.entities.EntityHandler;
+import com.iwilkey.designa.entities.creature.Creature;
 import com.iwilkey.designa.entities.creature.passive.Npc;
 import com.iwilkey.designa.entities.creature.passive.Player;
+import com.iwilkey.designa.entities.creature.violent.TerraBot;
+import com.iwilkey.designa.entities.statics.StaticEntity;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gui.Hud;
@@ -23,6 +27,7 @@ import com.iwilkey.designa.items.ItemHandler;
 import com.iwilkey.designa.machines.MachineHandler;
 import com.iwilkey.designa.machines.MachineType;
 import com.iwilkey.designa.particle.ParticleHandler;
+import com.iwilkey.designa.states.GameState;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
 
@@ -64,7 +69,6 @@ public class World {
     private final WeaponHandler weaponHandler;
 
     public World(GameBuffer gb, String path) {
-
         this.gb = gb;
         ambientCycle = new AmbientCycle(this, gb);
         lightManager = new LightManager(gb, this);
@@ -75,11 +79,6 @@ public class World {
         weaponHandler = new WeaponHandler();
         particleHandler = new ParticleHandler();
         loadWorld(path);
-
-        giveItem(Assets.simpleBlasterItem, 99);
-        giveItem(Assets.blasterBaseItem, 100);
-
-        entityHandler.addEntity(new Npc(gb, ((w / 2f) + 1) * Tile.TILE_SIZE, (LightManager.highestTile[((w / 2) + 1)]) * Tile.TILE_SIZE));
     }
 
     public void tick() {
@@ -95,8 +94,7 @@ public class World {
     }
 
     private void giveItem(Item item, int amount) {
-        Inventory inv = entityHandler.getPlayer().getInventory();
-        for(int ii = 0; ii < amount; ii++) inv.addItem(item);
+        for(int ii = 0; ii < amount; ii++) Inventory.addItem(item);
     }
 
     public void render(Batch b) {
@@ -278,6 +276,11 @@ public class World {
             WorldGeneration.OreGeneration(); // If we're loading a world, we don't need to generate ores.
             entityHandler.getPlayer().setX((w / 2f) * Tile.TILE_SIZE);
             entityHandler.getPlayer().setY((LightManager.highestTile[(w / 2)]) * Tile.TILE_SIZE);
+            entityHandler.addPlayer();
+            GameState.hasLost = false;
+            giveItem(Assets.copperPelletItem, 99);
+            giveItem(Assets.blasterBaseItem, 1);
+            giveItem(Assets.simpleBlasterItem, 1);
         } else {
             // Load Game
             String gamePath = path + "metadata/game.dsw";
@@ -285,6 +288,12 @@ public class World {
             String[] gameTokens = game.split("-");
             ambientCycle.posTime = gameTokens[0].charAt(0) == 'p';
             ambientCycle.time = Utils.parseInt(gameTokens[0].substring(1));
+            if(Utils.parseInt(gameTokens[1]) <= 0) {
+                GameState.hasLost = true;
+                entityHandler.getPlayer().die();
+            } else {
+                GameState.hasLost = false;
+            }
             entityHandler.getPlayer().hurt(10 - Utils.parseInt(gameTokens[1]));
             System.out.println("IS THIS CALLED? " + Utils.parseInt(gameTokens[2]));
             ambientCycle.daysSurvived = Utils.parseInt(gameTokens[2]);
@@ -361,16 +370,35 @@ public class World {
                 // Pipes
                 String pipePath = path + "machines/pip.dsw";
                 FileHandle pipeF = Gdx.files.local(pipePath);
+
+                /*
+                w.write(pipe.x + "-" + pipe.y + "-" + orientation + "-");
+                for(int i = 0; i < pipe.currentItems.size(); i++) {
+                    w.write(pipe.currentItems.get(i).getItemID() + ";" + pipe.percentItemTraveled.get(i) + "-");
+                }
+                w.write("\n");
+                 */
+
                 if(pipeF.exists()) {
                     String pipes = Utils.loadFileAsString(pipePath);
-                    String[] pipeTokens = pipes.split("\\s+");
-
-                    int x = 0; int y = 0; int dir = 0;
-                    for (int s = 0; s < pipeTokens.length; s += 3) {
-                        x = Utils.parseInt(pipeTokens[s]);
-                        y = Utils.parseInt(pipeTokens[s + 1]);
-                        dir = Utils.parseInt(pipeTokens[s + 2]);
-                        MachineHandler.addPipe(x, y, dir);
+                    String[] eachPipe = pipes.split("\n");
+                    int x, y, orientation;
+                    for (String s : eachPipe) {
+                        String[] pipeMetadata = s.split("-");
+                        x = Utils.parseInt(pipeMetadata[0]);
+                        y = Utils.parseInt(pipeMetadata[1]);
+                        orientation = Utils.parseInt(pipeMetadata[2]);
+                        ArrayList<Item> currentItems = new ArrayList<>();
+                        ArrayList<Float> percentDone = new ArrayList<>();
+                        for (int ii = 0; ii < pipeMetadata.length; ii++) {
+                            if (ii > 2) {
+                                String[] itemAndPercent = pipeMetadata[ii].split(";");
+                                currentItems.add(Item.getItemByID(Utils.parseInt(itemAndPercent[0])));
+                                percentDone.add(Float.parseFloat(itemAndPercent[1]));
+                            }
+                        }
+                        MachineHandler.addPipe(x, y,
+                                orientation, currentItems, percentDone);
                     }
                 }
 
@@ -445,6 +473,44 @@ public class World {
                                 (short) (20 * Tile.TILE_SIZE), (short) 10, (short) 1));
                     }
                 }
+
+            // Load in entities
+                String entitiesPath = path + "metadata/ents.dsw";
+                FileHandle entF = Gdx.files.local(entitiesPath);
+                if(entF.exists()) {
+                    String entities = Utils.loadFileAsString(entitiesPath);
+                    if(entities.length() > 1) {
+                        String[] eachEntity = entities.split("\\s+");
+                        int entType = 0, locX, locY, health;
+                        float speed;
+                        String name = "";
+                        for (String e : eachEntity) {
+                            String[] entityMetadata = e.split("-");
+
+                            entType = Utils.parseInt(entityMetadata[0]);
+                            name = entityMetadata[1];
+                            locX = Utils.parseInt(entityMetadata[2]);
+                            locY = Utils.parseInt(entityMetadata[3]);
+                            health = Utils.parseInt(entityMetadata[4]);
+                            speed = Float.parseFloat(entityMetadata[5]);
+
+                            if (entType == 0) {
+                                Entity ee = World.getEntityHandler().addEntity(new Npc(gb, locX,
+                                        LightManager.highestTile[locX / Tile.TILE_SIZE] * Tile.TILE_SIZE));
+                                ((Npc) ee).name = name;
+                                ((Npc) ee).speed = speed;
+                                ee.hurt(10 - health);
+                            } else if (entType == 1) {
+                                Entity ee = World.getEntityHandler().addEntity(new TerraBot(gb, locX,
+                                        LightManager.highestTile[locX / Tile.TILE_SIZE] * Tile.TILE_SIZE));
+                                ((TerraBot) ee).speed = speed;
+                                ee.hurt(10 - health);
+                                ambientCycle.wave.ENEMIES_ALIVE++;
+                                ambientCycle.wave.active = true;
+                            }
+                        }
+                    }
+                } entityHandler.addPlayer();
 
             // Load in all crates
             String relpath = dirpath + "crates/";
@@ -608,6 +674,14 @@ public class World {
             gameF.delete();
             FileHandle gameFF = Gdx.files.local(gamePath);
             if (!writeGAME(gameFF, time, playerHealth, daysSurvived)) System.exit(-1);
+
+        // Save Entities
+            ArrayList<Entity> entities = getEntityHandler().getEntities();
+            String entityPath = dirpath + "metadata/ents.dsw";
+            FileHandle entF = Gdx.files.local(entityPath);
+            entF.delete();
+            FileHandle entFF = Gdx.files.local(entityPath);
+            if(!writeENTITIES(entFF, entities)) System.exit(-1);
 
     }
 
@@ -838,7 +912,11 @@ public class World {
                     case LEFT: orientation = 2; break;
                     case UP: orientation = 3; break;
                 }
-                w.write(pipe.x + " " + pipe.y + " " + orientation + "\n");
+                w.write(pipe.x + "-" + pipe.y + "-" + orientation + "-");
+                for(int i = 0; i < pipe.currentItems.size(); i++) {
+                    w.write(pipe.currentItems.get(i).getItemID() + ";" + pipe.percentItemTraveled.get(i) + ";-");
+                }
+                w.write("\n");
             }
 
             w.close();
@@ -916,6 +994,36 @@ public class World {
             else timeDir = "n";
             System.out.println(days);
             w.write(timeDir + time + "-" + health + "-" + days + "-");
+            w.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    private boolean writeENTITIES(FileHandle ftblf, ArrayList<Entity> entities) {
+        try {
+            Writer w = ftblf.writer(true);
+
+            int entType = 0, locX, locY, health; float speed; String name = "";
+            for(Entity e : entities) {
+                if(e instanceof StaticEntity) continue;
+                if(e instanceof Player) continue;
+                if(e instanceof Npc) {
+                    entType = 0;
+                    name = ((Npc)e).name;
+                }
+                else if (e instanceof TerraBot) {
+                    entType = 1;
+                    name = "TerraBot";
+                }
+                locX = (int)e.x; locY = (int)e.y;
+                health = e.getHealth();
+                speed = ((Creature)e).speed;
+
+                w.write(entType + "-" + name + "-" + locX + "-" + locY + "-" + health + "-" + speed + "-" + "\n");
+            }
+
             w.close();
             return true;
         } catch (IOException e) {

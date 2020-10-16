@@ -139,6 +139,12 @@ public class WeaponType {
 
         float timer = 0.0f;
         public void tick() {
+
+            if(World.getTile(x, y) != Assets.blasterBaseTile) {
+                WeaponHandler.removeBlasterAt(x, y);
+                return;
+            }
+
             if(playerNear()) {
                 aim();
                 if(InputHandler.rightMouseButtonDown) loadFromPlayer();

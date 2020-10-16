@@ -16,6 +16,7 @@ import com.iwilkey.designa.items.ItemRecipe;
 import com.iwilkey.designa.items.ItemType;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class MachineType {
         public Tile destination = null; // Where is this pipe going to?
         public ArrayList<Item> currentItems = new ArrayList<>(); // What items are this pipe transporting?
         public ArrayList<Float> percentItemTraveled = new ArrayList<>(); // Where is each item in the pipe?
-        public final int ITEM_CAP = 99; // How many items can be in a pipe at a time?
+        public final int ITEM_CAP = 10; // How many items can be in a pipe at a time?
         public float CONVEY_SPEED = 0.78f; // How fast do the items move?
         public int TIME_MULTIPLIER;
         long timer = 0, newItem = 100; // Timers
@@ -52,9 +53,23 @@ public class MachineType {
             }
         }
 
+        public Pipe(int x, int y, int direction, ArrayList<Item> items, ArrayList<Float> percentDone) {
+            this.x = x; this.y = y;
+            this.currentItems = items;
+            this.percentItemTraveled = percentDone;
+            switch(direction) {
+                case 0: this.direction = Direction.RIGHT; break;
+                case 1: this.direction = Direction.DOWN; break;
+                case 2: this.direction = Direction.LEFT; break;
+                case 3: this.direction = Direction.UP; break;
+            }
+        }
+
         public void tick() {
 
-            if(InputHandler.speedUpTimeRequest) {
+            if(MachineHandler.returnPipeAt(x, y) == null) MachineHandler.removePipeAt(x, y);
+
+            if(AmbientCycle.timeSpeed) {
                 TIME_MULTIPLIER = 15;
             } else TIME_MULTIPLIER = 1;
 
@@ -64,7 +79,7 @@ public class MachineType {
             if(currentItems.size() != 0) {
                 for(int i = 0; i < percentItemTraveled.size(); i++) {
                     if(percentItemTraveled.get(i) >= 100) {
-                        percentItemTraveled.set(i, 100.0f); break;
+                        percentItemTraveled.set(i, 100.0f); continue;
                     }
                     percentItemTraveled.set(i, percentItemTraveled.get(i) + (CONVEY_SPEED * TIME_MULTIPLIER));
                 }
@@ -106,7 +121,7 @@ public class MachineType {
                 timer = 0;
             }
 
-            if(source == Assets.stonePipeTile) offloadToPipe();
+            if(destination == Assets.stonePipeTile) offloadToPipe();
             if(destination == Assets.crateTile) offloadToCrate();
             if(destination == Assets.nodeTile) offloadToNode();
             if(destination == Assets.assemblerTile) offloadToAssembler();
@@ -146,19 +161,24 @@ public class MachineType {
         private void offloadToPipe() {
             int xx = 0; int yy = 0;
             switch(direction) {
-                case RIGHT: xx = x - 1; yy = y; break;
-                case LEFT: xx = x + 1; yy = y; break;
-                case UP: xx = x; yy = y - 1; break;
-                case DOWN: xx = x; yy = y + 1; break;
+                case RIGHT: xx = x + 1; yy = y; break;
+                case LEFT: xx = x - 1; yy = y; break;
+                case UP: yy = y + 1; xx = x; break;
+                case DOWN: yy = y - 1; xx = x; break;
             }
 
-            if(returnCompletedItem(xx, yy) != null) {
-                if (currentItems.size() + 1 < ITEM_CAP) {
-                    addItemForTransport(returnCompletedItem(xx, yy));
-                    for(MachineType.Pipe pipe : MachineHandler.pipes) {
-                        if (pipe.x == xx && pipe.y == yy)
-                            for(int i = 0; i < pipe.currentItems.size(); i++)
-                                pipe.removeItemFromTransport(i);
+            if(returnCompletedItem(x, y) != null) {
+                if(MachineHandler.returnPipeAt(xx, yy) != null) {
+                    Pipe nextPipe = MachineHandler.returnPipeAt(xx, yy);
+                    if(nextPipe.currentItems.size() + 1 < ITEM_CAP) {
+                        nextPipe.addItemForTransport(returnCompletedItem(x, y));
+                        for(int i = 0; i < currentItems.size(); i++) {
+                            if(currentItems.get(i) == returnCompletedItem(x, y)) {
+                                currentItems.remove(i);
+                                percentItemTraveled.remove(i);
+                                return;
+                            }
+                        }
                     }
                 }
             }
@@ -307,19 +327,20 @@ public class MachineType {
                         switch(direction) {
                             case RIGHT:
                                 yy = y * Tile.TILE_SIZE + 4;
-                                xx = (int)(((x * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)) - (i + 1));
+                                xx = (int)(((x * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)));
                                 break;
                             case LEFT:
                                 yy = y * Tile.TILE_SIZE + 4;
-                                xx = (int) ((((x * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)) + (i + 1));
+                                xx = (int)(((x * Tile.TILE_SIZE) + 16) - (Tile.TILE_SIZE * (percentDone / 100.0f)));
+                                xx += i;
                                 break;
                             case UP:
                                 xx = x * Tile.TILE_SIZE + 4;
-                                yy = (int)(((y * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)) - (i + 1));
+                                yy = (int)(((y * Tile.TILE_SIZE) - 8) + (Tile.TILE_SIZE * (percentDone / 100.0f)));
                                 break;
                             case DOWN:
                                 xx = x * Tile.TILE_SIZE + 4;
-                                yy = (int) ((((y * Tile.TILE_SIZE) + Tile.TILE_SIZE)) - (Tile.TILE_SIZE * (percentDone / 100.0f)) + (i + 1));
+                                yy = (int) ((((y * Tile.TILE_SIZE) + 12)) - (Tile.TILE_SIZE * (percentDone / 100.0f)));
                                 break;
                         }
                         b.draw(item.getTexture(), xx, yy, 8, 8);
@@ -357,7 +378,9 @@ public class MachineType {
             this.miningResource = miningResource;
             this.x = x; this.y = y;
         }
-        public void tick() {}
+        public void tick() {
+            if(MachineHandler.returnDrillAt(x, y) == null) MachineHandler.removeDrillAt(x, y);
+        }
         public int getMiningSpeed() {
             switch(resourceType) {
                 case COPPER:
@@ -397,6 +420,8 @@ public class MachineType {
         }
 
         public void tick() {
+            if(MachineHandler.returnNodeAt(x, y) == null) MachineHandler.removeNodeAt(x, y);
+
             deferIO();
 
             if(storedItems.size() > 0) {
@@ -680,6 +705,8 @@ public class MachineType {
         short tir = 0, tickBuffer = 50;
 
         public void tick() {
+
+            if(MachineHandler.returnAssemblerAt(x, y) == null) MachineHandler.removeAssemblerAt(x, y);
 
             if(tir < tickBuffer) {
                 tir++; return;

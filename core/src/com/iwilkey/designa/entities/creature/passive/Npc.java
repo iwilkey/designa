@@ -45,7 +45,7 @@ public class Npc extends Creature {
     boolean walkLeft = true;
 
     // Strings
-    String name;
+    public String name;
 
     // Integers
     int heartSpacing = 4;

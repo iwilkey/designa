@@ -32,7 +32,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "pa1.0.50";
+    public static String VERSION = "alpha 1.0.0";
     // Cursor
     public static TextureRegion cursor;
     // Font
@@ -605,91 +605,91 @@ public class Assets {
 
         // Items
 
-        barkResource = new Item(Assets.wood[0], "Bark",100,
+        barkResource = new Item(Assets.wood[0], "Bark", "Find this resource on trees!",100,
                 new ItemType.Resource("Wood", "Bark"));
-        stickResource = new Item(Assets.wood[1], "Sticks", 101,
+        stickResource = new Item(Assets.wood[1], "Sticks", "Level 2 wood resource.", 101,
                 new ItemType.Resource("Wood", "Sticks"));
-        plywoodResource = new Item(Assets.wood[2], "Plywood", 102,
+        plywoodResource = new Item(Assets.wood[2], "Plywood", "Level 3 wood resource.",102,
                 new ItemType.Resource("Wood", "Plywood"));
-        hardwoodResource = new Item(Assets.wood[3], "Hardwood", 103,
+        hardwoodResource = new Item(Assets.wood[3], "Hardwood", "Level 4 wood resource.", 103,
                 new ItemType.Resource("Wood", "Hardwood"));
-        reinforcedHardwoodResource = new Item(Assets.wood[4], "Reinforced Hardwood", 104,
+        reinforcedHardwoodResource = new Item(Assets.wood[4], "Reinforced Hardwood", "Level 5 wood resource.", 104,
                 new ItemType.Resource("Wood", "Reinforced Hardwood"));
-        strongwoodResource = new Item(Assets.wood[5], "Strongwood", 105,
+        strongwoodResource = new Item(Assets.wood[5], "Strongwood", "Level 6 wood resource.", 105,
                 new ItemType.Resource("Wood", "Strongwood"));
-        reinforcedStrongwoodResource = new Item(Assets.wood[6], "Reinforced Strongwood", 106,
+        reinforcedStrongwoodResource = new Item(Assets.wood[6], "Reinforced Strongwood", "Ultimate wood resource.", 106,
                 new ItemType.Resource("Wood", "Reinforced Strongwood"));
 
         // Stone
-        rockResource = new Item(Assets.rock[0], "Rocks", 107,
+        rockResource = new Item(Assets.rock[0], "Rocks", "Find this resource by mining stone underground.", 107,
                 new ItemType.Resource("Stone", "Rocks"));
-        gravelResource = new Item(Assets.rock[1], "Gravel", 108,
+        gravelResource = new Item(Assets.rock[1], "Gravel", "Level 2 rock resource.", 108,
                 new ItemType.Resource("Stone", "Gravel"));
-        concreteResource = new Item(Assets.rock[2], "Concrete", 109,
+        concreteResource = new Item(Assets.rock[2], "Concrete", "Level 3 rock resource.", 109,
                 new ItemType.Resource("Stone", "Concrete"));
-        reinforcedConcreteResource = new Item(Assets.rock[3], "Reinforced Concrete", 110,
+        reinforcedConcreteResource = new Item(Assets.rock[3], "Reinforced Concrete", "Level 4 rock resource.", 110,
                 new ItemType.Resource("Stone", "Reinforced Concrete"));
-        condensedSlabResource = new Item(Assets.rock[4], "Condensed Slab", 111,
+        condensedSlabResource = new Item(Assets.rock[4], "Condensed Slab", "Level 5 rock resource.", 111,
                 new ItemType.Resource("Stone", "Condensed Slab"));
-        strongstoneResource = new Item(Assets.rock[5], "Strongstone", 112,
+        strongstoneResource = new Item(Assets.rock[5], "Strongstone", "Level 6 rock resource.",112,
                 new ItemType.Resource("Stone", "Strongstone"));
-        reinforcedStrongstoneResource = new Item(Assets.rock[6], "Reinforced Strongstone", 113,
+        reinforcedStrongstoneResource = new Item(Assets.rock[6], "Reinforced Strongstone", "Ultimate rock resource.", 113,
                 new ItemType.Resource("Stone", "Reinforced Strongstone"));
 
         // Copper
-        copperScrapResource = new Item(Assets.copper[0], "Copper Scrap", 114,
+        copperScrapResource = new Item(Assets.copper[0], "Copper Scrap", "Find this resource by mining copper ore underground.", 114,
                 new ItemType.Resource("Copper", "Copper Scrap"));
-        recycledCopperResource = new Item(Assets.copper[1], "Recycled Copper", 115,
+        recycledCopperResource = new Item(Assets.copper[1], "Recycled Copper", "Level 2 copper resource.", 115,
                 new ItemType.Resource("Copper", "Recycled Copper"));
-        bluestoneResource = new Item(Assets.copper[2], "Bluestone", 116,
+        bluestoneResource = new Item(Assets.copper[2], "Bluestone", "Level 3 copper resource.", 116,
                 new ItemType.Resource("Copper", "Bluestone"));
-        reinforcedBluestoneResource = new Item(Assets.copper[3], "Reinforced Bluestone", 117,
+        reinforcedBluestoneResource = new Item(Assets.copper[3], "Reinforced Bluestone", "Level 4 copper resource.", 117,
                 new ItemType.Resource("Copper", "Reinforced Bluestone"));
-        romanVitriolResource = new Item(Assets.copper[4], "Roman Vitriol", 118,
+        romanVitriolResource = new Item(Assets.copper[4], "Roman Vitriol", "Ultimate copper resource.",118,
                 new ItemType.Resource("Copper", "Roman Vitriol"));
 
         // Silver
-        silverScrapResource = new Item(Assets.silver[0], "Silver Scrap", 119,
+        silverScrapResource = new Item(Assets.silver[0], "Silver Scrap", "Find this resource by mining silver ore underground.",119,
                 new ItemType.Resource("Silver", "Silver Scrap"));
-        recycledSilverResource = new Item(Assets.silver[1], "Recycled Silver", 120,
+        recycledSilverResource = new Item(Assets.silver[1], "Recycled Silver", "Level 2 silver resource.", 120,
                 new ItemType.Resource("Silver", "Recycled Silver"));
-        coinSilverResource = new Item(Assets.silver[2], "Coin Silver", 121,
+        coinSilverResource = new Item(Assets.silver[2], "Coin Silver", "Level 3 silver resource.", 121,
                 new ItemType.Resource("Silver", "Coin Silver"));
-        sterlingSilverResource = new Item(Assets.silver[3], "Sterling Silver", 122,
+        sterlingSilverResource = new Item(Assets.silver[3], "Sterling Silver", "Level 4 silver resource.", 122,
                 new ItemType.Resource("Silver", "Sterling Silver"));
-        reinforcedSterlingSilverResource = new Item(Assets.silver[4], "Reinforced Sterling Silver", 123,
+        reinforcedSterlingSilverResource = new Item(Assets.silver[4], "Reinforced Sterling Silver", "Level 5 silver resource.", 123,
                 new ItemType.Resource("Silver", "Reinforced Sterling Silver"));
-        fineSilverResource = new Item(Assets.silver[5], "Fine Silver", 124,
+        fineSilverResource = new Item(Assets.silver[5], "Fine Silver", "Level 6 silver resource.", 124,
                 new ItemType.Resource("Silver", "Fine Silver"));
-        reinforcedFineSilverResource = new Item(Assets.silver[6], "Reinforced Fine Silver", 125,
+        reinforcedFineSilverResource = new Item(Assets.silver[6], "Reinforced Fine Silver", "Ultimate silver resource.", 125,
                 new ItemType.Resource("Silver", "Reinforced Fine Silver"));
 
         // Iron
-        ironScrapResource = new Item(Assets.iron[0], "Iron Scrap", 126,
+        ironScrapResource = new Item(Assets.iron[0], "Iron Scrap", "Find this resource by mining iron ore underground.", 126,
                 new ItemType.Resource("Iron", "Iron Scrap"));
-        recycledIronResource = new Item(Assets.iron[1], "Recycled Iron", 127,
+        recycledIronResource = new Item(Assets.iron[1], "Recycled Iron", "Level 2 iron resource.", 127,
                 new ItemType.Resource("Iron", "Recycled Iron"));
-        castIronResource = new Item(Assets.iron[2], "Cast Iron", 128,
+        castIronResource = new Item(Assets.iron[2], "Cast Iron", "Level 3 iron resource.", 128,
                 new ItemType.Resource("Iron", "Cast Iron"));
-        reinforcedCastIronResource = new Item(Assets.iron[3], "Reinforced Cast Iron", 129,
+        reinforcedCastIronResource = new Item(Assets.iron[3], "Reinforced Cast Iron", "Level 4 iron resource.", 129,
                 new ItemType.Resource("Iron", "Reinforced Cast Iron"));
-        steelResource = new Item(Assets.iron[4], "Steel", 130,
+        steelResource = new Item(Assets.iron[4], "Steel", "Level 5 iron resource.", 130,
                 new ItemType.Resource("Iron", "Steel"));
-        reinforcedSteelResource = new Item(Assets.iron[5], "Reinforced Steel", 131,
+        reinforcedSteelResource = new Item(Assets.iron[5], "Reinforced Steel", "Ultimate iron resource.", 131,
                 new ItemType.Resource("Iron", "Reinforced Steel"));
 
         // Carbon
-        carbonSampleResource = new Item(Assets.carbon[0], "Carbon Sample", 132,
+        carbonSampleResource = new Item(Assets.carbon[0], "Carbon Sample", "Find this resource by killing living things.", 132,
                 new ItemType.Resource("Carbon", "Carbon Sample"));
-        graphiteResource = new Item(Assets.carbon[1], "Graphite", 133,
+        graphiteResource = new Item(Assets.carbon[1], "Graphite", "Level 2 carbon resource.",133,
                 new ItemType.Resource("Carbon", "Graphite"));
-        compressedGraphite = new Item(Assets.carbon[2], "Compressed Graphite", 134,
+        compressedGraphite = new Item(Assets.carbon[2], "Compressed Graphite", "Level 3 carbon resource.",134,
                 new ItemType.Resource("Carbon", "Compressed Graphite"));
-        weakDiamondResource = new Item(Assets.carbon[3], "Weak Diamond", 135,
+        weakDiamondResource = new Item(Assets.carbon[3], "Weak Diamond", "Level 4 carbon resource.", 135,
                 new ItemType.Resource("Carbon", "Weak Diamond"));
-        diamondResource = new Item(Assets.carbon[4], "Diamond", 136,
+        diamondResource = new Item(Assets.carbon[4], "Diamond", "Level 5 carbon resource.", 136,
                 new ItemType.Resource("Carbon", "Diamond"));
-        reinforcedDiamondResource = new Item(Assets.carbon[5], "Reinforced Diamond", 137,
+        reinforcedDiamondResource = new Item(Assets.carbon[5], "Reinforced Diamond", "Ultimate carbon resource.", 137,
                 new ItemType.Resource("Carbon", "Reinforced Diamond"));
 
         // PlaceableBlocks
@@ -698,15 +698,15 @@ public class Assets {
         stoneItem = new Item(Assets.stone, "Stone", 1,
                 new ItemType.PlaceableBlock(stoneTile.getID()));
             // Construction
-            plywoodTileItem = new Item(Assets.plywood, "Plywood Tile", 2,
+            plywoodTileItem = new Item(Assets.plywood, "Plywood Tile", "Level 1 defense.", 2,
                 new ItemType.PlaceableBlock.CreatableTile(plywoodTile.getID()));
-            hardwoodTileItem = new Item(Assets.hardwood, "Hardwood Tile", 3,
+            hardwoodTileItem = new Item(Assets.hardwood, "Hardwood Tile", "Level 2 defense.", 3,
                 new ItemType.PlaceableBlock.CreatableTile(hardwoodTile.getID()));
-            reinforcedHardwoodTileItem = new Item(Assets.reinforcedHardwood, "Reinforced Hardwood Tile", 4,
+            reinforcedHardwoodTileItem = new Item(Assets.reinforcedHardwood, "Reinforced Hardwood Tile", "Level 3 defense.", 4,
                 new ItemType.PlaceableBlock.CreatableTile(reinforcedHardwoodTile.getID()));
-            strongwoodTileItem = new Item(Assets.strongwood, "Strongwood Tile", 5,
+            strongwoodTileItem = new Item(Assets.strongwood, "Strongwood Tile", "Level 4 defense.", 5,
                 new ItemType.PlaceableBlock.CreatableTile(strongwoodTile.getID()));
-            reinforcedStrongwoodTileItem = new Item(Assets.reinforcedStrongwood, "Reinforced Strongwood Tile", 6,
+            reinforcedStrongwoodTileItem = new Item(Assets.reinforcedStrongwood, "Reinforced Strongwood Tile", "Level 5 defense.", 6,
                 new ItemType.PlaceableBlock.CreatableTile(reinforcedStrongwoodTile.getID()));
 
         // Non-construction creatable tiles
@@ -714,41 +714,41 @@ public class Assets {
                 new ItemType.PlaceableBlock.CreatableTile(torchTile.getID()));
         crateItem = new Item(Assets.crate, "Crate", "Place this item to store items from your\ninventory, pipes, nodes, or assemblers.", 21,
                 new ItemType.PlaceableBlock.CreatableTile.Storage(crateTile.getID()));
-        ladderItem = new Item(Assets.ladder, "Ladder", 26,
+        ladderItem = new Item(Assets.ladder, "Ladder", "Use this item to travel vertically.", 26,
                 new ItemType.PlaceableBlock.CreatableTile(ladderTile.getID()));
 
         //CreatableItems
             // Tools
                 // Drills
-                simpleDrillItem = new Item(Assets.simpleDrill, "Copper Drill", 10,
+                simpleDrillItem = new Item(Assets.simpleDrill, "Copper Drill", "Use this item to speed up the process\nof mining and digging.", 10,
                     new ItemType.CreatableItem.Tool.Drill("copper-drill", 5, 1));
 
-                wrenchItem = new Item(Assets.wrench, "Wrench", 25,
+                wrenchItem = new Item(Assets.wrench, "Wrench", "Change the orientation of machines.\nNOTE: As of alpha 1.0.0, this doesn't yet work.", 25,
                     new ItemType.CreatableItem.Tool.Wrench(1));
 
                 // Mechanical Drill
-                copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", 22,
+                copperMechanicalDrillItem = new Item(Assets.copperMechanicalDrill[0], "Copper Mechanical Drill", "Place this and attach a pipe to mine\nwhat ever tile you place it on for you.", 22,
                     new ItemType.PlaceableBlock.CreatableTile.MechanicalDrill(copperMechanicalDrillTile.getID()));
 
                 // Node
-                nodeItem = new Item(Assets.node[0], "Node", 24,
+                nodeItem = new Item(Assets.node[0], "Node", "Use this as a junction to \nperpendicularly change a pipe line\ndirection or to divide up item flow.", 24,
                     new ItemType.PlaceableBlock.CreatableTile.Node(nodeTile.getID()));
 
                 // Pipes
-                stonePipeItem = new Item(Assets.stonePipeUp[0], "Stone Pipe", 23,
+                stonePipeItem = new Item(Assets.stonePipeUp[0], "Stone Pipe", "Simple transport for items. \nAny item can travel in it.", 23,
                     new ItemType.PlaceableBlock.CreatableTile.Pipe(stonePipeTile.getID()));
 
                 // Assembler
-                assemblerItem = new Item(Assets.assembler, "Assembler", 27,
+                assemblerItem = new Item(Assets.assembler, "Assembler", "Left click it with an item in your hand\nand pipe in the recipe to output the item desired!", 27,
                     new ItemType.PlaceableBlock.CreatableTile.Assembler(assemblerTile.getID()));
 
             // Weapons
-                blasterBaseItem = new Item(Assets.blasterBase, "Blaster Base", 28,
+                blasterBaseItem = new Item(Assets.blasterBase, "Blaster Base", "All blasters have to sit on this item.", 28,
                     new ItemType.PlaceableBlock.CreatableTile.BlasterBase(blasterBaseTile.getID()));
-                simpleBlasterItem = new Item(Assets.simpleBlasterBodyRight, "Simple Blaster", 29,
+                simpleBlasterItem = new Item(Assets.simpleBlasterBodyRight, "Simple Blaster", "Place this on a base and, next to it, use\nthe arrow keys to aim, c to shoot.\nNOTE: Make sure it's loaded somehow!", 29,
                     new ItemType.CreatableItem.Weapon.Blaster("simple-blaster", 1));
                 // Ammo
-                copperPelletItem = new Item(Assets.copperPellet, "Copper Pellet", 29,
+                copperPelletItem = new Item(Assets.copperPellet, "Copper Pellet", "Level 1 ammo for blasters.\nLeft-click near a blaster to load it.", 29,
                     new ItemType.CreatableItem.Weapon.Pellet("copper-pellet"));
 
         // Item Recipes

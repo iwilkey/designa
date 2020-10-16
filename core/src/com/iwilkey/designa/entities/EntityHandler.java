@@ -58,8 +58,9 @@ public class EntityHandler {
 
         // Initialize the entity array.
         entities = new ArrayList<Entity>();
+    }
 
-        // Add the player.
+    public void addPlayer() {
         entities.add(player);
     }
 
@@ -112,8 +113,9 @@ public class EntityHandler {
      * This method will add a new entity into the list when invoked.
      * @param e The new entity to add.
      */
-    public void addEntity(Entity e) {
+    public Entity addEntity(Entity e) {
         entities.add(e);
+        return e;
     }
 
     /*

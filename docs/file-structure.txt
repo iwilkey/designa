@@ -73,8 +73,8 @@ Every game will be saved in this format:
                 be defined
 
                 ex.
-                1034 49 0-3 (Right, Down, Left, Up)
-                1035 49 0-3
+                1034-49-0-3 (Right, Down, Left, Up)
+                1035-49-0-3-12;32-12;100-ect.
                 ...
 
             - nde.dsw (nodes)

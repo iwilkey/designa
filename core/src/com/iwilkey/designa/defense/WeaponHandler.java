@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.defense.WeaponType.SimpleBlaster;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 public class WeaponHandler {
 
@@ -30,7 +31,9 @@ public class WeaponHandler {
     }
 
     public void tick() {
-        for(SimpleBlaster blaster : blasters) blaster.tick();
+        try {
+            for (SimpleBlaster blaster : blasters) blaster.tick();
+        } catch (ConcurrentModificationException ignored) {}
     }
     public void render(Batch b) {
         for(SimpleBlaster blaster : blasters) blaster.render(b);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.iwilkey.designa.assets.Assets;
 import com.iwilkey.designa.gfx.Text;
+import com.iwilkey.designa.gui.Hud;
 import com.iwilkey.designa.gui.ui.ClickListener;
 import com.iwilkey.designa.gui.ui.TextButton;
 import com.iwilkey.designa.gui.ui.UIManager;
@@ -56,6 +57,7 @@ public class WorldLoaderState extends State {
                 public void onClick() {
                     switchState(4); // Switch to game state
                     GameState.loadWorld("worlds/" + titles.get(finalS) + "/");
+                    Hud.gameMenu = false;
                 }
             });
             uiManager.addObject(button);
