@@ -748,7 +748,7 @@ public class Assets {
                 simpleBlasterItem = new Item(Assets.simpleBlasterBodyRight, "Simple Blaster", "Place this on a base and, next to it, use\nthe arrow keys to aim, c to shoot.\nNOTE: Make sure it's loaded somehow!", 29,
                     new ItemType.CreatableItem.Weapon.Blaster("simple-blaster", 1));
                 // Ammo
-                copperPelletItem = new Item(Assets.copperPellet, "Copper Pellet", "Level 1 ammo for blasters.\nLeft-click near a blaster to load it.", 29,
+                copperPelletItem = new Item(Assets.copperPellet, "Copper Pellet", "Level 1 ammo for blasters.\nLeft-click near a blaster to load it.", 30,
                     new ItemType.CreatableItem.Weapon.Pellet("copper-pellet"));
 
         // Item Recipes
