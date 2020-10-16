@@ -820,7 +820,7 @@ public class World {
             w.write("\n");
 
             for(int y = 0; y < 400 / InventorySlot.SLOT_HEIGHT; y++) {
-                for (int x = 0; x < 200 / InventorySlot.SLOT_WIDTH; x++) {
+                for (int x = 0; x < 400 / InventorySlot.SLOT_WIDTH; x++) {
                     Item i = null;
                     int count = 0;
                     try {

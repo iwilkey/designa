@@ -521,6 +521,11 @@ Date || Build ||
     - Items now render in correct stacks while in a backed up pipe
     - Added item descriptions
     - When starting a new world, the player is now granted 99 copper pellets,
-        a blaster base and simple blaster.
+        a blaster base and simple blaster
 
 -- READY FOR a1.0.0 RELEASE! --
+
+10/16/2020 || alpha 1.0.1 ||
+    - Patched an inventory saving issue
+    - Softened/changed some crafting recipes
+    - Fixed player collider issue with other tiles

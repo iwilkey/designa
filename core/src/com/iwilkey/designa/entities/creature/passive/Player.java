@@ -91,12 +91,12 @@ public class Player extends Creature {
         facingLeft = true;
 
         // Set the collider.
-        collider.width = (width - 3);
+        collider.width = (width - 10);
         collider.height = height;
         collider.x = (width / 2) - (collider.width / 2);
         collider.y = (height / 2) - (collider.height / 2) + 1;
 
-        hitBox = new Rectangle(collider.x, collider.y, collider.width, collider.height);
+        hitBox = new Rectangle(collider.x, collider.y, collider.width + 6, collider.height);
 
         // Init animations
         animations = new Animation[4];

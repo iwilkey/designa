@@ -253,8 +253,8 @@ public abstract class ItemRecipe {
                 public SimpleDrillRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.plywoodResource, 16);
-                    add(Assets.recycledCopperResource, 8);
+                    add(Assets.plywoodResource, 4);
+                    add(Assets.recycledCopperResource, 4);
                     add(Assets.coinSilverResource, 2);
                 }
             }
@@ -290,8 +290,9 @@ public abstract class ItemRecipe {
             public CrateRecipe(Item item) { super(item); }
             @Override
             public void create() {
-                add(Assets.plywoodTileItem, 4);
-                add(Assets.silverScrapResource, 8);
+                add(Assets.barkResource, 4);
+                add(Assets.silverScrapResource, 4);
+                add(Assets.copperScrapResource, 4);
             }
         }
 
@@ -338,7 +339,7 @@ public abstract class ItemRecipe {
                 public CopperMechanicalDrillRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.recycledCopperResource, 8);
+                    add(Assets.recycledCopperResource, 3);
                 }
             }
 
@@ -347,8 +348,8 @@ public abstract class ItemRecipe {
                 public NodeRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
-                    add(Assets.recycledCopperResource, 2);
-                    add(Assets.silverScrapResource, 2);
+                    add(Assets.recycledCopperResource, 1);
+                    add(Assets.rockResource, 2);
                 }
             }
 
@@ -366,6 +367,7 @@ public abstract class ItemRecipe {
                 public AssemblerRecipe(Item item) { super(item); }
                 @Override
                 public void create() {
+                    add(Assets.recycledCopperResource, 4);
                     add(Assets.sterlingSilverResource, 4);
                     add(Assets.castIronResource, 2);
                 }
@@ -376,7 +378,8 @@ public abstract class ItemRecipe {
         public BlasterBaseRecipe(Item item) { super(item); }
         @Override
         public void create() {
-            add(Assets.steelResource, 8);
+            add(Assets.steelResource, 2);
+            add(Assets.recycledCopperResource,2);
         }
     }
 
@@ -384,7 +387,7 @@ public abstract class ItemRecipe {
         public SimpleBlasterRecipe(Item item) { super(item); }
         @Override
         public void create() {
-            add(Assets.castIronResource, 8);
+            add(Assets.castIronResource, 2);
         }
     }
 
