@@ -7,17 +7,19 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.iwilkey.designa.Game;
 import com.iwilkey.designa.GameBuffer;
+import com.iwilkey.designa.entities.creature.passive.Player;
 import com.iwilkey.designa.gfx.Camera;
 import com.iwilkey.designa.gfx.LightManager;
 import com.iwilkey.designa.gfx.Text;
 import com.iwilkey.designa.input.InputHandler;
+import com.iwilkey.designa.inventory.crate.Crate;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.world.World;
 import com.iwilkey.designa.world.WorldGeneration;
 
 public class GameState extends State {
 
-    public static boolean hasLost = false;
+    public static boolean hasLost = false, crateOpen = false;
     private static World world;
 
     @Override
@@ -37,10 +39,24 @@ public class GameState extends State {
                 LightManager.highestTile[World.w / 2] * Tile.TILE_SIZE));
     }
 
+    short cratesClosed = 0;
+    Player player;
     @Override
     public void tick() {
         Game.gb.getCamera().tick();
         world.tick();
+
+        player = World.getEntityHandler().getPlayer();
+        cratesClosed = 0;
+        if(player.crates.size() != 0) {
+            for (Crate crate : player.crates) {
+                if (crate.isActive) {
+                    crateOpen = true;
+                    break;
+                } else cratesClosed++;
+            }
+        }
+        if(cratesClosed == player.crates.size()) crateOpen = false;
 
         if(hasLost) {
             if(InputHandler.escapeRequest) {

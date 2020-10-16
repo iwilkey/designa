@@ -529,3 +529,11 @@ Date || Build ||
     - Patched an inventory saving issue
     - Softened/changed some crafting recipes
     - Fixed player collider issue with other tiles
+    - Fixed perlin seed generation
+    - Pipes now spit out items at the end of their path if there is nothing connected to it
+    - Geometry now does not render when a crate is open
+    - Nodes and Assemblers now tick at the proper rate when time is sped up
+    - Fixed the simple blaster not spawning when broken
+    - You can now load a blaster continuously by holding RMB. Faster while time is sped up as well.
+
+-- READY FOR a1.0.1 RELEASE! --

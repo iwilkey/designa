@@ -17,6 +17,7 @@ import com.iwilkey.designa.inventory.ToolSlot;
 import com.iwilkey.designa.items.Item;
 import com.iwilkey.designa.tiles.Tile;
 import com.iwilkey.designa.utils.Utils;
+import com.iwilkey.designa.world.AmbientCycle;
 import com.iwilkey.designa.world.World;
 
 import java.awt.Rectangle;
@@ -138,16 +139,24 @@ public class WeaponType {
         }
 
         float timer = 0.0f;
+        short tt = 0, lc = 30;
         public void tick() {
 
-            if(World.getTile(x, y) != Assets.blasterBaseTile) {
+            if(World.getTile(x, y) != Assets.blasterBaseTile && WeaponHandler.checkLocationForBlaster(x, y) != null) {
                 WeaponHandler.removeBlasterAt(x, y);
+                World.getItemHandler().addItem(Assets.simpleBlasterItem.createNew(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE));
                 return;
             }
 
             if(playerNear()) {
                 aim();
-                if(InputHandler.rightMouseButtonDown) loadFromPlayer();
+                if(InputHandler.rightMouseButton) {
+                    tt = (AmbientCycle.timeSpeed) ? (short)(tt + 10) : (short)(tt + 1);
+                    if(tt > lc) {
+                        loadFromPlayer();
+                        tt = 0;
+                    }
+                } else tt = lc;
             }
 
             for(Pellet p : shotPellets) p.tick();

@@ -106,7 +106,7 @@ public class Game extends ApplicationAdapter {
 		if(State.getCurrentState() != null) State.getCurrentState().onGUI(guiBatch);
 		guiBatch.end();
 
-		if(!Hud.gameMenu && !Inventory.active) drawGeometry();
+		if(!Hud.gameMenu && !Inventory.active && !GameState.crateOpen) drawGeometry();
 
 		if(timer > 1000000000) {
 			tps = ticks;

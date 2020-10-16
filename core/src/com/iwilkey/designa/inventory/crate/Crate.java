@@ -440,6 +440,9 @@ public class Crate {
 
     public void render(Batch b) {
         if (isActive) {
+            b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, Game.h - 300 - 20, 480, 275);
+            Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 300) + 220, 11);
+            playerInventory.renderPlayerInventory(b, 0);
             b.draw(bg, Inventory.CRATE_X - 30, Inventory.CRATE_Y - 20, w + 90, h + 82);
             Text.draw(b, "Crate", Inventory.CRATE_X + (4 * InventorySlot.SLOT_WIDTH) - 18,
                     Inventory.CRATE_Y + (8 * InventorySlot.SLOT_HEIGHT) + 24, 11);
@@ -449,10 +452,6 @@ public class Crate {
                             (y * InventorySlot.SLOT_HEIGHT) + Inventory.CRATE_Y);
                 }
             }
-
-            b.draw(bg, (Gdx.graphics.getWidth() / 2) - 228, Game.h - 300 - 20, 480, 275);
-            Text.draw(b, "Inventory", (Gdx.graphics.getWidth() / 2) - 40, (Game.h - 300) + 220, 11);
-            playerInventory.renderPlayerInventory(b, 0);
         }
     }
 

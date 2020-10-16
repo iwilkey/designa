@@ -118,11 +118,9 @@ public class Hud {
     public void render(Batch b) {
 
         renderHealthBar(b);
+        if(player.crates.size() != 0) for(Crate crate : player.crates) if(crate.isActive) crate.render(b);
         player.getInventory().render(b);
         player.getToolSlot().render(b);
-        if(player.crates.size() != 0) for(Crate crate : player.crates) {
-            if(crate.isActive) crate.render(b);
-        }
 
         if(BuildingHandler.backBuilding){
             b.draw(Assets.backBuilding[1], Game.w - 80, 72, 64, 64);

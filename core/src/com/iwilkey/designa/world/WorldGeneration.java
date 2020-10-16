@@ -45,8 +45,8 @@ public class WorldGeneration {
     public static ArrayList<Integer> trees;
 
     private static final int sampleDistance = 32;
-    private static final PerlinNoise perlinNoise = new PerlinNoise(MathUtils.random(100000, 1000000));
-    private static final PerlinNoise backTilePerlin = new PerlinNoise(MathUtils.random(10000000, 10000000 + 1000000));
+    private static PerlinNoise perlinNoise = new PerlinNoise(MathUtils.random(100000, 1000000));
+    private static PerlinNoise backTilePerlin = new PerlinNoise(MathUtils.random(10000000, 10000000 + 1000000));
 
     // Clouds
     public static ArrayList<Cloud> clouds = new ArrayList<>();
@@ -167,6 +167,9 @@ public class WorldGeneration {
     }
 
     public static void GenerateTerrain(String name, int width, int height) {
+        perlinNoise = new PerlinNoise(MathUtils.random(100000, 1000000));
+        backTilePerlin = new PerlinNoise(MathUtils.random(10000000, 10000000 + 1000000));
+
         tiles = new int[width][height];
         backTiles = new int[width][height];
 

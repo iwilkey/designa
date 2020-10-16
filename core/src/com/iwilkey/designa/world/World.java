@@ -281,6 +281,7 @@ public class World {
             giveItem(Assets.copperPelletItem, 99);
             giveItem(Assets.blasterBaseItem, 1);
             giveItem(Assets.simpleBlasterItem, 1);
+            giveItem(Assets.crateItem, 1);
         } else {
             // Load Game
             String gamePath = path + "metadata/game.dsw";

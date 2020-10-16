@@ -291,8 +291,8 @@ public abstract class ItemRecipe {
             @Override
             public void create() {
                 add(Assets.barkResource, 4);
-                add(Assets.silverScrapResource, 4);
-                add(Assets.copperScrapResource, 4);
+                add(Assets.silverScrapResource, 1);
+                add(Assets.copperScrapResource, 1);
             }
         }
 

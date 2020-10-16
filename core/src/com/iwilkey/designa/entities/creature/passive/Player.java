@@ -165,10 +165,6 @@ public class Player extends Creature {
 
         hitBox.x = (int)x; hitBox.y = (int)y;
 
-        if(InputHandler.backBuildingToggleRequest) {
-            addEnemy(pointerOnTileX(), pointerOnTileY());
-        }
-
         try {
             if (InputHandler.rightMouseButtonDown && ToolSlot.currentItem.getItem() == Assets.carbonSampleResource) {
                 if (BuildingHandler.inRange) {
@@ -225,13 +221,6 @@ public class Player extends Creature {
         }
     }
 
-    private void addEnemy(int x, int y) {
-        World.getEntityHandler().addEntity(new TerraBot(gb, x * Tile.TILE_SIZE,
-                LightManager.highestTile[x] * Tile.TILE_SIZE));
-    }
-
-
-
     /**
      * This method will take into account where the cursor compared to the camera and evaluate
      * the proper x coordinate for the tile selected.
@@ -240,16 +229,6 @@ public class Player extends Creature {
     private int pointerOnTileX() {
         return (int) ((((InputHandler.cursorX) - Camera.position.x) /
                 Tile.TILE_SIZE) / Camera.scale.x);
-    }
-
-    /**
-     * This method will take into account where the cursor compared to the camera and evaluate
-     * the proper y coordinate for the tile selected.
-     * @return The proper y coordinate of the tile selected in the tile map.
-     */
-    private int pointerOnTileY() {
-        return (int) ((((InputHandler.cursorY) - Camera.position.y) /
-                Tile.TILE_SIZE) / Camera.scale.y);
     }
 
     /**

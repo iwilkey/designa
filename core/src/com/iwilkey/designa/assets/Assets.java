@@ -32,7 +32,7 @@ public class Assets {
      */
 
     // Version
-    public static String VERSION = "alpha 1.0.0";
+    public static String VERSION = "alpha 1.0.1";
     // Cursor
     public static TextureRegion cursor;
     // Font

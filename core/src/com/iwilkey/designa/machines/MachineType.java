@@ -121,6 +121,7 @@ public class MachineType {
                 timer = 0;
             }
 
+            if(destination == Assets.airTile) offloadToAir();
             if(destination == Assets.stonePipeTile) offloadToPipe();
             if(destination == Assets.crateTile) offloadToCrate();
             if(destination == Assets.nodeTile) offloadToNode();
@@ -135,6 +136,36 @@ public class MachineType {
 
         private void removeItemFromTransport(int index) {
             currentItems.remove(index); percentItemTraveled.remove(index);
+        }
+
+        private void offloadToAir() {
+            for(int i = 0; i < percentItemTraveled.size(); i++) {
+                if (percentItemTraveled.get(i) >= 100.0f) {
+                    int xx = 0;
+                    int yy = 0;
+                    switch (direction) {
+                        case RIGHT:
+                            xx = x + 1;
+                            yy = y;
+                            break;
+                        case LEFT:
+                            xx = x - 1;
+                            yy = y;
+                            break;
+                        case UP:
+                            yy = y + 1;
+                            xx = x;
+                            break;
+                        case DOWN:
+                            yy = y - 1;
+                            xx = x;
+                            break;
+                    }
+                    World.getItemHandler().
+                            addItem(currentItems.get(i).createNew(xx * Tile.TILE_SIZE, yy * Tile.TILE_SIZE));
+                    removeItemFromTransport(i);
+                }
+            }
         }
 
         private void offloadToBlaster() {
@@ -408,7 +439,7 @@ public class MachineType {
         public HashMap<Direction, Integer> io = new HashMap<>(); // 0 is input, 1 output, -1 neither, 2 for crate, 3 is other node.
         public ArrayList<Direction> outputs = new ArrayList<>();
         public HashMap<Item, Integer> storedItems = new HashMap<>();
-        public long timer = 0, offloadMax = 20;
+        public long timer = 0, offloadMax = 20, TIME_MULTIPLIER;
         public final int STORAGE_CAP = 1;
 
         public Node(int x, int y) {
@@ -420,12 +451,17 @@ public class MachineType {
         }
 
         public void tick() {
+
+            if(AmbientCycle.timeSpeed) {
+                TIME_MULTIPLIER = 15;
+            } else TIME_MULTIPLIER = 1;
+
             if(MachineHandler.returnNodeAt(x, y) == null) MachineHandler.removeNodeAt(x, y);
 
             deferIO();
 
             if(storedItems.size() > 0) {
-                timer++;
+                timer += 1 * TIME_MULTIPLIER;
                 if (timer > offloadMax) {
                     deferOffloadDirection();
                     timer = 0;
@@ -675,7 +711,7 @@ public class MachineType {
         public ArrayList<Direction> outputs = new ArrayList<>();
         public HashMap<Item, Integer> storedItems = new HashMap<>();
         public int readyItems = 0;
-        public long timer = 0, offloadMax = 20;
+        public long timer = 0, offloadMax = 20, TIME_MULTIPLIER;
         public final int STORAGE_CAP = 1;
 
         public Assembler(int x, int y) {
@@ -705,6 +741,10 @@ public class MachineType {
         short tir = 0, tickBuffer = 50;
 
         public void tick() {
+
+            if(AmbientCycle.timeSpeed) {
+                TIME_MULTIPLIER = 15;
+            } else TIME_MULTIPLIER = 1;
 
             if(MachineHandler.returnAssemblerAt(x, y) == null) MachineHandler.removeAssemblerAt(x, y);
 
@@ -737,7 +777,7 @@ public class MachineType {
             }
 
             if(storedItems.size() > 0) {
-                timer++;
+                timer += 1 * TIME_MULTIPLIER;
                 if (timer > offloadMax) {
                     assemble();
                     if(readyItems - 1 >= 0) deferOffloadDirection(targetRecipe.item);
