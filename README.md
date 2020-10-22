@@ -8,6 +8,7 @@ An open-source sandbox tower defense game focused on creating effective systems 
 
 ## IMPORTANT DEVELOPMENT NOTE
 The game engine is currently being rewritten on a private debug Github repo and will be moved here as soon as it works.
+Basically, don't expect pushes to here until then.
 
 ---
 
