@@ -8,6 +8,7 @@ import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.world.World;
 
@@ -46,13 +47,20 @@ public class BuildingHandler {
         selector.y = tileYSelected * Tile.TILE_SIZE;
 
         if (InputHandler.placeTileRequest) {
-            placeTile(Tile.DIRT, tileXSelected, tileYSelected);
+            if(player.inventory.selectedSlot().item != null) {
+                if (player.inventory.selectedSlot().item.getType()
+                        instanceof ItemType.NonCreatableItem.PlaceableTile) {
+                    if ((player.inventory.selectedSlot().count - 1 >= 0))
+                        placeTile(((ItemType.NonCreatableItem.PlaceableTile)
+                                        (player.inventory.selectedSlot().item.getType())).correspondingTile,
+                                tileXSelected, tileYSelected);
+                }
+            }
             InputHandler.placeTileRequest = false;
         }
 
         if(InputHandler.damageTileRequest) {
             damageTile(tileXSelected, tileYSelected);
-            world.activeItemHandler.spawn(Item.DIRT, tileXSelected * Tile.TILE_SIZE + MathUtils.random(-4, 4), tileYSelected * Tile.TILE_SIZE);
             InputHandler.damageTileRequest = false;
         }
 
@@ -72,8 +80,8 @@ public class BuildingHandler {
     public boolean placeTile(Tile tile, int x, int y) {
         if(!inRange) return false;
         if(world.getTile(x, y) == Tile.AIR) {
+            player.inventory.selectedSlot().count--;
             world.FRONT_TILES[x][y] = (byte)tile.getTileID();
-            world.lightHandler.addLight(x, y, 10);
             world.lightHandler.bake();
             return true;
         }
@@ -83,8 +91,8 @@ public class BuildingHandler {
     public boolean damageTile(int x, int y) {
         if(!inRange || y < 1) return false;
         if(world.getTile(x, y) != Tile.AIR) {
+            world.activeItemHandler.spawn(Tile.getItemFromTile(world.getTile(x, y)), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
             world.FRONT_TILES[x][y] = (byte)Tile.AIR.getTileID();
-            world.lightHandler.removeLight(x, y);
             world.lightHandler.bake();
             return true;
         }

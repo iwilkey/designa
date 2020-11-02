@@ -11,7 +11,7 @@ public enum Item {
     DIRT (
             "Dirt",
             0,
-            new ItemType.NonCreatableItem.PlaceableTile(Tile.DIRT.getTileID()),
+            new ItemType.NonCreatableItem.PlaceableTile(Tile.DIRT),
             null,
             Assets.dirt
     );
@@ -34,6 +34,12 @@ public enum Item {
 
     public void render(Batch b, int x, int y) {
         b.draw(texture, x, y, ITEM_WIDTH, ITEM_HEIGHT);
+    }
+
+    public static Tile getTileFromItem(Item i) {
+        if(i.getType() instanceof ItemType.NonCreatableItem.PlaceableTile)
+            return ((ItemType.NonCreatableItem.PlaceableTile)i.getType()).correspondingTile;
+        return null;
     }
 
     public byte getID() { return itemID; }

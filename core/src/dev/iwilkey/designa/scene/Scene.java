@@ -5,6 +5,7 @@ import dev.iwilkey.designa.Game;
 
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.clock.Clock;
+import dev.iwilkey.designa.ui.ScrollableItemList;
 import dev.iwilkey.designa.ui.UIText;
 import dev.iwilkey.designa.ui.UIManager;
 import dev.iwilkey.designa.world.World;
@@ -51,11 +52,12 @@ public abstract class Scene {
         public void start() {
             InputHandler.initSinglePlayerGameSceneInput();
 
-            world = new World(200, 100);
-
             GUI = new UIManager("gui");
+
             GUI.addText(new UIText("FPS: " + Clock.FPS + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT,
                     22, 10, Game.WINDOW_HEIGHT - 10));
+
+            world = new World(GUI,200, 100);
         }
 
         @Override

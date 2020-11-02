@@ -2,6 +2,7 @@ package dev.iwilkey.designa.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.input.InputHandler;
 
 import java.awt.*;
@@ -9,9 +10,12 @@ import java.awt.*;
 public abstract class UIObject {
 
     public enum UIObjectType {
-        TEXT, BUTTON;
+        TEXT, BUTTON, SCROLLABLE;
     }
 
+    public static float XSCALE, YSCALE;
+
+    public final Rectangle relRect;
     public int x, y, width, height;
     public Rectangle collider;
     public boolean hovering;
@@ -19,6 +23,7 @@ public abstract class UIObject {
 
     public UIObject(UIObjectType type, int x, int y, int width, int height) {
         this.type = type;
+        relRect = new Rectangle(x, y, width, height);
         this.x = x; this.y = y;
         this.width = width; this.height = height;
         if(this.type == UIObjectType.TEXT) collider = new Rectangle(x, y + height, width, -height);
@@ -30,14 +35,13 @@ public abstract class UIObject {
     public abstract void render(Batch b);
     public abstract void onClick();
 
-    float xDiff, yDiff;
     public void onResize(int width, int height) {
-        xDiff = (float)width / Game.WINDOW_WIDTH;
-        yDiff = (float)height / Game.WINDOW_HEIGHT;
-        collider.height = (int)Math.ceil(collider.height * yDiff);
-        collider.width = (int)Math.ceil(collider.width * xDiff);
-        collider.x = (int)Math.ceil(collider.x * xDiff);
-        collider.y = (int)Math.ceil(collider.y * yDiff);
+        XSCALE = (float)width / Camera.GW;
+        YSCALE = (float)height / Camera.GH;
+        collider.height = (int)(relRect.height * YSCALE);
+        collider.width = (int)(relRect.width * XSCALE);
+        collider.x = (int)(relRect.x * XSCALE);
+        collider.y = (int)(relRect.y * YSCALE);
     }
 
     public void onMouseMove() { hovering = collider.contains(InputHandler.cursorX, InputHandler.cursorY); }

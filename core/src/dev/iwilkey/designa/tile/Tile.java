@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
 
 public enum Tile {
 
@@ -28,6 +30,15 @@ public enum Tile {
 
     public void render(Batch b, int x, int y) {
         b.draw(texture, x, y, TILE_SIZE, TILE_SIZE);
+    }
+
+    public static Item getItemFromTile(Tile t) {
+        for(Item i : Item.values()) {
+            if(i.getType() instanceof ItemType.NonCreatableItem.PlaceableTile) {
+                if(((ItemType.NonCreatableItem.PlaceableTile)i.getType()).correspondingTile == t) return i;
+            }
+        }
+        return null;
     }
 
     public boolean isSolid() { return isSolid; }

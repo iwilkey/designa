@@ -24,6 +24,11 @@ public class UIText extends UIObject {
         font.draw(b, message, x, y);
     }
 
+    public void render(Batch b, int xx, int yy, int size) {
+        font.getData().setScale(size / 128.0f);
+        font.draw(b, message, xx, yy);
+    }
+
     @Override
     public void tick() {}
 

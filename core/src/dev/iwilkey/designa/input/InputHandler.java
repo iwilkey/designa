@@ -8,18 +8,20 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.building.BuildingHandler;
+import dev.iwilkey.designa.ui.UIObject;
 
 public class InputHandler {
 
     private static boolean[] keys, jp, cp;
     private static boolean lmbd, rmbd, jcl, ccl, jcr, ccr;
 
-    public static double dMouse; // Change in MousePos (magnitude)
-    public static int cursorX, cursorY;
+    public static double dMouse, // Change in MousePos (magnitude)
+        dx, dy;
+    public static float cursorX, cursorY;
     public static boolean rightMouseButton, leftMouseButton, rightMouseButtonDown,
             leftMouseButtonDown, mouseCurrentlyMoving, rightMouseButtonUp, leftMouseButtonUp,
             moveLeftRequest, moveRightRequest, jumpRequest, placeTileRequest, damageTileRequest;
-    public static float zoomRequest;
+    public static float zoomRequest, scrollWheelRequestValue;
 
     public static void init() {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
@@ -62,6 +64,12 @@ public class InputHandler {
                     @Override
                     public boolean mouseMoved(int x, int y) {
                         cursorX = x; cursorY = Game.WINDOW_HEIGHT - y;
+                        return true;
+                    }
+
+                    @Override
+                    public boolean scrolled(int amount) {
+                        scrollWheelRequestValue = amount;
                         return true;
                     }
 
@@ -142,9 +150,11 @@ public class InputHandler {
     public static void tick() {
         frameCounter++;
         if(frameCounter == 1) {
-            mousePosTwoFrames[0][0] = cursorX; mousePosTwoFrames[0][1] = cursorY;
+            mousePosTwoFrames[0][0] = (int)(cursorX * UIObject.XSCALE); mousePosTwoFrames[0][1] = (int)(cursorY * UIObject.YSCALE);
         } else if (frameCounter == 2) {
-            mousePosTwoFrames[1][0] = cursorX; mousePosTwoFrames[1][1] = cursorY;
+            mousePosTwoFrames[1][0] = (int)(cursorX * UIObject.XSCALE); mousePosTwoFrames[1][1] = (int)(cursorY * UIObject.YSCALE);
+            dx = mousePosTwoFrames[1][0] - mousePosTwoFrames[0][0];
+            dy = mousePosTwoFrames[1][1] - mousePosTwoFrames[0][1];
             dMouse = Math.sqrt(Math.pow((mousePosTwoFrames[1][0] - mousePosTwoFrames[0][0]), 2) +
                     Math.pow((mousePosTwoFrames[1][1] - mousePosTwoFrames[0][1]), 2));
             frameCounter = 0;

@@ -43,7 +43,7 @@ public class ActiveItemHandler {
 
     private void pickup(Item item, Player player) {
         // Add to player inventory
-        System.out.println("Player picked up: " + item.name());
+        player.inventory.add(item);
     }
 
     int c1, c2;

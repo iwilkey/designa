@@ -10,7 +10,8 @@ public class Assets {
     public static String VERSION = "alpha 2.0.0";
     // Cursor
     public static TextureRegion cursor;
-
+    // GUI
+    public static TextureRegion inventorySlot, inventorySelector;
     // Tiles
     public static TextureRegion air, grass, dirt;
 
@@ -29,6 +30,10 @@ public class Assets {
 
         // Cursor
         cursor = ss.crop(0, 5, ss.SLOT_SIZE * 4, ss.SLOT_SIZE * 4);
+
+        // GUI
+        inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);

@@ -10,19 +10,25 @@ import dev.iwilkey.designa.gfx.Animation;
 import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.gfx.Renderer;
 import dev.iwilkey.designa.input.InputHandler;
+import dev.iwilkey.designa.inventory.Inventory;
 import dev.iwilkey.designa.world.World;
 
 public class Player extends Creature {
 
     private final Animation[] animations;
+    public Inventory inventory;
     public BuildingHandler buildingHandler;
 
     public Player(World world, float x, float y) {
         super(world, x, y);
+
         animations = new Animation[2];
         animations[0] = new Animation(5, Assets.walk_right);
         animations[1] = new Animation(5, Assets.walk_left);
+
+        inventory = new Inventory(world, this);
         buildingHandler = new BuildingHandler(world, this);
+
         collider.width -= 12;
         collider.x += 4;
     }
@@ -43,6 +49,7 @@ public class Player extends Creature {
         move();
         Renderer.getCamera().centerOnEntity(this);
         buildingHandler.tick();
+        //if(inventory.selectedSlot().item != null) System.out.println(inventory.selectedSlot().item.name() + " " + inventory.selectedSlot().count);
         // drawCollider();
     }
 

@@ -7,10 +7,10 @@ import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.gfx.LightHandler;
 import dev.iwilkey.designa.gfx.Renderer;
-import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.ActiveItemHandler;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.tile.Tile;
+import dev.iwilkey.designa.ui.UIManager;
 
 public class World {
 
@@ -19,13 +19,14 @@ public class World {
     public byte[][] FRONT_TILES,
         LIGHT_MAP;
 
+    public UIManager uiManager;
     public AmbientCycle ambientCycle;
     public LightHandler lightHandler;
     public EntityHandler entityHandler;
     public ActiveItemHandler activeItemHandler;
     public Player player;
 
-    public World(int width, int height) {
+    public World(UIManager uiManager, int width, int height) {
 
         this.WIDTH = width; this.HEIGHT = height;
         FRONT_TILES = new byte[WIDTH][HEIGHT];
@@ -33,6 +34,7 @@ public class World {
 
         debugGenerateWorld();
 
+        this.uiManager = uiManager;
         ambientCycle = new AmbientCycle(this);
         lightHandler = new LightHandler(this);
         lightHandler.bake();

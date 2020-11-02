@@ -59,7 +59,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(width);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.line(x1, y1, x2, y2);
             shapeRenderer.end();
@@ -144,7 +144,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(stokeWidth);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.rect(x, y, width, height);
             shapeRenderer.end();
@@ -186,7 +186,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(width);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.circle(x, y, radius);
             shapeRenderer.end();
@@ -228,7 +228,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(width);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.circle(x, y, radius);
             shapeRenderer.end();
@@ -273,7 +273,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(stokeWidth);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.rect(x + radius, y + radius, width - 2*radius, height - 2*radius);
             shapeRenderer.rect(x + radius, y, width - 2*radius, radius);
@@ -326,7 +326,7 @@ public class Geometry {
         public void render() {
             Gdx.gl.glLineWidth(width);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setTransformMatrix(Camera.mat);
+            // shapeRenderer.setTransformMatrix(Camera.mat);
             shapeRenderer.setColor(color);
             shapeRenderer.rect(x + radius, y + radius, width - 2*radius, height - 2*radius);
             shapeRenderer.rect(x + radius, y, width - 2*radius, radius);
