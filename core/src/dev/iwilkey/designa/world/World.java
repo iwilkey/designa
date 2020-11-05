@@ -49,7 +49,6 @@ public class World {
     }
 
     private void debugInit() {
-        activeItemHandler.spawn(Item.DIRT, 100 * Tile.TILE_SIZE, 60 * Tile.TILE_SIZE);
     }
 
     public void debugGenerateWorld() {

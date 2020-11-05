@@ -11,8 +11,6 @@ public abstract class ItemType {
         }
     }
 
-    public abstract static class CreatableItem extends ItemType {
-
-    }
+    public abstract static class CreatableItem extends ItemType {}
 
 }

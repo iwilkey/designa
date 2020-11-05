@@ -28,13 +28,15 @@ public class Camera {
     private static float targetZoom = 1;
     public static boolean isZooming = false;
 
+    Timer t;
+
     public Camera(World world, int x, int y) {
         this.world = world;
         position = new Vector3(x, y,0);
         offset = new Vector3(x - (Game.WINDOW_WIDTH / 2f), y - (Game.WINDOW_HEIGHT / 2f),0);
         GW = Game.WINDOW_WIDTH; GH = Game.WINDOW_HEIGHT;
 
-        Clock.addTimer(new Timer(10, new Event() {
+        t = Clock.addTimer(new Timer(10, new Event() {
             @Override
             public void onEvent() {
                 if(!isZooming) return;
@@ -101,5 +103,6 @@ public class Camera {
     public void tick() {
         mat.getTranslation(position);
         translate();
+        if(!t.active) t.enable();
     }
 }

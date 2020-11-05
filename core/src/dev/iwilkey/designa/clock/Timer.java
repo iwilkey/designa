@@ -5,7 +5,7 @@ public class Timer {
     public int length;
     public boolean active;
 
-    double timer;
+    public double timer;
     Event event;
 
     public Timer(int length, Event event) {
@@ -17,12 +17,22 @@ public class Timer {
     public void tick(float dt) {
         if(!active) return;
         timer += 1 * (60.0 / (1 / dt));
-        if(timer >= length) {
-            event();
-            timer = 0;
-        }
+        if(timer >= length) event();
     }
 
-    void event() { event.onEvent(); }
+    void event() {
+        event.onEvent();
+        timer = 0;
+    }
+
+    public void disable() {
+        timer = 0;
+        active = false;
+    }
+
+    public void enable() {
+        timer = 0;
+        active = true;
+    }
 
 }

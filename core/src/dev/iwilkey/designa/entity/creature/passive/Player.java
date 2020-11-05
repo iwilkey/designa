@@ -3,6 +3,7 @@ package dev.iwilkey.designa.entity.creature.passive;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.building.BuildingHandler;
 import dev.iwilkey.designa.entity.creature.Creature;
@@ -11,12 +12,15 @@ import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.gfx.Renderer;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.inventory.Inventory;
+import dev.iwilkey.designa.item.creator.CategoryItemRecipeList;
+import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.world.World;
 
 public class Player extends Creature {
 
     private final Animation[] animations;
     public Inventory inventory;
+    public ItemCreator itemCreator;
     public BuildingHandler buildingHandler;
 
     public Player(World world, float x, float y) {
@@ -27,6 +31,9 @@ public class Player extends Creature {
         animations[1] = new Animation(5, Assets.walk_left);
 
         inventory = new Inventory(world, this);
+        itemCreator = new ItemCreator(this, 10, Game.WINDOW_HEIGHT - 10,
+                ((CategoryItemRecipeList.SLOT_SIZE + CategoryItemRecipeList.SLOT_SPACE) * 5),
+                ((CategoryItemRecipeList.SLOT_SIZE + CategoryItemRecipeList.SLOT_SPACE) * 5));
         buildingHandler = new BuildingHandler(world, this);
 
         collider.width -= 12;
@@ -49,6 +56,7 @@ public class Player extends Creature {
         move();
         Renderer.getCamera().centerOnEntity(this);
         buildingHandler.tick();
+        itemCreator.tick();
         //if(inventory.selectedSlot().item != null) System.out.println(inventory.selectedSlot().item.name() + " " + inventory.selectedSlot().count);
         // drawCollider();
     }

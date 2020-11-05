@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class SpriteSheet {
 
-    public final int SLOT_SIZE = 8;
+    public static final int SLOT_SIZE = 8;
     private final Texture sheet;
     public SpriteSheet(Texture sheet) { this.sheet = sheet; }
 

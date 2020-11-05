@@ -48,7 +48,6 @@ public class UIButton extends UIObject {
 
     @Override
     public void tick() {
-
         if(hovering) {
             if(InputHandler.leftMouseButton) backgroundColor = colors.get(3);
             else backgroundColor = colors.get(2);

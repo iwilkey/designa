@@ -8,6 +8,7 @@ import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.creator.ItemCreator;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ public class ScrollableItemList extends Scrollable {
         super(x, y, width, height);
         slots = new ArrayList<>();
         slotTexture = Assets.inventorySlot; selectTexture = Assets.inventorySelector;
-        for(int i = 0; i < 5; i++) add(null);
     }
 
     public int sizeOfList() {
@@ -50,6 +50,12 @@ public class ScrollableItemList extends Scrollable {
         for(Slot slot : slots)
             if(slot.item == item && slot.collider == r)
                 slots.remove(slot);
+    }
+
+    public Slot selectedSlot() {
+        for(int i = 0; i < slots.size(); i++)
+            if(i == selectedSlot) return slots.get(i);
+        return null;
     }
 
     @Override
@@ -75,12 +81,22 @@ public class ScrollableItemList extends Scrollable {
                 velocityX =  (dx > 0) ? (float)Math.min(InputHandler.dx, SCROLL_SENSITIVITY) :
                         (float)Math.max(InputHandler.dx, -SCROLL_SENSITIVITY); // This is a ternary
             }
+
+            if(ItemCreator.isActive) {
+                velocityX -= (InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY != 0.0f) ?
+                        InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY : 0;
+                InputHandler.scrollWheelRequestValue = 0;
+            }
         } else {
             dx = 0;
             isScrolling = false;
-            velocityX -= (InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY != 0.0f) ?
-                    InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY : 0;
-            InputHandler.scrollWheelRequestValue = 0;
+
+            if(!ItemCreator.isActive) {
+                velocityX -= (InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY != 0.0f) ?
+                        InputHandler.scrollWheelRequestValue * SCROLLWHEEL_SENSITIVITY : 0;
+                InputHandler.scrollWheelRequestValue = 0;
+            }
+
         }
 
         if(velocityX < 0) velocityX = (velocityX + FRICTION < 0) ? velocityX + FRICTION : 0;
@@ -92,7 +108,7 @@ public class ScrollableItemList extends Scrollable {
     private void selectSlot() {
         s = 0;
         for(Slot slot : slots) {
-            center = (int)(((Game.WINDOW_WIDTH - (collider.width + 20)) + (collider.width / 2)) / UIObject.XSCALE);
+            center = (int)(((collider.x + (collider.width / 2)) / UIObject.XSCALE));
             if(slot.collider.x - xSlotOffset > center - ((SLOT_SIZE + SLOT_SPACE)) &&
                     slot.collider.x - xSlotOffset  < center + ((SLOT_SIZE + SLOT_SPACE))) {
                 selectedSlot = s;

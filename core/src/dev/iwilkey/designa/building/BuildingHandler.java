@@ -2,6 +2,7 @@ package dev.iwilkey.designa.building;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.gfx.Camera;
@@ -17,9 +18,10 @@ import java.awt.Rectangle;
 public class BuildingHandler {
 
     public static boolean isBuilding;
-    final float MAX_DIST_RANGE = 2 * Tile.TILE_SIZE;
+    final float MAX_DIST_RANGE = 2 * Tile.TILE_SIZE,
+        MAX_RENDER_RANGE = 4 * Tile.TILE_SIZE;
 
-    boolean inRange, onTop;
+    boolean inRange, onTop, inRenderRange;
     short tileXSelected, tileYSelected;
     Player player;
     World world;
@@ -38,7 +40,7 @@ public class BuildingHandler {
         }
     }
 
-    Rectangle selector = new Rectangle(0,0, Tile.TILE_SIZE, Tile.TILE_SIZE);
+    Rectangle selector = new Rectangle(0, 0, Tile.TILE_SIZE,Tile.TILE_SIZE);
     private void input() {
 
         tileXSelected = (short)pointerOnTileX();
@@ -47,7 +49,7 @@ public class BuildingHandler {
         selector.y = tileYSelected * Tile.TILE_SIZE;
 
         if (InputHandler.placeTileRequest) {
-            if(player.inventory.selectedSlot().item != null) {
+            if (player.inventory.selectedSlot().item != null) {
                 if (player.inventory.selectedSlot().item.getType()
                         instanceof ItemType.NonCreatableItem.PlaceableTile) {
                     if ((player.inventory.selectedSlot().count - 1 >= 0))
@@ -74,6 +76,7 @@ public class BuildingHandler {
 
         inRange = (!player.collider.intersects(selector) && distFromPlayerX < MAX_DIST_RANGE && distFromPlayerY < MAX_DIST_RANGE) &&
             tileYSelected > 0;
+        inRenderRange = (distFromPlayerX < MAX_RENDER_RANGE && distFromPlayerY < MAX_RENDER_RANGE);
 
     }
 
@@ -91,7 +94,8 @@ public class BuildingHandler {
     public boolean damageTile(int x, int y) {
         if(!inRange || y < 1) return false;
         if(world.getTile(x, y) != Tile.AIR) {
-            world.activeItemHandler.spawn(Tile.getItemFromTile(world.getTile(x, y)), x * Tile.TILE_SIZE, y * Tile.TILE_SIZE);
+            world.activeItemHandler.spawn(Tile.getItemFromTile(world.getTile(x, y)), (int)((x * Tile.TILE_SIZE) +
+                    (Item.ITEM_WIDTH / 2f)) + MathUtils.random(-2, 2), (int)((y * Tile.TILE_SIZE) + (Item.ITEM_HEIGHT / 2f) + 2));
             world.FRONT_TILES[x][y] = (byte)Tile.AIR.getTileID();
             world.lightHandler.bake();
             return true;
@@ -101,14 +105,15 @@ public class BuildingHandler {
 
     public void render() {
         if(isBuilding) {
+            if(!inRenderRange) return;
             if(inRange) {
                 Geometry.requests.add(new Geometry.RectangleOutline(
                         tileXSelected * Tile.TILE_SIZE, tileYSelected * Tile.TILE_SIZE,
-                        Tile.TILE_SIZE, Tile.TILE_SIZE, 2, Color.WHITE));
+                        Tile.TILE_SIZE, Tile.TILE_SIZE, 4, Color.WHITE));
             } else {
                 Geometry.requests.add(new Geometry.RectangleOutline(
                         tileXSelected * Tile.TILE_SIZE, tileYSelected * Tile.TILE_SIZE,
-                        Tile.TILE_SIZE, Tile.TILE_SIZE, 2, Color.RED));
+                        Tile.TILE_SIZE, Tile.TILE_SIZE, 4, Color.RED));
             }
         }
     }

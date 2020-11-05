@@ -29,20 +29,14 @@ public class ActiveItemHandler {
 
     List<Rectangle> rectangles;
     public void spawn(Item i, int x, int y) {
-
-        if(activeItems.containsKey(i)) {
-            rectangles = activeItems.get(i);
-            rectangles.add(new Rectangle(x, y, Item.ITEM_WIDTH, Item.ITEM_HEIGHT));
-        } else {
-            rectangles = new ArrayList<>();
-        }
-
+        if(activeItems.containsKey(i)) rectangles = activeItems.get(i);
+        else rectangles = new ArrayList<>();
+        rectangles.add(new Rectangle(x, y, Item.ITEM_WIDTH, Item.ITEM_HEIGHT));
         activeItems.put(i, rectangles);
         timeInAir.add(0.0f);
     }
 
     private void pickup(Item item, Player player) {
-        // Add to player inventory
         player.inventory.add(item);
     }
 
@@ -74,12 +68,12 @@ public class ActiveItemHandler {
             return newPosition;
         }
 
-        if(!collisionWithTile((collider.x + 4) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
-                !collisionWithTile((collider.x + collider.width + 4) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
+        if(!collisionWithTile((collider.x) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
+                !collisionWithTile((collider.x + collider.width) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
                 !checkItemAt(collider.x, ty) && !checkItemAt(collider.x + collider.width, ty)) {
             timeInAir.set(index, timeInAir.get(index) + 0.02f);
             newPosition.y += GRAVITY * (timeInAir.get(index));
-        } else if (collisionWithTile((collider.x + 4) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
+        } else if (collisionWithTile((collider.x) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
                 collisionWithTile((collider.x + collider.width + 4) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE)) {
             timeInAir.set(index, 0.0f);
             newPosition.y = (((int)((newPosition.y + 8) / Tile.TILE_SIZE)) * Tile.TILE_SIZE);

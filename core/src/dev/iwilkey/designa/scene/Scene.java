@@ -3,13 +3,18 @@ package dev.iwilkey.designa.scene;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import dev.iwilkey.designa.Game;
 
+import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.gfx.SpriteSheet;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.clock.Clock;
-import dev.iwilkey.designa.ui.ScrollableItemList;
+import dev.iwilkey.designa.item.creator.ItemCreator;
+import dev.iwilkey.designa.ui.ClickListener;
+import dev.iwilkey.designa.ui.UIImageButton;
 import dev.iwilkey.designa.ui.UIText;
 import dev.iwilkey.designa.ui.UIManager;
 import dev.iwilkey.designa.world.World;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 // This defines what a Scene is. A object that encapsulates certain behaviors so that the ticker and renderer than
@@ -54,9 +59,20 @@ public abstract class Scene {
 
             GUI = new UIManager("gui");
 
+            // Fps, version, and dimension info
             GUI.addText(new UIText("FPS: " + Clock.FPS + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT,
-                    22, 10, Game.WINDOW_HEIGHT - 10));
+                    22, 10, 32));
 
+            // Add item button
+            GUI.addImageButton(new UIImageButton(10, Game.WINDOW_HEIGHT - ((SpriteSheet.SLOT_SIZE * 3) * 3) - 10,
+                    Assets.addItemButton, 3, new ClickListener() {
+                @Override
+                public void onClick() {
+                    ItemCreator.isActive = !ItemCreator.isActive;
+                }
+            }));
+
+            // World init
             world = new World(GUI,200, 100);
         }
 
@@ -66,6 +82,12 @@ public abstract class Scene {
             GUI.tick();
             GUI.texts.get(0).message = "FPS: " + Clock.FPS
                     + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT;
+
+            if(ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.addItemButton)
+                GUI.imageButtons.get(0).image = Assets.subtractItemButton;
+            else if (!ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.subtractItemButton)
+                GUI.imageButtons.get(0).image = Assets.addItemButton;
+
         }
 
         @Override
@@ -76,11 +98,13 @@ public abstract class Scene {
         @Override
         public void onGUI(Batch b) {
             GUI.render(b);
+            if(world.player != null) world.player.itemCreator.render(b);
         }
 
         @Override
         public void onResize(int width, int height) {
             GUI.onResize(width, height);
+            ItemCreator.uiManager.onResize(width, height);
         }
 
         @Override

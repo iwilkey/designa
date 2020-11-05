@@ -14,6 +14,14 @@ public enum Item {
             new ItemType.NonCreatableItem.PlaceableTile(Tile.DIRT),
             null,
             Assets.dirt
+    ),
+
+    GRASS (
+            "Grass",
+            1,
+            new ItemType.NonCreatableItem.PlaceableTile(Tile.GRASS),
+            null,
+            Assets.grass
     );
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;

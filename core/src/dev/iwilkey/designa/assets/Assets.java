@@ -11,7 +11,8 @@ public class Assets {
     // Cursor
     public static TextureRegion cursor;
     // GUI
-    public static TextureRegion inventorySlot, inventorySelector;
+    public static TextureRegion inventorySlot, inventorySelector,
+        addItemButton, subtractItemButton;
     // Tiles
     public static TextureRegion air, grass, dirt;
 
@@ -34,6 +35,8 @@ public class Assets {
         // GUI
         inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        addItemButton = ss.crop(144 / 8, 104 / 8, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        subtractItemButton = ss.crop(168 / 8, 104 / 8, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
 
         // Tiles
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
