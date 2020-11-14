@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class LightHandler {
 
     final byte[][] darkMap;
-    byte[] highestFrontTile,
+    public byte[] highestFrontTile,
             originalHighestFrontTiles;
     final int LIGHT_LEVEL_MAX = 10,
         ww, hh;
@@ -83,7 +83,7 @@ public class LightHandler {
         for(int x = 0; x < ww; x++)
             for(int y = 0; y < hh; y++)
                 for(int yy = hh - 1; yy > 0; yy--)
-                    if(world.FRONT_TILES[x][yy] != Tile.AIR.getTileID()) {
+                    if(world.FRONT_TILES[x][yy][0] != Tile.AIR.getTileID()) {
                         if(run == 0) originalHighestFrontTiles[x] = (byte)(yy + 1);
                         if(highestFrontTile[x] < yy) highestFrontTile[x] = (byte)(yy + 1);
                         else if(highestFrontTile[x] >= yy) {
@@ -111,7 +111,7 @@ public class LightHandler {
                 if(hh - y == highestFrontTile[x])
                     for(int yy = y; yy < hh; yy++)
                         returnedLightMap[x][hh - yy - 1] = (byte)(intensityLevel - Math.abs(y - yy) + 1);
-                else if(hh - y < highestFrontTile[x])
+                else if(hh - y <= highestFrontTile[x])
                     returnedLightMap[x][hh - y - 1] = (byte)(intensityLevel - Math.abs(hh - y - highestFrontTile[x]));
             }
         }
@@ -135,7 +135,7 @@ public class LightHandler {
         // Air is fully lit
         for(int x = 0; x < ww; x++)
             for(int y = 0; y < hh; y++)
-                if(world.FRONT_TILES[x][y] == Tile.AIR.getTileID()) newLightMap[x][y] = LIGHT_LEVEL_MAX;
+                if(world.FRONT_TILES[x][y][0] == Tile.AIR.getTileID()) newLightMap[x][y] = LIGHT_LEVEL_MAX;
 
         world.LIGHT_MAP = newLightMap;
     }

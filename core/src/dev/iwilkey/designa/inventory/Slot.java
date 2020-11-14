@@ -18,7 +18,7 @@ public class Slot {
         this.collider = rectangle;
         this.isCountable = isCountable;
         if(isCountable) count = 0;
-        else count = -1;
+        else count = 1;
         this.display = null;
     }
 
@@ -27,7 +27,7 @@ public class Slot {
         this.collider = rectangle;
         this.isCountable = isCountable;
         if(isCountable) count = 0;
-        else count = -1;
+        else count = 1;
         this.display = display;
     }
 

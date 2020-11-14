@@ -3,9 +3,10 @@ package dev.iwilkey.designa.ui;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.input.InputHandler;
+import dev.iwilkey.designa.inventory.ComprehensiveInventory;
+import dev.iwilkey.designa.inventory.Inventory;
 import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.creator.ItemCreator;
@@ -22,7 +23,7 @@ public class ScrollableItemList extends Scrollable {
     public TextureRegion slotTexture, selectTexture;
     public ArrayList<Slot> slots;
     public int xSlotOffset = 0, selectedSlot;
-    private float velocityX = 0;
+    public float velocityX = 0;
 
     public ScrollableItemList(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -62,7 +63,8 @@ public class ScrollableItemList extends Scrollable {
     public void tick() {
         updateDisplay();
         selectSlot();
-        act();
+        if(this instanceof Inventory && !ItemCreator.isActive) act();
+        else if (!(this instanceof Inventory)) act();
     }
 
     private void updateDisplay() {
@@ -71,6 +73,7 @@ public class ScrollableItemList extends Scrollable {
     }
 
     private void act() {
+
         checkBounds();
         if(hovering) {
             isScrolling = InputHandler.leftMouseButton;
@@ -105,12 +108,12 @@ public class ScrollableItemList extends Scrollable {
     }
 
     int s = 0, center = 0;
-    private void selectSlot() {
+    protected void selectSlot() {
         s = 0;
-        for(Slot slot : slots) {
-            center = (int)(((collider.x + (collider.width / 2)) / UIObject.XSCALE));
-            if(slot.collider.x - xSlotOffset > center - ((SLOT_SIZE + SLOT_SPACE)) &&
-                    slot.collider.x - xSlotOffset  < center + ((SLOT_SIZE + SLOT_SPACE))) {
+        for (Slot slot : slots) {
+            center = (int) (((collider.x + (collider.width / 2)) / UIObject.XSCALE));
+            if (slot.collider.x - xSlotOffset > center - ((SLOT_SIZE + SLOT_SPACE)) &&
+                    slot.collider.x - xSlotOffset < center + ((SLOT_SIZE + SLOT_SPACE))) {
                 selectedSlot = s;
                 return;
             }
@@ -146,38 +149,38 @@ public class ScrollableItemList extends Scrollable {
                 eval = (slot.collider.x - xSlotOffset) - (relRect.x - SLOT_SIZE - SLOT_SPACE); // 68 start -> 0
                 percent = (eval * UIObject.XSCALE) / 68;
                 b.draw(slotTexture, relRect.x, slot.collider.y, eval * UIObject.XSCALE, eval * UIObject.YSCALE);
-                if (slot.item != null) {
+                if (slot.item != null && slot != ComprehensiveInventory.slotCurrentlyUp) {
                     b.draw(slot.item.getTexture(), relRect.x + (((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f) * percent),
                             slot.collider.y + (((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f) * percent),
                             ((float)ITEM_TEXTURE_SIZE / SLOT_SIZE) * (eval * UIObject.XSCALE),
                             ((float)ITEM_TEXTURE_SIZE / SLOT_SIZE) * (eval * UIObject.YSCALE));
+                    if(slot.isCountable && slot.count != 0) slot.display.render(b, (int)(relRect.x - ((SLOT_SIZE - 10) * (1 - percent)) + (SLOT_SIZE - 10)),
+                            slot.display.y, (int)Math.max(slot.display.size * percent, 1));
                 }
-                if(slot.isCountable && slot.count != 0) slot.display.render(b, (int)(relRect.x - ((SLOT_SIZE - 10) * (1 - percent)) + (SLOT_SIZE - 10)),
-                        slot.display.y, (int)Math.max(slot.display.size * percent, 1));
                 if(selected) b.draw(selectTexture, relRect.x, slot.collider.y, eval * UIObject.XSCALE, eval * UIObject.YSCALE);
                 continue;
             } else if (slot.collider.x - xSlotOffset > relRect.x + relRect.width - SLOT_SIZE - SLOT_SPACE) {
                 eval = slot.collider.x - xSlotOffset - relRect.x - relRect.width;
                 percent = Math.abs((eval * UIObject.XSCALE) / 68);
                 b.draw(slotTexture, slot.collider.x - xSlotOffset, slot.collider.y, -eval * UIObject.XSCALE, -eval * UIObject.YSCALE);
-                if (slot.item != null) {
+                if (slot.item != null && slot != ComprehensiveInventory.slotCurrentlyUp) {
                     b.draw(slot.item.getTexture(), slot.collider.x - xSlotOffset + (((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f) * percent),
                             slot.collider.y + (((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f) * percent),
                             ((float)ITEM_TEXTURE_SIZE / SLOT_SIZE) * -(eval * UIObject.XSCALE),
                             ((float)ITEM_TEXTURE_SIZE / SLOT_SIZE) * -(eval * UIObject.YSCALE));
+                    if(slot.isCountable && slot.count != 0) slot.display.render(b, relRect.x + relRect.width - 10,
+                            slot.display.y, (int)Math.max(slot.display.size * percent, 1));
                 }
-                if(slot.isCountable && slot.count != 0) slot.display.render(b, relRect.x + relRect.width - 10,
-                        slot.display.y, (int)Math.max(slot.display.size * percent, 1));
                 if(selected) b.draw(selectTexture, slot.collider.x - xSlotOffset, slot.collider.y, -eval * UIObject.XSCALE, -eval * UIObject.YSCALE);
                 continue;
             }
 
             b.draw(slotTexture, slot.collider.x - xSlotOffset, slot.collider.y, slot.collider.width, slot.collider.height);
-            if (slot.item != null) {
+            if (slot.item != null && slot != ComprehensiveInventory.slotCurrentlyUp) {
                 b.draw(slot.item.getTexture(), slot.collider.x + ((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f) - xSlotOffset,
                         slot.collider.y + ((SLOT_SIZE - ITEM_TEXTURE_SIZE) / 2f), ITEM_TEXTURE_SIZE, ITEM_TEXTURE_SIZE);
+                if(slot.isCountable && slot.count != 0) slot.display.render(b, slot.display.x - xSlotOffset - 10, slot.display.y, slot.display.size);
             }
-            if(slot.isCountable && slot.count != 0) slot.display.render(b, slot.display.x - xSlotOffset - 10, slot.display.y, slot.display.size);
             if(selected) b.draw(selectTexture, slot.collider.x - xSlotOffset, slot.collider.y, slot.collider.width, slot.collider.height);
         }
 

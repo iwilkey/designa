@@ -10,6 +10,7 @@ import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
+import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.world.World;
 
@@ -33,6 +34,7 @@ public class BuildingHandler {
     }
 
     public void tick() {
+        isBuilding = !ItemCreator.isActive;
         if(isBuilding) {
             input();
             checkInRange();
@@ -58,6 +60,7 @@ public class BuildingHandler {
                                 tileXSelected, tileYSelected);
                 }
             }
+
             InputHandler.placeTileRequest = false;
         }
 
@@ -82,9 +85,10 @@ public class BuildingHandler {
 
     public boolean placeTile(Tile tile, int x, int y) {
         if(!inRange) return false;
-        if(world.getTile(x, y) == Tile.AIR) {
+        if(world.getFrontTile(x, y) == Tile.AIR) {
             player.inventory.selectedSlot().count--;
-            world.FRONT_TILES[x][y] = (byte)tile.getTileID();
+            world.FRONT_TILES[x][y][0] = (byte)tile.getTileID();
+            world.FRONT_TILES[x][y][1] = (byte)tile.getStrength();
             world.lightHandler.bake();
             return true;
         }
@@ -93,10 +97,19 @@ public class BuildingHandler {
 
     public boolean damageTile(int x, int y) {
         if(!inRange || y < 1) return false;
-        if(world.getTile(x, y) != Tile.AIR) {
-            world.activeItemHandler.spawn(Tile.getItemFromTile(world.getTile(x, y)), (int)((x * Tile.TILE_SIZE) +
+        if(world.getFrontTile(x, y) != Tile.AIR) {
+            world.FRONT_TILES[x][y][1]--;
+            checkBreak(x, y);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean checkBreak(int x, int y) {
+        if(world.FRONT_TILES[x][y][1] <= 0) {
+            world.activeItemHandler.spawn(Tile.getItemFromTile(world.getFrontTile(x, y)), (int)((x * Tile.TILE_SIZE) +
                     (Item.ITEM_WIDTH / 2f)) + MathUtils.random(-2, 2), (int)((y * Tile.TILE_SIZE) + (Item.ITEM_HEIGHT / 2f) + 2));
-            world.FRONT_TILES[x][y] = (byte)Tile.AIR.getTileID();
+            world.FRONT_TILES[x][y][0] = (byte)Tile.AIR.getTileID();
             world.lightHandler.bake();
             return true;
         }
@@ -109,11 +122,11 @@ public class BuildingHandler {
             if(inRange) {
                 Geometry.requests.add(new Geometry.RectangleOutline(
                         tileXSelected * Tile.TILE_SIZE, tileYSelected * Tile.TILE_SIZE,
-                        Tile.TILE_SIZE, Tile.TILE_SIZE, 4, Color.WHITE));
+                        Tile.TILE_SIZE, Tile.TILE_SIZE, 6, Color.WHITE));
             } else {
                 Geometry.requests.add(new Geometry.RectangleOutline(
                         tileXSelected * Tile.TILE_SIZE, tileYSelected * Tile.TILE_SIZE,
-                        Tile.TILE_SIZE, Tile.TILE_SIZE, 4, Color.RED));
+                        Tile.TILE_SIZE, Tile.TILE_SIZE, 6, Color.RED));
             }
         }
     }

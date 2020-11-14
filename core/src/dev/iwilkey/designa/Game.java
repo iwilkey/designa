@@ -7,6 +7,7 @@ import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.gfx.Renderer;
 import dev.iwilkey.designa.clock.Clock;
 import dev.iwilkey.designa.input.InputHandler;
+import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.scene.Scene;
 
 public class Game extends ApplicationAdapter {

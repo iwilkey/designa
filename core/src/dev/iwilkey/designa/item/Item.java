@@ -12,7 +12,7 @@ public enum Item {
             "Dirt",
             0,
             new ItemType.NonCreatableItem.PlaceableTile(Tile.DIRT),
-            null,
+            Recipe.DIRT,
             Assets.dirt
     ),
 
@@ -20,8 +20,16 @@ public enum Item {
             "Grass",
             1,
             new ItemType.NonCreatableItem.PlaceableTile(Tile.GRASS),
-            null,
+            Recipe.GRASS,
             Assets.grass
+    ),
+
+    STONE (
+            "Stone",
+            2,
+            new ItemType.NonCreatableItem.PlaceableTile(Tile.STONE),
+            null,
+            Assets.stone
     );
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
@@ -44,13 +52,21 @@ public enum Item {
         b.draw(texture, x, y, ITEM_WIDTH, ITEM_HEIGHT);
     }
 
+    // Converters
     public static Tile getTileFromItem(Item i) {
         if(i.getType() instanceof ItemType.NonCreatableItem.PlaceableTile)
             return ((ItemType.NonCreatableItem.PlaceableTile)i.getType()).correspondingTile;
         return null;
     }
 
+    public static Item getItemFromString(String name) {
+        for(Item i : values())
+            if(i.getName().equals(name)) return i;
+        return null;
+    }
+
     public byte getID() { return itemID; }
+    public String getName() { return name; }
     public ItemType getType() { return type; }
     public Recipe getRecipe() { return recipe; }
     public TextureRegion getTexture() { return texture; }

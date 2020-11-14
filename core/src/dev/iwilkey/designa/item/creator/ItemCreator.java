@@ -3,11 +3,10 @@ package dev.iwilkey.designa.item.creator;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.entity.creature.passive.Player;
-import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.ui.UIManager;
 import dev.iwilkey.designa.ui.UIText;
 
-import java.awt.*;
+import java.awt.Rectangle;
 
 public class ItemCreator {
 
@@ -19,7 +18,7 @@ public class ItemCreator {
     RecipeDisplay recipeDisplay;
 
     public ItemCreator(Player player, int x, int y, int width, int height) {
-        isActive = true;
+        isActive = false;
         activeCollider = new Rectangle(x, y, width, height);
         uiManager = new UIManager("item-creator");
         recipeDisplay = new RecipeDisplay(uiManager, 120, Game.WINDOW_HEIGHT - 10);
@@ -38,14 +37,20 @@ public class ItemCreator {
         uiManager.tick();
     }
 
+    byte i = 0;
     public void render(Batch b) {
         if(!isActive) return;
         uiManager.render(b);
 
+        i = 0;
         for(CategoryItemRecipeList l : uiManager.categoryItemList)
             try {
-                if(l.hovering) recipeDisplay.renderRecipe(b, l.selectedSlot().item);
+                if(l.hovering) {
+                    i = 1;
+                    recipeDisplay.renderRecipe(b, l.selectedSlot().item);
+                }
             } catch (NullPointerException ignored) {}
+        if(i == 0) recipeDisplay.renderRecipe(b, null);
 
     }
 

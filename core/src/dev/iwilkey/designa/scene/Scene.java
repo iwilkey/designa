@@ -7,6 +7,7 @@ import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.gfx.SpriteSheet;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.clock.Clock;
+import dev.iwilkey.designa.io.IO;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.ui.ClickListener;
 import dev.iwilkey.designa.ui.UIImageButton;
@@ -14,7 +15,6 @@ import dev.iwilkey.designa.ui.UIText;
 import dev.iwilkey.designa.ui.UIManager;
 import dev.iwilkey.designa.world.World;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 // This defines what a Scene is. A object that encapsulates certain behaviors so that the ticker and renderer than
@@ -73,7 +73,7 @@ public abstract class Scene {
             }));
 
             // World init
-            world = new World(GUI,200, 100);
+            world = new World(GUI,3000, 100);
         }
 
         @Override
@@ -108,7 +108,9 @@ public abstract class Scene {
         }
 
         @Override
-        public void dispose() {}
+        public void dispose() {
+            // IO.SaveGame(world);
+        }
 
     }
 

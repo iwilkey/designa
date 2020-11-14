@@ -74,7 +74,7 @@ public class ActiveItemHandler {
             timeInAir.set(index, timeInAir.get(index) + 0.02f);
             newPosition.y += GRAVITY * (timeInAir.get(index));
         } else if (collisionWithTile((collider.x) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE) &&
-                collisionWithTile((collider.x + collider.width + 4) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE)) {
+                collisionWithTile((collider.x + collider.width) / Tile.TILE_SIZE, ty / Tile.TILE_SIZE)) {
             timeInAir.set(index, 0.0f);
             newPosition.y = (((int)((newPosition.y + 8) / Tile.TILE_SIZE)) * Tile.TILE_SIZE);
         } else timeInAir.set(index, 0.0f);
@@ -83,7 +83,7 @@ public class ActiveItemHandler {
     }
 
     public boolean collisionWithTile(int x, int y) {
-        return world.getTile(x, y).isSolid();
+        return world.getFrontTile(x, y).isSolid();
     }
 
     private boolean checkItemAt(int x, int y) {
@@ -111,7 +111,9 @@ public class ActiveItemHandler {
             Item item = i.getKey();
             for(Rectangle rect : i.getValue()) {
                 if(!itemInView(rect)) continue;
-                item.render(b, rect.x, rect.y);
+                try {
+                    item.render(b, rect.x, rect.y);
+                } catch (NullPointerException ignored) {}
             }
         }
     }

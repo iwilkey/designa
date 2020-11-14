@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.tile.Tile;
 
 public class AmbientCycle {
 
@@ -55,7 +56,7 @@ public class AmbientCycle {
 
     public void render(Batch b) {
         b.setColor(skyTint);
-        b.draw(sky, 0,0, Game.WINDOW_WIDTH * 10, Game.WINDOW_HEIGHT * 10);
+        b.draw(sky, 0,0, 5000 * Tile.TILE_SIZE, 1000 * Tile.TILE_SIZE);
         b.setColor(Color.WHITE);
     }
 

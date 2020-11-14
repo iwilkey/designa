@@ -116,6 +116,6 @@ public abstract class Creature extends Entity {
         collider.y = (int)y;
     }
 
-    public boolean collisionWithTile(int x, int y) { return world.getTile(x, y).isSolid(); }
+    public boolean collisionWithTile(int x, int y) { return world.getFrontTile(x, y).isSolid(); }
 
 }

@@ -24,7 +24,7 @@ public class Camera {
     public static int GW, GH;
     private final static float CAMERA_SPEED = 4.0f,
             CAMERA_MAX_ZOOM = 7.0f,
-            CAMERA_MIN_ZOOM = 1.0f;
+            CAMERA_MIN_ZOOM = 1.0f; // 1 norm
     private static float targetZoom = 1;
     public static boolean isZooming = false;
 

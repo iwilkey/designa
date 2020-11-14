@@ -10,11 +10,16 @@ public class Assets {
     public static String VERSION = "alpha 2.0.0";
     // Cursor
     public static TextureRegion cursor;
+    // Colors
+    public static TextureRegion[] lightColors;
     // GUI
     public static TextureRegion inventorySlot, inventorySelector,
         addItemButton, subtractItemButton;
+    public static TextureRegion[] breakLevel;
     // Tiles
-    public static TextureRegion air, grass, dirt;
+    public static TextureRegion backDirt, air, grass, dirt, stone;
+    // Environment
+    public static Texture[] clouds;
 
     // Entities
         // Creature
@@ -32,16 +37,36 @@ public class Assets {
         // Cursor
         cursor = ss.crop(0, 5, ss.SLOT_SIZE * 4, ss.SLOT_SIZE * 4);
 
+        // Colors
+        lightColors = new TextureRegion[7];
+        for(int i = 0; i < 7; i++)
+            lightColors[i] = ss.crop(i, 12, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
         // GUI
         inventorySlot = ss.crop(3, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         inventorySelector = ss.crop(0, 13, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         addItemButton = ss.crop(144 / 8, 104 / 8, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
         subtractItemButton = ss.crop(168 / 8, 104 / 8, ss.SLOT_SIZE * 3, ss.SLOT_SIZE * 3);
+        breakLevel = new TextureRegion[5];
+            breakLevel[0] = ss.crop(5, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Clean block
+            breakLevel[1] = ss.crop(1, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            breakLevel[2] = ss.crop(2, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            breakLevel[3] = ss.crop(3, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
+            breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
 
         // Tiles
+        backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);
         air = ss.crop(2, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         grass = ss.crop(0, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
         dirt = ss.crop(1, 2, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
+        // Environment
+        clouds = new Texture[4];
+            clouds[0] = new Texture("textures/environment/clouds/cloud-1.png");
+            clouds[1] = new Texture("textures/environment/clouds/cloud-2.png");
+            clouds[2] = new Texture("textures/environment/clouds/cloud-3.png");
+            clouds[3] = new Texture("textures/environment/clouds/cloud-4.png");
 
         // Entities
             // Creatures

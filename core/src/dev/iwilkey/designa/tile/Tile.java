@@ -10,8 +10,9 @@ import dev.iwilkey.designa.item.ItemType;
 public enum Tile {
 
     AIR (0, Assets.air, new TileType.Natural(),0,false),
-    DIRT (1, Assets.dirt, new TileType.Natural(), 4, true),
-    GRASS (2, Assets.grass, new TileType.Natural(), 6,true);
+    DIRT (1, Assets.dirt, new TileType.Natural(), 2, true),
+    GRASS (2, Assets.grass, new TileType.Natural(), 4,true),
+    STONE (3, Assets.stone, new TileType.Natural(), 6, true);
 
     public static final int TILE_SIZE = 16;
     private final int tileID;
@@ -28,8 +29,27 @@ public enum Tile {
         this.isSolid = isSolid;
     }
 
-    public void render(Batch b, int x, int y) {
+    public void render(Batch b, int x, int y, int bl) {
         b.draw(texture, x, y, TILE_SIZE, TILE_SIZE);
+        renderBreakLevel(b, x, y, bl);
+    }
+
+    float pd;
+    public void renderBreakLevel(Batch b, int x, int y, int bl) {
+        if(strength > 0)
+            pd = Math.abs((float)(strength - bl) / bl) * 100;
+        else pd = 0;
+
+        if(pd >= 0 && pd <= 20) b.draw(Assets.breakLevel[0], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        else if (pd > 20 && pd <= 40) b.draw(Assets.breakLevel[1], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        else if (pd > 40 && pd <= 60) b.draw(Assets.breakLevel[2], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        else if (pd > 60 && pd <= 80) b.draw(Assets.breakLevel[3], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+        else b.draw(Assets.breakLevel[4], x, y, Tile.TILE_SIZE, Tile.TILE_SIZE);
+    }
+
+    public void renderBack(Batch b, int x, int y) {
+        b.draw(texture, x, y, TILE_SIZE, TILE_SIZE);
+        b.draw(Assets.lightColors[3], x, y, TILE_SIZE, TILE_SIZE);
     }
 
     public static Item getItemFromTile(Tile t) {
@@ -38,6 +58,12 @@ public enum Tile {
                 if(((ItemType.NonCreatableItem.PlaceableTile)i.getType()).correspondingTile == t) return i;
             }
         }
+        return null;
+    }
+
+    public static Tile getTileFromID(int ID) {
+        for(Tile t : Tile.values())
+            if(t.getTileID() == ID) return t;
         return null;
     }
 
