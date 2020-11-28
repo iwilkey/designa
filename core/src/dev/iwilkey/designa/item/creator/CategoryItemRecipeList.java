@@ -16,7 +16,7 @@ import java.util.Map;
 public class CategoryItemRecipeList extends ScrollableItemList {
 
     Category category;
-    byte[] canCreate;
+    public byte[] canCreate;
     Thread createProcessor;
 
     public CategoryItemRecipeList(final ItemCreator itemCreator, Category category, int x, int y, int width, int height) {

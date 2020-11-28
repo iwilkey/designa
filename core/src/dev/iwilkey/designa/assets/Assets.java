@@ -16,7 +16,7 @@ public class Assets {
     public static TextureRegion[] lightColors;
     // GUI
     public static TextureRegion inventorySlot, inventorySelector,
-        addItemButton, subtractItemButton;
+        addItemButton, subtractItemButton, greenCheck, redX;
     public static TextureRegion[] breakLevel;
     // Tiles
     public static TextureRegion backDirt, air, grass, dirt, stone,
@@ -66,6 +66,8 @@ public class Assets {
             breakLevel[2] = ss.crop(2, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
             breakLevel[3] = ss.crop(3, 4, ss.SLOT_SIZE, ss.SLOT_SIZE);
             breakLevel[4] = ss.crop(4, 4, ss.SLOT_SIZE, ss.SLOT_SIZE); // Most broken
+        greenCheck = ss.crop(104 / 8, 56 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        redX = ss.crop(112 / 8, 56 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Tiles
         backDirt = ss.crop(4, 5, ss.SLOT_SIZE, ss.SLOT_SIZE);

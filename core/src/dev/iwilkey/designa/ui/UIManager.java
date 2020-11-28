@@ -83,11 +83,11 @@ public class UIManager {
     }
 
     public void render(Batch b) {
-        if(texts != null) for(UIText text : texts) text.render(b);
         if(buttons != null) for(UIButton button : buttons) button.render(b);
         if(itemLists != null) for(ScrollableItemList list : itemLists) list.render(b);
         if(imageButtons != null) for(UIImageButton button : imageButtons) button.render(b);
         if(categoryItemList != null) for(CategoryItemRecipeList l : categoryItemList) l.render(b);
+        if(texts != null) for(UIText text : texts) text.render(b);
     }
 
 }

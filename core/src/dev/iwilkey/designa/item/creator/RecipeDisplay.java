@@ -3,6 +3,8 @@ package dev.iwilkey.designa.item.creator;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 
+import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.inventory.Inventory;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.Recipe;
 import dev.iwilkey.designa.ui.UIManager;
@@ -17,18 +19,23 @@ public class RecipeDisplay {
     int x, y;
     UIManager uiManager;
     UIText name;
-    UIText[] amounts;
+    UIText[] amounts,
+        needed;
     Recipe recipe;
+    byte lookat = 0;
+    Inventory inventory;
 
-    public RecipeDisplay(UIManager uiManager, int x, int y) {
+    public RecipeDisplay(UIManager uiManager, Inventory inv, int x, int y) {
         this.uiManager = uiManager;
+        this.inventory = inv;
         this.x = x; this.y = y;
         name = uiManager.addText(new UIText("", 32, x, y - 12));
 
-        amounts = new UIText[5];
+        amounts = new UIText[5]; needed = new UIText[5];
         for(int i = 0; i < amounts.length; i++) {
             amounts[i] = new UIText("", 12, x + MathUtils.random(-12, 12), y - 12);
-            uiManager.addText(amounts[i]);
+            needed[i] = new UIText("", 18, 0, 0);
+            uiManager.addText(amounts[i]); uiManager.addText(needed[i]);
         }
 
         recipe = null;
@@ -36,12 +43,28 @@ public class RecipeDisplay {
 
     byte c = 0;
     short xx, yy;
-    public void renderRecipe(Batch b, Item item) {
+    public void renderRecipe(Batch b, CategoryItemRecipeList cirl, Item item, byte slotNumber) {
+        if(lookat != slotNumber) lookat = slotNumber;
+        else {
+            for (UIText uiText : needed) uiText.message = "";
+        }
 
         if(item == null) {
             name.message = "";
             for(UIText t : amounts) t.message = "";
+            for (UIText uiText : needed) uiText.message = "";
             return;
+        }
+
+        if(cirl != null) {
+            if (cirl.canCreate[slotNumber] == 1) {
+                // We can create this item
+                needed[0].message = "";
+            } else {
+                needed[0].message = "";
+            }
+            needed[0].x = (cirl.x + (cirl.width / 2)) - ((needed[0].message.length() * 12) / 2);
+            needed[0].y = cirl.y + cirl.height + 14;
         }
 
         name.message = item.getName();
@@ -59,6 +82,24 @@ public class RecipeDisplay {
             xx = (short)(x + ((INGREDIENT_SIZE + SPACING) * c)); yy = (short)(y - 54 - (INGREDIENT_SIZE / 2f));
             amounts[c].x = xx; amounts[c].y = yy - SPACING;
             amounts[c].message = "x" + ingredient.getValue();
+
+            needed[c + 1].x = cirl.x + cirl.width + 12;
+            needed[c + 1].y = ((cirl.y + cirl.height) - ((cirl.height / recipe.getRecipe().size()) / 2) -
+                    ((cirl.height / recipe.getRecipe().size())) * c);
+            needed[c + 1].message = "" + inventory.amountOf(Item.getItemFromString(ingredient.getKey())) +
+                    "/" + ingredient.getValue() + " " + ingredient.getKey();
+
+            if(inventory.amountOf(Item.getItemFromString(ingredient.getKey())) >= ingredient.getValue()) {
+                b.draw(Assets.greenCheck, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 8,
+                        needed[c + 1].y - 11, 16, 16);
+                b.draw(Assets.greenCheck, xx,
+                        yy - 36, 16, 16);
+            } else {
+                b.draw(Assets.redX, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 8,
+                        needed[c + 1].y - 11, 16, 16);
+                b.draw(Assets.redX, xx,
+                        yy - 36, 16, 16);
+            }
 
             b.draw(i.getTexture(), xx, yy, INGREDIENT_SIZE, INGREDIENT_SIZE);
             c++;

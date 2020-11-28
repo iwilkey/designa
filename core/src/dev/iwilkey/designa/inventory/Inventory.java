@@ -90,6 +90,13 @@ public class Inventory extends ScrollableItemList {
         }
     }
 
+    public int amountOf(Item item) {
+        int count = 0;
+        for(Slot s : slots)
+            if(s.item == item) count += s.count;
+        return count;
+    }
+
     public void add(Item item, int amount) {
         for (Slot slot : slots) {
             if (slot.item == item && slot.count + 1 <= STORAGE_CAP) {
