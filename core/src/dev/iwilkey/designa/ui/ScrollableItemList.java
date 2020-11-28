@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.inventory.ComprehensiveInventory;
 import dev.iwilkey.designa.inventory.Inventory;
@@ -114,7 +115,9 @@ public class ScrollableItemList extends Scrollable {
             center = (int) (((collider.x + (collider.width / 2)) / UIObject.XSCALE));
             if (slot.collider.x - xSlotOffset > center - ((SLOT_SIZE + SLOT_SPACE)) &&
                     slot.collider.x - xSlotOffset < center + ((SLOT_SIZE + SLOT_SPACE))) {
+                if(selectedSlot == s) return;
                 selectedSlot = s;
+                Audio.playSFX(Assets.invClick, 0.3f);
                 return;
             }
             s++;
@@ -132,9 +135,9 @@ public class ScrollableItemList extends Scrollable {
             xSlotOffset = -(2 * (SLOT_SIZE + SLOT_SPACE)) + ((sizeOfList() + 1) * (SLOT_SIZE + SLOT_SPACE));
     }
 
-    float eval, percent;
-    int s1 = 0;
-    boolean selected;
+    public float eval, percent;
+    public int s1 = 0;
+    public boolean selected;
     @Override
     public void render(Batch b) {
         s1 = 0;

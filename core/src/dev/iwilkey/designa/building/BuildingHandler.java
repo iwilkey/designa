@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.gfx.Geometry;
@@ -14,7 +16,7 @@ import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.world.World;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 public class BuildingHandler {
 
@@ -60,6 +62,8 @@ public class BuildingHandler {
                                 tileXSelected, tileYSelected);
                 }
             }
+
+            world.lightHandler.addLight(tileXSelected, tileYSelected, 8);
 
             InputHandler.placeTileRequest = false;
         }

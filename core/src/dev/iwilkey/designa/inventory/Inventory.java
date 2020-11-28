@@ -1,6 +1,7 @@
 package dev.iwilkey.designa.inventory;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.item.Item;
@@ -12,7 +13,7 @@ import dev.iwilkey.designa.world.World;
 
 public class Inventory extends ScrollableItemList {
 
-    public static final int STORAGE_CAP = 99;
+    public static final byte STORAGE_CAP = 99;
     public UIText currentItemLabel;
 
     Player player;
@@ -28,12 +29,14 @@ public class Inventory extends ScrollableItemList {
 
         world.uiManager.addScrollableItemList(this);
 
-        for(int i = 0; i < 20; i++) super.add(null);
+        for(byte i = 0; i < 20; i++) super.add(null);
 
         this.compInv = new ComprehensiveInventory(slots,this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
                 0, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
 
         currentItemLabel = new UIText("", 22, collider.x, collider.y + 64);
+
+        add(Item.ROCK, 99);
     }
 
     @Override
@@ -85,6 +88,21 @@ public class Inventory extends ScrollableItemList {
                 return;
             }
         }
+    }
+
+    public void add(Item item, int amount) {
+        for (Slot slot : slots) {
+            if (slot.item == item && slot.count + 1 <= STORAGE_CAP) {
+                slot.count += amount;
+                return;
+            }
+            if (slot.item == null) {
+                slot.item = item;
+                slot.count += amount;
+                return;
+            }
+        }
+
     }
 
     public boolean editSlot(Slot s, Item i, int count) {

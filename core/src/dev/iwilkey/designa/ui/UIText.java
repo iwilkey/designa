@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 public class UIText extends UIObject {
 
     public BitmapFont font;
-    int size;
+    public int size;
     public String message;
 
     public UIText(String message, int size, int x, int y) {

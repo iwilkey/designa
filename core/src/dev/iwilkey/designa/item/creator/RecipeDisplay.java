@@ -44,7 +44,7 @@ public class RecipeDisplay {
             return;
         }
 
-        name.message = item.name();
+        name.message = item.getName();
         if(item.getRecipe() != recipe) for(UIText t : amounts) t.message = "";
         recipe = item.getRecipe();
         if(recipe == null) {

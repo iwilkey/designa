@@ -3,6 +3,7 @@ package dev.iwilkey.designa.inventory;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
@@ -43,6 +44,7 @@ public class ComprehensiveInventory {
                     d = new Rectangle(collider.x, collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
                             collider.width, collider.height);
             if (c.intersects(d)) {
+                Audio.playSFX(Assets.invClick, 0.3f);
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
                         (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
                 if(itemUp) {
@@ -80,6 +82,14 @@ public class ComprehensiveInventory {
                     }
                 }
             } else {
+
+                int xx = (int) (((((InputHandler.cursorX / XSCALE) - Camera.position.x) /
+                        Tile.TILE_SIZE) / Camera.scale.x) * Tile.TILE_SIZE),
+                        yy = (int) ((((InputHandler.cursorY / YSCALE) - Camera.position.y) /
+                                Tile.TILE_SIZE) / Camera.scale.y) * Tile.TILE_SIZE;
+
+                Audio.playSpacialSFX(Assets.invClick, new Point(xx, yy), inventory.player);
+
                 if(slotCurrentlyUp == null) {
                     itemUp = false;
                     return;
@@ -87,10 +97,7 @@ public class ComprehensiveInventory {
 
                 for(int i = 0; i < slotCurrentlyUp.count; i++) {
                     inventory.player.world.activeItemHandler.spawn(slotCurrentlyUp.item,
-                            (int) (((((InputHandler.cursorX / XSCALE) - Camera.position.x) /
-                                    Tile.TILE_SIZE) / Camera.scale.x) * Tile.TILE_SIZE) + MathUtils.random(-2, 2),
-                            (int) ((((InputHandler.cursorY / YSCALE) - Camera.position.y) /
-                                    Tile.TILE_SIZE) / Camera.scale.y) * Tile.TILE_SIZE);
+                            xx + MathUtils.random(-2, 2), yy);
                 }
 
                 inventory.editSlot(slotCurrentlyUp, null, 0);
@@ -106,6 +113,7 @@ public class ComprehensiveInventory {
                     d = new Rectangle(collider.x, collider.y + (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
                             collider.width, collider.height);
             if(c.intersects(d)) {
+                Audio.playSFX(Assets.invClick, 0.3f);
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
                         (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
                 if(slotCurrentlyUp != null) {
@@ -136,16 +144,21 @@ public class ComprehensiveInventory {
                 if(slotCurrentlyUp == null) itemUp = false;
 
             } else {
+
+                int xx = (int) (((((InputHandler.cursorX / XSCALE) - Camera.position.x) /
+                        Tile.TILE_SIZE) / Camera.scale.x) * Tile.TILE_SIZE),
+                yy = (int) ((((InputHandler.cursorY / YSCALE) - Camera.position.y) /
+                        Tile.TILE_SIZE) / Camera.scale.y) * Tile.TILE_SIZE;
+
+                Audio.playSpacialSFX(Assets.invClick, new Point(xx, yy), inventory.player);
+
                 if(slotCurrentlyUp == null) {
                     itemUp = false;
                     return;
                 }
                 boolean canDrop = slotCurrentlyUp.count - 1 > 0;
                 inventory.player.world.activeItemHandler.spawn(slotCurrentlyUp.item,
-                        (int) (((((InputHandler.cursorX / XSCALE) - Camera.position.x) /
-                                Tile.TILE_SIZE) / Camera.scale.x) * Tile.TILE_SIZE) + MathUtils.random(-2, 2),
-                        (int) ((((InputHandler.cursorY / YSCALE) - Camera.position.y) /
-                                Tile.TILE_SIZE) / Camera.scale.y) * Tile.TILE_SIZE);
+                        xx + MathUtils.random(-2, 2), yy);
                 slotCurrentlyUp.count--;
                 if (!canDrop) {
                     itemUp = false;

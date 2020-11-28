@@ -24,9 +24,41 @@ public enum Category {
         switch (name) {
 
             case "Resources":
+                this.items.add(Item.GRAVEL);
+                this.items.add(Item.CONCRETE);
+                this.items.add(Item.REINFORCED_CONCRETE);
+                this.items.add(Item.CONDENSED_SLAB);
+                this.items.add(Item.STRONGSTONE);
+                this.items.add(Item.REINFORCED_STRONGSTONE);
+
+                this.items.add(Item.RECYCLED_COPPER);
+                this.items.add(Item.BLUESTONE);
+                this.items.add(Item.REINFORCED_BLUESTONE);
+                this.items.add(Item.ROMAN_VITRIOL);
+
+                this.items.add(Item.RECYCLED_SILVER);
+                this.items.add(Item.COIN_SILVER);
+                this.items.add(Item.STERLING_SILVER);
+                this.items.add(Item.REINFORCED_STERLING_SILVER);
+                this.items.add(Item.FINE_SILVER_RECIPE);
+                this.items.add(Item.REINFORCED_FINE_SILVER);
+
+                this.items.add(Item.RECYCLED_IRON);
+                this.items.add(Item.CAST_IRON);
+                this.items.add(Item.REINFORCED_CAST_IRON);
+                this.items.add(Item.STEEL);
+                this.items.add(Item.REINFORCED_STEEL);
+
+                this.items.add(Item.GRAPHITE);
+                this.items.add(Item.COMPRESSED_GRAPHITE);
+                this.items.add(Item.WEAK_DIAMOND);
+                this.items.add(Item.DIAMOND);
+
                 break;
 
             case "Tools":
+                this.items.add(Item.STONE_SICKLE);
+                this.items.add(Item.COPPER_SICKLE);
                 break;
 
             case "Utilities":

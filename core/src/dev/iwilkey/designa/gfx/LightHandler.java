@@ -108,7 +108,7 @@ public class LightHandler {
 
         for(int x = 0; x < ww; x++) {
             for(int y = 0; y < hh; y++) {
-                if(hh - y == highestFrontTile[x])
+                if(hh - y - 1 == highestFrontTile[x])
                     for(int yy = y; yy < hh; yy++)
                         returnedLightMap[x][hh - yy - 1] = (byte)(intensityLevel - Math.abs(y - yy) + 1);
                 else if(hh - y <= highestFrontTile[x])
@@ -120,11 +120,9 @@ public class LightHandler {
     }
 
     public void bake() {
-
         byte[][] builtAmbient = buildAmbientLight();
         byte[][] newLightMap = darkMap;
 
-        // Build for lights
         if(lights.size() != 0) {
             for (int i = 0; i < lights.size(); i++) {
                 if(i > 0) newLightMap = lights.get(i).buildLightMap(newLightMap, ww, hh);
@@ -132,10 +130,11 @@ public class LightHandler {
             }
         } else newLightMap = builtAmbient;
 
-        // Air is fully lit
         for(int x = 0; x < ww; x++)
-            for(int y = 0; y < hh; y++)
-                if(world.FRONT_TILES[x][y][0] == Tile.AIR.getTileID()) newLightMap[x][y] = LIGHT_LEVEL_MAX;
+            for(int y = 0; y < hh; y++) {
+                if (y < highestFrontTile[x]) continue;
+                if (world.FRONT_TILES[x][y][0] == Tile.AIR.getTileID()) newLightMap[x][y] = LIGHT_LEVEL_MAX;
+            }
 
         world.LIGHT_MAP = newLightMap;
     }

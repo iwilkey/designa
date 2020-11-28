@@ -8,6 +8,7 @@ import dev.iwilkey.designa.tile.Tile;
 
 public enum Item {
 
+    // Placeable tiles
     DIRT (
             "Dirt",
             0,
@@ -30,6 +31,270 @@ public enum Item {
             new ItemType.NonCreatableItem.PlaceableTile(Tile.STONE),
             null,
             Assets.stone
+    ),
+
+    // Resources
+
+    // Stone
+    ROCK (
+        "Rock",
+        3,
+        new ItemType.CreatableItem.Resource(),
+        null,
+        Assets.rock[0]
+    ),
+
+    GRAVEL (
+        "Gravel",
+        4,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.GRAVEL,
+        Assets.rock[1]
+    ),
+
+    CONCRETE (
+            "Concrete",
+            5,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.CONCRETE,
+            Assets.rock[2]
+    ),
+
+    REINFORCED_CONCRETE (
+            "Reinforced Concrete",
+            6,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.REINFORCED_CONCRETE,
+            Assets.rock[3]
+    ),
+
+    CONDENSED_SLAB (
+            "Condensed Slab",
+            7,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.CONDENSED_SLAB,
+            Assets.rock[4]
+    ),
+
+    STRONGSTONE (
+            "Strongstone",
+            8,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.STRONGSTONE,
+            Assets.rock[5]
+    ),
+
+    REINFORCED_STRONGSTONE (
+            "Reinforced Strongstone",
+            9,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.REINFORCED_STRONGSTONE,
+            Assets.rock[6]
+    ),
+
+    // Copper
+    COPPER_SCRAP (
+            "Copper Scrap",
+            10,
+            new ItemType.CreatableItem.Resource(),
+            null,
+            Assets.copper[0]
+    ),
+
+    RECYCLED_COPPER (
+        "Recycled Copper",
+        11,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.RECYCLED_COPPER,
+        Assets.copper[1]
+    ),
+
+    BLUESTONE (
+        "Bluestone",
+        12,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.BLUESTONE,
+        Assets.copper[2]
+    ),
+
+    REINFORCED_BLUESTONE (
+        "Reinforced Bluestone",
+        13,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.REINFORCED_BLUESTONE,
+        Assets.copper[3]
+    ),
+
+    ROMAN_VITRIOL (
+        "Roman Vitriol",
+        14,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.ROMAN_VITRIOL,
+        Assets.copper[4]
+    ),
+
+    // Silver
+    SILVER_SCRAP (
+      "Silver Scrap",
+      15,
+      new ItemType.CreatableItem.Resource(),
+      null,
+      Assets.silver[0]
+    ),
+
+    RECYCLED_SILVER (
+      "Recycled Silver",
+      16,
+      new ItemType.CreatableItem.Resource(),
+      Recipe.RECYCLED_SILVER,
+      Assets.silver[1]
+    ),
+
+    COIN_SILVER (
+            "Coin Silver",
+            17,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.COIN_SILVER,
+            Assets.silver[2]
+    ),
+
+    STERLING_SILVER (
+        "Sterling Silver",
+        18,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.STERLING_SILVER,
+        Assets.silver[3]
+    ),
+
+    REINFORCED_STERLING_SILVER (
+        "Reinforced Sterling Silver",
+        19,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.REINFORCED_STERLING_SILVER,
+        Assets.silver[4]
+    ),
+
+    FINE_SILVER_RECIPE (
+            "Fine Silver",
+            20,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.FINE_SILVER,
+            Assets.silver[5]
+    ),
+
+    REINFORCED_FINE_SILVER (
+        "Reinforced Fine Silver",
+        21,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.REINFORCED_FINE_SILVER,
+        Assets.silver[6]
+    ),
+
+    // Iron
+    IRON_SCRAP (
+            "Iron Scrap",
+            22,
+            new ItemType.CreatableItem.Resource(),
+            null,
+            Assets.iron[0]
+    ),
+
+    RECYCLED_IRON (
+            "Recycled Iron",
+            23,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.RECYCLED_IRON,
+            Assets.iron[1]
+    ),
+
+    CAST_IRON (
+            "Cast Iron",
+            24,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.CAST_IRON,
+            Assets.iron[2]
+    ),
+
+    REINFORCED_CAST_IRON (
+            "Reinforced Cast Iron",
+            25,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.REINFORCED_CAST_IRON,
+            Assets.iron[3]
+    ),
+
+    STEEL (
+            "Steel",
+            26,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.STEEL,
+            Assets.iron[4]
+    ),
+
+    REINFORCED_STEEL (
+            "Reinforced Steel",
+            27,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.REINFORCED_STEEL,
+            Assets.iron[5]
+    ),
+
+    // Carbon
+    CARBON_SAMPLE (
+            "Carbon Sample",
+            28,
+            new ItemType.CreatableItem.Resource(),
+            null,
+            Assets.carbon[0]
+    ),
+
+    GRAPHITE (
+            "Graphite",
+            29,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.GRAPHITE,
+            Assets.carbon[1]
+    ),
+
+    COMPRESSED_GRAPHITE (
+        "Compressed Graphite",
+        30,
+        new ItemType.CreatableItem.Resource(),
+        Recipe.COMPRESSED_GRAPHITE,
+        Assets.carbon[2]
+    ),
+
+    WEAK_DIAMOND (
+            "Weak Diamond",
+            31,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.WEAK_DIAMOND,
+            Assets.carbon[3]
+    ),
+
+    DIAMOND (
+            "Diamond",
+            32,
+            new ItemType.CreatableItem.Resource(),
+            Recipe.DIAMOND,
+            Assets.carbon[4]
+    ),
+
+    // Tools
+    STONE_SICKLE (
+            "Stone Sickle",
+            33,
+            new ItemType.CreatableItem.Tool.Sickle(),
+            Recipe.STONE_SICKLE,
+            Assets.stoneSickle
+    ),
+
+    COPPER_SICKLE (
+            "Copper Sickle",
+            34,
+            new ItemType.CreatableItem.Tool.Sickle(),
+            Recipe.COPPER_SICKLE,
+            Assets.copperSickle
     );
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;

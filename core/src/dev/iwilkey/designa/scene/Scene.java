@@ -1,9 +1,11 @@
 package dev.iwilkey.designa.scene;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import dev.iwilkey.designa.Game;
 
 import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.SpriteSheet;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.clock.Clock;
@@ -68,12 +70,14 @@ public abstract class Scene {
                     Assets.addItemButton, 3, new ClickListener() {
                 @Override
                 public void onClick() {
+                    if(ItemCreator.isActive) Audio.playSFX(Assets.closeInv[MathUtils.random(0, 2)], 0.5f);
+                    else Audio.playSFX(Assets.openInv[MathUtils.random(0, 2)], 0.5f);
                     ItemCreator.isActive = !ItemCreator.isActive;
                 }
             }));
 
             // World init
-            world = new World(GUI,3000, 100);
+            world = new World(GUI,3000, 200);
         }
 
         @Override

@@ -1,0 +1,20 @@
+Designa -> KING OF THE HILL. Become a online only option. Must play with others. You connect to servers that have worlds running and
+you kill or team up with others. Leaderboard is how many kills you have before you die (then its reset).
+
+Do this using the technologies
+    Client (This)
+    Node.js (Server)
+    Socket.io (Socket for global game servers)
+
+Code I might need to use later:
+
+
+    boolean done = false;
+    InputStream inputStream = new URL("http://download1334.mediafire.com/995i0jyjiwfg/8gazdntgpcss85x/Designa-alpha-v.1.0.1.jar").openStream();
+    Files.copy(inputStream, Paths.get("C:/Users/User/Desktop/libGDX/projects/designa/android/assets/downloads"), StandardCopyOption.REPLACE_EXISTING);
+    File oldFile = new File("C:/Users/User/Desktop/libGDX/projects/designa/android/assets/downloads");
+    File newFile = new File("C:/Users/User/Desktop/libGDX/projects/designa/android/assets/designa.jar");
+    boolean f1 = oldFile.renameTo(newFile);
+
+    ProcessBuilder builder = new ProcessBuilder("java", "-jar", "C:/Users/User/Desktop/libGDX/projects/designa/android/assets/designa.jar");
+    Process process = builder.start();

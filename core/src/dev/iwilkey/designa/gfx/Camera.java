@@ -1,10 +1,13 @@
 package dev.iwilkey.designa.gfx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.assets.Assets;
+import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.clock.Clock;
 import dev.iwilkey.designa.clock.Event;
 import dev.iwilkey.designa.clock.Timer;
@@ -88,6 +91,7 @@ public class Camera {
         scale.x = targetZoom; scale.y = targetZoom;
         offset.x = (int)(e.x * scale.x - (GW / 2f) + e.width / 2f);
         offset.y = (int)(e.y * scale.y - (GH / 2f) + e.height / 2f);
+        Audio.playSFX(Assets.zoom[MathUtils.random(0,2)], 0.5f);
         InputHandler.zoomRequest = 0;
     }
 

@@ -12,6 +12,8 @@ import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.gfx.Renderer;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.inventory.Inventory;
+import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.creator.CategoryItemRecipeList;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.world.World;
@@ -57,7 +59,6 @@ public class Player extends Creature {
         Renderer.getCamera().centerOnEntity(this);
         buildingHandler.tick();
         itemCreator.tick();
-        //if(inventory.selectedSlot().item != null) System.out.println(inventory.selectedSlot().item.name() + " " + inventory.selectedSlot().count);
         // drawCollider();
     }
 
@@ -68,6 +69,31 @@ public class Player extends Creature {
     @Override
     public void render(Batch b) {
         b.draw(currentSprite(), x, y, width, height);
+        renderWield(b);
+    }
+
+    Item currentWield = null;
+    ItemType wieldType = null;
+    private void renderWield(Batch b) {
+
+        currentWield = (inventory.selectedSlot().item != null) ? inventory.selectedSlot().item : null;
+        if(currentWield == null) {
+            wieldType = null;
+            return;
+        }
+        wieldType = currentWield.getType();
+
+        // Facing right
+        if(facingRight) {
+            if (wieldType instanceof ItemType.NonCreatableItem.PlaceableTile)
+                b.draw(currentWield.getTexture(), x + 1, y + 4, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+
+        // Facing left
+        } else {
+            if (wieldType instanceof ItemType.NonCreatableItem.PlaceableTile)
+                b.draw(currentWield.getTexture(), x + 12, y + 4, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+        }
+
     }
 
     private TextureRegion currentSprite() {
