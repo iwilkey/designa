@@ -65,9 +65,6 @@ public enum Category {
                 break;
 
             case "Tiles":
-                this.items.add(Item.DIRT);
-                this.items.add(Item.GRASS);
-                this.items.add(Item.STONE);
                 break;
 
             case "Defense":

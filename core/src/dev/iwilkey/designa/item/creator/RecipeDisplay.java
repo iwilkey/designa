@@ -78,30 +78,25 @@ public class RecipeDisplay {
         c = 0;
         for(Map.Entry<String, Integer> ingredient : recipe.getRecipe().entrySet()) {
             Item i = Item.getItemFromString(ingredient.getKey());
+            
+            b.draw(i.getTexture(), x, (yy - (24 * c) - (INGREDIENT_SIZE - 6)), INGREDIENT_SIZE, INGREDIENT_SIZE);
+            
+            xx = (short)(x + 16); 
+            yy = (short)(y - 44);
 
-            xx = (short)(x + ((INGREDIENT_SIZE + SPACING) * c)); yy = (short)(y - 54 - (INGREDIENT_SIZE / 2f));
-            amounts[c].x = xx; amounts[c].y = yy - SPACING;
-            amounts[c].message = "x" + ingredient.getValue();
-
-            needed[c + 1].x = cirl.x + cirl.width + 12;
-            needed[c + 1].y = ((cirl.y + cirl.height) - ((cirl.height / recipe.getRecipe().size()) / 2) -
-                    ((cirl.height / recipe.getRecipe().size())) * c);
-            needed[c + 1].message = "" + inventory.amountOf(Item.getItemFromString(ingredient.getKey())) +
-                    "/" + ingredient.getValue() + " " + ingredient.getKey();
+            needed[c + 1].x = xx;
+            needed[c + 1].y = (yy - (24 * c));
+            needed[c + 1].message = " " + inventory.amountOf(Item.getItemFromString(ingredient.getKey())) +
+                    "/" + ingredient.getValue() + " " + ingredient.getKey(); 
 
             if(inventory.amountOf(Item.getItemFromString(ingredient.getKey())) >= ingredient.getValue()) {
-                b.draw(Assets.greenCheck, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 8,
+                b.draw(Assets.greenCheck, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 12,
                         needed[c + 1].y - 11, 16, 16);
-                b.draw(Assets.greenCheck, xx,
-                        yy - 36, 16, 16);
             } else {
-                b.draw(Assets.redX, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 8,
+                b.draw(Assets.redX, needed[c + 1].x + (needed[c + 1].message.length() * 12) + 12,
                         needed[c + 1].y - 11, 16, 16);
-                b.draw(Assets.redX, xx,
-                        yy - 36, 16, 16);
             }
-
-            b.draw(i.getTexture(), xx, yy, INGREDIENT_SIZE, INGREDIENT_SIZE);
+            
             c++;
         }
 

@@ -1,5 +1,6 @@
 package dev.iwilkey.designa.item;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -12,7 +13,7 @@ public enum Item {
     DIRT (
             "Dirt",
             0,
-            new ItemType.NonCreatableItem.PlaceableTile(Tile.DIRT),
+            new ItemType.PlaceableTile(Tile.DIRT),
             Recipe.DIRT,
             Assets.dirt
     ),
@@ -20,7 +21,7 @@ public enum Item {
     GRASS (
             "Grass",
             1,
-            new ItemType.NonCreatableItem.PlaceableTile(Tile.GRASS),
+            new ItemType.PlaceableTile(Tile.GRASS),
             Recipe.GRASS,
             Assets.grass
     ),
@@ -28,7 +29,7 @@ public enum Item {
     STONE (
             "Stone",
             2,
-            new ItemType.NonCreatableItem.PlaceableTile(Tile.STONE),
+            new ItemType.PlaceableTile(Tile.STONE),
             null,
             Assets.stone
     ),
@@ -126,6 +127,7 @@ public enum Item {
     ),
 
     ROMAN_VITRIOL (
+    		
         "Roman Vitriol",
         14,
         new ItemType.CreatableItem.Resource(),
@@ -284,7 +286,7 @@ public enum Item {
     STONE_SICKLE (
             "Stone Sickle",
             33,
-            new ItemType.CreatableItem.Tool.Sickle(),
+            new ItemType.CreatableItem.Tool.Sickle(20, 1),
             Recipe.STONE_SICKLE,
             Assets.stoneSickle
     ),
@@ -292,7 +294,7 @@ public enum Item {
     COPPER_SICKLE (
             "Copper Sickle",
             34,
-            new ItemType.CreatableItem.Tool.Sickle(),
+            new ItemType.CreatableItem.Tool.Sickle(80, 3),
             Recipe.COPPER_SICKLE,
             Assets.copperSickle
     );
@@ -311,6 +313,14 @@ public enum Item {
         this.type = type;
         this.recipe = recipe;
         this.texture = texture;
+    }
+
+    Item(String name, int itemID, ItemType type, Recipe recipe, Texture texture) {
+        this.name = name;
+        this.itemID = (byte)itemID;
+        this.type = type;
+        this.recipe = recipe;
+        this.texture = new TextureRegion(texture, texture.getWidth(), texture.getHeight());
     }
 
     public void render(Batch b, int x, int y) {

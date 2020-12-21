@@ -9,7 +9,6 @@ import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.SpriteSheet;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.clock.Clock;
-import dev.iwilkey.designa.io.IO;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.ui.ClickListener;
 import dev.iwilkey.designa.ui.UIImageButton;
@@ -82,7 +81,8 @@ public abstract class Scene {
 
         @Override
         public void tick() {
-            world.tick();
+        	
+        	world.tick();
             GUI.tick();
             GUI.texts.get(0).message = "FPS: " + Clock.FPS
                     + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT;
@@ -91,6 +91,13 @@ public abstract class Scene {
                 GUI.imageButtons.get(0).image = Assets.subtractItemButton;
             else if (!ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.subtractItemButton)
                 GUI.imageButtons.get(0).image = Assets.addItemButton;
+            
+            if(InputHandler.openInventoryRequest) {
+            	if(ItemCreator.isActive) Audio.playSFX(Assets.closeInv[MathUtils.random(0, 2)], 0.5f);
+                else Audio.playSFX(Assets.openInv[MathUtils.random(0, 2)], 0.5f);
+                ItemCreator.isActive = !ItemCreator.isActive;
+                InputHandler.openInventoryRequest = false;
+            }
 
         }
 

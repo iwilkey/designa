@@ -12,6 +12,7 @@ import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.gfx.LightHandler;
 import dev.iwilkey.designa.gfx.Renderer;
 import dev.iwilkey.designa.item.ActiveItemHandler;
+import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.ui.UIManager;
 
@@ -108,13 +109,14 @@ public class World {
                         t.render(b, x * Tile.TILE_SIZE, y * Tile.TILE_SIZE, FRONT_TILES[x][y][1]);
             }
         }
+        
+        if(!ItemCreator.isActive) entityHandler.render(b);
 
         for(int x = xStart; x < xEnd; x++)
             for (int y = yStart; y < yEnd; y++)
                 lightHandler.renderLight(b, x, y);
 
         activeItemHandler.render(b);
-        entityHandler.render(b);
 
     }
 

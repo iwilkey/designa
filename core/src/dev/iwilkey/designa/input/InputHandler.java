@@ -20,7 +20,8 @@ public class InputHandler {
     public static float cursorX, cursorY;
     public static boolean rightMouseButton, leftMouseButton, rightMouseButtonDown,
             leftMouseButtonDown, mouseCurrentlyMoving, rightMouseButtonUp, leftMouseButtonUp,
-            moveLeftRequest, moveRightRequest, jumpRequest, placeTileRequest, damageTileRequest;
+            moveLeftRequest, moveRightRequest, jumpRequest, placeTileRequest, damageTileRequest,
+            openInventoryRequest;
     public static float zoomRequest, scrollWheelRequestValue;
 
     public static void init() {
@@ -49,6 +50,7 @@ public class InputHandler {
                         keyJustPressed(key);
                         if(key == Input.Keys.A) moveLeftRequest = true;
                         if(key == Input.Keys.D) moveRightRequest = true;
+                        if(key == Input.Keys.F) openInventoryRequest = true;
                         if(key == Input.Keys.SPACE) jumpRequest = true;
                         return true;
                     }
@@ -57,6 +59,7 @@ public class InputHandler {
                     public boolean keyUp(int key) {
                         if(key == Input.Keys.A) moveLeftRequest = false;
                         if(key == Input.Keys.D) moveRightRequest = false;
+                        if(key == Input.Keys.F) openInventoryRequest = false;
                         if(key == Input.Keys.SPACE) jumpRequest = false;
                         return true;
                     }
@@ -142,6 +145,8 @@ public class InputHandler {
             case Android:
             case iOS:
                 break;
+		default:
+			break;
         }
     }
 

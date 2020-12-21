@@ -36,7 +36,7 @@ public class Inventory extends ScrollableItemList {
 
         currentItemLabel = new UIText("", 22, collider.x, collider.y + 64);
 
-        add(Item.ROCK, 99);
+        add(Item.STONE_SICKLE, 1);
     }
 
     @Override

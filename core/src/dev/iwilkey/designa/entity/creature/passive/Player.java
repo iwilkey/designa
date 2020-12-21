@@ -54,7 +54,11 @@ public class Player extends Creature {
 
     @Override
     public void tick() {
-        control();
+        if(!ItemCreator.isActive) control();
+        else {
+        	xMove = 0;
+        	InputHandler.jumpRequest = false;
+        }
         move();
         Renderer.getCamera().centerOnEntity(this);
         buildingHandler.tick();
@@ -87,11 +91,19 @@ public class Player extends Creature {
         if(facingRight) {
             if (wieldType instanceof ItemType.NonCreatableItem.PlaceableTile)
                 b.draw(currentWield.getTexture(), x + 1, y + 4, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+            if (wieldType instanceof ItemType.CreatableItem.Resource)
+            	b.draw(currentWield.getTexture(), x + 1, y + 5, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+            if (wieldType instanceof ItemType.CreatableItem.Tool)
+            	b.draw(currentWield.getTexture(), x + 4, y + 9, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
 
         // Facing left
         } else {
             if (wieldType instanceof ItemType.NonCreatableItem.PlaceableTile)
                 b.draw(currentWield.getTexture(), x + 12, y + 4, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+            if (wieldType instanceof ItemType.CreatableItem.Resource)
+            	b.draw(currentWield.getTexture(), x + 12, y + 5, Item.ITEM_WIDTH, Item.ITEM_HEIGHT);
+            if (wieldType instanceof ItemType.CreatableItem.Tool)
+            	b.draw(currentWield.getTexture(), x + 18, y + 10, 0, 0, Item.ITEM_WIDTH, Item.ITEM_HEIGHT, 1, 1, 112);
         }
 
     }

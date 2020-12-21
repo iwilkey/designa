@@ -17,7 +17,9 @@ public class Slot {
         this.item = item;
         this.collider = rectangle;
         this.isCountable = isCountable;
-        if(isCountable) count = 0;
+        if(item != null)
+        	if(!item.getType().stackable && item != null) this.isCountable = false;
+        if(this.isCountable) count = 0;
         else count = 1;
         this.display = null;
     }
@@ -26,7 +28,9 @@ public class Slot {
         this.item = item;
         this.collider = rectangle;
         this.isCountable = isCountable;
-        if(isCountable) count = 0;
+        if(item != null)
+        	if(!item.getType().stackable) this.isCountable = false;
+        if(this.isCountable) count = 0;
         else count = 1;
         this.display = display;
     }
