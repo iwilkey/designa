@@ -286,7 +286,7 @@ public enum Item {
     STONE_SICKLE (
             "Stone Sickle",
             33,
-            new ItemType.CreatableItem.Tool.Sickle(20, 1),
+            new ItemType.CreatableItem.Tool.Sickle(33, 50, 4),
             Recipe.STONE_SICKLE,
             Assets.stoneSickle
     ),
@@ -294,9 +294,33 @@ public enum Item {
     COPPER_SICKLE (
             "Copper Sickle",
             34,
-            new ItemType.CreatableItem.Tool.Sickle(80, 3),
+            new ItemType.CreatableItem.Tool.Sickle(34, 100, 8),
             Recipe.COPPER_SICKLE,
             Assets.copperSickle
+    ),
+    
+    SILVER_SICKLE (
+    		"Silver Sickle",
+    		35,
+    		new ItemType.CreatableItem.Tool.Sickle(35, 150, 15),
+    		Recipe.SILVER_SICKLE,
+    		Assets.silverSickle
+    ),
+    
+    IRON_SICKLE (
+    		"Iron Sickle",
+    		36,
+    		new ItemType.CreatableItem.Tool.Sickle(36, 200, 24),
+    		Recipe.IRON_SICKLE,
+    		Assets.ironSickle
+    ),
+    
+    DIAMOND_SICKLE (
+    		"Diamond Sickle",
+    		37,
+    		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40),
+    		Recipe.DIAMOND_SICKLE,
+    		Assets.diamondSickle
     );
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;
@@ -338,6 +362,12 @@ public enum Item {
         for(Item i : values())
             if(i.getName().equals(name)) return i;
         return null;
+    }
+    
+    public static Item getItemFromID(int id) {
+    	for(Item i : Item.values()) 
+    		if(i.itemID == (byte)id) return i;
+    	return null;
     }
 
     public byte getID() { return itemID; }

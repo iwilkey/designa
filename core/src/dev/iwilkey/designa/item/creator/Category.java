@@ -59,6 +59,9 @@ public enum Category {
             case "Tools":
                 this.items.add(Item.STONE_SICKLE);
                 this.items.add(Item.COPPER_SICKLE);
+                this.items.add(Item.SILVER_SICKLE);
+                this.items.add(Item.IRON_SICKLE);
+                this.items.add(Item.DIAMOND_SICKLE);
                 break;
 
             case "Utilities":

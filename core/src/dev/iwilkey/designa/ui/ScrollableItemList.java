@@ -10,6 +10,7 @@ import dev.iwilkey.designa.inventory.ComprehensiveInventory;
 import dev.iwilkey.designa.inventory.Inventory;
 import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 
 import java.awt.Rectangle;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 
 public class ScrollableItemList extends Scrollable {
 
-    public static final int SLOT_SIZE = 64, SLOT_SPACE = 4,
+    public static final int SLOT_SIZE = 64, SLOT_SPACE = 16,
         ITEM_TEXTURE_SIZE = 32, SCROLL_SENSITIVITY = 15, SCROLLWHEEL_SENSITIVITY = 2; // px
     public static final float FRICTION = 0.3f;
 
@@ -62,16 +63,11 @@ public class ScrollableItemList extends Scrollable {
 
     @Override
     public void tick() {
-        updateDisplay();
         selectSlot();
         if(this instanceof Inventory && !ItemCreator.isActive) act();
         else if (!(this instanceof Inventory)) act();
     }
 
-    private void updateDisplay() {
-        for(Slot slot : slots)
-            slot.display.message = Integer.toString(slot.count);
-    }
 
     private void act() {
 

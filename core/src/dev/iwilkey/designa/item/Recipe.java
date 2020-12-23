@@ -39,7 +39,10 @@ public enum Recipe {
     REINFORCED_DIAMOND ("Reinforced Diamond"),
 
     STONE_SICKLE ("Stone Sickle"),
-    COPPER_SICKLE ("Copper Sickle");
+    COPPER_SICKLE ("Copper Sickle"),
+	SILVER_SICKLE ("Silver Sickle"),
+	IRON_SICKLE ("Iron Sickle"),
+	DIAMOND_SICKLE ("Diamond Sickle");
 
     private HashMap<String, Integer> recipe;
 
@@ -141,7 +144,8 @@ public enum Recipe {
             case "Diamond":
                 add("Weak Diamond", 2);
                 break;
-
+               
+            // Tools
             case "Stone Sickle":
                 add("Rock", 3);
                 add("Gravel", 2);
@@ -151,6 +155,21 @@ public enum Recipe {
                 add("Copper Scrap", 3);
                 add("Recycled Copper", 2);
                 break;
+            case "Silver Sickle":
+            	add("Copper Sickle", 1);
+            	add("Silver Scrap", 3);
+            	add("Recycled Silver", 2);
+            	break;
+            case "Iron Sickle":
+            	add("Silver Sickle", 1);
+            	add("Iron Scrap", 3);
+            	add("Recycled Iron", 2);
+            	break;
+            case "Diamond Sickle":
+            	add("Iron Sickle", 1);
+            	add("Compressed Graphite", 3);
+            	add("Weak Diamond", 2);
+            	break;
 
         }
 

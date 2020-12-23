@@ -25,19 +25,21 @@ public abstract class ItemType {
         }
         
         public abstract static class Tool extends CreatableItem {
-       
+        	
+        	public final int itemID;
         	public final int strength;
         	public final int efficiency;
         	
-        	public Tool(int strength, int efficiency) {
+        	public Tool(int itemID, int strength, int efficiency) {
         		stackable = false;
+        		this.itemID = itemID;
 				this.strength = strength;
 				this.efficiency = efficiency;
         	}
         	
             public static class Sickle extends Tool{
-				public Sickle(int strength, int efficiency) {
-					super(strength, efficiency);
+				public Sickle(int itemID, int strength, int efficiency) {
+					super(itemID, strength, efficiency);
 				}
 			}
         }

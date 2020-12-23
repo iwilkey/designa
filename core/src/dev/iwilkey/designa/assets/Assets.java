@@ -24,7 +24,8 @@ public class Assets {
     // Resources
     public static TextureRegion[] rock, copper, silver, iron, carbon;
     // Tools
-    public static TextureRegion stoneSickle, copperSickle;
+    public static TextureRegion stoneSickle, copperSickle, silverSickle,
+    	ironSickle, diamondSickle;
     // Environment
     public static Texture[] clouds;
 
@@ -129,6 +130,9 @@ public class Assets {
         // Tools
         stoneSickle = ss.crop(104 / 8, 48 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
         copperSickle = ss.crop(112 / 8, 48 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        silverSickle = ss.crop(120 / 8, 48 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        ironSickle = ss.crop(128 / 8, 48 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        diamondSickle = ss.crop(136 / 8, 48 / 8, ss.SLOT_SIZE, ss.SLOT_SIZE);
 
         // Environment
         clouds = new Texture[4];

@@ -1,17 +1,21 @@
 package dev.iwilkey.designa.inventory;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
+
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
+import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.ui.ScrollableItemList;
-import dev.iwilkey.designa.ui.UIObject;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Point;
 import java.util.ArrayList;
 
 // This will show the inventory in grid form and allow the player to move around things inside the inventory.
@@ -48,13 +52,22 @@ public class ComprehensiveInventory {
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
                         (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
                 if(itemUp) {
+                
                     Slot slotToMove = inventory.getSlotFromIndex(index);
+                   
                     if(slotCurrentlyUp == slotToMove) {
                         itemUp = false;
                         slotCurrentlyUp = null;
                         return;
                     }
+                    
                     if(slotToMove.item == null) {
+                    	
+                    	if(slotCurrentlyUp.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                    		slotToMove.tool = slotCurrentlyUp.tool;
+                    		slotCurrentlyUp.tool = null;
+                    	}
+                    	
                         inventory.editSlot(slotToMove, slotCurrentlyUp.item, slotCurrentlyUp.count);
                         inventory.editSlot(slotCurrentlyUp, null, 0);
                         itemUp = false;
@@ -62,12 +75,33 @@ public class ComprehensiveInventory {
                         return;
                     }
                     if(slotToMove.item != slotCurrentlyUp.item) {
+                    	
+                    	// If the two items are both tools...
+                    	if(slotCurrentlyUp.item.getType() instanceof ItemType.CreatableItem.Tool
+                    			&& slotToMove.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                    		Tool t = slotCurrentlyUp.tool;
+                    		slotCurrentlyUp.tool = slotToMove.tool;
+                    		slotToMove.tool = t;
+                    	} else if(slotCurrentlyUp.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                    		slotToMove.tool = slotCurrentlyUp.tool;
+                    		slotCurrentlyUp.tool = null;
+                    	} else if(slotToMove.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                    		slotCurrentlyUp.tool = slotToMove.tool;
+                    		slotToMove.tool = null;
+                    	}
+                    	
                         Item i = slotToMove.item;
                         byte count = slotToMove.count;
                         inventory.editSlot(slotToMove, slotCurrentlyUp.item, slotCurrentlyUp.count);
                         slotCurrentlyUp.item = i;
                         slotCurrentlyUp.count = count;
                     } else {
+                    	
+                    	if(slotCurrentlyUp.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                    		itemUp = false;
+                            slotCurrentlyUp = null;
+                    		return;
+                    	}
 
                         short totalCountAfter = (short)(slotCurrentlyUp.count + slotToMove.count);
                         if(totalCountAfter > Inventory.STORAGE_CAP) {
@@ -94,10 +128,15 @@ public class ComprehensiveInventory {
                     itemUp = false;
                     return;
                 }
-
-                for(int i = 0; i < slotCurrentlyUp.count; i++) {
-                    inventory.player.world.activeItemHandler.spawn(slotCurrentlyUp.item,
-                            xx + MathUtils.random(-2, 2), yy);
+                
+                if(slotCurrentlyUp.item.getType() instanceof ItemType.CreatableItem.Tool) {
+                	inventory.player.world.activeItemHandler.spawnTool(slotCurrentlyUp.item,
+                			slotCurrentlyUp.tool, xx + MathUtils.random(-2, 2), yy);
+                } else {
+                	for(int i = 0; i < slotCurrentlyUp.count; i++) {
+                        inventory.player.world.activeItemHandler.spawn(slotCurrentlyUp.item,
+                                xx + MathUtils.random(-2, 2), yy);
+                    }
                 }
 
                 inventory.editSlot(slotCurrentlyUp, null, 0);
@@ -179,6 +218,7 @@ public class ComprehensiveInventory {
 
     byte c = 0, gx, gy;
     short pixX, pixY;
+    Color inv = new Color(252 / 255f, 194 / 255f, 3 / 255f, 1.0f);
     public void render(Batch b) {
         c = 0;
         for(Slot s : slots) {
@@ -187,13 +227,15 @@ public class ComprehensiveInventory {
             gy = (byte)(TABLE_HEIGHT - ((c - gx) / TABLE_WIDTH));
             pixX = (short)(relRect.x + (gx * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
             pixY = (short)(relRect.y + (gy * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
-
+            
+            b.setColor(inv);
             b.draw(Assets.inventorySlot, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
+            b.setColor(Color.WHITE);
 
             if(inventory.selectedSlot() == s) b.draw(Assets.inventorySelector, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
 
             if(s.item != null && s != slotCurrentlyUp) {
-                s.display.render(b, pixX + ScrollableItemList.SLOT_SIZE - 8, pixY + 8, 18);
+                s.display.render(b, pixX + ScrollableItemList.SLOT_SIZE - 19, pixY + 1, 18);
                 b.draw(s.item.getTexture(), pixX + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
                         pixY + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
                         ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);

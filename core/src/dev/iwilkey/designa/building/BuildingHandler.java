@@ -10,6 +10,7 @@ import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.input.InputHandler;
+import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.creator.ItemCreator;
@@ -62,15 +63,38 @@ public class BuildingHandler {
                                 tileXSelected, tileYSelected);
                 }
             }
-
-            world.lightHandler.addLight(tileXSelected, tileYSelected, 8);
-
+            
+            world.lightHandler.addLight(tileXSelected, tileYSelected, 10);
+            
             InputHandler.placeTileRequest = false;
         }
 
         if(InputHandler.damageTileRequest) {
-            damageTile(tileXSelected, tileYSelected);
-            InputHandler.damageTileRequest = false;
+        	if(inRange) {
+	        	Slot selected = player.inventory.selectedSlot();
+	        	
+	        	if(selected.tool != null) {	
+	        		if(selected.tool.toolType instanceof ItemType.CreatableItem.Tool.Sickle) {
+	        			if(world.getFrontTile(tileXSelected, tileYSelected) == Tile.STONE) {
+	        				damageTile(selected.tool.toolType.efficiency, tileXSelected, tileYSelected);
+	        				
+	        				for(int i = 0; i < Math.min(selected.tool.toolType.efficiency / 2, 6); i++) 
+	        					world.activeItemHandler.spawn(Item.ROCK, (int)world.player.x +
+	        							MathUtils.random(4, 8), (int)world.player.y + 12);
+	        				
+	        			} else damageTile(selected.tool.toolType.efficiency / 2, tileXSelected, tileYSelected);
+	        			if(world.getFrontTile(tileXSelected, tileYSelected) != Tile.AIR) selected.tool.timesUsed++;
+	        		}
+	        	} else {
+	        		damageTile(1, tileXSelected, tileYSelected);
+	        		if(world.getFrontTile(tileXSelected, tileYSelected) == Tile.STONE) {
+	        			world.activeItemHandler.spawn(Item.ROCK, (int)world.player.x +
+							MathUtils.random(4, 8), (int)world.player.y + 12);
+	        		}
+	        	}
+	        	
+        	}
+        	InputHandler.damageTileRequest = false;
         }
 
     }
@@ -99,10 +123,10 @@ public class BuildingHandler {
         return false;
     }
 
-    public boolean damageTile(int x, int y) {
+    public boolean damageTile(int amount, int x, int y) {
         if(!inRange || y < 1) return false;
         if(world.getFrontTile(x, y) != Tile.AIR) {
-            world.FRONT_TILES[x][y][1]--;
+            world.FRONT_TILES[x][y][1] -= amount;
             checkBreak(x, y);
             return true;
         }

@@ -18,6 +18,7 @@ public class ActiveItemHandler {
     public final float GRAVITY = -6.5f;
     public HashMap<Item, List<Rectangle>> activeItems;
     public ArrayList<Float> timeInAir;
+    public ArrayList<Tool> tools;
 
     World world;
 
@@ -25,6 +26,7 @@ public class ActiveItemHandler {
         this.world = world;
         activeItems = new HashMap<>();
         timeInAir = new ArrayList<>();
+        tools = new ArrayList<>();
     }
 
     List<Rectangle> rectangles;
@@ -35,27 +37,51 @@ public class ActiveItemHandler {
         activeItems.put(i, rectangles);
         timeInAir.add(0.0f);
     }
+    
+    public void spawnTool(Item i, Tool t, int x, int y) {
+    	spawn(i, x, y);
+
+    	System.out.println(t.timesUsed);
+    	
+    	tools.add(t);
+
+    }
 
     private void pickup(Item item, Player player) {
         player.inventory.add(item);
     }
+    
+    private void pickupTool(Tool tool, Player player) {
+    	player.inventory.addTool(tool);
+    }
 
-    int c1, c2;
+    int c1, c2, c3;
     public void tick() {
-        c1 = 0;
+        c1 = 0; c3 = 0;
         for(Map.Entry<Item, List<Rectangle>> i : activeItems.entrySet()) {
             c2 = 0;
             for(Rectangle rect : i.getValue()) {
+            	
                 if(world.player.collider.intersects(rect)) {
+                	
+                	if(i.getKey().getType() instanceof ItemType.CreatableItem.Tool) {
+                		try {
+                    		pickupTool(tools.get(c3), world.player);
+                    		tools.remove(c3);
+                    	} catch (IndexOutOfBoundsException ignored) {}
+                    	c3++;
+                	} else pickup(i.getKey(), world.player);
+                	
                     i.getValue().remove(rect);
                     timeInAir.remove(c1);
-                    pickup(i.getKey(), world.player);
                     break;
                 }
                 i.getValue().set(c2, moveY(rect, c1));
                 c1++; c2++;
             }
         }
+        
+       
     }
 
     int ty;

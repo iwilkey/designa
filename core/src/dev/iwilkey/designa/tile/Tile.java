@@ -9,13 +9,13 @@ import dev.iwilkey.designa.item.ItemType;
 
 public enum Tile {
 
-    AIR (0, Assets.air, new TileType.Natural(),0,false),
-    DIRT (1, Assets.dirt, new TileType.Natural(), 2, true),
-    GRASS (2, Assets.grass, new TileType.Natural(), 4,true),
-    STONE (3, Assets.stone, new TileType.Natural(), 6, true),
-    COPPER_ORE (4, Assets.copperOre, new TileType.Natural.Ore(), 10, true),
-    SILVER_ORE (5, Assets.silverOre, new TileType.Natural.Ore(), 12, true),
-    IRON_ORE (6, Assets.ironOre, new TileType.Natural.Ore(), 14, true);
+    AIR (0, Assets.air, new TileType.Natural(), 0,false),
+    DIRT (1, Assets.dirt, new TileType.Natural(), 10, true),
+    GRASS (2, Assets.grass, new TileType.Natural(), 12,true),
+    STONE (3, Assets.stone, new TileType.Natural(), 30, true),
+    COPPER_ORE (4, Assets.copperOre, new TileType.Natural.Ore(), 32, true),
+    SILVER_ORE (5, Assets.silverOre, new TileType.Natural.Ore(), 38, true),
+    IRON_ORE (6, Assets.ironOre, new TileType.Natural.Ore(), 42, true);
 
     public static final int TILE_SIZE = 16;
     private final int tileID;

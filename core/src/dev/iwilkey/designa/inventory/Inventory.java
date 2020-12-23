@@ -1,10 +1,14 @@
 package dev.iwilkey.designa.inventory;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.item.Item;
+import dev.iwilkey.designa.item.ItemType;
+import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.ui.ScrollableItemList;
 import dev.iwilkey.designa.ui.UIObject;
@@ -17,6 +21,7 @@ public class Inventory extends ScrollableItemList {
     public UIText currentItemLabel;
 
     Player player;
+    public ArrayList<Tool> tools;
     ComprehensiveInventory compInv;
     World world;
 
@@ -26,25 +31,54 @@ public class Inventory extends ScrollableItemList {
 
         this.player = player;
         this.world = world;
+        
+        tools = new ArrayList<>();
 
         world.uiManager.addScrollableItemList(this);
 
         for(byte i = 0; i < 20; i++) super.add(null);
 
         this.compInv = new ComprehensiveInventory(slots,this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
-                0, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
+                -48, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
 
         currentItemLabel = new UIText("", 22, collider.x, collider.y + 64);
 
-        add(Item.STONE_SICKLE, 1);
+        this.add(Item.STONE_SICKLE);
+        this.add(Item.COPPER_SICKLE);
+        this.add(Item.SILVER_SICKLE);
+        this.add(Item.IRON_SICKLE);
+        this.add(Item.DIAMOND_SICKLE);
     }
 
     @Override
     public void tick() {
+    	updateDisplay();
         super.tick();
-        for(Slot slot : slots)
-            if (slot.count <= 0) slot.item = null;
+        
+        for(Slot slot : slots) {
+        	if(slot.tool != null) {
+        		if(slot.tool.calculate() <= 0) {
+        			slot.item = null;
+        			slot.tool = null;
+        			break;
+        		}
+        	} else if (slot.count <= 0) slot.item = null;
+        }
+        
         if(ItemCreator.isActive) compInv.tick();
+    }
+    
+    // TODO Make tools so they aren't this arraylist thing, rather every slot has a tool or null.
+    
+    private void updateDisplay() {
+        for(Slot slot : slots) {
+        	if(slot.item != null) {
+	        	if(slot.tool != null) {
+	        		slot.display.message = "" + slot.tool.calculate() + "%";
+	        		continue;
+	        	} else slot.display.message = Integer.toString(slot.count);
+        	}
+        }
     }
 
     byte s = 0;
@@ -77,7 +111,23 @@ public class Inventory extends ScrollableItemList {
 
     @Override
     public void add(Item item) {
+    	
+    	if(!item.getType().stackable) {
+    		for(Slot slot : slots) {
+    			if(slot.item == null) {
+    				slot.item = item;
+    				slot.count = 1;
+    				if(item.getType() instanceof ItemType.CreatableItem.Tool) 
+    					slot.tool = new Tool((ItemType.CreatableItem.Tool)(item.getType()), slot);
+    				return;
+    			}
+    			else continue;	
+            }
+    	}
+    
         for(Slot slot : slots) {
+        	
+
             if(slot.item == item && slot.count + 1 <= STORAGE_CAP) {
                 slot.count++;
                 return;
@@ -87,7 +137,20 @@ public class Inventory extends ScrollableItemList {
                 slot.count++;
                 return;
             }
+          
         }
+    }
+    
+    public void addTool(Tool tool) {
+    	for(Slot slot : slots) {
+			if(slot.item == null) {
+				slot.item = Item.getItemFromID(((ItemType.CreatableItem.Tool)tool.toolType).itemID);
+				slot.count = 1;
+				slot.tool = tool;
+				slot.tool.timesUsed = tool.timesUsed;
+				return;
+			} else continue;
+    	}
     }
 
     public int amountOf(Item item) {
@@ -139,7 +202,7 @@ public class Inventory extends ScrollableItemList {
 
     @Override
     public void render(Batch b) {
-        super.render(b);
+        super.render(b);  
         if(ItemCreator.isActive) compInv.render(b);
         currentItemLabel.render(b, currentItemLabel.x, currentItemLabel.y, 22);
     }
