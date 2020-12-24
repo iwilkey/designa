@@ -15,6 +15,7 @@ import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.creator.ItemCreator;
 import dev.iwilkey.designa.tile.Tile;
+import dev.iwilkey.designa.tile.TileType;
 import dev.iwilkey.designa.world.World;
 
 import java.awt.*;
@@ -78,12 +79,20 @@ public class BuildingHandler {
 	        			if(world.getFrontTile(tileXSelected, tileYSelected) == Tile.STONE) {
 	        				damageTile(selected.tool.toolType.efficiency, tileXSelected, tileYSelected);
 	        				
-	        				for(int i = 0; i < Math.min(selected.tool.toolType.efficiency / 2, 6); i++) 
-	        					world.activeItemHandler.spawn(Item.ROCK, (int)world.player.x +
-	        							MathUtils.random(4, 8), (int)world.player.y + 12);
+	        				for(int i = 0; i < 2; i++) 
+	        					world.activeItemHandler.spawn(Item.ROCK, (int)(tileXSelected * Tile.TILE_SIZE) +
+	        							MathUtils.random(4, 8), (int)(tileYSelected * Tile.TILE_SIZE));
 	        				
 	        			} else damageTile(selected.tool.toolType.efficiency / 2, tileXSelected, tileYSelected);
 	        			if(world.getFrontTile(tileXSelected, tileYSelected) != Tile.AIR) selected.tool.timesUsed++;
+	        			
+	        			
+	        			if(world.getBackTile(tileXSelected,  tileYSelected).type instanceof TileType.Natural.Ore) {
+        					world.activeItemHandler.spawn(((TileType.Natural.Ore)(world.getBackTile(tileXSelected,  tileYSelected).type)).drop, 
+        							(tileXSelected * Tile.TILE_SIZE) + MathUtils.random(0, 8), (tileYSelected * Tile.TILE_SIZE) + 4);
+	        				selected.tool.timesUsed++;
+	        			}
+
 	        		}
 	        	} else {
 	        		damageTile(1, tileXSelected, tileYSelected);

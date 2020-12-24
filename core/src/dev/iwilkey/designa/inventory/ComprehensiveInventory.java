@@ -13,6 +13,7 @@ import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.ui.ScrollableItemList;
+import dev.iwilkey.designa.ui.UIText;
 
 import java.awt.Rectangle;
 import java.awt.Point;
@@ -23,6 +24,7 @@ public class ComprehensiveInventory {
 
     private final byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
     private final short Y_OFF = 680;
+    private UIText inventoryLabel, currentItemLabel;
 
     ArrayList<Slot> slots;
     Rectangle collider, relRect;
@@ -35,6 +37,9 @@ public class ComprehensiveInventory {
         this.slots = slots;
         collider = new Rectangle(x, y + Y_OFF, width, height);
         relRect = new Rectangle(x, y + Y_OFF, width, height);
+        
+        inventoryLabel = new UIText("Inventory", 22, collider.x, collider.y + collider.height);
+        currentItemLabel = new UIText("", 22, collider.x, collider.y + collider.height);
     }
 
     public void tick() {
@@ -247,10 +252,24 @@ public class ComprehensiveInventory {
         if(itemUp && slotCurrentlyUp != null) {
             slotCurrentlyUp.display.render(b, (int)(InputHandler.cursorX / XSCALE) + (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) + 4,
                     (int)(InputHandler.cursorY / YSCALE) - (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) - 4, 18);
-            b.draw(slotCurrentlyUp.item.getTexture(), (InputHandler.cursorX / XSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
-                    (InputHandler.cursorY / YSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
-                    ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+            try {
+	            b.draw(slotCurrentlyUp.item.getTexture(), (InputHandler.cursorX / XSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
+	                    (InputHandler.cursorY / YSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
+	                    ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+            } catch (NullPointerException ignored) {}
         }
+        
+        inventoryLabel.render(b, (int)(((collider.x + (collider.width / 2)) / XSCALE) - 72), 
+        		(int)((collider.y + collider.height) / YSCALE) + 135, 22);
+        
+        if(inventory.selectedSlot().item != null)
+        	currentItemLabel.message = inventory.selectedSlot().item.getName();
+        else currentItemLabel.message = "Empty Slot";
+        
+        currentItemLabel.render(b, (int)((collider.x + (collider.width / 2)) / XSCALE) - (currentItemLabel.message.length() * 8), 
+        		(int)((collider.y + collider.height) / YSCALE) + 100, 22);
+        
+        
 
     }
 
@@ -263,7 +282,5 @@ public class ComprehensiveInventory {
         collider.x = (int)(relRect.x * XSCALE);
         collider.y = (int)(relRect.y * YSCALE);
     }
-
-
 
 }

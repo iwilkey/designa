@@ -49,6 +49,8 @@ public class ItemCreator {
     }
 
     byte i = 0;
+    long timer = 0;
+    short craftTimeCap = 10;
     public void render(Batch b) {
         if(!isActive) return;
         uiManager.render(b);
@@ -61,9 +63,15 @@ public class ItemCreator {
                     recipeDisplay.renderRecipe(b, l, l.selectedSlot().item, (byte)l.selectedSlot);
 
                     if(l.canCreate[l.selectedSlot] == 1)
-                        if(InputHandler.rightMouseButtonDown)
-                            createItem(l.selectedSlot().item);
-
+                        if(InputHandler.rightMouseButton) {
+                        	timer++;
+                        	if(timer >= craftTimeCap) {
+                        		createItem(l.selectedSlot().item);
+                        		timer = 0;
+                        		craftTimeCap = (short)Math.max(craftTimeCap - 1, 4);
+                        		break;
+                        	}
+                        } else craftTimeCap = 10;
                 }
             } catch (NullPointerException ignored) {}
         if(i == 0) recipeDisplay.renderRecipe(b, null,null, (byte)0);

@@ -13,14 +13,14 @@ public enum Tile {
     DIRT (1, Assets.dirt, new TileType.Natural(), 10, true),
     GRASS (2, Assets.grass, new TileType.Natural(), 12,true),
     STONE (3, Assets.stone, new TileType.Natural(), 30, true),
-    COPPER_ORE (4, Assets.copperOre, new TileType.Natural.Ore(), 32, true),
-    SILVER_ORE (5, Assets.silverOre, new TileType.Natural.Ore(), 38, true),
-    IRON_ORE (6, Assets.ironOre, new TileType.Natural.Ore(), 42, true);
+    COPPER_ORE (4, Assets.copperOre, new TileType.Natural.Ore(Item.COPPER_SCRAP), 32, true),
+    SILVER_ORE (5, Assets.silverOre, new TileType.Natural.Ore(Item.SILVER_SCRAP), 38, true),
+    IRON_ORE (6, Assets.ironOre, new TileType.Natural.Ore(Item.IRON_SCRAP), 42, true);
 
     public static final int TILE_SIZE = 16;
     private final int tileID;
     private final int strength;
-    private TileType type;
+    public TileType type;
     private TextureRegion texture;
     private boolean isSolid;
 

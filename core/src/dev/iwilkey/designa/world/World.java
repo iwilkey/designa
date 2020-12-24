@@ -67,6 +67,14 @@ public class World {
             if (t.getTileID() == FRONT_TILES[x][y][0]) return t;
         return null;
     }
+    
+    public Tile getBackTile(int x, int y) {
+    	if(y > HEIGHT - 1 || x > WIDTH - 1) return Tile.AIR;
+    	if(y < 0 || x < 0) return Tile.AIR;
+    	for (Tile t : Tile.values())
+    		if (t.getTileID() == BACK_TILES[x][y][0]) return t;
+    	return null;
+    }
 
     public void tick() {
         ambientCycle.tick();

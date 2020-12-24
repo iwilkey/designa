@@ -18,7 +18,6 @@ import dev.iwilkey.designa.world.World;
 public class Inventory extends ScrollableItemList {
 
     public static final byte STORAGE_CAP = 99;
-    public UIText currentItemLabel;
 
     Player player;
     public ArrayList<Tool> tools;
@@ -39,9 +38,7 @@ public class Inventory extends ScrollableItemList {
         for(byte i = 0; i < 20; i++) super.add(null);
 
         this.compInv = new ComprehensiveInventory(slots,this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
-                -48, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
-
-        currentItemLabel = new UIText("", 22, collider.x, collider.y + 64);
+                -120, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
 
         this.add(Item.STONE_SICKLE);
         this.add(Item.COPPER_SICKLE);
@@ -126,18 +123,18 @@ public class Inventory extends ScrollableItemList {
     	}
     
         for(Slot slot : slots) {
-        	
-
             if(slot.item == item && slot.count + 1 <= STORAGE_CAP) {
                 slot.count++;
                 return;
             }
-            if(slot.item == null) {
+        }
+        
+        for(Slot slot : slots) {
+        	if(slot.item == null) {
                 slot.item = item;
                 slot.count++;
                 return;
             }
-          
         }
     }
     
@@ -204,7 +201,6 @@ public class Inventory extends ScrollableItemList {
     public void render(Batch b) {
         super.render(b);  
         if(ItemCreator.isActive) compInv.render(b);
-        currentItemLabel.render(b, currentItemLabel.x, currentItemLabel.y, 22);
     }
 
     @Override

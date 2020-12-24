@@ -50,7 +50,7 @@ public class RecipeDisplay {
         }
 
         if(item == null) {
-            name.message = "";
+            name.message = "Item Creator";
             for(UIText t : amounts) t.message = "";
             for (UIText uiText : needed) uiText.message = "";
             return;
