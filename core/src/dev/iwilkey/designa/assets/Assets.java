@@ -20,7 +20,9 @@ public class Assets {
     public static TextureRegion[] breakLevel;
     // Tiles
     public static TextureRegion backDirt, air, grass, dirt, stone,
-            copperOre, silverOre, ironOre;
+            copperOre, silverOre, ironOre,
+            stoneCrate, copperCrate, silverCrate, ironCrate, diamondCrate;
+
     // Resources
     public static TextureRegion[] rock, copper, silver, iron, carbon;
     // Tools
@@ -78,7 +80,13 @@ public class Assets {
         stone = ss.crop(11, 3, ss.SLOT_SIZE, ss.SLOT_SIZE);
         copperOre = ss.crop(2, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
         silverOre = ss.crop(3, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+
         ironOre = ss.crop(4, 20, ss.SLOT_SIZE, ss.SLOT_SIZE);
+        stoneCrate = ss.crop(80 / 8, 152 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
+        copperCrate = ss.crop(96 / 8, 152 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
+        silverCrate = ss.crop((96 + 16) / 8, 152 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
+        ironCrate = ss.crop((96 + 16 + 16) / 8, 152 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
+        diamondCrate = ss.crop((96 + 16 + 16 + 16) / 8, 152 / 8, ss.SLOT_SIZE * 2, ss.SLOT_SIZE);
 
         // Resources
         // Stone

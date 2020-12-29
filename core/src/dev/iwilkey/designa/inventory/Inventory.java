@@ -10,6 +10,7 @@ import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.item.creator.ItemCreator;
+import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.ui.ScrollableItemList;
 import dev.iwilkey.designa.ui.UIObject;
 import dev.iwilkey.designa.ui.UIText;
@@ -21,6 +22,7 @@ public class Inventory extends ScrollableItemList {
 
     Player player;
     public ArrayList<Tool> tools;
+    public ArrayList<Crate> crates;
     ComprehensiveInventory compInv;
     World world;
 
@@ -30,21 +32,24 @@ public class Inventory extends ScrollableItemList {
 
         this.player = player;
         this.world = world;
-        
+
         tools = new ArrayList<>();
+        crates = new ArrayList<>();
 
         world.uiManager.addScrollableItemList(this);
 
-        for(byte i = 0; i < 20; i++) super.add(null);
+        for (byte i = 0; i < 20; i++) super.add(null);
 
-        this.compInv = new ComprehensiveInventory(slots,this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
-                -120, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
+        this.compInv = new ComprehensiveInventory(slots, this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
+                -200, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
 
-        this.add(Item.STONE_SICKLE);
-        this.add(Item.COPPER_SICKLE);
-        this.add(Item.SILVER_SICKLE);
-        this.add(Item.IRON_SICKLE);
-        this.add(Item.DIAMOND_SICKLE);
+        this.add(Item.STONE_CRATE);
+        this.add(Item.COPPER_CRATE);
+        this.add(Item.SILVER_CRATE);
+        this.add(Item.IRON_CRATE);
+        this.add(Item.DIAMOND_CRATE);
+
+        addCrate(new Crate(new ItemType.PlaceableTile.Crate(Tile.STONE_CRATE, 36), 40, 40));
     }
 
     @Override
@@ -62,7 +67,10 @@ public class Inventory extends ScrollableItemList {
         	} else if (slot.count <= 0) slot.item = null;
         }
         
-        if(ItemCreator.isActive) compInv.tick();
+        if(ItemCreator.isActive) {
+            compInv.tick();
+            for(Crate c : crates) c.tick();
+        }
     }
     
     // TODO Make tools so they aren't this arraylist thing, rather every slot has a tool or null.
@@ -137,6 +145,10 @@ public class Inventory extends ScrollableItemList {
             }
         }
     }
+
+    public void addCrate(Crate crate) {
+        crates.add(crate);
+    }
     
     public void addTool(Tool tool) {
     	for(Slot slot : slots) {
@@ -200,13 +212,18 @@ public class Inventory extends ScrollableItemList {
     @Override
     public void render(Batch b) {
         super.render(b);  
-        if(ItemCreator.isActive) compInv.render(b);
+        if(ItemCreator.isActive) {
+            compInv.render(b);
+            for(Crate c : crates) c.render(b);
+        }
+
     }
 
     @Override
     public void onResize(int width, int height) {
         super.onResize(width, height);
         compInv.onResize(width, height);
+        for(Crate c : crates) c.onResize(width, height);
     }
 
 }

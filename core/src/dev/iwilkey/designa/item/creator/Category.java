@@ -65,6 +65,11 @@ public enum Category {
                 break;
 
             case "Utilities":
+                this.items.add(Item.STONE_CRATE);
+                this.items.add(Item.COPPER_CRATE);
+                this.items.add(Item.SILVER_CRATE);
+                this.items.add(Item.IRON_CRATE);
+                this.items.add(Item.DIAMOND_CRATE);
                 break;
 
             case "Tiles":

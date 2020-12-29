@@ -1,6 +1,9 @@
 package dev.iwilkey.designa.item;
 
+import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.tile.Tile;
+
+import java.util.ArrayList;
 
 public abstract class ItemType {
 	
@@ -16,6 +19,14 @@ public abstract class ItemType {
         	this.correspondingTile = correspondingTile;
         	stackable = true;
         }
+
+		public static class Crate extends PlaceableTile {
+			public int space;
+			public Crate(Tile correspondingTile, int space) {
+				super(correspondingTile);
+				this.space = space;
+			}
+		}
     }
 
     public abstract static class CreatableItem extends ItemType {

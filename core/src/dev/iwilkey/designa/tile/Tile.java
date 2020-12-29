@@ -9,10 +9,17 @@ import dev.iwilkey.designa.item.ItemType;
 
 public enum Tile {
 
+    //Placeable tiles
     AIR (0, Assets.air, new TileType.Natural(), 0,false),
     DIRT (1, Assets.dirt, new TileType.Natural(), 10, true),
     GRASS (2, Assets.grass, new TileType.Natural(), 12,true),
     STONE (3, Assets.stone, new TileType.Natural(), 30, true),
+    STONE_CRATE (7, Assets.stoneCrate, new TileType.Creatable.Crate(), 30, true),
+    COPPER_CRATE (8, Assets.copperCrate, new TileType.Creatable.Crate(), 40, true),
+    SILVER_CRATE (9, Assets.silverCrate, new TileType.Creatable.Crate(), 50, true),
+    IRON_CRATE (10, Assets.ironCrate, new TileType.Creatable.Crate(), 60, true),
+    DIAMOND_CRATE (11, Assets.diamondCrate, new TileType.Creatable.Crate(), 70, true),
+
     COPPER_ORE (4, Assets.copperOre, new TileType.Natural.Ore(Item.COPPER_SCRAP), 32, true),
     SILVER_ORE (5, Assets.silverOre, new TileType.Natural.Ore(Item.SILVER_SCRAP), 38, true),
     IRON_ORE (6, Assets.ironOre, new TileType.Natural.Ore(Item.IRON_SCRAP), 42, true);

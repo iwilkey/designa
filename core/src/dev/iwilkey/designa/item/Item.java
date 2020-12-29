@@ -321,6 +321,46 @@ public enum Item {
     		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40),
     		Recipe.DIAMOND_SICKLE,
     		Assets.diamondSickle
+    ),
+
+    STONE_CRATE (
+            "Stone Crate",
+            38,
+            new ItemType.PlaceableTile.Crate(Tile.STONE_CRATE, 5),
+            Recipe.STONE_CRATE,
+            Assets.stoneCrate
+    ),
+
+    COPPER_CRATE (
+        "Copper Crate",
+        39,
+        new ItemType.PlaceableTile.Crate(Tile.COPPER_CRATE, 10),
+        Recipe.COPPER_CRATE,
+        Assets.copperCrate
+    ),
+
+    SILVER_CRATE (
+        "Silver Crate",
+        40,
+        new ItemType.PlaceableTile.Crate(Tile.SILVER_CRATE, 15),
+        Recipe.SILVER_CRATE,
+        Assets.silverCrate
+    ),
+
+    IRON_CRATE (
+            "Iron Crate",
+            41,
+            new ItemType.PlaceableTile.Crate(Tile.IRON_CRATE, 20),
+            Recipe.IRON_CRATE,
+            Assets.ironCrate
+    ),
+
+    DIAMOND_CRATE (
+            "Diamond Crate",
+            41,
+            new ItemType.PlaceableTile.Crate(Tile.DIAMOND_CRATE, 20),
+            Recipe.DIAMOND_CRATE,
+            Assets.diamondCrate
     );
 
     public static final int ITEM_WIDTH = 8, ITEM_HEIGHT = 8;

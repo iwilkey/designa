@@ -22,7 +22,7 @@ import java.util.ArrayList;
 // This will show the inventory in grid form and allow the player to move around things inside the inventory.
 public class ComprehensiveInventory {
 
-    private final byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
+    public final byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
     private final short Y_OFF = 680;
     private UIText inventoryLabel, currentItemLabel;
 
@@ -46,7 +46,7 @@ public class ComprehensiveInventory {
         input();
     }
 
-    private void input() {
+    protected void input() {
 
         if(InputHandler.leftMouseButtonDown) {
             Rectangle c = new Rectangle((int) InputHandler.cursorX, (int) InputHandler.cursorY, 1, 1),
@@ -214,7 +214,7 @@ public class ComprehensiveInventory {
 
     // Returns index of slot that needs to be selected
     byte gxx, gyy, index;
-    private void selectSlot(float gpx, float gpy) {
+    protected void selectSlot(float gpx, float gpy) {
         gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
         gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
         index = (byte)(((int)gyy * TABLE_WIDTH) + gxx);
