@@ -14,6 +14,7 @@ import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.creator.ItemCreator;
+import dev.iwilkey.designa.math.Maths;
 import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.tile.TileType;
 import dev.iwilkey.designa.world.World;
@@ -78,18 +79,19 @@ public class BuildingHandler {
 	        		if(selected.tool.toolType instanceof ItemType.CreatableItem.Tool.Sickle) {
 	        			if(world.getFrontTile(tileXSelected, tileYSelected) == Tile.STONE) {
 	        				damageTile(selected.tool.toolType.efficiency, tileXSelected, tileYSelected);
-	        				
-	        				for(int i = 0; i < 2; i++) 
-	        					world.activeItemHandler.spawn(Item.ROCK, (int)(tileXSelected * Tile.TILE_SIZE) +
-	        							MathUtils.random(4, 8), (int)(tileYSelected * Tile.TILE_SIZE));
+
+                            if(Maths.percentChance(((ItemType.CreatableItem.Tool.Sickle) selected.tool.toolType).luck + 40))
+	        					world.activeItemHandler.spawn(Item.ROCK, (tileXSelected * Tile.TILE_SIZE) +
+	        							MathUtils.random(4, 8), (int)(tileYSelected * Tile.TILE_SIZE) +
+                                        MathUtils.random(4, 12));
 	        				
 	        			} else damageTile(selected.tool.toolType.efficiency / 2, tileXSelected, tileYSelected);
 	        			if(world.getFrontTile(tileXSelected, tileYSelected) != Tile.AIR) selected.tool.timesUsed++;
-	        			
-	        			
+
 	        			if(world.getBackTile(tileXSelected,  tileYSelected).type instanceof TileType.Natural.Ore) {
-        					world.activeItemHandler.spawn(((TileType.Natural.Ore)(world.getBackTile(tileXSelected,  tileYSelected).type)).drop, 
-        							(tileXSelected * Tile.TILE_SIZE) + MathUtils.random(0, 8), (tileYSelected * Tile.TILE_SIZE) + 4);
+	        			    if(Maths.percentChance(((ItemType.CreatableItem.Tool.Sickle) selected.tool.toolType).luck))
+                                world.activeItemHandler.spawn(((TileType.Natural.Ore)(world.getBackTile(tileXSelected,  tileYSelected).type)).drop,
+                                        (tileXSelected * Tile.TILE_SIZE) + MathUtils.random(0, 8), (tileYSelected * Tile.TILE_SIZE) + 4);
 	        				selected.tool.timesUsed++;
 	        			}
 
@@ -97,8 +99,10 @@ public class BuildingHandler {
 	        	} else {
 	        		damageTile(1, tileXSelected, tileYSelected);
 	        		if(world.getFrontTile(tileXSelected, tileYSelected) == Tile.STONE) {
-	        			world.activeItemHandler.spawn(Item.ROCK, (int)world.player.x +
-							MathUtils.random(4, 8), (int)world.player.y + 12);
+	        		    if(Maths.percentChance(40))
+                            world.activeItemHandler.spawn(Item.ROCK, (tileXSelected * Tile.TILE_SIZE) +
+                                    MathUtils.random(4, 8), (tileYSelected * Tile.TILE_SIZE) +
+                                    MathUtils.random(4, 12));
 	        		}
 	        	}
 	        	

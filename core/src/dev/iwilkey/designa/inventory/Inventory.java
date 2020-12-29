@@ -10,10 +10,8 @@ import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.item.creator.ItemCreator;
-import dev.iwilkey.designa.tile.Tile;
 import dev.iwilkey.designa.ui.ScrollableItemList;
 import dev.iwilkey.designa.ui.UIObject;
-import dev.iwilkey.designa.ui.UIText;
 import dev.iwilkey.designa.world.World;
 
 public class Inventory extends ScrollableItemList {
@@ -23,6 +21,7 @@ public class Inventory extends ScrollableItemList {
     Player player;
     public ArrayList<Tool> tools;
     public ArrayList<Crate> crates;
+    Crate currentOpenCrate = null;
     ComprehensiveInventory compInv;
     World world;
 
@@ -43,17 +42,17 @@ public class Inventory extends ScrollableItemList {
         this.compInv = new ComprehensiveInventory(slots, this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
                 -200, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
 
-        this.add(Item.STONE_CRATE);
-        this.add(Item.COPPER_CRATE);
-        this.add(Item.SILVER_CRATE);
-        this.add(Item.IRON_CRATE);
-        this.add(Item.DIAMOND_CRATE);
+        this.add(Item.STONE_SICKLE);
 
-        addCrate(new Crate(new ItemType.PlaceableTile.Crate(Tile.STONE_CRATE, 36), 40, 40));
+        addCrate(new Crate((ItemType.PlaceableTile.Crate)Item.DIAMOND_CRATE.getType(), 40, 40));
     }
 
     @Override
     public void tick() {
+
+        crates.get(0).setObserver(world.player);
+        currentOpenCrate = crates.get(0);
+
     	updateDisplay();
         super.tick();
         
@@ -72,8 +71,6 @@ public class Inventory extends ScrollableItemList {
             for(Crate c : crates) c.tick();
         }
     }
-    
-    // TODO Make tools so they aren't this arraylist thing, rather every slot has a tool or null.
     
     private void updateDisplay() {
         for(Slot slot : slots) {
@@ -126,7 +123,6 @@ public class Inventory extends ScrollableItemList {
     					slot.tool = new Tool((ItemType.CreatableItem.Tool)(item.getType()), slot);
     				return;
     			}
-    			else continue;	
             }
     	}
     
@@ -158,7 +154,7 @@ public class Inventory extends ScrollableItemList {
 				slot.tool = tool;
 				slot.tool.timesUsed = tool.timesUsed;
 				return;
-			} else continue;
+			}
     	}
     }
 
@@ -195,8 +191,12 @@ public class Inventory extends ScrollableItemList {
         return false;
     }
 
-    public void requestSlot(int slot) {
+    public Slot requestSlot(int slot) {
         selectedSlot = slot;
+        try {
+            return slots.get(slot);
+        } catch (IndexOutOfBoundsException ignored) {}
+        return slots.get(slots.size() - 1);
     }
 
     byte c = 0;

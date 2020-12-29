@@ -22,7 +22,9 @@ import java.util.ArrayList;
 // This will show the inventory in grid form and allow the player to move around things inside the inventory.
 public class ComprehensiveInventory {
 
-    public final byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
+    public static Rectangle inventoryArea;
+
+    public byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
     private final short Y_OFF = 680;
     private UIText inventoryLabel, currentItemLabel;
 
@@ -49,6 +51,10 @@ public class ComprehensiveInventory {
     protected void input() {
 
         if(InputHandler.leftMouseButtonDown) {
+
+            inventoryArea = new Rectangle(collider.x, collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
+                    collider.width, collider.height);
+
             Rectangle c = new Rectangle((int) InputHandler.cursorX, (int) InputHandler.cursorY, 1, 1),
                     d = new Rectangle(collider.x, collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
                             collider.width, collider.height);
@@ -120,6 +126,24 @@ public class ComprehensiveInventory {
                         }
                     }
                 }
+            } else if (inventory.currentOpenCrate != null && c.intersects(Crate.crateArea)) {
+
+                if(itemUp) {
+
+                    Slot crateSlot = inventory.currentOpenCrate.autoSelectSlot();
+
+                    if(crateSlot.item == null) {
+                        inventory.currentOpenCrate.editSlot(crateSlot, slotCurrentlyUp.item, slotCurrentlyUp.count);
+                        inventory.editSlot(slotCurrentlyUp, null, 0);
+                        itemUp = false;
+                        slotCurrentlyUp = null;
+                        return;
+                    }
+
+
+                }
+
+
             } else {
 
                 int xx = (int) (((((InputHandler.cursorX / XSCALE) - Camera.position.x) /
@@ -214,11 +238,22 @@ public class ComprehensiveInventory {
 
     // Returns index of slot that needs to be selected
     byte gxx, gyy, index;
-    protected void selectSlot(float gpx, float gpy) {
+    protected Slot selectSlot(float gpx, float gpy) {
         gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
         gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
         index = (byte)(((int)gyy * TABLE_WIDTH) + gxx);
-        inventory.requestSlot(index);
+        return inventory.requestSlot(index);
+    }
+
+    public Slot autoSelect() {
+
+        int gpx = collider.x - (int)InputHandler.cursorX;
+        int gpy = (int)(collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+
+        gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
+        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
+        index = (byte)(((int)(gyy - 1) * TABLE_WIDTH) + gxx);
+        return inventory.requestSlot(index);
     }
 
     byte c = 0, gx, gy;

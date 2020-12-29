@@ -40,11 +40,7 @@ public class ActiveItemHandler {
     
     public void spawnTool(Item i, Tool t, int x, int y) {
     	spawn(i, x, y);
-
-    	System.out.println(t.timesUsed);
-    	
     	tools.add(t);
-
     }
 
     private void pickup(Item item, Player player) {

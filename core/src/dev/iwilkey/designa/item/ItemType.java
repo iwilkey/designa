@@ -48,9 +48,11 @@ public abstract class ItemType {
 				this.efficiency = efficiency;
         	}
         	
-            public static class Sickle extends Tool{
-				public Sickle(int itemID, int strength, int efficiency) {
+            public static class Sickle extends Tool {
+        		public int luck;
+				public Sickle(int itemID, int strength, int efficiency, int luck) {
 					super(itemID, strength, efficiency);
+					this.luck = luck;
 				}
 			}
         }

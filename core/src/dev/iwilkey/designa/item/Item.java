@@ -286,7 +286,7 @@ public enum Item {
     STONE_SICKLE (
             "Stone Sickle",
             33,
-            new ItemType.CreatableItem.Tool.Sickle(33, 50, 4),
+            new ItemType.CreatableItem.Tool.Sickle(33, 50, 4, 10),
             Recipe.STONE_SICKLE,
             Assets.stoneSickle
     ),
@@ -294,7 +294,7 @@ public enum Item {
     COPPER_SICKLE (
             "Copper Sickle",
             34,
-            new ItemType.CreatableItem.Tool.Sickle(34, 100, 8),
+            new ItemType.CreatableItem.Tool.Sickle(34, 100, 8, 25),
             Recipe.COPPER_SICKLE,
             Assets.copperSickle
     ),
@@ -302,7 +302,7 @@ public enum Item {
     SILVER_SICKLE (
     		"Silver Sickle",
     		35,
-    		new ItemType.CreatableItem.Tool.Sickle(35, 150, 15),
+    		new ItemType.CreatableItem.Tool.Sickle(35, 150, 15, 40),
     		Recipe.SILVER_SICKLE,
     		Assets.silverSickle
     ),
@@ -310,7 +310,7 @@ public enum Item {
     IRON_SICKLE (
     		"Iron Sickle",
     		36,
-    		new ItemType.CreatableItem.Tool.Sickle(36, 200, 24),
+    		new ItemType.CreatableItem.Tool.Sickle(36, 200, 24, 60),
     		Recipe.IRON_SICKLE,
     		Assets.ironSickle
     ),
@@ -318,7 +318,7 @@ public enum Item {
     DIAMOND_SICKLE (
     		"Diamond Sickle",
     		37,
-    		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40),
+    		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40, 80),
     		Recipe.DIAMOND_SICKLE,
     		Assets.diamondSickle
     ),
@@ -358,7 +358,7 @@ public enum Item {
     DIAMOND_CRATE (
             "Diamond Crate",
             41,
-            new ItemType.PlaceableTile.Crate(Tile.DIAMOND_CRATE, 20),
+            new ItemType.PlaceableTile.Crate(Tile.DIAMOND_CRATE, 30),
             Recipe.DIAMOND_CRATE,
             Assets.diamondCrate
     );
