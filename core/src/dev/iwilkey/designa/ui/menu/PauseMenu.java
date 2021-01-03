@@ -4,11 +4,12 @@ import com.badlogic.gdx.Input;
 import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.input.InputHandler;
+import dev.iwilkey.designa.inventory.Inventory;
+import dev.iwilkey.designa.inventory.Slot;
 import dev.iwilkey.designa.scene.Scene;
-import dev.iwilkey.designa.ui.ClickListener;
-import dev.iwilkey.designa.ui.UIButton;
-import dev.iwilkey.designa.ui.UIManager;
-import dev.iwilkey.designa.ui.UIText;
+import dev.iwilkey.designa.ui.*;
+
+import java.awt.*;
 
 public class PauseMenu extends Menu {
 
@@ -33,7 +34,8 @@ public class PauseMenu extends Menu {
         JUMP_BUTTON, OPEN_INV_BUTTON, BACK_BUTTON,
         ZOOM_IN_BUTTON, ZOOM_OUT_BUTTON;
 
-    final UIText FONT_SIZE_TEXT, SLOT_SIZE_TEXT;
+    final UIText FONT_SIZE_TEXT, SLOT_SIZE_TEXT,
+            SLOT_SPACING_TEXT, GUI_ITEM_SIZE_TEXT;
 
     public static boolean choosingBinding = false;
 
@@ -341,15 +343,21 @@ public class PauseMenu extends Menu {
         // Slot Size
         manager.addText(new UIText("Item Slot Size", PauseMenuLevel.SLOT_SIZE.level, 8, 40, Game.WINDOW_HEIGHT - 250));
 
-        SLOT_SIZE_TEXT = manager.addText(new UIText("Item Slot Size: " + Settings.GUI_SLOT_SIZE,
+        SLOT_SIZE_TEXT = manager.addText(new UIText("Item Slot Size: " + Settings.GUI_SLOT_SIZE + "px",
+                PauseMenuLevel.SLOT_SIZE.level, 0, 40, (Game.WINDOW_HEIGHT / 2) + 80 + 20));
+
+        SLOT_SPACING_TEXT = manager.addText(new UIText("Item Slot Spacing: " + Settings.GUI_SLOT_SPACING + "px",
                 PauseMenuLevel.SLOT_SIZE.level, 0, 40, (Game.WINDOW_HEIGHT / 2) + 40 + 20));
+
+        GUI_ITEM_SIZE_TEXT = manager.addText(new UIText("Item Texture Size: " + Settings.GUI_ITEM_TEXTURE_SIZE + "px",
+                PauseMenuLevel.SLOT_SIZE.level, 0, 40, (Game.WINDOW_HEIGHT / 2) + 20));
 
         manager.addButton(new UIButton("+",
                 PauseMenuLevel.SLOT_SIZE.level, 40, (Game.WINDOW_HEIGHT / 2) - 60, 30, 30, new ClickListener() {
             @Override
             public void onClick() {
                 Settings.GUI_SLOT_SIZE += 2;
-                SLOT_SIZE_TEXT.message = "Text Size: " + Settings.GUI_SLOT_SIZE;
+                setSettings();
             }
         }));
 
@@ -358,7 +366,7 @@ public class PauseMenu extends Menu {
             @Override
             public void onClick() {
                 Settings.GUI_SLOT_SIZE -= 2;
-                SLOT_SIZE_TEXT.message = "Text Size: " + Settings.GUI_SLOT_SIZE;
+                setSettings();
             }
         }));
 
@@ -371,6 +379,14 @@ public class PauseMenu extends Menu {
             }
         }));
 
+    }
+
+    private void setSettings() {
+        Settings.GUI_SLOT_SPACING = (Settings.GUI_SLOT_SIZE / 4);
+        Settings.GUI_ITEM_TEXTURE_SIZE = (Settings.GUI_SLOT_SIZE / 2);
+        SLOT_SIZE_TEXT.message = "Item Slot Size: " + Settings.GUI_SLOT_SIZE + "px";
+        SLOT_SPACING_TEXT.message = "Item Slot Spacing: " + Settings.GUI_SLOT_SPACING + "px";
+        GUI_ITEM_SIZE_TEXT.message = "Item Texture Size: " + Settings.GUI_ITEM_TEXTURE_SIZE + "px";
     }
 
 }

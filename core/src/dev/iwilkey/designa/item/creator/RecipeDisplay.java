@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class RecipeDisplay {
 
-    final byte INGREDIENT_SIZE = 24, SPACING = 8;
+    final byte INGREDIENT_SIZE = 24, SPACING = 16;
 
     int x, y;
     UIManager uiManager;
@@ -28,8 +28,8 @@ public class RecipeDisplay {
     public RecipeDisplay(UIManager uiManager, Inventory inv, int x, int y) {
         this.uiManager = uiManager;
         this.inventory = inv;
-        this.x = x; this.y = y;
-        name = uiManager.addText(new UIText("", 8, x, y - 12));
+        this.x = x - SPACING; this.y = y;
+        name = uiManager.addText(new UIText("", 8, x - SPACING, y - 12));
 
         amounts = new UIText[5]; needed = new UIText[5];
         for(int i = 0; i < amounts.length; i++) {
@@ -41,6 +41,10 @@ public class RecipeDisplay {
         recipe = null;
     }
 
+    public void move(float dx, float dy) {
+        this.x += dx; this.y += dy;
+    }
+
     byte c = 0;
     short xx, yy;
     public void renderRecipe(Batch b, CategoryItemRecipeList cirl, Item item, byte slotNumber) {
@@ -50,7 +54,7 @@ public class RecipeDisplay {
         }
 
         if(item == null) {
-            name.message = "Item Creator";
+            name.message = "Craftbook";
             for(UIText t : amounts) t.message = "";
             for (UIText uiText : needed) uiText.message = "";
             return;
@@ -81,7 +85,7 @@ public class RecipeDisplay {
             
             b.draw(i.getTexture(), x, (yy - (24 * c) - (INGREDIENT_SIZE - 6)), INGREDIENT_SIZE, INGREDIENT_SIZE);
             
-            xx = (short)(x + 16); 
+            xx = (short)(x + 16);
             yy = (short)(y - 44);
 
             needed[c + 1].x = xx;

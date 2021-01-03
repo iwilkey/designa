@@ -2,6 +2,7 @@ package dev.iwilkey.designa.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import dev.iwilkey.designa.Game;
 
 public class UIImageButton extends UIButton {
 
@@ -12,6 +13,12 @@ public class UIImageButton extends UIButton {
         super("", x, y, image.getRegionWidth() * scale, image.getRegionHeight() * scale, clickListener);
         this.image = image;
         this.scale = scale;
+    }
+
+    public void move(int x, int y) {
+        relRect.x = x; relRect.y = y;
+        this.x = x; this.y = y;
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
     }
 
     @Override

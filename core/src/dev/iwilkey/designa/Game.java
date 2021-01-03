@@ -9,6 +9,8 @@ import dev.iwilkey.designa.clock.Clock;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.scene.Scene;
 
+import java.awt.*;
+
 public class Game extends ApplicationAdapter {
 
 	public static int WINDOW_WIDTH, WINDOW_HEIGHT;

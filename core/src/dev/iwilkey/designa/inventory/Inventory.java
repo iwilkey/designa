@@ -46,7 +46,7 @@ public class Inventory extends ScrollableItemList {
         this.add(Item.STONE_SICKLE);
         this.add(Item.DIAMOND_SICKLE);
 
-        addCrate(new Crate((ItemType.PlaceableTile.Crate)Item.DIAMOND_CRATE.getType(), 40, 40));
+        addCrate(new Crate((ItemType.PlaceableTile.Crate)Item.COPPER_CRATE.getType(), 40, 40));
     }
 
     @Override

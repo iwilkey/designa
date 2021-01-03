@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.input.InputHandler;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class UIButton extends UIObject {
 
     public BitmapFont font;
-    int relX, relY, relW, relH;
+    public int relX, relY, relW, relH;
     public int tag;
     short textX, textY;
     ClickListener clickListener;
@@ -78,6 +79,12 @@ public class UIButton extends UIObject {
             if(InputHandler.leftMouseButton) backgroundColor = colors.get(3);
             else backgroundColor = colors.get(2);
         } else backgroundColor = colors.get(1);
+    }
+
+    public void move(int x, int y) {
+        relRect.x = x; relRect.y = y;
+        relX = x; relY = y;
+        onResize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override

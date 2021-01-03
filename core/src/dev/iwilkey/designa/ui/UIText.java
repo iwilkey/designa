@@ -3,6 +3,7 @@ package dev.iwilkey.designa.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 
 public class UIText extends UIObject {
@@ -27,6 +28,12 @@ public class UIText extends UIObject {
         this.message = message; this.size = size;
         font.getData().setScale((Settings.GUI_FONT_SIZE + size) / 128.0f);
         this.tag = tag;
+    }
+
+    public void move(float x, float y) {
+        relRect.x += x; relRect.y += y;
+        this.x += x; this.y += y;
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
     }
 
     @Override

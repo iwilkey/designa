@@ -49,6 +49,12 @@ public class UIManager {
         return l;
     }
 
+    public void relocate(float dx, float dy) {
+        if(texts != null) for(UIText text : texts) text.move(dx, dy);
+        if(itemLists != null) for(ScrollableItemList list : itemLists) list.move(dx, dy);
+        if(categoryItemList != null) for(CategoryItemRecipeList l : categoryItemList) l.move(dx, dy);
+    }
+
     public void tick() {
         if(InputHandler.mouseCurrentlyMoving) onMouseMove();
         if(InputHandler.leftMouseButtonUp) onMouseRelease();
@@ -76,7 +82,10 @@ public class UIManager {
 
     public void onResize(int width, int height) {
         if(texts != null) for(UIText text : texts) text.onResize(width, height);
-        if(buttons != null) for(UIButton button : buttons) button.onResize(width, height);
+        if(buttons != null) for(UIButton button : buttons) {
+            button.move(10,10);
+            button.onResize(width, height);
+        }
         if(itemLists != null) for(ScrollableItemList list : itemLists) list.onResize(width, height);
         if(imageButtons != null) for(UIImageButton button : imageButtons) button.onResize(width, height);
         if(categoryItemList != null) for(CategoryItemRecipeList l : categoryItemList) l.onResize(width, height);

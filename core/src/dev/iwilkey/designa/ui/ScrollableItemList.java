@@ -3,6 +3,7 @@ package dev.iwilkey.designa.ui;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.audio.Audio;
@@ -131,6 +132,19 @@ public class ScrollableItemList extends Scrollable {
                     ((sizeOfList() + 1) * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING));
     }
 
+    public void move(float x, float y) {
+        relRect.x += x; relRect.y += y;
+        this.x += x; this.y += y;
+
+        for(Slot s : slots) {
+            s.collider.x += x;
+            s.collider.y += y;
+        }
+
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
+
+    }
+
     public float eval, percent;
     public int s1 = 0;
     public boolean selected;
@@ -174,7 +188,7 @@ public class ScrollableItemList extends Scrollable {
                 continue;
             }
 
-            b.draw(slotTexture, slot.collider.x - xSlotOffset, slot.collider.y, slot.collider.width, slot.collider.height);
+            b.draw(slotTexture, slot.collider.x - xSlotOffset, slot.collider.y, Settings.GUI_SLOT_SIZE, Settings.GUI_SLOT_SIZE);
             if (slot.item != null && slot != ComprehensiveInventory.slotCurrentlyUp) {
                 b.draw(slot.item.getTexture(), slot.collider.x + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f) - xSlotOffset,
                         slot.collider.y + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f), Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);

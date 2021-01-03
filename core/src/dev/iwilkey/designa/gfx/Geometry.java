@@ -13,6 +13,7 @@ public class Geometry {
     }
 
     static ShapeRenderer shapeRenderer = new ShapeRenderer();
+    static ShapeRenderer GUIshapeRenderer = new ShapeRenderer();
     public static void dispose() { shapeRenderer.dispose(); }
     public static ArrayList<GeometryRequest> requests = new ArrayList<>();
 
@@ -106,6 +107,47 @@ public class Geometry {
             shapeRenderer.setColor(color);
             shapeRenderer.rect(x, y, width, height);
             shapeRenderer.end();
+        }
+    }
+
+    public static class GUIRectangleOutline extends GeometryRequest {
+
+        int x, y;
+        short width, height;
+        byte stokeWidth;
+        Color color;
+
+        public GUIRectangleOutline(int x, int y, int width, int height) {
+            super(ShapeType.RECTANGLE);
+            this.x = x; this.y = y;
+            this.width = (short)width; this.height = (short)height;
+            stokeWidth = 1;
+            color = new Color(1,1,1,1);
+        }
+
+        public GUIRectangleOutline(int x, int y, int width, int height, int strokeWidth) {
+            super(ShapeType.RECTANGLE);
+            this.x = x; this.y = y;
+            this.width = (short)width; this.height = (short)height;
+            this.stokeWidth = (byte)strokeWidth;
+            color = new Color(1,1,1,1);
+        }
+
+        public GUIRectangleOutline(int x, int y, int width, int height, int strokeWidth, Color color) {
+            super(ShapeType.RECTANGLE);
+            this.x = x; this.y = y;
+            this.width = (short)width; this.height = (short)height;
+            this.stokeWidth = (byte)strokeWidth;
+            this.color = color;
+        }
+
+        @Override
+        public void render() {
+            Gdx.gl.glLineWidth(stokeWidth);
+            GUIshapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            GUIshapeRenderer.setColor(color);
+            GUIshapeRenderer.rect(x, y, width, height);
+            GUIshapeRenderer.end();
         }
     }
 

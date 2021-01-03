@@ -4,17 +4,18 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.Camera;
+import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.item.Tool;
 import dev.iwilkey.designa.tile.Tile;
-import dev.iwilkey.designa.ui.ScrollableItemList;
-import dev.iwilkey.designa.ui.UIText;
+import dev.iwilkey.designa.ui.*;
 
 import java.awt.Rectangle;
 import java.awt.Point;
@@ -27,7 +28,9 @@ public class ComprehensiveInventory {
 
     public byte TABLE_WIDTH = 5, TABLE_HEIGHT = 4;
     private final short Y_OFF = 680;
-    private UIText inventoryLabel, currentItemLabel;
+
+    UIManager customizer;
+    UIButton CRATE_MOVE;
 
     ArrayList<Slot> slots;
     Rectangle collider, relRect;
@@ -38,15 +41,46 @@ public class ComprehensiveInventory {
     ComprehensiveInventory(ArrayList<Slot> slots, Inventory inventory, int x, int y, int width, int height) {
         this.inventory = inventory;
         this.slots = slots;
-        collider = new Rectangle(x, y + Y_OFF, width, height);
-        relRect = new Rectangle(x, y + Y_OFF, width, height);
-        
-        inventoryLabel = new UIText("Inventory", 0, collider.x, collider.y + collider.height);
-        currentItemLabel = new UIText("", 0, collider.x, collider.y + collider.height);
+        collider = new Rectangle(x - 40, y + Y_OFF, width, height);
+        relRect = new Rectangle(x - 40, y + Y_OFF, width, height);
+
+        customizer = new UIManager("Inventory Customizer");
+
+        CRATE_MOVE = customizer.addButton(new UIButton("", Settings.INVENTORY_POSITION.x + Settings.INVENTORY_POSITION.width - 40,
+                Settings.INVENTORY_POSITION.y + Settings.INVENTORY_POSITION.height - 40, 30, 30, new ClickListener() {
+            @Override
+            public void onClick() {
+                new Thread() {
+                    public void run() {
+                        while(true) {
+                            int multiplier = 2;
+                            Settings.INVENTORY_POSITION.x += InputHandler.dx * multiplier;
+                            Settings.INVENTORY_POSITION.y += InputHandler.dy * multiplier;
+
+                            // move((float)InputHandler.dx * multiplier, (float)InputHandler.dy * multiplier);
+                            CRATE_MOVE.move(Settings.INVENTORY_POSITION.x + Settings.INVENTORY_POSITION.width - 40,
+                                    Settings.INVENTORY_POSITION.y + Settings.INVENTORY_POSITION.height - 40);
+                            if(InputHandler.leftMouseButton || InputHandler.rightMouseButton) {
+                                break;
+                            }
+
+                            try { sleep(1000 / 40); } catch (InterruptedException ignored) {}
+                        }
+                    }
+                }.start();
+            }
+        }));
+
     }
 
     public void tick() {
         input();
+
+        customizer.tick();
+
+        Geometry.requests.add(new Geometry.GUIRectangleOutline(Settings.INVENTORY_POSITION.x, Settings.INVENTORY_POSITION.y,
+                Settings.INVENTORY_POSITION.width, Settings.INVENTORY_POSITION.height, 6, Color.WHITE));
+
     }
 
     protected void input() {
@@ -260,6 +294,12 @@ public class ComprehensiveInventory {
         }
     }
 
+    private void move(float dx, float dy) {
+        this.relRect.x += dx; this.relRect.y += dy;
+
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
+    }
+
     // Returns index of slot that needs to be selected
     byte gxx, gyy, index;
     protected Slot selectSlot(float gpx, float gpy) {
@@ -284,6 +324,8 @@ public class ComprehensiveInventory {
     short pixX, pixY;
     Color inv = new Color(252 / 255f, 194 / 255f, 3 / 255f, 1.0f);
     public void render(Batch b) {
+        customizer.render(b);
+
         c = 0;
         for(Slot s : slots) {
 
@@ -317,18 +359,6 @@ public class ComprehensiveInventory {
                         Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
             } catch (NullPointerException ignored) {}
         }
-        
-        inventoryLabel.render(b, (int)(((collider.x + (collider.width / 2)) / XSCALE) - 72), 
-        		(int)((collider.y + collider.height) / YSCALE) + 135, 0);
-        
-        if(inventory.selectedSlot().item != null)
-        	currentItemLabel.message = inventory.selectedSlot().item.getName();
-        else currentItemLabel.message = "Empty Slot";
-        
-        currentItemLabel.render(b, (int)((collider.x + (collider.width / 2)) / XSCALE) - (currentItemLabel.message.length() * 8), 
-        		(int)((collider.y + collider.height) / YSCALE) + 100, 0);
-        
-        
 
     }
 

@@ -2,6 +2,7 @@ package dev.iwilkey.designa.item.creator;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import dev.iwilkey.designa.Game;
 import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.inventory.ComprehensiveInventory;
 import dev.iwilkey.designa.inventory.Slot;
@@ -76,6 +77,19 @@ public class CategoryItemRecipeList extends ScrollableItemList {
 
         slots.add(new Slot(item, itemRect, false, new UIText("1",
                 18, itemRect.x + (Settings.GUI_SLOT_SIZE - 10), itemRect.y)));
+
+    }
+
+    public void move(float x, float y) {
+        relRect.x += x; relRect.y += y;
+        this.x += x; this.y += y;
+
+        for(Slot s : slots) {
+            s.collider.x += x;
+            s.collider.y += y;
+        }
+
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
 
     }
 

@@ -8,11 +8,14 @@ import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.gfx.Camera;
+import dev.iwilkey.designa.gfx.Geometry;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
 import dev.iwilkey.designa.tile.Tile;
-import dev.iwilkey.designa.ui.ScrollableItemList;
+import dev.iwilkey.designa.ui.ClickListener;
+import dev.iwilkey.designa.ui.UIButton;
+import dev.iwilkey.designa.ui.UIManager;
 import dev.iwilkey.designa.ui.UIText;
 
 import java.awt.*;
@@ -22,6 +25,10 @@ public class Crate extends ComprehensiveInventory {
 
     private final Color[] guiColors;
     public static Rectangle crateArea;
+
+    UIManager customizer;
+    UIButton CRATE_MOVE;
+    UIText TITLE, ITEM_NAME;
 
     Player observer;
     ItemType.PlaceableTile.Crate crateType;
@@ -37,6 +44,64 @@ public class Crate extends ComprehensiveInventory {
                 Game.WINDOW_HEIGHT - 800,
                 (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5,
                 (crateType.space / 5) * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING));
+
+        String name = "";
+
+        if (crateType.correspondingTile == Tile.STONE_CRATE) {
+            sub = 310;
+            name = "Stone Crate";
+        }
+        else if (crateType.correspondingTile == Tile.COPPER_CRATE) {
+            sub = (short)(310 - (Settings.GUI_SLOT_SIZE + 4));
+            name = "Copper Crate";
+        }
+        else if (crateType.correspondingTile == Tile.SILVER_CRATE) {
+            sub = (short)(310 - (2 * Settings.GUI_SLOT_SIZE + 4));
+            name = "Silver Crate";
+        }
+        else if (crateType.correspondingTile == Tile.IRON_CRATE) {
+            sub = (short)(310 - (3 * Settings.GUI_SLOT_SIZE + 4));
+            name = "Iron Crate";
+        }
+        else if (crateType.correspondingTile == Tile.DIAMOND_CRATE) {
+            sub = (short)(310 - (4 * Settings.GUI_SLOT_SIZE + 4));
+            name = "Diamond Crate";
+        }
+
+        customizer = new UIManager("Crate Customizer");
+
+        TITLE = customizer.addText(new UIText(name,  8, Settings.CRATE_POSITION.x + 70,
+                Settings.CRATE_POSITION.y + Settings.CRATE_POSITION.height - 20 - sub));
+
+        ITEM_NAME = customizer.addText(new UIText("Item Name",  0, Settings.CRATE_POSITION.x + 70,
+                Settings.CRATE_POSITION.y + Settings.CRATE_POSITION.height - 40 - sub));
+
+        CRATE_MOVE = customizer.addButton(new UIButton("", Settings.CRATE_POSITION.x + Settings.CRATE_POSITION.width - 40,
+                Settings.CRATE_POSITION.y + Settings.CRATE_POSITION.height - 40 - sub, 30, 30, new ClickListener() {
+            @Override
+            public void onClick() {
+                new Thread() {
+                    public void run() {
+                        while(true) {
+                            int multiplier = 2;
+                            Settings.CRATE_POSITION.x += InputHandler.dx * multiplier;
+                            Settings.CRATE_POSITION.y += InputHandler.dy * multiplier;
+
+                            move((float)InputHandler.dx * multiplier, (float)InputHandler.dy * multiplier);
+                            TITLE.move((float)InputHandler.dx * multiplier, (float)InputHandler.dy * multiplier);
+                            ITEM_NAME.move((float)InputHandler.dx * multiplier, (float)InputHandler.dy * multiplier);
+                            CRATE_MOVE.move(Settings.CRATE_POSITION.x + Settings.CRATE_POSITION.width - 40,
+                                    Settings.CRATE_POSITION.y + Settings.CRATE_POSITION.height - 40 - sub);
+                            if(InputHandler.leftMouseButton || InputHandler.rightMouseButton) {
+                                break;
+                            }
+
+                            try { sleep(1000 / 40); } catch (InterruptedException ignored) {}
+                        }
+                    }
+                }.start();
+            }
+        }));
 
         guiColors = new Color[] {
                 new Color(135 / 255f, 135 / 255f, 135 / 255f, 1.0f), // Stone
@@ -85,15 +150,35 @@ public class Crate extends ComprehensiveInventory {
         this.observer = player;
     }
 
+    short sub;
     @Override
     public void tick() {
         super.tick();
+
+        customizer.tick();
+
+
+        Geometry.requests.add(new Geometry.GUIRectangleOutline(Settings.CRATE_POSITION.x,
+                Settings.CRATE_POSITION.y, Settings.CRATE_POSITION.width,
+                Settings.CRATE_POSITION.height - sub, 6, Color.WHITE));
 
         for(Slot s : slots)
             if(s.item != null) {
                 s.display.message = "" + s.count;
             }
 
+        if(selected.item != null)
+            ITEM_NAME.message = selected.item.getName();
+        else ITEM_NAME.message = "Empty Slot";
+    }
+
+    public void move(float dx, float dy) {
+        this.relRect.x += dx; this.relRect.y += dy;
+        for(Slot s : slots) {
+            s.collider.x += dx;
+            s.collider.y += dy;
+        }
+        onResize(Game.WINDOW_WIDTH, Game.WINDOW_HEIGHT);
     }
 
     public void add(Item item, int amount) {
@@ -257,6 +342,8 @@ public class Crate extends ComprehensiveInventory {
     Color crt;
     @Override
     public void render(Batch b) {
+
+        customizer.render(b);
 
         c = 0;
         for(Slot s : slots) {
