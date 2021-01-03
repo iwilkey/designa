@@ -15,6 +15,9 @@ public class WorldGeneration {
         sampleDistance;
     static byte ID;
 
+    // Build it in sections?
+        // Chunks
+
     public static void GenerateWorld(int WIDTH, int HEIGHT, byte[][][] FRONT_TILES, byte[][][] BACK_TILES, ArrayList<World.Cloud> clouds) {
         sampleDistance = 2 * Tile.TILE_SIZE;
 

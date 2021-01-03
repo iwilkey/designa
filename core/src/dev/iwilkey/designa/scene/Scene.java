@@ -14,6 +14,7 @@ import dev.iwilkey.designa.ui.ClickListener;
 import dev.iwilkey.designa.ui.UIImageButton;
 import dev.iwilkey.designa.ui.UIText;
 import dev.iwilkey.designa.ui.UIManager;
+import dev.iwilkey.designa.ui.menu.PauseMenu;
 import dev.iwilkey.designa.world.World;
 
 import java.util.ArrayList;
@@ -47,6 +48,9 @@ public abstract class Scene {
 
     public static class SinglePlayerGameScene extends Scene {
 
+        public static boolean isPaused;
+
+        PauseMenu pauseMenu;
         UIManager GUI;
         World world;
 
@@ -58,11 +62,13 @@ public abstract class Scene {
         public void start() {
             InputHandler.initSinglePlayerGameSceneInput();
 
+            pauseMenu = new PauseMenu();
+
             GUI = new UIManager("gui");
 
             // Fps, version, and dimension info
             GUI.addText(new UIText("FPS: " + Clock.FPS + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT,
-                    22, 10, 32));
+                    0, 10, 32));
 
             // Add item button
             GUI.addImageButton(new UIImageButton(10, Game.WINDOW_HEIGHT - ((SpriteSheet.SLOT_SIZE * 3) * 3) - 10,
@@ -81,22 +87,42 @@ public abstract class Scene {
 
         @Override
         public void tick() {
-        	
-        	world.tick();
-            GUI.tick();
-            GUI.texts.get(0).message = "FPS: " + Clock.FPS
-                    + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT;
 
-            if(ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.addItemButton)
-                GUI.imageButtons.get(0).image = Assets.subtractItemButton;
-            else if (!ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.subtractItemButton)
-                GUI.imageButtons.get(0).image = Assets.addItemButton;
-            
-            if(InputHandler.openInventoryRequest) {
-            	if(ItemCreator.isActive) Audio.playSFX(Assets.closeInv[MathUtils.random(0, 2)], 0.5f);
-                else Audio.playSFX(Assets.openInv[MathUtils.random(0, 2)], 0.5f);
-                ItemCreator.isActive = !ItemCreator.isActive;
-                InputHandler.openInventoryRequest = false;
+            if(isPaused) {
+                pauseMenu.tick();
+                GUI.texts.get(0).message = "FPS: " + Clock.FPS
+                        + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT;
+            } else {
+                world.tick();
+                GUI.tick();
+                GUI.texts.get(0).message = "FPS: " + Clock.FPS
+                        + " " + Game.WINDOW_WIDTH + "x" + Game.WINDOW_HEIGHT;
+
+                if(ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.addItemButton)
+                    GUI.imageButtons.get(0).image = Assets.subtractItemButton;
+                else if (!ItemCreator.isActive && GUI.imageButtons.get(0).image == Assets.subtractItemButton)
+                    GUI.imageButtons.get(0).image = Assets.addItemButton;
+
+                if(InputHandler.openInventoryRequest) {
+                    if(ItemCreator.isActive) Audio.playSFX(Assets.closeInv[MathUtils.random(0, 2)], 0.5f);
+                    else Audio.playSFX(Assets.openInv[MathUtils.random(0, 2)], 0.5f);
+                    ItemCreator.isActive = !ItemCreator.isActive;
+                    InputHandler.openInventoryRequest = false;
+                }
+            }
+
+            if(!PauseMenu.choosingBinding) {
+                if (InputHandler.pauseRequest && ItemCreator.isActive && !isPaused) {
+                    ItemCreator.isActive = false;
+                    InputHandler.pauseRequest = false;
+                } else if (InputHandler.pauseRequest && !ItemCreator.isActive && !isPaused) {
+                    isPaused = true;
+                    pauseMenu.level = 0;
+                    InputHandler.pauseRequest = false;
+                } else if (InputHandler.pauseRequest && !ItemCreator.isActive && isPaused) {
+                    isPaused = false;
+                    InputHandler.pauseRequest = false;
+                }
             }
 
         }
@@ -108,14 +134,20 @@ public abstract class Scene {
 
         @Override
         public void onGUI(Batch b) {
-            GUI.render(b);
-            if(world.player != null) world.player.itemCreator.render(b);
+            if(!isPaused) {
+                GUI.render(b);
+                if (world.player != null) world.player.itemCreator.render(b);
+            } else {
+                pauseMenu.render(b);
+                GUI.texts.get(0).render(b);
+            }
         }
 
         @Override
         public void onResize(int width, int height) {
             GUI.onResize(width, height);
             ItemCreator.uiManager.onResize(width, height);
+            pauseMenu.onResize(width, height);
         }
 
         @Override

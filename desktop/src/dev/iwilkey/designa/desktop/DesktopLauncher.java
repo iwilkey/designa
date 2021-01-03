@@ -6,11 +6,15 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import dev.iwilkey.designa.Game;
 
+import java.awt.*;
+
 public class DesktopLauncher {
 
 	public static void main (String[] arg) {
 
-		int width = 2000, height = 1125, fullscreen = 0;
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+
+		int width = screen.width, height = screen.height, fullscreen = 0;
 		if(arg.length > 0) {
 			width = Integer.parseInt(arg[0]);
 			height = Integer.parseInt(arg[1]);

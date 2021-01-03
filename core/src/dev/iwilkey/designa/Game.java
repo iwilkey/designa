@@ -20,6 +20,7 @@ public class Game extends ApplicationAdapter {
 		clock = new Clock();
 		renderer = new Renderer();
 		InputHandler.init();
+		Settings.initSettings();
 		Assets.init();
 		Scene.init();
 		Scene.setSceneTo("single-player-game-scene");

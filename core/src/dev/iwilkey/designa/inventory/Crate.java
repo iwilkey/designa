@@ -4,8 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.entity.creature.passive.Player;
+import dev.iwilkey.designa.gfx.Camera;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
@@ -31,10 +33,10 @@ public class Crate extends ComprehensiveInventory {
 
     Crate(ItemType.PlaceableTile.Crate crateType, int tileX, int tileY) {
 
-        super(null, null, ((Game.WINDOW_WIDTH / 2) - (((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * 5) / 2)),
+        super(null, null, ((Game.WINDOW_WIDTH / 2) - (((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5) / 2)),
                 Game.WINDOW_HEIGHT - 800,
-                (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * 5,
-                (crateType.space / 5) * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE));
+                (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5,
+                (crateType.space / 5) * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING));
 
         guiColors = new Color[] {
                 new Color(135 / 255f, 135 / 255f, 135 / 255f, 1.0f), // Stone
@@ -47,11 +49,14 @@ public class Crate extends ComprehensiveInventory {
         TABLE_HEIGHT = (byte)(crateType.space / 5);
         System.out.println(TABLE_HEIGHT);
 
-        collider = new Rectangle(((Game.WINDOW_WIDTH / 2) - (((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * 5) / 2)),
+        collider = new Rectangle(((Game.WINDOW_WIDTH / 2) - (((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5) / 2)),
                 Game.WINDOW_HEIGHT - 800,
-                (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * 5,
-                (TABLE_HEIGHT) * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE));
-        relRect = collider;
+                (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5,
+                (TABLE_HEIGHT) * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING));
+        relRect = new Rectangle(((Game.WINDOW_WIDTH / 2) - (((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5) / 2)),
+                Game.WINDOW_HEIGHT - 800,
+                (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5,
+                (TABLE_HEIGHT) * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING));
 
         this.crateType = crateType;
         this.tileX = tileX; this.tileY = tileY;
@@ -111,8 +116,8 @@ public class Crate extends ComprehensiveInventory {
     @Override
     protected Slot selectSlot(float gpx, float gpy) {
 
-        gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
-        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
+        gxx = (byte)(Math.abs(gpx) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * XSCALE));
+        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE)));
         index = (byte)(((int)gyy * TABLE_WIDTH) + gxx);
 
         if (index < slots.size()) {
@@ -127,10 +132,10 @@ public class Crate extends ComprehensiveInventory {
     public Slot autoSelectSlot() {
 
         int gpx = (int)(collider.x - InputHandler.cursorX);
-        int gpy = (int)(collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+        int gpy = (int)(collider.y + (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
 
-        gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
-        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
+        gxx = (byte)(Math.abs(gpx) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * XSCALE));
+        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE)));
         index = (byte)(((int)(gyy - 1) * TABLE_WIDTH) + gxx);
         if (index < slots.size()) {
             selected = slots.get(index);
@@ -154,7 +159,7 @@ public class Crate extends ComprehensiveInventory {
     @Override
     protected void input() {
 
-        crateArea = new Rectangle(collider.x, (collider.y) + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
+        crateArea = new Rectangle(collider.x, (collider.y) + (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE),
                 collider.width, collider.height);
 
         if(InputHandler.leftMouseButtonDown) {
@@ -166,7 +171,7 @@ public class Crate extends ComprehensiveInventory {
 
                     Slot beforeSelected = selected;
                     selectSlot(collider.x - InputHandler.cursorX, collider.y +
-                            (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+                            (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
 
                     // If the slot drop has no item
                     if(selected.item == null) {
@@ -181,9 +186,10 @@ public class Crate extends ComprehensiveInventory {
                 }
 
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
-                        (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+                        (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
 
             } else if (c.intersects(ComprehensiveInventory.inventoryArea)) {
+
                 if(itemUp) {
                     Slot beforeSelected = selected;
                     Slot selected = observer.inventory.compInv.autoSelect();
@@ -201,15 +207,48 @@ public class Crate extends ComprehensiveInventory {
             }
         } else if (InputHandler.rightMouseButtonDown) {
             Rectangle c = new Rectangle((int) InputHandler.cursorX, (int) InputHandler.cursorY, 1, 1),
-                    d = new Rectangle(collider.x, (collider.y) + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
-                            collider.width, collider.height);
+                    d = crateArea;
             if (c.intersects(d)) {
                 if (!itemUp) {
                     itemUp = true;
                     selectSlot(collider.x - InputHandler.cursorX, collider.y +
-                            (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+                            (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
                     if(selected.item == null) itemUp = false;
+                } else {
+
+                    Slot beforeSelected = selected;
+                    selectSlot(collider.x - InputHandler.cursorX, collider.y +
+                            (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
+
+                    if(selected.item == null || selected.item == beforeSelected.item) {
+
+                    }
+
+
                 }
+            } else if (c.intersects(ComprehensiveInventory.inventoryArea)) {
+
+                if(itemUp) {
+                    Slot beforeSelected = selected;
+                    Slot selected = observer.inventory.compInv.autoSelect();
+
+                    if(selected.item == null || selected.item == beforeSelected.item) {
+
+                        if(selected.count + 1 <= Inventory.STORAGE_CAP && beforeSelected.count - 1 > 0) {
+                            observer.inventory.editSlot(selected, beforeSelected.item, selected.count + 1);
+                            editSlot(beforeSelected, beforeSelected.item, beforeSelected.count - 1);
+                        } else if (beforeSelected.count - 1 <= 0) {
+                            observer.inventory.editSlot(selected, beforeSelected.item, selected.count + 1);
+                            editSlot(beforeSelected, null, 0);
+                            itemUp = false;
+                            return;
+                        }
+
+                    }
+
+
+                }
+
             }
         }
     }
@@ -224,43 +263,43 @@ public class Crate extends ComprehensiveInventory {
 
             gx = (byte) (c % TABLE_WIDTH);
             gy = (byte) (TABLE_HEIGHT - ((c - gx) / TABLE_WIDTH));
-            pixX = (short) (relRect.x + (gx * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
-            pixY = (short) (relRect.y + (gy * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
+            pixX = (short) (relRect.x + (gx * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING)));
+            pixY = (short) (relRect.y + (gy * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING)));
 
             crt = deferGUIColor();
 
             b.setColor(crt);
-            b.draw(Assets.inventorySlot, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
+            b.draw(Assets.inventorySlot, pixX, pixY, Settings.GUI_SLOT_SIZE, Settings.GUI_SLOT_SIZE);
             b.setColor(Color.WHITE);
 
             if(s.item != null) {
                 if(!itemUp) {
-                    s.display.render(b, pixX + ScrollableItemList.SLOT_SIZE - 19, pixY + 1, 18);
-                    b.draw(s.item.getTexture(), pixX + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                            pixY + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                            ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+                    s.display.render(b, pixX + Settings.GUI_SLOT_SIZE - 19, pixY + 1, 0);
+                    b.draw(s.item.getTexture(), pixX + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                            pixY + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                            Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
                 } else {
                     if(s != selected) {
-                        s.display.render(b, pixX + ScrollableItemList.SLOT_SIZE - 19, pixY + 1, 18);
-                        b.draw(s.item.getTexture(), pixX + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                                pixY + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                                ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+                        s.display.render(b, pixX + Settings.GUI_SLOT_SIZE - 19, pixY + 1, 0);
+                        b.draw(s.item.getTexture(), pixX + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                                pixY + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                                Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
                     }
                 }
             }
 
-            if(selected == s) b.draw(Assets.inventorySelector, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
+            if(selected == s) b.draw(Assets.inventorySelector, pixX, pixY, Settings.GUI_SLOT_SIZE, Settings.GUI_SLOT_SIZE);
 
             c++;
         }
 
         for(Slot s : slots) {
             if(selected == s && itemUp) {
-                b.draw(s.item.getTexture(), (InputHandler.cursorX - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f)) / XSCALE,
-                        (InputHandler.cursorY - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f)) / YSCALE,
-                        ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
-                s.display.render(b, (int)(InputHandler.cursorX / XSCALE) + (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) - 1,
-                        (int)(InputHandler.cursorY / YSCALE) - (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) - 6, 18);
+                b.draw(s.item.getTexture(), (InputHandler.cursorX - (Settings.GUI_ITEM_TEXTURE_SIZE/ 2f)) / XSCALE,
+                        (InputHandler.cursorY - (Settings.GUI_ITEM_TEXTURE_SIZE / 2f)) / YSCALE,
+                        Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
+                s.display.render(b, (int)(InputHandler.cursorX / XSCALE) + (int)(Settings.GUI_ITEM_TEXTURE_SIZE / 2f) - 1,
+                        (int)(InputHandler.cursorY / YSCALE) - (int)(Settings.GUI_ITEM_TEXTURE_SIZE / 2f) - 6, 0);
             }
         }
 
@@ -275,6 +314,17 @@ public class Crate extends ComprehensiveInventory {
         else if (crateType.correspondingTile == Tile.IRON_CRATE) return guiColors[3];
         else if (crateType.correspondingTile == Tile.DIAMOND_CRATE) return guiColors[4];
         return null;
+    }
+
+    float XSCALE = 1.0f, YSCALE = 1.0f;
+    @Override
+    public void onResize(int width, int height) {
+        XSCALE = (float)width / Camera.GW;
+        YSCALE = (float)height / Camera.GH;
+        collider.height = (int)(relRect.height * YSCALE);
+        collider.width = (int)(relRect.width * XSCALE);
+        collider.x = (int)(relRect.x * XSCALE);
+        collider.y = (int)(relRect.y * YSCALE);
     }
 
 }

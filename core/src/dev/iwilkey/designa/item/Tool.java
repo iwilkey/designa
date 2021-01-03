@@ -19,7 +19,7 @@ public class Tool {
 	
 	public int calculate() {
 		float percent = 100.0f - (((float)timesUsed /
-    			((ItemType.CreatableItem.Tool)(toolType)).strength) * 100.0f);
+    			((toolType)).strength) * 100.0f);
     	return (int)Math.round(percent);
 	}
 	

@@ -2,6 +2,7 @@ package dev.iwilkey.designa.item.creator;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.input.InputHandler;
 import dev.iwilkey.designa.inventory.Inventory;
@@ -34,11 +35,11 @@ public class ItemCreator {
         recipeDisplay = new RecipeDisplay(uiManager, inventory, 120, Game.WINDOW_HEIGHT - 10);
 
         for(int i = 0; i < Category.values().length; i++) {
-            uiManager.addCategoryItemRecipeList(new CategoryItemRecipeList(this, Category.values()[i], x + 132, y -
-                    ((CategoryItemRecipeList.SLOT_SIZE + (CategoryItemRecipeList.SLOT_SPACE + 16)) * (2 + i)) - 20,
-                    ((CategoryItemRecipeList.SLOT_SIZE + CategoryItemRecipeList.SLOT_SPACE) * 5), CategoryItemRecipeList.SLOT_SIZE));
-            uiManager.addText(new UIText(Category.values()[i].name(), 20,10, Game.WINDOW_HEIGHT -
-                    ((CategoryItemRecipeList.SLOT_SIZE + (CategoryItemRecipeList.SLOT_SPACE + 16)) * (2 + i)) + 8));
+            uiManager.addCategoryItemRecipeList(new CategoryItemRecipeList(this, Category.values()[i], x + 180, y -
+                    ((Settings.GUI_SLOT_SIZE + (Settings.GUI_SLOT_SPACING + 16)) * (2 + i)) - 20 - 60,
+                    ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5), Settings.GUI_SLOT_SIZE));
+            uiManager.addText(new UIText(Category.values()[i].name(), 0,10, Game.WINDOW_HEIGHT -
+                    ((Settings.GUI_SLOT_SIZE + (Settings.GUI_SLOT_SPACING + 16)) * (2 + i)) + 8 - 60));
         }
 
     }

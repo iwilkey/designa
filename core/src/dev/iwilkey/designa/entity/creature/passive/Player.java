@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.building.BuildingHandler;
 import dev.iwilkey.designa.entity.creature.Creature;
@@ -34,8 +35,8 @@ public class Player extends Creature {
 
         inventory = new Inventory(world, this);
         itemCreator = new ItemCreator(this, 10, Game.WINDOW_HEIGHT - 10,
-                ((CategoryItemRecipeList.SLOT_SIZE + CategoryItemRecipeList.SLOT_SPACE) * 5),
-                ((CategoryItemRecipeList.SLOT_SIZE + CategoryItemRecipeList.SLOT_SPACE) * 5));
+                ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5),
+                ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5));
         buildingHandler = new BuildingHandler(world, this);
 
         collider.width -= 12;

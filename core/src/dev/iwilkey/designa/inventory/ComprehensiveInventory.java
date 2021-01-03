@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.assets.Assets;
 import dev.iwilkey.designa.audio.Audio;
 import dev.iwilkey.designa.gfx.Camera;
@@ -40,8 +41,8 @@ public class ComprehensiveInventory {
         collider = new Rectangle(x, y + Y_OFF, width, height);
         relRect = new Rectangle(x, y + Y_OFF, width, height);
         
-        inventoryLabel = new UIText("Inventory", 22, collider.x, collider.y + collider.height);
-        currentItemLabel = new UIText("", 22, collider.x, collider.y + collider.height);
+        inventoryLabel = new UIText("Inventory", 0, collider.x, collider.y + collider.height);
+        currentItemLabel = new UIText("", 0, collider.x, collider.y + collider.height);
     }
 
     public void tick() {
@@ -50,18 +51,21 @@ public class ComprehensiveInventory {
 
     protected void input() {
 
+        if(inventory.currentOpenCrate != null)
+            if(inventory.currentOpenCrate.itemUp) return;
+
+        inventoryArea = new Rectangle(collider.x, collider.y + (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE),
+                collider.width, collider.height);
+
+
         if(InputHandler.leftMouseButtonDown) {
 
-            inventoryArea = new Rectangle(collider.x, collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
-                    collider.width, collider.height);
-
             Rectangle c = new Rectangle((int) InputHandler.cursorX, (int) InputHandler.cursorY, 1, 1),
-                    d = new Rectangle(collider.x, collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
-                            collider.width, collider.height);
+                    d = inventoryArea;
             if (c.intersects(d)) {
                 Audio.playSFX(Assets.invClick, 0.3f);
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
-                        (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+                        (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
                 if(itemUp) {
                 
                     Slot slotToMove = inventory.getSlotFromIndex(index);
@@ -178,13 +182,32 @@ public class ComprehensiveInventory {
         } else if (InputHandler.rightMouseButtonDown) {
             if(!itemUp) itemUp = true;
             Rectangle c = new Rectangle((int)InputHandler.cursorX, (int)InputHandler.cursorY, 1, 1),
-                    d = new Rectangle(collider.x, collider.y + (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE),
+                    d = new Rectangle(collider.x, collider.y + (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE),
                             collider.width, collider.height);
             if(c.intersects(d)) {
                 Audio.playSFX(Assets.invClick, 0.3f);
                 selectSlot(collider.x - InputHandler.cursorX, collider.y +
-                        (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+                        (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
                 if(slotCurrentlyUp != null) {
+
+                    if(slotCurrentlyUp.tool != null) {
+                        Slot slotToDrop = inventory.getSlotFromIndex(index);
+                        if (slotCurrentlyUp == slotToDrop) {
+                            itemUp = false;
+                            slotCurrentlyUp = null;
+                            return;
+                        } else if (slotToDrop.item == null) {
+                            slotToDrop.tool = slotCurrentlyUp.tool;
+                            inventory.editSlot(slotToDrop, slotCurrentlyUp.item, 1);
+                            inventory.editSlot(slotCurrentlyUp, null, 0);
+                            slotCurrentlyUp.tool = null;
+                            itemUp = false;
+                            slotCurrentlyUp = null;
+                            return;
+                        }
+                    }
+
+
                     Slot slotToDrop = inventory.getSlotFromIndex(index);
                     if(slotToDrop.item != slotCurrentlyUp.item && slotToDrop.item != null) return;
                     if (slotCurrentlyUp == slotToDrop) {
@@ -208,7 +231,8 @@ public class ComprehensiveInventory {
                     }
                 }
 
-                if(slotCurrentlyUp == null) slotCurrentlyUp = (inventory.getSlotFromIndex(index).item != null) ? inventory.getSlotFromIndex(index) : null;
+                if(slotCurrentlyUp == null) slotCurrentlyUp = (inventory.getSlotFromIndex(index).item != null)
+                        ? inventory.getSlotFromIndex(index) : null;
                 if(slotCurrentlyUp == null) itemUp = false;
 
             } else {
@@ -239,8 +263,8 @@ public class ComprehensiveInventory {
     // Returns index of slot that needs to be selected
     byte gxx, gyy, index;
     protected Slot selectSlot(float gpx, float gpy) {
-        gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
-        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
+        gxx = (byte)(Math.abs(gpx) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * XSCALE));
+        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE)));
         index = (byte)(((int)gyy * TABLE_WIDTH) + gxx);
         return inventory.requestSlot(index);
     }
@@ -248,10 +272,10 @@ public class ComprehensiveInventory {
     public Slot autoSelect() {
 
         int gpx = collider.x - (int)InputHandler.cursorX;
-        int gpy = (int)(collider.y + (int) ((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE) - InputHandler.cursorY);
+        int gpy = (int)(collider.y + (int) ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE) - InputHandler.cursorY);
 
-        gxx = (byte)(Math.abs(gpx) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * XSCALE));
-        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE) * YSCALE)));
+        gxx = (byte)(Math.abs(gpx) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * XSCALE));
+        gyy = (byte)(TABLE_HEIGHT - (Math.abs(gpy) / (int)((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * YSCALE)));
         index = (byte)(((int)(gyy - 1) * TABLE_WIDTH) + gxx);
         return inventory.requestSlot(index);
     }
@@ -265,44 +289,44 @@ public class ComprehensiveInventory {
 
             gx = (byte)(c % TABLE_WIDTH);
             gy = (byte)(TABLE_HEIGHT - ((c - gx) / TABLE_WIDTH));
-            pixX = (short)(relRect.x + (gx * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
-            pixY = (short)(relRect.y + (gy * (ScrollableItemList.SLOT_SIZE + ScrollableItemList.SLOT_SPACE)));
+            pixX = (short)(relRect.x + (gx * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING)));
+            pixY = (short)(relRect.y + (gy * (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING)));
             
             b.setColor(inv);
-            b.draw(Assets.inventorySlot, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
+            b.draw(Assets.inventorySlot, pixX, pixY, Settings.GUI_SLOT_SIZE, Settings.GUI_SLOT_SIZE);
             b.setColor(Color.WHITE);
 
-            if(inventory.selectedSlot() == s) b.draw(Assets.inventorySelector, pixX, pixY, ScrollableItemList.SLOT_SIZE, ScrollableItemList.SLOT_SIZE);
+            if(inventory.selectedSlot() == s) b.draw(Assets.inventorySelector, pixX, pixY, Settings.GUI_SLOT_SIZE, Settings.GUI_SLOT_SIZE);
 
             if(s.item != null && s != slotCurrentlyUp) {
-                s.display.render(b, pixX + ScrollableItemList.SLOT_SIZE - 19, pixY + 1, 18);
-                b.draw(s.item.getTexture(), pixX + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                        pixY + ((ScrollableItemList.SLOT_SIZE - ScrollableItemList.ITEM_TEXTURE_SIZE) / 2f),
-                        ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+                s.display.render(b, pixX + Settings.GUI_SLOT_SIZE - 19, pixY + 1, 0);
+                b.draw(s.item.getTexture(), pixX + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                        pixY + ((Settings.GUI_SLOT_SIZE - Settings.GUI_ITEM_TEXTURE_SIZE) / 2f),
+                        Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
             }
 
             c++;
         }
 
         if(itemUp && slotCurrentlyUp != null) {
-            slotCurrentlyUp.display.render(b, (int)(InputHandler.cursorX / XSCALE) + (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) + 4,
-                    (int)(InputHandler.cursorY / YSCALE) - (int)(ScrollableItemList.ITEM_TEXTURE_SIZE / 2f) - 4, 18);
+            slotCurrentlyUp.display.render(b, (int)(InputHandler.cursorX / XSCALE) + (int)(Settings.GUI_ITEM_TEXTURE_SIZE / 2f) + 4,
+                    (int)(InputHandler.cursorY / YSCALE) - (int)(Settings.GUI_ITEM_TEXTURE_SIZE / 2f) - 4, 0);
             try {
-	            b.draw(slotCurrentlyUp.item.getTexture(), (InputHandler.cursorX / XSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
-	                    (InputHandler.cursorY / YSCALE) - (ScrollableItemList.ITEM_TEXTURE_SIZE / 2f),
-	                    ScrollableItemList.ITEM_TEXTURE_SIZE, ScrollableItemList.ITEM_TEXTURE_SIZE);
+	            b.draw(slotCurrentlyUp.item.getTexture(), (InputHandler.cursorX / XSCALE) - (Settings.GUI_ITEM_TEXTURE_SIZE / 2f),
+	                    (InputHandler.cursorY / YSCALE) - (Settings.GUI_ITEM_TEXTURE_SIZE / 2f),
+                        Settings.GUI_ITEM_TEXTURE_SIZE, Settings.GUI_ITEM_TEXTURE_SIZE);
             } catch (NullPointerException ignored) {}
         }
         
         inventoryLabel.render(b, (int)(((collider.x + (collider.width / 2)) / XSCALE) - 72), 
-        		(int)((collider.y + collider.height) / YSCALE) + 135, 22);
+        		(int)((collider.y + collider.height) / YSCALE) + 135, 0);
         
         if(inventory.selectedSlot().item != null)
         	currentItemLabel.message = inventory.selectedSlot().item.getName();
         else currentItemLabel.message = "Empty Slot";
         
         currentItemLabel.render(b, (int)((collider.x + (collider.width / 2)) / XSCALE) - (currentItemLabel.message.length() * 8), 
-        		(int)((collider.y + collider.height) / YSCALE) + 100, 22);
+        		(int)((collider.y + collider.height) / YSCALE) + 100, 0);
         
         
 

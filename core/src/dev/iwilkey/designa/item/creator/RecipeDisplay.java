@@ -29,12 +29,12 @@ public class RecipeDisplay {
         this.uiManager = uiManager;
         this.inventory = inv;
         this.x = x; this.y = y;
-        name = uiManager.addText(new UIText("", 32, x, y - 12));
+        name = uiManager.addText(new UIText("", 8, x, y - 12));
 
         amounts = new UIText[5]; needed = new UIText[5];
         for(int i = 0; i < amounts.length; i++) {
-            amounts[i] = new UIText("", 12, x + MathUtils.random(-12, 12), y - 12);
-            needed[i] = new UIText("", 18, 0, 0);
+            amounts[i] = new UIText("", 0, x + MathUtils.random(-12, 12), y - 12);
+            needed[i] = new UIText("", 0, 0, 0);
             uiManager.addText(amounts[i]); uiManager.addText(needed[i]);
         }
 

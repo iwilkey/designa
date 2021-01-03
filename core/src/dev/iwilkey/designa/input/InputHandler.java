@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.building.BuildingHandler;
 import dev.iwilkey.designa.ui.UIObject;
 
@@ -21,8 +22,10 @@ public class InputHandler {
     public static boolean rightMouseButton, leftMouseButton, rightMouseButtonDown,
             leftMouseButtonDown, mouseCurrentlyMoving, rightMouseButtonUp, leftMouseButtonUp,
             moveLeftRequest, moveRightRequest, jumpRequest, placeTileRequest, damageTileRequest,
-            openInventoryRequest;
+            openInventoryRequest, pauseRequest;
     public static float zoomRequest, scrollWheelRequestValue;
+
+    public static int lastKeyPressed = -1;
 
     public static void init() {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
@@ -47,20 +50,23 @@ public class InputHandler {
 
                     @Override
                     public boolean keyDown(int key) {
+                        lastKeyPressed = key;
                         keyJustPressed(key);
-                        if(key == Input.Keys.A) moveLeftRequest = true;
-                        if(key == Input.Keys.D) moveRightRequest = true;
-                        if(key == Input.Keys.F) openInventoryRequest = true;
-                        if(key == Input.Keys.SPACE) jumpRequest = true;
+                        if(key == Settings.LEFT_KEY) moveLeftRequest = true;
+                        if(key == Settings.RIGHT_KEY) moveRightRequest = true;
+                        if(key == Settings.OPEN_INVENTORY_KEY) openInventoryRequest = true;
+                        if(key == Settings.JUMP_KEY) jumpRequest = true;
+                        if(key == Settings.PAUSE_KEY) pauseRequest = true;
                         return true;
                     }
 
                     @Override
                     public boolean keyUp(int key) {
-                        if(key == Input.Keys.A) moveLeftRequest = false;
-                        if(key == Input.Keys.D) moveRightRequest = false;
-                        if(key == Input.Keys.F) openInventoryRequest = false;
-                        if(key == Input.Keys.SPACE) jumpRequest = false;
+                        if(key == Settings.LEFT_KEY) moveLeftRequest = false;
+                        if(key == Settings.RIGHT_KEY) moveRightRequest = false;
+                        if(key == Settings.OPEN_INVENTORY_KEY) openInventoryRequest = false;
+                        if(key == Settings.JUMP_KEY) jumpRequest = false;
+                        if(key == Settings.PAUSE_KEY) pauseRequest = false;
                         return true;
                     }
 
@@ -126,8 +132,8 @@ public class InputHandler {
 
                     public boolean keyJustPressed(int KeyCode) {
                         if(KeyCode < 0 || KeyCode >= keys.length) return false;
-                        if(KeyCode == Input.Keys.E && !jp[KeyCode]) zoomRequest -= 1f;
-                        if(KeyCode == Input.Keys.Q && !jp[KeyCode]) zoomRequest += 1f;
+                        if(KeyCode == Settings.ZOOM_OUT_KEY && !jp[KeyCode]) zoomRequest -= 1f;
+                        if(KeyCode == Settings.ZOOM_IN_KEY && !jp[KeyCode]) zoomRequest += 1f;
                         return true;
                     }
 

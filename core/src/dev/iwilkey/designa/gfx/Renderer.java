@@ -57,7 +57,7 @@ public class Renderer {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
-        if(ItemCreator.isActive) GAME_BATCH.setShader(BLUR_SHADER);
+        if(ItemCreator.isActive || Scene.SinglePlayerGameScene.isPaused) GAME_BATCH.setShader(BLUR_SHADER);
         else GAME_BATCH.setShader(DEFAULT_SHADER);
 
         if(Scene.currentScene != null) {

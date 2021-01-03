@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import dev.iwilkey.designa.Game;
+import dev.iwilkey.designa.Settings;
 import dev.iwilkey.designa.entity.creature.passive.Player;
 import dev.iwilkey.designa.item.Item;
 import dev.iwilkey.designa.item.ItemType;
@@ -26,8 +27,8 @@ public class Inventory extends ScrollableItemList {
     World world;
 
     public Inventory(World world, Player player) {
-        super(Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
-                Game.WINDOW_HEIGHT - SLOT_SIZE - 10, (SLOT_SIZE + SLOT_SPACE) * 5, SLOT_SIZE);
+        super(Game.WINDOW_WIDTH - ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5) - 10,
+                Game.WINDOW_HEIGHT - Settings.GUI_SLOT_SIZE - 10, (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5, Settings.GUI_SLOT_SIZE);
 
         this.player = player;
         this.world = world;
@@ -39,10 +40,11 @@ public class Inventory extends ScrollableItemList {
 
         for (byte i = 0; i < 20; i++) super.add(null);
 
-        this.compInv = new ComprehensiveInventory(slots, this, Game.WINDOW_WIDTH - ((SLOT_SIZE + SLOT_SPACE) * 5) - 10,
-                -200, (SLOT_SIZE + SLOT_SPACE) * 5, (SLOT_SIZE + SLOT_SPACE) * 4);
+        this.compInv = new ComprehensiveInventory(slots, this, Game.WINDOW_WIDTH - ((Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5) - 10,
+                -200, (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 5, (Settings.GUI_SLOT_SIZE + Settings.GUI_SLOT_SPACING) * 4);
 
         this.add(Item.STONE_SICKLE);
+        this.add(Item.DIAMOND_SICKLE);
 
         addCrate(new Crate((ItemType.PlaceableTile.Crate)Item.DIAMOND_CRATE.getType(), 40, 40));
     }
@@ -95,12 +97,12 @@ public class Inventory extends ScrollableItemList {
 
                 if(s == selectedSlot) {
                     center = (int) (((collider.x + (collider.width / 2)) / UIObject.XSCALE));
-                    distance = Math.abs((slot.collider.x - xSlotOffset) - (center - ((SLOT_SIZE / 2f))));
+                    distance = Math.abs((slot.collider.x - xSlotOffset) - (center - ((Settings.GUI_SLOT_SIZE / 2f))));
                     velocityX = (distance) / 15f;
-                    if(slot.collider.x - xSlotOffset < center - ((SLOT_SIZE / 2))) {
+                    if(slot.collider.x - xSlotOffset < center - ((Settings.GUI_SLOT_SIZE / 2))) {
                         xSlotOffset -= velocityX;
                         return;
-                    } else if (slot.collider.x - xSlotOffset > center - ((SLOT_SIZE / 2))) {
+                    } else if (slot.collider.x - xSlotOffset > center - ((Settings.GUI_SLOT_SIZE / 2))) {
                         xSlotOffset += velocityX;
                         return;
                     }
@@ -213,10 +215,14 @@ public class Inventory extends ScrollableItemList {
     public void render(Batch b) {
         super.render(b);  
         if(ItemCreator.isActive) {
-            compInv.render(b);
-            for(Crate c : crates) c.render(b);
+            if (ComprehensiveInventory.slotCurrentlyUp != null) {
+                for(Crate c : crates) c.render(b);
+                compInv.render(b);
+            } else {
+                compInv.render(b);
+                for(Crate c : crates) c.render(b);
+            }
         }
-
     }
 
     @Override

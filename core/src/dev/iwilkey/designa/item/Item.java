@@ -318,7 +318,7 @@ public enum Item {
     DIAMOND_SICKLE (
     		"Diamond Sickle",
     		37,
-    		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40, 80),
+    		new ItemType.CreatableItem.Tool.Sickle(37, 250, 40, 70),
     		Recipe.DIAMOND_SICKLE,
     		Assets.diamondSickle
     ),
